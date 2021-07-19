@@ -1,0 +1,92 @@
+{
+  "name": "storybook-addon-kit",
+  "version": "0.0.0",
+  "description": "everything you need to build a Storybook addon",
+  "keywords": [
+    "storybook-addons",
+    "style",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/storybookjs/storybook-addon-kit"
+  },
+  "author": "winkerVSbecks",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/ts/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "*.js",
+    "*.d.ts"
+  ],
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "buildBabel": "concurrently \"yarn buildBabel:cjs\" \"yarn buildBabel:esm\"",
+    "buildBabel:cjs": "babel ./src -d ./dist/cjs --extensions \".js,.jsx,.ts,.tsx\"",
+    "buildBabel:esm": "babel ./src -d ./dist/esm --env-name esm --extensions \".js,.jsx,.ts,.tsx\"",
+    "buildTsc": "tsc --declaration --emitDeclarationOnly --outDir ./dist/ts",
+    "prebuild": "yarn clean",
+    "build": "concurrently \"yarn buildBabel\" \"yarn buildTsc\"",
+    "build:watch": "concurrently \"yarn buildBabel:esm -- --watch\" \"yarn buildTsc -- --watch\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --no-manager-cache --quiet\"",
+    "build-storybook": "build-storybook",
+    "prerelease": "zx scripts/prepublish-checks.mjs",
+    "release": "yarn build && auto shipit",
+    "eject-ts": "zx scripts/eject-typescript.mjs"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.5",
+    "@babel/preset-typescript": "^7.13.0",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/react": "^6.2.9",
+    "auto": "^10.3.0",
+    "babel-loader": "^8.1.0",
+    "boxen": "^5.0.1",
+    "concurrently": "^6.2.0",
+    "dedent": "^0.7.0",
+    "prettier": "^2.3.1",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.2.4",
+    "zx": "^1.14.1"
+  },
+  "peerDependencies": {
+    "@storybook/addons": "^6.2.9",
+    "@storybook/api": "^6.2.9",
+    "@storybook/components": "^6.2.9",
+    "@storybook/core-events": "^6.2.9",
+    "@storybook/theming": "^6.2.9",
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "storybook": {
+    "displayName": "Addon Kit",
+    "supportedFrameworks": [
+      "react",
+      "vue",
+      "angular"
+    ],
+    "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
+  }
+}

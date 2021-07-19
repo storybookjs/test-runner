@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "incremental": false,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["es2017", "dom"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "target": "es5"
+  },
+  "include": [
+    "src/**/*"
+  ],
+}
