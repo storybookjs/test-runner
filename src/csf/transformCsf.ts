@@ -3,6 +3,7 @@ import { loadCsf } from '@storybook/csf-tools';
 import * as t from '@babel/types';
 import generate from '@babel/generator';
 import { toId, storyNameFromExport } from '@storybook/csf';
+import dedent from 'ts-dedent';
 
 const logger = console;
 
@@ -222,7 +223,12 @@ export const transformCsf = (
   if (allTests.length) {
     const describe = makeDescribe(csf.meta.title, allTests);
     const { code: describeCode } = generate(describe, {});
-    result = `${result}${describeCode}`;
+    result = dedent`
+      ${result}
+      if (!require.main) {
+        ${describeCode}
+      }
+    `;
   } else if (insertTestIfEmpty) {
     result = `describe('${csf.meta.title}', () => { it('no-op', () => {}) });`;
   }
