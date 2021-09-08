@@ -4,3 +4,6 @@ storybook-static/
 build-storybook.log
 .DS_Store
 .env
+.cache
+stories/design-system
+yarn-error.log

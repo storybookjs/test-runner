@@ -6,6 +6,7 @@ import * as HeaderStories from './Header.stories';
 export default {
   title: 'Example/Page',
   component: Page,
+  play: async () => {},
 };
 
 const Template = (args) => <Page {...args} />;
