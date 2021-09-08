@@ -11,10 +11,32 @@ The goal of this prototype is to help evaluate both approaches: primarily for pe
 
 ## Install
 
-To install the package, run:
+The package has not yet been published so you'll have to link it for now.
+
+In the `test-runner` package:
 
 ```sh
-yarn add @storybook/test-runner --dev
+yarn && yarn build
+yarn link
+```
+
+In your project directory:
+
+```sh
+yarn link @storybook/test-runner
+yarn add jest --dev
+```
+
+For JSDOM (React-only for now):
+
+```sh
+yarn add @testing-library/react @storybook/testing-react --dev
+```
+
+For Playwright:
+
+```sh
+yarn add jest-playwright-preset playwright --dev
 ```
 
 This simply installs the package in `node_modules`. Using the package is fully manual at this point.
@@ -47,11 +69,11 @@ module.exports = {
   moduleNameMapper: {
     // non-js files
     '\\.(jpg|jpeg|png|apng|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/mocks/fileMock.js',
-    '\\.(css|scss|stylesheet)$': '<rootDir>/mocks/styleMock.js',
+      '@storybook/test-runner/mocks/fileMock.js',
+    '\\.(css|scss|stylesheet)$': '@storybook/test-runner/mocks/styleMock.js',
   },
   transform: {
-    '^.+\\.stories\\.[jt]sx?$': './jsdom/transform',
+    '^.+\\.stories\\.[jt]sx?$': '@storyboook/test-runner/jsdom/transform',
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   testEnvironment: 'jest-environment-jsdom',
@@ -79,16 +101,14 @@ module.exports = {
   moduleNameMapper: {
     // non-js files
     '\\.(jpg|jpeg|png|apng|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/mocks/fileMock.js',
-    '\\.(css|scss|stylesheet)$': '<rootDir>/mocks/styleMock.js',
+      '@storybook/test-runner/mocks/fileMock.js',
+    '\\.(css|scss|stylesheet)$': '@storybook/test-runner/mocks/styleMock.js',
   },
   transform: {
-    '^.+\\.stories\\.[jt]sx?$': './playwright/transform',
+    '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   preset: 'jest-playwright-preset',
-  // globalSetup: './playwright/global-setup.js',
-  // globalTeardown: './playwright/global-teardown.js',
   testEnvironment: './playwright/custom-environment.js',
 };
 ```
