@@ -5,7 +5,7 @@ module.exports = {
   process(src, filename, config) {
     const csfTest = transformTestingLib(src);
 
-    console.log('xxx', csfTest);
+    console.log(csfTest);
 
     const result = babelTransform(csfTest, {
       filename,

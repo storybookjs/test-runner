@@ -219,12 +219,12 @@ export const transformCsf = (
     const { code: globalCode } = generate(metaJestGlobals[i], {});
     result = `${result}${globalCode}\n`;
   }
-  // if (allTests.length) {
-  //   const describe = makeDescribe(csf.meta.title, allTests);
-  //   const { code: describeCode } = generate(describe, {});
-  //   result = `${result}${describeCode}`;
-  // } else if (insertTestIfEmpty) {
-  result = `describe('${csf.meta.title}', () => { it('no-op', () => {}) });`;
-  //}
+  if (allTests.length) {
+    const describe = makeDescribe(csf.meta.title, allTests);
+    const { code: describeCode } = generate(describe, {});
+    result = `${result}${describeCode}`;
+  } else if (insertTestIfEmpty) {
+    result = `describe('${csf.meta.title}', () => { it('no-op', () => {}) });`;
+  }
   return result;
 };
