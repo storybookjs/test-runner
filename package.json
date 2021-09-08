@@ -1,5 +1,5 @@
 {
-  "name": "storybook-addon-kit",
+  "name": "@storybook/test-runner",
   "version": "0.0.0",
   "description": "everything you need to build a Storybook addon",
   "keywords": [
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/storybookjs/storybook-addon-kit"
   },
-  "author": "winkerVSbecks",
+  "author": "shilman",
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
