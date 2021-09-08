@@ -24,13 +24,13 @@ In your project directory:
 
 ```sh
 yarn link @storybook/test-runner
-yarn add jest --dev
+yarn add jest babel-jest --dev
 ```
 
 For JSDOM (React-only for now):
 
 ```sh
-yarn add @testing-library/react @storybook/testing-react --dev
+yarn add @testing-library/react @storybook/testing-react jest-environment-jsdom --dev
 ```
 
 For Playwright:
