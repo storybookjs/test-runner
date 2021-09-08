@@ -13,9 +13,12 @@
     "noImplicitAny": true,
     "rootDir": "./src",
     "skipLibCheck": true,
-    "target": "es5"
+    "target": "es5",
+    "types": ["jest", "node"],
+    "moduleResolution": "node"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ],
+  "exclude": ["src/**/*.test.ts"]
 }
