@@ -109,7 +109,7 @@ module.exports = {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
   preset: 'jest-playwright-preset',
-  testEnvironment: './playwright/custom-environment.js',
+  testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
 };
 ```
 
