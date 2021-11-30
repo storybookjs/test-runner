@@ -12,7 +12,10 @@ const testPrefixer = template(
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => {
       const Composed = await composeStory(%%storyExport%%, exports.default);
-      await render(<Composed />);  
+      const { container } = render(<Composed />);
+      if(Composed.play) {
+        await Composed.play({ canvasElement: container });
+      }
     }
   `,
   {
