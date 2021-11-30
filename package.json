@@ -65,6 +65,8 @@
     "dedent": "^0.7.0",
     "jest": "^27.0.6",
     "jest-environment-jsdom": "^27.0.6",
+    "jest-playwright-preset": "^1.7.0",
+    "playwright": "^1.17.0",
     "prettier": "^2.3.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
@@ -73,23 +75,6 @@
     "ts-jest": "^27.0.4",
     "typescript": "^4.2.4",
     "zx": "^1.14.1"
-  },
-  "peerDependencies": {
-    "@storybook/addons": "^6.3.5",
-    "@storybook/api": "^6.3.5",
-    "@storybook/components": "^6.3.5",
-    "@storybook/core-events": "^6.3.5",
-    "@storybook/theming": "^6.3.5",
-    "react": "^16.8.0 || ^17.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
   },
   "publishConfig": {
     "access": "public"
@@ -104,15 +89,10 @@
     "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
   },
   "dependencies": {
-    "@storybook/csf": "^0.0.1",
-    "@types/react-modal": "^3.12.1",
-    "@types/styled-components": "^5.1.0",
+    "@storybook/csf": "^0.0.1"
+  },
+  "peerDependencies": {
     "jest-playwright-preset": "^1.7.0",
-    "playwright": "^1.14.0",
-    "pluralize": "^8.0.0",
-    "react-github-button": "^0.1.11",
-    "react-modal": "^3.11.2",
-    "seedrandom": "^3.0.5",
-    "styled-components": "^4.4.1"
+    "playwright": "^1.14.0"
   }
 }
