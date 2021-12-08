@@ -19,6 +19,7 @@
   "files": [
     "dist/**/*",
     "README.md",
+    "playwright",
     "*.js",
     "*.d.ts"
   ],
@@ -89,7 +90,8 @@
     "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
   },
   "dependencies": {
-    "@storybook/csf": "^0.0.1"
+    "@storybook/csf": "0.0.2--canary.87bc651.0",
+    "@storybook/csf-tools": "^6.4.0"
   },
   "peerDependencies": {
     "jest-playwright-preset": "^1.7.0",
