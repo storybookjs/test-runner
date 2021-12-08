@@ -19,6 +19,7 @@
   "files": [
     "dist/**/*",
     "README.md",
+    "playwright",
     "*.js",
     "*.d.ts"
   ],
