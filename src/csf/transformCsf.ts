@@ -151,7 +151,7 @@ export const transformCsf = (
   code: string,
   { filePrefixer, clearBody = false, testPrefixer, insertTestIfEmpty }: TransformOptions = {}
 ) => {
-  const csf = loadCsf(code);
+  const csf = loadCsf(code, { defaultTitle: 'FIXME' });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
