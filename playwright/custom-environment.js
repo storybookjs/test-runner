@@ -9,7 +9,8 @@ class CustomEnvironment extends PlaywrightEnvironment {
     const page = this.global.page;
     const start = new Date();
     const port = process.env.STORYBOOK_PORT || '6006';
-    await page.goto(`http://localhost:${port}/iframe.html`, { waitUntil: 'load' }); // FIXME: configure
+    const targetURL = process.env.TARGET_URL || `http://localhost:${port}`
+    await page.goto(`${targetURL}/iframe.html`, { waitUntil: 'load' }); // FIXME: configure
     console.log('page loaded in', new Date() - start);
 
     await page.addScriptTag({

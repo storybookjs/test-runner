@@ -115,6 +115,19 @@ module.exports = {
 
 > **NOTE:** The code currently assumes that your Storybook is ALREADY running on `process.env.STORYBOOK_PORT` which defaults to `6006`.
 
+#### Running against a deployed Storybook
+
+By default, the playwright assumes that you're running it against a locally served Storybook.
+If you want to define a target url so it runs against deployed Storybooks, you can do so by passing the `TARGET_URL` environment variable:
+
+```json
+{
+  "scripts": {
+    "test-storybook:playwright": "TARGET_URL=the-storybook-url-here jest --config ./playwright-jest.config.js"
+  }
+}
+```
+
 ## Future work
 
 In the future it will support the following features:
