@@ -5,8 +5,6 @@ module.exports = {
   process(src, filename, config) {
     const csfTest = transformPlaywright(src);
 
-    console.log(filename, csfTest);
-
     const result = babelTransform(csfTest, {
       filename,
       babelrc: false,
