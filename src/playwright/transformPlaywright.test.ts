@@ -1,34 +1,28 @@
 import dedent from 'ts-dedent';
-import { transformTestingLib } from './transformTestingLib';
+import { transformPlaywright } from './transformPlaywright';
 
-// @ts-ignore
 expect.addSnapshotSerializer({
   print: (val: any) => val,
   test: (val: any) => true,
 });
 
-describe('Puppeeter', () => {
+describe('Playwright', () => {
   it('basic', () => {
     expect(
-      transformTestingLib(dedent`
+      transformPlaywright(dedent`
         export default { title: 'foo/bar' };
         export const A = () => {};
         A.play = () => {};
       `)
     ).toMatchInlineSnapshot(`
-      import { render, screen } from "@testing-library/react";
-      import { composeStory } from "@storybook/testing-react";
-      export default { title: 'foo/bar' };
-      export const A = () => {};
-      A.play = () => {};
-      describe("foo/bar", () => {
+
+      if (!require.main) {
+        describe("foo/bar", () => {
         describe("A", () => {
-          it("play", () => {
-            const Composed = composeStory(A, exports.default);
-            render(<Composed />);
-          });
+          it("play", async () => page.evaluate(id => __test(id), "foo-bar--a"));
         });
       });
+      }
     `);
   });
 });

@@ -21,14 +21,39 @@ describe('transformTestingLib', () => {
       export default { title: 'foo/bar' };
       export const A = () => {};
       A.tests = { baz: () => {} };
-      describe("foo/bar", () => {
+
+      if (!require.main) {
+        describe("foo/bar", () => {
         describe("A", () => {
-          it("baz", () => {
-            const Composed = composeStory(A, exports.default);
-            render(<Composed />);
+          it("play", async () => {
+            const Composed = await composeStory(A, exports.default);
+            const {
+              container
+            } = render(<Composed />);
+
+            if (Composed.play) {
+              await Composed.play({
+                canvasElement: container
+              });
+            }
+          });
+        });
+        describe("A", () => {
+          it("baz", async () => {
+            const Composed = await composeStory(A, exports.default);
+            const {
+              container
+            } = render(<Composed />);
+
+            if (Composed.play) {
+              await Composed.play({
+                canvasElement: container
+              });
+            }
           });
         });
       });
+      }
     `);
   });
 });
