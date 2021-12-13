@@ -1,11 +1,14 @@
 {
   "name": "@storybook/test-runner",
   "version": "0.0.0",
-  "description": "everything you need to build a Storybook addon",
+  "description": "Test runner for Storybook stories",
   "keywords": [
     "storybook-addons",
-    "style",
-    "test"
+    "test",
+    "runner",
+    "jest",
+    "testing-library",
+    "playwright"
   ],
   "repository": {
     "type": "git",
@@ -84,11 +87,9 @@
     "access": "public"
   },
   "storybook": {
-    "displayName": "Addon Kit",
-    "supportedFrameworks": [
-      "react",
-      "vue",
-      "angular"
+    "displayName": "Storybook test runner",
+    "unsupportedFrameworks": [
+      "react-native"
     ],
     "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
   },
