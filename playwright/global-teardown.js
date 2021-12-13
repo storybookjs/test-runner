@@ -4,6 +4,4 @@ const { globalTeardown: playwrightGlobalTeardown } = require('jest-playwright-pr
 module.exports = async function globalTeardown(globalConfig) {
   // Your global teardown
   await playwrightGlobalTeardown(globalConfig);
-
-  console.log('TEARDOWN');
 };

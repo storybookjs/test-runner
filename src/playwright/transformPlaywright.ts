@@ -5,7 +5,7 @@ const testPrefixer = template(
   `
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => page.evaluate((id) => __test(id), %%id%%);
-`,
+  `,
   {
     plugins: ['jsx'],
   }

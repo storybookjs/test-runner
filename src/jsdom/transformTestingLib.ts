@@ -8,7 +8,6 @@ const filePrefixer = template(`
 
 const testPrefixer = template(
   `
-    console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => {
       const Composed = await composeStory(%%storyExport%%, exports.default);
       const { container } = render(<Composed />);
