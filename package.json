@@ -20,6 +20,8 @@
     "dist/**/*",
     "README.md",
     "playwright",
+    "jsdom",
+    "mocks",
     "*.js",
     "*.d.ts"
   ],
