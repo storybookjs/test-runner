@@ -1,5 +1,4 @@
-import * as t from '@babel/types';
-import template, { PublicReplacements } from '@babel/template';
+import template from '@babel/template';
 import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
