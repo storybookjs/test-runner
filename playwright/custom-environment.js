@@ -21,21 +21,25 @@ class CustomEnvironment extends PlaywrightEnvironment {
     await page.addScriptTag({
       content: `
         class StorybookTestRunnerError extends Error {
-          constructor(storyId, error) {
-            super(error.message);
+          constructor(storyId, errorMessage) {
+            super(errorMessage);
             this.name = 'StorybookTestRunnerError';
+            const storyUrl = \`${targetURL}?path=/story/\${storyId}\`;
 
-            this.message = \`\nAn error occurred in the following story:\n\${storyId}\n\nMessage:\n \${error.message}\`;
+            this.message = \`\nAn error occurred in the following story:\n\${storyUrl}\n\nMessage:\n \${errorMessage}\`;
           }
+        }
+
+        async function __throwError(storyId, errorMessage) {
+          throw new StorybookTestRunnerError(storyId, errorMessage);
         }
 
         async function __test(storyId) {
           const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
-          const storyUrl = \`${targetURL}?path=/story/\${storyId}\`;
           if(!channel) {
-            throw new StorybookTestRunnerError(
-              storyUrl,
-              { message: 'The test runner could not access the story. Are you sure the Storybook is running correctly in that URL?' }
+            __throwError(
+              storyId,
+              'The test runner could not access the story. Are you sure the Storybook is running correctly in that URL?'
             );
           }
 
@@ -43,13 +47,13 @@ class CustomEnvironment extends PlaywrightEnvironment {
             channel.on('storyRendered', () => resolve(document.getElementById('root')));
             channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
             channel.on('storyErrored', ({ description }) => reject(
-              new StorybookTestRunnerError(storyUrl, { name: description }))
+              __throwError(storyId, description))
             );
             channel.on('storyThrewException', (error) => reject(
-              new StorybookTestRunnerError(storyUrl, error))
+              __throwError(storyId, error.message))
             );
             channel.on('storyMissing', (id) => id === storyId && reject(
-              new StorybookTestRunnerError(storyUrl, { message: 'The story was missing when trying to access it.' }))
+              __throwError(storyId, 'The story was missing when trying to access it.'))
             );
 
             channel.emit('setCurrentStory', { storyId });
