@@ -48,7 +48,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
             channel.on('storyThrewException', (error) => reject(
               new StorybookTestRunnerError(storyUrl, error))
             );
-            channel.on('storyMissing', () => reject(
+            channel.on('storyMissing', (id) => id === storyId && reject(
               new StorybookTestRunnerError(storyUrl, { message: 'The story was missing when trying to access it.' }))
             );
 
