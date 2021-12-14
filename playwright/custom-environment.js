@@ -37,7 +37,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
         async function __test(storyId) {
           const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
           if(!channel) {
-            __throwError(
+            throw new StorybookTestRunnerError(
               storyId,
               'The test runner could not access the story. Are you sure the Storybook is running correctly in that URL?'
             );
@@ -47,13 +47,13 @@ class CustomEnvironment extends PlaywrightEnvironment {
             channel.on('storyRendered', () => resolve(document.getElementById('root')));
             channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
             channel.on('storyErrored', ({ description }) => reject(
-              __throwError(storyId, description))
+              new StorybookTestRunnerError(storyId, description))
             );
             channel.on('storyThrewException', (error) => reject(
-              __throwError(storyId, error.message))
+              new StorybookTestRunnerError(storyId, error.message))
             );
             channel.on('storyMissing', (id) => id === storyId && reject(
-              __throwError(storyId, 'The story was missing when trying to access it.'))
+              new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.'))
             );
 
             channel.emit('setCurrentStory', { storyId });
