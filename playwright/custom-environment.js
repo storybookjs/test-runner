@@ -24,7 +24,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
           constructor(storyId, errorMessage) {
             super(errorMessage);
             this.name = 'StorybookTestRunnerError';
-            const storyUrl = \`${targetURL}?path=/story/\${storyId}\`;
+            const storyUrl = \`${targetURL}?path=/story/\${storyId}&addonPanel=storybook/interactions/panel\`;
 
             this.message = \`\nAn error occurred in the following story:\n\${storyUrl}\n\nMessage:\n \${errorMessage}\`;
           }
