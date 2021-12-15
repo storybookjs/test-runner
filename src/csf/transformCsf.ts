@@ -12,6 +12,7 @@ export interface TestContext {
   name: t.Literal;
   title: t.Literal;
   id: t.Literal;
+  hasPlayFn?: t.BooleanLiteral;
 }
 type FilePrefixer = () => t.Statement[];
 type TestPrefixer = (context: TestContext) => t.Statement[];
@@ -37,6 +38,7 @@ const prefixFunction = (
     name: t.stringLiteral(name), // FIXME .name annotation
     title: t.stringLiteral(title), // FIXME: auto-title
     id: t.stringLiteral(toId(title, name)),
+    hasPlayFn: t.booleanLiteral(!!input),
   };
   /*
   This prefixes the play function with setup code
