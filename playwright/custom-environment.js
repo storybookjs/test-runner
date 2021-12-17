@@ -8,6 +8,13 @@ class CustomEnvironment extends PlaywrightEnvironment {
     const start = new Date();
     const port = process.env.STORYBOOK_PORT || '6006';
     const targetURL = process.env.TARGET_URL || `http://localhost:${port}`
+    
+    if('TARGET_URL' in process.env && !process.env.TARGET_URL) {
+      console.log(`Received TARGET_URL but with a falsy value: ${
+        process.env.TARGET_URL
+      }, will fallback to ${targetURL} instead.`)
+    }
+    
     await page.goto(`${targetURL}/iframe.html`, { waitUntil: 'load' }).catch((err) => {
       if(err.message?.includes('ERR_CONNECTION_REFUSED')) {
         const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
