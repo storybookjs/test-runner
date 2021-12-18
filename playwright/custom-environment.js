@@ -8,13 +8,15 @@ const sanitizeURL = (url) => {
     finalURL = 'http://' + finalURL;
   }
 
+  // remove iframe.html if present
+  finalURL = finalURL.replace(/iframe.html\s*$/, "");
+
   // add forward slash at the end if not there
   if (finalURL.slice(-1) !== '/') {
     finalURL = finalURL + '/';
   }
 
-  // remove iframe.html if present
-  return finalURL.replace(/iframe.html\s*$/, "");
+  return finalURL;
 }
 
 class CustomEnvironment extends PlaywrightEnvironment {
