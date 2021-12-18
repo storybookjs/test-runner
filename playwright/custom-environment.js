@@ -42,7 +42,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
 
       throw err;
     }); // FIXME: configure
-    console.log(`page loaded in ${new Date() - start}ms.`, targetURL);
+    console.log(`page loaded in ${new Date() - start}ms.`);
 
     // if we ever want to log something from the browser to node
     await page.exposeBinding('logToPage', (_, message) => console.log(message));
