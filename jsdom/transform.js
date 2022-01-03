@@ -1,9 +1,9 @@
 const { transform: babelTransform } = require('@babel/core');
-const { transformTestingLib } = require('../dist/cjs/jsdom/transformTestingLib');
+const { transformJsdom } = require('../dist/cjs/jsdom/transformJsdom');
 
 module.exports = {
   process(src, filename, config) {
-    const csfTest = transformTestingLib(src);
+    const csfTest = transformJsdom(src);
 
     const result = babelTransform(csfTest, {
       filename,

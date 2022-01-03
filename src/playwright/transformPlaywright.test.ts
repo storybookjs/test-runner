@@ -2,7 +2,7 @@ import dedent from 'ts-dedent';
 import { transformPlaywright } from './transformPlaywright';
 
 expect.addSnapshotSerializer({
-  print: (val: any) => val,
+  print: (val: any) => val.trim(),
   test: (val: any) => true,
 });
 
@@ -15,11 +15,27 @@ describe('Playwright', () => {
         A.play = () => {};
       `)
     ).toMatchInlineSnapshot(`
-
       if (!require.main) {
         describe("foo/bar", () => {
         describe("A", () => {
-          it("play", async () => page.evaluate(id => __test(id), "foo-bar--a"));
+          it("play", async () => {
+            page.on('pageerror', err => {
+              page.evaluate(({
+                id,
+                err
+              }) => __throwError(id, err), {
+                id: "foo-bar--a",
+                err: err.message
+              });
+            });
+            return page.evaluate(({
+              id,
+              hasPlayFn
+            }) => __test(id, hasPlayFn), {
+              id: "foo-bar--a",
+              hasPlayFn: true
+            });
+          });
         });
       });
       }

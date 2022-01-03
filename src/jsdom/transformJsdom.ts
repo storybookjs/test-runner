@@ -22,11 +22,8 @@ const testPrefixer = template(
   }
 );
 
-export const transformTestingLib = (src: string) => {
-  // const start = new Date();
+export const transformJsdom = (src: string) => {
   // @ts-ignore
   const result = transformCsf(src, { filePrefixer, testPrefixer, insertTestIfEmpty: true });
-  // @ts-ignore
-  // console.log('transform', new Date() - start);
   return result;
 };
