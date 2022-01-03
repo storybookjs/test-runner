@@ -1,10 +1,8 @@
 import { transform as babelTransform } from '@babel/core';
-import { transformTestingLib } from './transformTestingLib';
+import { transformJsdom } from './transformJsdom';
 
 export const process = (src: string, filename: string, config: any) => {
-  const csfTest = transformTestingLib(src);
-
-  // console.error({ src, csfTest });
+  const csfTest = transformJsdom(src);
 
   const result = babelTransform(csfTest, {
     filename,
