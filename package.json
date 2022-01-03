@@ -20,6 +20,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/ts/index.d.ts",
   "files": [
+    "bin",
     "dist/**/*",
     "README.md",
     "playwright",
@@ -46,6 +47,9 @@
     "eject-ts": "zx scripts/eject-typescript.mjs",
     "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i",
     "test-storybook:playwright": "jest --no-cache --config ./playwright-jest.config.js"
+  },
+  "bin": {
+    "test-storybook": "./bin/test-storybook.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
@@ -95,7 +99,8 @@
   },
   "dependencies": {
     "@storybook/csf": "0.0.2--canary.87bc651.0",
-    "@storybook/csf-tools": "^6.4.0"
+    "@storybook/csf-tools": "^6.4.0",
+    "url-exists": "^1.0.3"
   },
   "peerDependencies": {
     "jest-playwright-preset": "^1.7.0",
