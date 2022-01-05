@@ -53,9 +53,9 @@ function executeJestPlaywright() {
   const jest = require('jest');
   let argv = process.argv.slice(2);
 
-  const jestConfigPath = fs.existsSync('playwright-jest.config.js')
-    ? 'playwright-jest.config.js'
-    : path.resolve(__dirname, '../playwright-jest.config.js')
+  const jestConfigPath = fs.existsSync('test-runner-jest.config.js')
+    ? 'test-runner-jest.config.js'
+    : path.resolve(__dirname, '../test-runner-jest.config.js')
 
   argv.push(
     '--config',

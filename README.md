@@ -87,12 +87,12 @@ Add a script to `package.json`:
 ```json
 {
   "scripts": {
-    "test-storybook:playwright": "jest --config ./playwright-jest.config.js"
+    "test-storybook:playwright": "jest --config ./test-runner-jest.config.js"
   }
 }
 ```
 
-Then create a config file `playwright-jest.config.js` that sets up your environment. For example:
+Then create a config file `test-runner-jest.config.js` that sets up your environment. For example:
 
 ```js
 module.exports = {
@@ -123,7 +123,7 @@ If you want to define a target url so it runs against deployed Storybooks, you c
 ```json
 {
   "scripts": {
-    "test-storybook:playwright": "TARGET_URL=the-storybook-url-here jest --config ./playwright-jest.config.js"
+    "test-storybook:playwright": "TARGET_URL=the-storybook-url-here jest --config ./test-runner-jest.config.js"
   }
 }
 ```

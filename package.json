@@ -46,7 +46,7 @@
     "release": "yarn build && auto shipit",
     "eject-ts": "zx scripts/eject-typescript.mjs",
     "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i",
-    "test-storybook:playwright": "jest --no-cache --config ./playwright-jest.config.js"
+    "test-storybook:playwright": "jest --no-cache --config ./test-runner-jest.config.js"
   },
   "bin": {
     "test-storybook": "./bin/test-storybook.js"
