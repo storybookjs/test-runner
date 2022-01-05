@@ -1,5 +1,5 @@
 module.exports = {
-  cacheDirectory: '.cache/jest',
+  cacheDirectory: 'node_modules/.cache/storybook/test-runner',
   rootDir: process.cwd(),
   testMatch: ['**/*.stories.[jt]s?(x)'],
   transform: {
