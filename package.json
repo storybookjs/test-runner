@@ -100,11 +100,11 @@
   "dependencies": {
     "@storybook/csf": "0.0.2--canary.87bc651.0",
     "@storybook/csf-tools": "^6.4.0",
+    "jest-playwright-preset": "^1.7.0",
+    "playwright": "^1.14.0",
     "url-exists": "^1.0.3"
   },
   "peerDependencies": {
-    "jest-playwright-preset": "^1.7.0",
-    "playwright": "^1.14.0",
     "jest": ">=26.6.3"
   }
 }
