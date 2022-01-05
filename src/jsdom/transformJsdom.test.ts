@@ -23,7 +23,7 @@ describe('transformJsdom', () => {
       if (!require.main) {
         describe("foo/bar", () => {
         describe("A", () => {
-          it("play", async () => {
+          it("smoke", async () => {
             const Composed = await composeStory(A, exports.default);
             const {
               container

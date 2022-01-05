@@ -56,7 +56,7 @@ const makePlayTest = (
   return [
     t.expressionStatement(
       t.callExpression(t.identifier('it'), [
-        t.stringLiteral('play'),
+        t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
         prefixFunction(key, title, metaOrStoryPlay as t.Expression, testPrefix),
       ])
     ),
