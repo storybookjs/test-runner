@@ -69,17 +69,19 @@ yarn storybook
 4. Run the test runner:
 
 ```jsx
-yarn test-storybook --watch
+yarn test-storybook
 ```
 
-> **NOTE:** The runner assumes that your Storybook is running on `process.env.STORYBOOK_PORT` which defaults to `6006`. If you're running Storybook in another port, set the STORYBOOK_PORT before running your command like:
+> **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, set the TARGET_URL before running your command like:
 >```jsx
->STORYBOOK_PORT=9009 yarn test-storybook --watch
+>TARGET_URL=http://localhost:9009 yarn test-storybook
 >```
 
 ## Configuration
 
-The test runner works out of the box, but you can override its configuration by adding a `test-runner-jest.config.js` that sets up your environment in the root folder of your project.
+The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--marWorkers`, etc.
+
+The test runner works out of the box, but you can override its Jest configuration by adding a `test-runner-jest.config.js` that sets up your environment in the root folder of your project.
 
 ```js
 // test-runner-jest.config.js
