@@ -34,8 +34,7 @@ function sanitizeURL(url) {
   return finalURL;
 }
 
-const port = process.env.STORYBOOK_PORT || '6006';
-const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:${port}`);
+const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
 
 urlExists(targetURL, function (err, exists) {
   if (!exists) {

@@ -24,8 +24,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
     await super.setup();
     const page = this.global.page;
     const start = new Date();
-    const port = process.env.STORYBOOK_PORT || '6006';
-    const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:${port}`);
+    const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
 
     const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
 
