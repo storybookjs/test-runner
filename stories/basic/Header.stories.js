@@ -5,6 +5,7 @@ import { Header } from './Header';
 export default {
   title: 'Example/Header',
   component: Header,
+  play: async () => {},
 };
 
 const Template = (args) => <Header {...args} />;

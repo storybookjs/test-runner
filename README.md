@@ -1,114 +1,197 @@
-# Storybook Addon Kit
+# Storybook Test Runner
 
-Simplify the creation of Storybook addons
+Storybook test runner turns all of your stories into executable tests.
 
-- 📝 Live-editing in development
-- ⚛️ React/JSX support
-- 📦 Transpiling and bundling with Babel
-- 🏷 Plugin metadata
-- 🚢 Release management with [Auto](https://github.com/intuit/auto)
-- 🧺 Boilerplate and sample code
-- 🛄 ESM support
-- 🛂 TypeScript by default with option to eject to JS
+## Table of Contents
 
-## Getting Started
+- [1. Features](#features)
+- [2. Getting Started](#getting-started)
+- [3. Configuration](#configuration)
+- [3. Running against a deployed Storybook](#running-against-a-deployed-storybook)
+- [4. Running in CI](#running-in-ci)
+- [5. Troubleshooting](#troubleshooting)
+- [6. Future work](#future-work)
 
-Click the **Use this template** button to get started.
+## Features
 
-![](https://user-images.githubusercontent.com/321738/125058439-8d9ef880-e0aa-11eb-9211-e6d7be812959.gif)
+- ⚡️ Zero config setup
+- 💨 Smoke test all stories
+- ▶️ Test stories with play functions
+- 🏃 Test your stories in parallel in a headless browser
+- 👷 Get feedback from error with a link directly to the story
+- 🐛 Debug them visually and interactively in a live browser with [addon-interactions](https://storybook.js.org/docs/react/essentials/interactions)
+- 🎭 Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)
+- 👀 Watch mode, filters, and the conveniences you'd expect
 
-Clone your repository and install dependencies.
+## Getting started
 
-```sh
-yarn
+1. Install the test runner and the interactions addon in Storybook:
+
+```jsx
+yarn add @storybook/test-runner -D
 ```
 
-### Development scripts
+<details>
+  <summary>1.1 Optional instructions to install the Interactions addon for visual debugging of play functions</summary>
 
-- `yarn start` runs babel in watch mode and starts Storybook
-- `yarn build` build and package your addon code
+  ```jsx
+  yarn add @storybook/addon-interactions @storybook/jest @storybook/testing-library -D
+  ```
 
-### Switch from TypeScript to JavaScript
+  Then add it to your `.storybook/main.js` config and enable debugging:
 
-Don't want to use TypeScript? We offer a handy eject command: `yarn eject-ts`
+  ```jsx
+  module.exports = {
+    stories: ['@storybook/addon-interactions'],
+    features: {
+      interactionsDebugger: true,
+    }
+  };
+  ```
+</details>
 
-This will convert all code to JS. It is a destructive process, so we recommended running this before you start writing any code.
+2. Add a `test-storybook` script to your package.json
 
-## What's included?
+```json
+{
+  "scripts": {
+    "test-storybook": "test-storybook"
+  }
+}
+```
 
-![Demo](https://user-images.githubusercontent.com/42671/107857205-e7044380-6dfa-11eb-8718-ad02e3ba1a3f.gif)
+3. Run Storybook (the test runner runs against a running Storybook instance):
 
-The addon code lives in `src`. It demonstrates all core addon related concepts. The three [UI paradigms](https://storybook.js.org/docs/react/addons/addon-types#ui-based-addons)
+```jsx
+yarn storybook
+```
 
-- `src/Tool.js`
-- `src/Panel.js`
-- `src/Tab.js`
+4. Run the test runner:
 
-Which, along with the addon itself, are registered in `src/preset/manager.js`.
+```jsx
+yarn test-storybook
+```
 
-Managing State and interacting with a story:
+> **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, set the TARGET_URL before running your command like:
+>```jsx
+>TARGET_URL=http://localhost:9009 yarn test-storybook
+>```
 
-- `src/withGlobals.js` & `src/Tool.js` demonstrates how to use `useGlobals` to manage global state and modify the contents of a Story.
-- `src/withRoundTrip.js` & `src/Panel.js` demonstrates two-way communication using channels.
-- `src/Tab.js` demonstrates how to use `useParameter` to access the current story's parameters.
+## Configuration
 
-Your addon might use one or more of these patterns. Feel free to delete unused code. Update `src/preset/manager.js` and `src/preset/preview.js` accordingly.
+The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--marWorkers`, etc.
 
-Lastly, configure you addon name in `src/constants.js`.
+The test runner works out of the box, but you can override its Jest configuration by adding a `test-runner-jest.config.js` that sets up your environment in the root folder of your project.
 
-### Metadata
+```js
+// test-runner-jest.config.js
+module.exports = {
+  cacheDirectory: 'node_modules/.cache/storybook/test-runner',
+  testMatch: ['**/*.stories.[jt]s(x)?'],
+  transform: {
+    '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
+    '^.+\\.[jt]sx?$': 'babel-jest',
+  },
+  preset: 'jest-playwright-preset',
+  testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
+  testEnvironmentOptions: {
+    'jest-playwright': {
+      browsers: ['chromium', 'firefox', 'webkit'], // run tests against all browsers
+    },
+  },
+};
+```
 
-Storybook addons are listed in the [catalog](https://storybook.js.org/addons) and distributed via npm. The catalog is populated by querying npm's registry for Storybook-specific metadata in `package.json`. This project has been configured with sample data. Learn more about available options in the [Addon metadata docs](https://storybook.js.org/docs/react/addons/addon-catalog#addon-metadata).
+The runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium.
 
-## Release Management
+## Running against a deployed Storybook
 
-### Setup
-
-This project is configured to use [auto](https://github.com/intuit/auto) for release management. It generates a changelog and pushes it to both GitHub and npm. Therefore, you need to configure access to both:
-
-- [`NPM_TOKEN`](https://docs.npmjs.com/creating-and-viewing-access-tokens#creating-access-tokens) Create a token with both _Read and Publish_ permissions.
-- [`GH_TOKEN`](https://github.com/settings/tokens) Create a token with the `repo` scope.
-
-Then open your `package.json` and edit the following fields:
-
-- `name`
-- `author`
-- `repository`
-
-#### Local
-
-To use `auto` locally create a `.env` file at the root of your project and add your tokens to it:
+By default, the test runner assumes that you're running it against a locally served Storybook.
+If you want to define a target url so it runs against deployed Storybooks, you can do so by passing the `TARGET_URL` environment variable:
 
 ```bash
-GH_TOKEN=<value you just got from GitHub>
-NPM_TOKEN=<value you just got from npm>
+TARGET_URL=https://the-storybook-url-here.com yarn test-storybook
 ```
 
-Lastly, **create labels on GitHub**. You’ll use these labels in the future when making changes to the package.
+## Running in CI
 
-```bash
-npx auto create-labels
+### Running against deployed Storybooks on Github Actions deployment
+
+On Github actions, once services like Vercel, Netlify and others do deployment run, they follow a pattern of emitting a `deployment_status` event containing the newly generated URL under `deployment_status.target_url`. Here's an example of an action to run tests based on that:
+
+```yml
+name: Storybook Tests
+on: deployment_status
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+    - name: Install dependencies
+      run: yarn
+    - name: Run Storybook tests
+      run: yarn test-storybook
+      env:
+        TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
-If you check on GitHub, you’ll now see a set of labels that `auto` would like you to use. Use these to tag future pull requests.
+### Running againts locally built Storybooks in CI
 
-#### GitHub Actions
+In order to build and run tests against your Storybook in CI, you might need to use a combination of commands involving the [concurrently](https://www.npmjs.com/package/concurrently), [http-server](https://www.npmjs.com/package/http-server) and [wait-on](https://www.npmjs.com/package/wait-on) libraries. Here's a recipe that does the following: Storybook is built and served locally, and once it is ready, the test runner will run against it.
 
-This template comes with GitHub actions already set up to publish your addon anytime someone pushes to your repository.
-
-Go to `Settings > Secrets`, click `New repository secret`, and add your `NPM_TOKEN`.
-
-### Creating a releasing
-
-To create a release locally you can run the following command, otherwise the GitHub action will make the release for you.
-
-```sh
-yarn release
+```json
+{
+  "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\""
+}
 ```
 
-That will:
+And then you can essentially run `test-storybook:ci` in your CI:
 
-- Build and package the addon code
-- Bump the version
-- Push a release to GitHub and npm
-- Push a changelog to GitHub
+```yml
+name: Storybook Tests
+on: push
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+    - name: Install dependencies
+      run: yarn
+    - name: Run Storybook tests
+      run: yarn test-storybook:ci
+```
+
+
+## Troubleshooting
+
+#### The test runner seems flaky and keeps timing out
+
+If your tests are timing out with `Timeout - Async callback was not invoked within the 15000 ms timeout specified by jest.setTimeout`, it might be that playwright couldn't handle to test the amount of stories you have in your project. Maybe you have a large amount of stories or your CI has a really low RAM configuration. 
+
+In either way, to fix it you should limit the amount of workers that run in parallel by passing the [--maxWorkers](https://jestjs.io/docs/cli#--maxworkersnumstring) option to your command:
+
+```json
+{
+  "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
+}
+```
+
+#### Adding the test runner to other CI environments
+
+As the test runner is based on playwright, depending on your CI setup you might need to use specific docker images or other configuration. In that case, you can refer to the [Playwright CI docs](https://playwright.dev/docs/ci) for more information.
+
+## Future work
+
+Future plans involve adding support for the following features:
+
+- 🧪 Custom test functions
+- 📄 Run addon reports
