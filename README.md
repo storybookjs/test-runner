@@ -115,9 +115,13 @@ TARGET_URL=https://the-storybook-url-here.com yarn test-storybook
 
 ## Running in CI
 
-### Running against deployed Storybooks on Github Actions deployment
+If you want to add the test-runner to CI, there are a couple of ways to do so:
 
-On Github actions, once services like Vercel, Netlify and others do deployment run, they follow a pattern of emitting a `deployment_status` event containing the newly generated URL under `deployment_status.target_url`. Here's an example of an action to run tests based on that:
+### 1. Running against deployed Storybooks on Github Actions deployment
+
+On Github actions, once services like Vercel, Netlify and others do deployment runs, they follow a pattern of emitting a `deployment_status` event containing the newly generated URL under `deployment_status.target_url`. You can use that URL and set it as `TARGET_URL` for the test-runner.
+
+Here's an example of an action to run tests based on that:
 
 ```yml
 name: Storybook Tests
@@ -140,13 +144,15 @@ jobs:
         TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
-### Running againts locally built Storybooks in CI
+> **_NOTE:_** If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
+
+### 2. Running against locally built Storybooks in CI
 
 In order to build and run tests against your Storybook in CI, you might need to use a combination of commands involving the [concurrently](https://www.npmjs.com/package/concurrently), [http-server](https://www.npmjs.com/package/http-server) and [wait-on](https://www.npmjs.com/package/wait-on) libraries. Here's a recipe that does the following: Storybook is built and served locally, and once it is ready, the test runner will run against it.
 
 ```json
 {
-  "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\""
+  "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\""
 }
 ```
 
@@ -170,6 +176,7 @@ jobs:
       run: yarn test-storybook:ci
 ```
 
+> **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
 
 ## Troubleshooting
 
@@ -181,7 +188,7 @@ In either way, to fix it you should limit the amount of workers that run in para
 
 ```json
 {
-  "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
+  "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
 }
 ```
 

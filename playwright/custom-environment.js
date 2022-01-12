@@ -94,7 +94,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
           try {
             await __waitForElement('#root');
           } catch(err) {
-            const message = \`Timed out waiting for Storybook to load after 10 seconds. Are you sure the Storybook is running correctly in that URL?\n\n\nHTML: \${document.body.innerHTML}\`;
+            const message = \`Timed out waiting for Storybook to load after 10 seconds. Are you sure the Storybook is running correctly in that URL? Is the Storybook private (e.g. under authentication layers)?\n\n\nHTML: \${document.body.innerHTML}\`;
             throw new StorybookTestRunnerError(storyId, hasPlayFn, message);
           }
 
