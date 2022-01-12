@@ -43,8 +43,9 @@
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --no-manager-cache --quiet\"",
     "build-storybook": "build-storybook",
     "release": "yarn build && auto shipit",
-    "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i",
-    "test-storybook:playwright": "jest --no-cache --config ./test-runner-jest.config.js"
+    "test-storybook": "node bin/test-storybook.js --no-cache",
+    "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\"",
+    "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i"
   },
   "bin": {
     "test-storybook": "./bin/test-storybook.js"
@@ -73,7 +74,7 @@
     "babel-jest": "^27.0.6",
     "babel-loader": "^8.1.0",
     "boxen": "^5.0.1",
-    "concurrently": "^6.2.0",
+    "concurrently": "^7.0.0",
     "dedent": "^0.7.0",
     "jest": "^27.0.6",
     "jest-environment-jsdom": "^27.0.6",
@@ -84,6 +85,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.4",
     "typescript": "^4.2.4",
+    "wait-on": "^6.0.0",
     "zx": "^1.14.1"
   },
   "publishConfig": {

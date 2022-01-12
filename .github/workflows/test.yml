@@ -16,6 +16,10 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Run tests
+      - name: Run jest tests
         run: |
           yarn test
+
+      - name: Run test runner
+        run: |
+          yarn test-storybook:ci
