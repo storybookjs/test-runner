@@ -45,7 +45,8 @@
     "release": "yarn build && auto shipit",
     "test-storybook": "node bin/test-storybook.js --no-cache",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\"",
-    "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i"
+    "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i",
+    "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js"
   },
   "bin": {
     "test-storybook": "./bin/test-storybook.js"
