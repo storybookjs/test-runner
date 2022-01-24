@@ -31,7 +31,6 @@ const prefixFunction = (
   input: t.Expression,
   testPrefixer?: TestPrefixer
 ) => {
-  const clone = t.cloneDeepWithoutLoc(input);
   const name = storyNameFromExport(key);
   const context: TestContext = {
     storyExport: t.identifier(key),
