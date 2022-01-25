@@ -1,12 +1,12 @@
-const fs = require('fs')
+const fs = require('fs');
 
-const storiesFolderPath = 'stories/stress-test'
+const storiesFolderPath = 'stories/stress-test';
 
-if (!fs.existsSync(storiesFolderPath)){
-  fs.mkdirSync(storiesFolderPath)
+if (!fs.existsSync(storiesFolderPath)) {
+  fs.mkdirSync(storiesFolderPath);
 }
 
-const storiesAmount = Number(process.env.STORIES_AMOUNT) || 500
+const storyCount = Number(process.env.DYNAMIC_STORIES_COUNT) || 500;
 
 let content = `
 import React from 'react';
@@ -17,15 +17,15 @@ export default {
   title: 'StressTest',
   component: Button,
 };
-`
-for(let i = 0; i < storiesAmount; i++) {
+`;
+for (let i = 0; i < storyCount; i++) {
   content += `
   export const Button${i} = {
     args: {
       label: 'I am button #${i}'
     }
   };
-  `
+  `;
 }
 
-fs.writeFileSync(`${storiesFolderPath}/StressTest.stories.js`, content, { encoding: 'utf-8' })
+fs.writeFileSync(`${storiesFolderPath}/StressTest.stories.js`, content, { encoding: 'utf-8' });
