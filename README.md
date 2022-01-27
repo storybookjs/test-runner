@@ -4,13 +4,20 @@ Storybook test runner turns all of your stories into executable tests.
 
 ## Table of Contents
 
-- [1. Features](#features)
-- [2. Getting Started](#getting-started)
-- [3. Configuration](#configuration)
-- [3. Running against a deployed Storybook](#running-against-a-deployed-storybook)
-- [4. Running in CI](#running-in-ci)
-- [5. Troubleshooting](#troubleshooting)
-- [6. Future work](#future-work)
+- [Storybook Test Runner](#storybook-test-runner)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Getting started](#getting-started)
+  - [Configuration](#configuration)
+  - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
+    - [Stories.json mode](#storiesjson-mode)
+  - [Running in CI](#running-in-ci)
+    - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
+    - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+  - [Troubleshooting](#troubleshooting)
+      - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+      - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+  - [Future work](#future-work)
 
 ## Features
 
@@ -40,20 +47,21 @@ yarn add jest -D
 <details>
   <summary>1.1 Optional instructions to install the Interactions addon for visual debugging of play functions</summary>
 
-  ```jsx
-  yarn add @storybook/addon-interactions @storybook/jest @storybook/testing-library -D
-  ```
+```jsx
+yarn add @storybook/addon-interactions @storybook/jest @storybook/testing-library -D
+```
 
-  Then add it to your `.storybook/main.js` config and enable debugging:
+Then add it to your `.storybook/main.js` config and enable debugging:
 
-  ```jsx
-  module.exports = {
-    stories: ['@storybook/addon-interactions'],
-    features: {
-      interactionsDebugger: true,
-    }
-  };
-  ```
+```jsx
+module.exports = {
+  stories: ['@storybook/addon-interactions'],
+  features: {
+    interactionsDebugger: true,
+  },
+};
+```
+
 </details>
 
 2. Add a `test-storybook` script to your package.json
@@ -79,13 +87,14 @@ yarn test-storybook
 ```
 
 > **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, set the TARGET_URL before running your command like:
->```jsx
->TARGET_URL=http://localhost:9009 yarn test-storybook
->```
+>
+> ```jsx
+> TARGET_URL=http://localhost:9009 yarn test-storybook
+> ```
 
 ## Configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--marWorkers`, etc.
+The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--maxWorkers`, etc.
 
 The test runner works out of the box, but you can override its Jest configuration by adding a `test-runner-jest.config.js` that sets up your environment in the root folder of your project.
 
@@ -119,6 +128,41 @@ If you want to define a target url so it runs against deployed Storybooks, you c
 TARGET_URL=https://the-storybook-url-here.com yarn test-storybook
 ```
 
+### Stories.json mode
+
+By default, the test runner transforms your story files into tests. It also supports a secondary "stories.json mode" which runs directly against your Storybook's `stories.json`, a static index of all the stories.
+
+This is particularly useful for running against a deployed storybook because `stories.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code.
+
+To run in stories.json mode, first make sure your Storybook has a v3 `stories.json` file. You can navigate to:
+
+```
+https://the-storybook-url-here.com/stories.json
+```
+
+It should be a JSON file and the first key should be `"v": 3` followed by a key called `"stories"` containing a map of story IDs to JSON objects.
+
+If your Storybook does not have a `stories.json` file, you can generate one provided:
+
+- You are running SB6.4 or above
+- You are not using `storiesOf` stories
+
+To enable `stories.json` in your Storybook, set the `buildStoriesJson` feature flag in `.storybook/main.js`:
+
+```js
+module.exports = {
+  features: { buildStoriesJson: true },
+};
+```
+
+Once you have a valid `stories.json` file, you can run the test runner against it with the `--stories-json` flag:
+
+```bash
+TARGET_URL=https://the-storybook-url-here.com yarn test-storybook --stories-json
+```
+
+Note that stories.json mode is not compatible with watch mode.
+
 ## Running in CI
 
 If you want to add the test-runner to CI, there are a couple of ways to do so:
@@ -138,16 +182,16 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success'
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14.x'
-    - name: Install dependencies
-      run: yarn
-    - name: Run Storybook tests
-      run: yarn test-storybook
-      env:
-        TARGET_URL: '${{ github.event.deployment_status.target_url }}'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: yarn
+      - name: Run Storybook tests
+        run: yarn test-storybook
+        env:
+          TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
 > **_NOTE:_** If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
@@ -172,14 +216,14 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14.x'
-    - name: Install dependencies
-      run: yarn
-    - name: Run Storybook tests
-      run: yarn test-storybook:ci
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: yarn
+      - name: Run Storybook tests
+        run: yarn test-storybook:ci
 ```
 
 > **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
@@ -188,7 +232,7 @@ jobs:
 
 #### The test runner seems flaky and keeps timing out
 
-If your tests are timing out with `Timeout - Async callback was not invoked within the 15000 ms timeout specified by jest.setTimeout`, it might be that playwright couldn't handle to test the amount of stories you have in your project. Maybe you have a large amount of stories or your CI has a really low RAM configuration. 
+If your tests are timing out with `Timeout - Async callback was not invoked within the 15000 ms timeout specified by jest.setTimeout`, it might be that playwright couldn't handle to test the amount of stories you have in your project. Maybe you have a large amount of stories or your CI has a really low RAM configuration.
 
 In either way, to fix it you should limit the amount of workers that run in parallel by passing the [--maxWorkers](https://jestjs.io/docs/cli#--maxworkersnumstring) option to your command:
 
