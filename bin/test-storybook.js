@@ -20,6 +20,19 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
+// Clean up tmp files globally in case of control-c
+let storiesJsonTmpDir;
+const cleanup = () => {
+  if (storiesJsonTmpDir) {
+    console.log(`[test-storybook] Cleaning up ${storiesJsonTmpDir}`);
+    fs.rmSync(storiesJsonTmpDir, { recursive: true, force: true });
+  }
+  process.exit();
+};
+
+process.on('SIGINT', cleanup);
+process.on('beforeExit', cleanup);
+
 function sanitizeURL(url) {
   let finalURL = url;
   // prepend URL protocol if not there
@@ -94,23 +107,11 @@ const main = async () => {
   await checkStorybook(targetURL);
   let args = process.argv.filter((arg) => arg !== '--stories-json');
 
-  let tmpDir;
   if (args.length !== process.argv.length) {
-    tmpDir = await fetchStoriesJson(targetURL);
-    process.env.TEST_ROOT = tmpDir;
+    storiesJsonTmpDir = await fetchStoriesJson(targetURL);
+    process.env.TEST_ROOT = storiesJsonTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
-
-  const cleanup = () => {
-    if (tmpDir) {
-      console.log(`[test-storybook] Cleaning up ${tmpDir}`);
-      fs.rmSync(tmpDir, { recursive: true, force: true });
-    }
-    process.exit();
-  };
-
-  process.on('SIGINT', cleanup);
-  process.on('beforeExit', cleanup);
 
   await executeJestPlaywright(args);
 };
