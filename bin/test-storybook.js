@@ -78,6 +78,9 @@ async function fetchStoriesJson(url) {
     });
   } catch (err) {
     console.error(`[test-storybook] Failed to fetch stories.json from ${storiesJsonUrl}.`);
+    console.error(
+      'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode'
+    );
     console.error(err);
     process.exit(1);
   }
