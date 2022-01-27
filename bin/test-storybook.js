@@ -66,7 +66,7 @@ async function checkStorybook(url) {
 }
 
 async function fetchStoriesJson(url) {
-  const storiesJsonUrl = new URL('/stories.json', url).toString();
+  const storiesJsonUrl = new URL('stories.json', url).toString();
   let tmpFile;
   try {
     const res = await fetch(storiesJsonUrl);
