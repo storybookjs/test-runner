@@ -31,6 +31,12 @@ Storybook test runner turns all of your stories into executable tests.
 yarn add @storybook/test-runner -D
 ```
 
+Jest is a peer dependency. If you don't have it, also install it
+
+```jsx
+yarn add jest -D
+```
+
 <details>
   <summary>1.1 Optional instructions to install the Interactions addon for visual debugging of play functions</summary>
 

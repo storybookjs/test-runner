@@ -1,9 +1,12 @@
-name: Test
+name: Stress Tests
 
-on: [push]
+on:
+  pull_request:
+    types: [ labeled ]
 
 jobs:
   test:
+    if: ${{ github.event.label.name == 'stress test' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,17 +19,8 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Run jest tests
-        run: |
-          yarn test
-
-      - name: Run test runner (default config)
+      - name: Run test runner
         run: |
           yarn build
-          yarn test-storybook:ci
-
-      - name: Run test runner (story store v7)
-        run: |
-          yarn build
-          STORY_STORE_V7=true yarn test-storybook:ci
-
+          yarn generate-dynamic-stories
+          STORY_STORE_V7=true STRESS_TEST=true yarn test-storybook:ci
