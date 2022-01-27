@@ -1,5 +1,6 @@
 import * as t from '@babel/types';
 import generate from '@babel/generator';
+import { toId } from '@storybook/csf';
 
 import { testPrefixer } from './transformPlaywright';
 
@@ -29,23 +30,32 @@ const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
+/**
+ * Generate one test file per component so that Jest can
+ * run them in parallel.
+ */
 export const transformPlaywrightJson = (src: string) => {
   const json = JSON.parse(src);
   if (json.v !== 3) {
     throw new Error(`Unsupported version ${json.v}`);
   }
   const stories = Object.values(json.stories) as Story[];
-  const storyGroups = stories.reduce((acc, story) => {
-    acc[story.title] = acc[story.title] || [];
-    acc[story.title].push(story);
+  const titleIdToStories = stories.reduce((acc, story) => {
+    const titleId = toId(story.title);
+    acc[titleId] = acc[titleId] || [];
+    acc[titleId].push(story);
     return acc;
   }, {} as { [key: string]: Story[] });
 
-  const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
-  const program = t.program(
-    Object.entries(storyGroups).map(([title, stories]) => makeDescribe(title, storyTests))
-  );
+  const titleIdToTest = Object.entries(titleIdToStories).reduce((acc, [titleId, stories]) => {
+    const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
+    const program = t.program([makeDescribe(stories[0].title, storyTests)]);
 
-  const { code } = generate(program, {});
-  return code;
+    const { code } = generate(program, {});
+
+    acc[titleId] = code;
+    return acc;
+  }, {} as { [key: string]: string });
+
+  return titleIdToTest;
 };

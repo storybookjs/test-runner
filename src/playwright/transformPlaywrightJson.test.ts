@@ -1,11 +1,6 @@
 import dedent from 'ts-dedent';
 import { transformPlaywrightJson } from './transformPlaywrightJson';
 
-expect.addSnapshotSerializer({
-  print: (val: any) => val.trim(),
-  test: (val: any) => true,
-});
-
 describe('Playwright Json', () => {
   it('should generate a test for each story', () => {
     const input = dedent`{
@@ -53,15 +48,16 @@ describe('Playwright Json', () => {
       }
     }`;
     expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
-describe("Example/Header", () => {
-  describe("Logged In", () => {
-    it("test", async () => {
+Object {
+  "example-header": "describe(\\"Example/Header\\", () => {
+  describe(\\"Logged In\\", () => {
+    it(\\"test\\", async () => {
       page.on('pageerror', err => {
         page.evaluate(({
           id,
           err
         }) => __throwError(id, err), {
-          id: "example-header--logged-in",
+          id: \\"example-header--logged-in\\",
           err: err.message
         });
       });
@@ -69,19 +65,19 @@ describe("Example/Header", () => {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: "example-header--logged-in",
+        id: \\"example-header--logged-in\\",
         hasPlayFn: false
       });
     });
   });
-  describe("Logged Out", () => {
-    it("test", async () => {
+  describe(\\"Logged Out\\", () => {
+    it(\\"test\\", async () => {
       page.on('pageerror', err => {
         page.evaluate(({
           id,
           err
         }) => __throwError(id, err), {
-          id: "example-header--logged-out",
+          id: \\"example-header--logged-out\\",
           err: err.message
         });
       });
@@ -89,19 +85,21 @@ describe("Example/Header", () => {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: "example-header--logged-out",
+        id: \\"example-header--logged-out\\",
         hasPlayFn: false
       });
     });
   });
-  describe("Logged In", () => {
-    it("test", async () => {
+});",
+  "example-page": "describe(\\"Example/Page\\", () => {
+  describe(\\"Logged In\\", () => {
+    it(\\"test\\", async () => {
       page.on('pageerror', err => {
         page.evaluate(({
           id,
           err
         }) => __throwError(id, err), {
-          id: "example-page--logged-in",
+          id: \\"example-page--logged-in\\",
           err: err.message
         });
       });
@@ -109,74 +107,13 @@ describe("Example/Header", () => {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: "example-page--logged-in",
+        id: \\"example-page--logged-in\\",
         hasPlayFn: false
       });
     });
   });
-});
-describe("Example/Page", () => {
-  describe("Logged In", () => {
-    it("test", async () => {
-      page.on('pageerror', err => {
-        page.evaluate(({
-          id,
-          err
-        }) => __throwError(id, err), {
-          id: "example-header--logged-in",
-          err: err.message
-        });
-      });
-      return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: "example-header--logged-in",
-        hasPlayFn: false
-      });
-    });
-  });
-  describe("Logged Out", () => {
-    it("test", async () => {
-      page.on('pageerror', err => {
-        page.evaluate(({
-          id,
-          err
-        }) => __throwError(id, err), {
-          id: "example-header--logged-out",
-          err: err.message
-        });
-      });
-      return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: "example-header--logged-out",
-        hasPlayFn: false
-      });
-    });
-  });
-  describe("Logged In", () => {
-    it("test", async () => {
-      page.on('pageerror', err => {
-        page.evaluate(({
-          id,
-          err
-        }) => __throwError(id, err), {
-          id: "example-page--logged-in",
-          err: err.message
-        });
-      });
-      return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: "example-page--logged-in",
-        hasPlayFn: false
-      });
-    });
-  });
-});
+});",
+}
 `);
   });
 });

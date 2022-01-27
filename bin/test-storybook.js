@@ -8,8 +8,6 @@ const path = require('path');
 const tempy = require('tempy');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
-const STORIES_JSON_TEST_JS = 'stories-json.test.js';
-
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
@@ -67,38 +65,51 @@ async function checkStorybook(url) {
 
 async function fetchStoriesJson(url) {
   const storiesJsonUrl = new URL('stories.json', url).toString();
-  let tmpFile;
+  let tmpDir;
   try {
     const res = await fetch(storiesJsonUrl);
-    const tmpDir = tempy.directory();
-    tmpFile = path.join(tmpDir, 'stories-json.test.js');
     const json = await res.text();
-    const js = transformPlaywrightJson(json);
-    fs.writeFileSync(tmpFile, js);
+    const titleIdToTest = transformPlaywrightJson(json);
+
+    tmpDir = tempy.directory();
+    Object.entries(titleIdToTest).forEach(([titleId, test]) => {
+      const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
+      fs.writeFileSync(tmpFile, test);
+    });
   } catch (err) {
     console.error(`[test-storybook] Failed to fetch stories.json from ${storiesJsonUrl}.`);
+    console.error(err);
     process.exit(1);
   }
-  return tmpFile;
+  return tmpDir;
 }
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const main = async () => {
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   await checkStorybook(targetURL);
   let args = process.argv.filter((arg) => arg !== '--stories-json');
-  let testFile;
+
+  let tmpDir;
   if (args.length !== process.argv.length) {
-    testFile = await fetchStoriesJson(targetURL);
-    process.env.TEST_ROOT = path.dirname(testFile);
+    tmpDir = await fetchStoriesJson(targetURL);
+    process.env.TEST_ROOT = tmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  await executeJestPlaywright(args);
+  const cleanup = () => {
+    if (tmpDir) {
+      console.log(`[test-storybook] Cleaning up ${tmpDir}`);
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+    process.exit();
+  };
 
-  if (testFile) {
-    fs.rmSync(testFile);
-    fs.rmdirSync(path.dirname(testFile));
-  }
+  process.on('SIGINT', cleanup);
+  process.on('beforeExit', cleanup);
+
+  await executeJestPlaywright(args);
 };
 
 main().catch((e) => console.log(`[test-storybook] ${e}`));
