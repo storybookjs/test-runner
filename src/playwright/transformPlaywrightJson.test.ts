@@ -116,4 +116,64 @@ Object {
 }
 `);
   });
+
+  it('should skip docs-only stories', () => {
+    const input = dedent`{
+      "v": 3,
+      "stories": {
+        "example-introduction--page": {
+          "id": "example-introduction--page",
+          "title": "Example/Introduction",
+          "name": "Page",
+          "importPath": "./stories/basic/Introduction.stories.mdx",
+          "kind": "Example/Introduction",
+          "story": "Page",
+          "parameters": {
+            "__id": "example-introduction--page",
+            "docsOnly": true,
+            "fileName": "./stories/basic/Introduction.stories.mdx"
+          }
+        },
+        "example-page--logged-in": {
+          "id": "example-page--logged-in",
+          "title": "Example/Page",
+          "name": "Logged In",
+          "importPath": "./stories/basic/Page.stories.js",
+          "kind": "Example/Page",
+          "story": "Logged In",
+          "parameters": {
+            "__id": "example-page--logged-in",
+            "docsOnly": false,
+            "fileName": "./stories/basic/Page.stories.js"
+          }
+        }
+      }
+    }`;
+    expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+Object {
+  "example-page": "describe(\\"Example/Page\\", () => {
+  describe(\\"Logged In\\", () => {
+    it(\\"test\\", async () => {
+      page.on('pageerror', err => {
+        page.evaluate(({
+          id,
+          err
+        }) => __throwError(id, err), {
+          id: \\"example-page--logged-in\\",
+          err: err.message
+        });
+      });
+      return page.evaluate(({
+        id,
+        hasPlayFn
+      }) => __test(id, hasPlayFn), {
+        id: \\"example-page--logged-in\\",
+        hasPlayFn: false
+      });
+    });
+  });
+});",
+}
+`);
+  });
 });
