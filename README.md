@@ -15,8 +15,8 @@ Storybook test runner turns all of your stories into executable tests.
     - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
     - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
   - [Troubleshooting](#troubleshooting)
-      - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
-      - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+    - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+    - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
   - [Future work](#future-work)
 
 ## Features
@@ -161,7 +161,7 @@ Once you have a valid `stories.json` file, you can run the test runner against i
 TARGET_URL=https://the-storybook-url-here.com yarn test-storybook --stories-json
 ```
 
-Note that stories.json mode is not compatible with watch mode.
+> **NOTE:** stories.json mode is not compatible with watch mode.
 
 ## Running in CI
 

@@ -90,9 +90,9 @@ async function fetchStoriesJson(url) {
       fs.writeFileSync(tmpFile, test);
     });
   } catch (err) {
-    console.error(`[test-storybook] Failed to fetch stories.json from ${storiesJsonUrl}.`);
+    console.error(`[test-storybook] Failed to fetch stories.json from ${storiesJsonUrl}`);
     console.error(
-      'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode'
+      'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode\n'
     );
     console.error(err);
     process.exit(1);
