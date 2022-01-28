@@ -2,7 +2,7 @@ import { transform as babelTransform } from '@babel/core';
 import { transformPlaywright } from './transformPlaywright';
 
 export const process = (src: string, filename: string, config: any) => {
-  const csfTest = transformPlaywright(src);
+  const csfTest = transformPlaywright(src, filename);
 
   const result = babelTransform(csfTest, {
     filename,
