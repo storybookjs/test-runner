@@ -1,7 +1,7 @@
 import template from '@babel/template';
 import { transformCsf } from '../csf/transformCsf';
 
-const testPrefixer = template(
+export const testPrefixer = template(
   `
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => {
