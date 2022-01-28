@@ -30,6 +30,9 @@ const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
+// FIXME: this should be a CSF helper
+const isDocsOnly = (stories: Story[]) => stories.length === 1 && stories[0].name === 'Page';
+
 /**
  * Generate one test file per component so that Jest can
  * run them in parallel.
@@ -41,21 +44,21 @@ export const transformPlaywrightJson = (src: string) => {
   }
   const stories = Object.values(json.stories) as Story[];
   const titleIdToStories = stories.reduce((acc, story) => {
-    if (!story.parameters?.docsOnly) {
-      const titleId = toId(story.title);
-      acc[titleId] = acc[titleId] || [];
-      acc[titleId].push(story);
-    }
+    const titleId = toId(story.title);
+    acc[titleId] = acc[titleId] || [];
+    acc[titleId].push(story);
     return acc;
   }, {} as { [key: string]: Story[] });
 
   const titleIdToTest = Object.entries(titleIdToStories).reduce((acc, [titleId, stories]) => {
-    const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
-    const program = t.program([makeDescribe(stories[0].title, storyTests)]);
+    if (!isDocsOnly(stories)) {
+      const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
+      const program = t.program([makeDescribe(stories[0].title, storyTests)]);
 
-    const { code } = generate(program, {});
+      const { code } = generate(program, {});
 
-    acc[titleId] = code;
+      acc[titleId] = code;
+    }
     return acc;
   }, {} as { [key: string]: string });
 
