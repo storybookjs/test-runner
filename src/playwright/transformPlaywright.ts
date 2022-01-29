@@ -1,4 +1,4 @@
-import { resolve, join } from 'path';
+import { resolve, join, relative } from 'path';
 import template from '@babel/template';
 import { serverRequire, normalizeStories } from '@storybook/core-common';
 import { autoTitle } from '@storybook/store';
@@ -44,16 +44,13 @@ const getDefaultTitle = (filename: string) => {
     importPathMatcher: new RegExp(specifier.importPathMatcher),
   }));
 
-  // filename: /Users/xxxx/test-runner/stories/basic/Button.stories.js
-  const filePath = `.${filename.split(workingDir)[1]}`;
-  // filePath: ./stories/basic/Page.stories.js
+  const filePath = './' + relative(workingDir, filename);
 
   return autoTitle(filePath, normalizedStoriesEntries);
 };
 
 export const transformPlaywright = (src: string, filename: string) => {
   const defaultTitle = getDefaultTitle(filename);
-
   const result = transformCsf(src, {
     // @ts-ignore
     testPrefixer,
