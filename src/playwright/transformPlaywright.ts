@@ -33,7 +33,7 @@ const getDefaultTitle = (filename: string) => {
   const main = serverRequire(join(configDir, 'main'));
 
   if (!main) {
-    throw new Error('could not load main.js');
+    throw new Error(`Could not load main.js in ${configDir}`);
   }
 
   const normalizedStoriesEntries = normalizeStories(main.stories, {
