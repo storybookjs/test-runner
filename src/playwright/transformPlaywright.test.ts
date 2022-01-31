@@ -13,10 +13,8 @@ expect.addSnapshotSerializer({
 
 describe('Playwright', () => {
   beforeEach(() => {
-    const basePath = '/Users/yannbraga/open-source/test-runner';
-    const pathSpy = jest.spyOn(path, 'resolve');
-    pathSpy.mockReturnValueOnce(basePath + '/.storybook');
-    pathSpy.mockReturnValueOnce(basePath);
+    const relativeSpy = jest.spyOn(path, 'relative');
+    relativeSpy.mockReturnValueOnce('stories/basic/Header.stories.js');
     jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => ({
       stories: [
         {
