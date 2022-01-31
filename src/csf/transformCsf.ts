@@ -16,13 +16,13 @@ export interface TestContext {
 }
 type FilePrefixer = () => t.Statement[];
 type TestPrefixer = (context: TestContext) => t.Statement[];
-const JEST_GLOBAL_REGEX = /(before|after)(All|Each)$/;
 
 interface TransformOptions {
   clearBody?: boolean;
   filePrefixer?: FilePrefixer;
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
+  defaultTitle?: string;
 }
 
 const prefixFunction = (
@@ -73,9 +73,15 @@ const makeDescribe = (key: string, tests: t.Statement[]): t.Statement | null => 
 
 export const transformCsf = (
   code: string,
-  { filePrefixer, clearBody = false, testPrefixer, insertTestIfEmpty }: TransformOptions = {}
+  {
+    filePrefixer,
+    clearBody = false,
+    testPrefixer,
+    insertTestIfEmpty,
+    defaultTitle,
+  }: TransformOptions = {}
 ) => {
-  const csf = loadCsf(code, { defaultTitle: 'FIXME' });
+  const csf = loadCsf(code, { defaultTitle });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);

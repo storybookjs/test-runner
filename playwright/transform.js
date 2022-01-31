@@ -3,7 +3,7 @@ const { transformPlaywright } = require('../dist/cjs/playwright/transformPlaywri
 
 module.exports = {
   process(src, filename, config) {
-    const csfTest = transformPlaywright(src);
+    const csfTest = transformPlaywright(src, filename);
 
     const result = babelTransform(csfTest, {
       filename,

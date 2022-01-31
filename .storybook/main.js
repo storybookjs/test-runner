@@ -1,6 +1,10 @@
 const { STRESS_TEST, STORY_STORE_V7, WITHOUT_DOCS } = process.env;
 
-const stories = ['../stories/basic/*.stories.mdx', '../stories/basic/*.stories.@(js|jsx|ts|tsx)'];
+const stories = [
+  {
+    directory: '../stories',
+  },
+];
 
 if (STRESS_TEST) {
   stories.push('../stories/stress-test/*.stories.@(js|jsx|ts|tsx)');
