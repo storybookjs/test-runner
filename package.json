@@ -37,7 +37,7 @@
     "buildTsc": "tsc --declaration --emitDeclarationOnly --outDir ./dist/ts",
     "prebuild": "yarn clean",
     "build": "concurrently \"yarn buildBabel\" \"yarn buildTsc\"",
-    "build:watch": "concurrently \"yarn buildBabel:esm -- --watch\" \"yarn buildTsc -- --watch\"",
+    "build:watch": "concurrently \"yarn buildBabel:cjs -- --watch\" \"yarn buildTsc -- --watch\"",
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --no-manager-cache --quiet\"",
@@ -106,6 +106,7 @@
   "dependencies": {
     "@storybook/csf": "0.0.2--canary.87bc651.0",
     "@storybook/csf-tools": "^6.4.14",
+    "commander": "^9.0.0",
     "jest-playwright-preset": "^1.7.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",
