@@ -14,6 +14,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Running in CI](#running-in-ci)
     - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
     - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+  - [Experimental test hook API](#experimental-test-hook-api)
   - [Troubleshooting](#troubleshooting)
     - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
     - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
@@ -227,6 +228,49 @@ jobs:
 ```
 
 > **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
+
+## Experimental test hook API
+
+The test runner renders a story and executes its [play function](https://storybook.js.org/docs/react/writing-stories/play-function) if one exists. However, there are certain behaviors that are not possible to achieve via the play function, which executes in the browser. For example, if you want the test runner to take visual snapshots for you, this is something that is possible via Playwright/Jest, but must be executed in Node.
+
+To enable use cases like visual or DOM snapshots, the test runner exports test hooks that can be overridden globally. These hooks give you access to the test lifecycle before and after the story is rendered.
+
+Consider the following pseudocode:
+
+```js
+it('component--widget', async () => {
+  const page = newPage();
+  const context = { id: 'component--widget', title: 'Component', name: 'Widget' };
+  await page.goto(STORYBOOK_URL);
+
+  // pre-render hook
+  if (preRender) await preRender(page, context);
+
+  // render the story and run its paly function (if applicable)
+  await page.execute('render', context);
+
+  // post-render hook
+  if (postRender) await postRender(page, context);
+});
+```
+
+The hooks here, `preRender` and `postRender` are functions that take a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+
+Thus, to make the test runner perform image snapshotting, you might set up the following in your `jest-setup.js`:
+
+```js
+const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { setPostRender } = require('@storybook/test-runner');
+
+setPostRender(async (page, context) => {
+  const image = await page.screenshot();
+  expect(image).toMatchImageSnapshot();
+});
+
+expect.extend({ toMatchImageSnapshot });
+```
+
+> **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function when that's possible.
 
 ## Troubleshooting
 

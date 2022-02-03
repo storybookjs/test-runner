@@ -14,8 +14,9 @@ export interface TestContext {
   id: t.Literal;
   hasPlayFn?: t.BooleanLiteral;
 }
-type FilePrefixer = () => t.Statement[];
-type TestPrefixer = (context: TestContext) => t.Statement[];
+type TemplateResult = t.Statement | t.Statement[];
+type FilePrefixer = () => TemplateResult;
+type TestPrefixer = (context: TestContext) => TemplateResult;
 
 interface TransformOptions {
   clearBody?: boolean;
@@ -41,7 +42,7 @@ const prefixFunction = (
   };
 
   // instead, let's just make the prefixer return the function
-  const result = testPrefixer(context);
+  const result = makeArray(testPrefixer(context));
   const stmt = result[1] as t.ExpressionStatement;
   return stmt.expression;
 };
@@ -70,6 +71,9 @@ const makeDescribe = (key: string, tests: t.Statement[]): t.Statement | null => 
     ])
   );
 };
+
+const makeArray = (templateResult: TemplateResult) =>
+  Array.isArray(templateResult) ? templateResult : [templateResult];
 
 export const transformCsf = (
   code: string,
@@ -112,7 +116,7 @@ export const transformCsf = (
 
   // FIXME: insert between imports
   if (filePrefixer) {
-    const { code: prefixCode } = generate(t.program(filePrefixer()), {});
+    const { code: prefixCode } = generate(t.program(makeArray(filePrefixer())), {});
     result = `${prefixCode}\n`;
   }
   if (!clearBody) result = `${result}${code}\n`;
