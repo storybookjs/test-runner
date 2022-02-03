@@ -60,11 +60,9 @@ describe('Playwright', () => {
               });
             });
             return page.evaluate(({
-              id,
-              hasPlayFn
-            }) => __test(id, hasPlayFn), {
-              id: "foo-bar--a",
-              hasPlayFn: true
+              id
+            }) => __test(id), {
+              id: "foo-bar--a"
             });
           });
         });
@@ -96,11 +94,9 @@ describe('Playwright', () => {
               });
             });
             return page.evaluate(({
-              id,
-              hasPlayFn
-            }) => __test(id, hasPlayFn), {
-              id: "foo-bar--a",
-              hasPlayFn: false
+              id
+            }) => __test(id), {
+              id: "foo-bar--a"
             });
           });
         });
@@ -133,11 +129,9 @@ describe('Playwright', () => {
               });
             });
             return page.evaluate(({
-              id,
-              hasPlayFn
-            }) => __test(id, hasPlayFn), {
-              id: "example-header--a",
-              hasPlayFn: false
+              id
+            }) => __test(id), {
+              id: "example-header--a"
             });
           });
         });

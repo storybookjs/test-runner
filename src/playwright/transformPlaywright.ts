@@ -13,9 +13,8 @@ export const testPrefixer = template(
         page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
       });
 
-      return page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
-        id: %%id%%,
-        hasPlayFn: %%hasPlayFn%%,
+      return page.evaluate(({ id }) => __test(id), {
+        id: %%id%%
       });
     }
   `,

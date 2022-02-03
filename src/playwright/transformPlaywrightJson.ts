@@ -13,7 +13,6 @@ const makeTest = (story: Story): t.Statement => {
     id: t.stringLiteral(story.id),
     // FIXME
     storyExport: t.identifier(story.id),
-    hasPlayFn: t.booleanLiteral(false),
   });
   const stmt = result[1] as t.ExpressionStatement;
   return t.expressionStatement(
