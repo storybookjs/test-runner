@@ -75,8 +75,7 @@ Object {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: \\"example-header--logged-in\\",
-        hasPlayFn: false
+        id: \\"example-header--logged-in\\"
       });
 
       if (global.__sbPostRender) {
@@ -111,8 +110,7 @@ Object {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: \\"example-header--logged-out\\",
-        hasPlayFn: false
+        id: \\"example-header--logged-out\\"
       });
 
       if (global.__sbPostRender) {
@@ -149,8 +147,7 @@ Object {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: \\"example-page--logged-in\\",
-        hasPlayFn: false
+        id: \\"example-page--logged-in\\"
       });
 
       if (global.__sbPostRender) {
@@ -225,8 +222,7 @@ Object {
         id,
         hasPlayFn
       }) => __test(id, hasPlayFn), {
-        id: \\"example-page--logged-in\\",
-        hasPlayFn: false
+        id: \\"example-page--logged-in\\"
       });
 
       if (global.__sbPostRender) {

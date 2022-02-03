@@ -75,8 +75,7 @@ describe('Playwright', () => {
               id,
               hasPlayFn
             }) => __test(id, hasPlayFn), {
-              id: "foo-bar--a",
-              hasPlayFn: true
+              id: "foo-bar--a"
             });
 
             if (global.__sbPostRender) {
@@ -129,8 +128,7 @@ describe('Playwright', () => {
               id,
               hasPlayFn
             }) => __test(id, hasPlayFn), {
-              id: "foo-bar--a",
-              hasPlayFn: false
+              id: "foo-bar--a"
             });
 
             if (global.__sbPostRender) {
@@ -184,8 +182,7 @@ describe('Playwright', () => {
               id,
               hasPlayFn
             }) => __test(id, hasPlayFn), {
-              id: "example-header--a",
-              hasPlayFn: false
+              id: "example-header--a"
             });
 
             if (global.__sbPostRender) {

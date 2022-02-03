@@ -25,7 +25,6 @@ export const testPrefixer = template(
 
       const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
         id: %%id%%,
-        hasPlayFn: %%hasPlayFn%%,
       });
 
       if(global.__sbPostRender) {
