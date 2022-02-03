@@ -100,8 +100,6 @@ async function fetchStoriesJson(url) {
   return tmpDir;
 }
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const main = async () => {
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   await checkStorybook(targetURL);

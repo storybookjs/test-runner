@@ -12,7 +12,6 @@ export interface TestContext {
   name: t.Literal;
   title: t.Literal;
   id: t.Literal;
-  hasPlayFn?: t.BooleanLiteral;
 }
 type FilePrefixer = () => t.Statement[];
 type TestPrefixer = (context: TestContext) => t.Statement[];
@@ -35,9 +34,8 @@ const prefixFunction = (
   const context: TestContext = {
     storyExport: t.identifier(key),
     name: t.stringLiteral(name), // FIXME .name annotation
-    title: t.stringLiteral(title), // FIXME: auto-title
+    title: t.stringLiteral(title),
     id: t.stringLiteral(toId(title, name)),
-    hasPlayFn: t.booleanLiteral(!!input),
   };
 
   // instead, let's just make the prefixer return the function

@@ -62,11 +62,9 @@ Object {
         });
       });
       return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: \\"example-header--logged-in\\",
-        hasPlayFn: false
+        id
+      }) => __test(id), {
+        id: \\"example-header--logged-in\\"
       });
     });
   });
@@ -82,11 +80,9 @@ Object {
         });
       });
       return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: \\"example-header--logged-out\\",
-        hasPlayFn: false
+        id
+      }) => __test(id), {
+        id: \\"example-header--logged-out\\"
       });
     });
   });
@@ -104,11 +100,9 @@ Object {
         });
       });
       return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: \\"example-page--logged-in\\",
-        hasPlayFn: false
+        id
+      }) => __test(id), {
+        id: \\"example-page--logged-in\\"
       });
     });
   });
@@ -164,11 +158,9 @@ Object {
         });
       });
       return page.evaluate(({
-        id,
-        hasPlayFn
-      }) => __test(id, hasPlayFn), {
-        id: \\"example-page--logged-in\\",
-        hasPlayFn: false
+        id
+      }) => __test(id), {
+        id: \\"example-page--logged-in\\"
       });
     });
   });
