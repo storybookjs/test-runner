@@ -39,7 +39,6 @@ const prefixFunction = (
     id: t.stringLiteral(toId(title, name)),
   };
 
-  // instead, let's just make the prefixer return the function
   const result = makeArray(testPrefixer(context));
   const stmt = result[1] as t.ExpressionStatement;
   return stmt.expression;
