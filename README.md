@@ -8,12 +8,15 @@ Storybook test runner turns all of your stories into executable tests.
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Getting started](#getting-started)
+  - [CLI Options](#cli-options)
   - [Configuration](#configuration)
   - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
     - [Stories.json mode](#storiesjson-mode)
   - [Running in CI](#running-in-ci)
     - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
     - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+  - [Experimental test hook API](#experimental-test-hook-api)
+    - [Image snapshot recipe](#image-snapshot-recipe)
   - [Troubleshooting](#troubleshooting)
     - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
     - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
@@ -98,16 +101,16 @@ yarn test-storybook
 Usage: test-storybook [options]
 ```
 
-| Options                         | Description                                                                                                                                                                 |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--help`                        | Output usage information <br/>`test-storybook --help`                                                                                                                      |
-| `-s`, `--stories-json` | Run in stories json mode (requires a compatible Storybook) <br/>`test-storybook --stories-json`                                                                                  |
-| `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                                                                  |
-| `--watch` | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
-| `--maxWorkers [amount]` | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                                                  |
-| `--no-cache` | Disable the cache <br/>`test-storybook --no-cache`                                                                                  |
-| `--clearCache` | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                                  |
-| `--verbose` | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                  |
+| Options                         | Description                                                                                                               |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `--help`                        | Output usage information <br/>`test-storybook --help`                                                                     |
+| `-s`, `--stories-json`          | Run in stories json mode (requires a compatible Storybook) <br/>`test-storybook --stories-json`                           |
+| `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                 |
+| `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                           |
+| `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2` |
+| `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                        |
+| `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                  |
+| `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                             |
 
 ## Configuration
 
@@ -244,6 +247,59 @@ jobs:
 ```
 
 > **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
+
+## Experimental test hook API
+
+The test runner renders a story and executes its [play function](https://storybook.js.org/docs/react/writing-stories/play-function) if one exists. However, there are certain behaviors that are not possible to achieve via the play function, which executes in the browser. For example, if you want the test runner to take visual snapshots for you, this is something that is possible via Playwright/Jest, but must be executed in Node.
+
+To enable use cases like visual or DOM snapshots, the test runner exports test hooks that can be overridden globally. These hooks give you access to the test lifecycle before and after the story is rendered.
+
+The hooks, `preRender` and `postRender`, are functions that take a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+
+> **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
+
+To visualize the test lifecycle, consider a simplified version of the test code automatically generated for each story in your Storybook:
+
+```js
+it('button--basic', async () => {
+  // filled in with data for the current story
+  const context = { id: 'button--basic', title: 'Button', name: 'Basic' };
+
+  // playwright page https://playwright.dev/docs/pages
+  await page.goto(STORYBOOK_URL);
+
+  // pre-render hook
+  if (preRender) await preRender(page, context);
+
+  // render the story and run its play function (if applicable)
+  await page.execute('render', context);
+
+  // post-render hook
+  if (postRender) await postRender(page, context);
+});
+```
+
+### Image snapshot recipe
+
+If you want to make the test runner take image snapshots, the following recipe uses test hooks in `jest-setup.js` to do it:
+
+```js
+const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { setPostRender } = require('@storybook/test-runner');
+
+expect.extend({ toMatchImageSnapshot });
+
+// use custom directory/id to align CSF and stories.json mode outputs
+const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
+
+setPostRender(async (page, context) => {
+  const image = await page.screenshot();
+  expect(image).toMatchImageSnapshot({
+    customSnapshotsDir,
+    customSnapshotIdentifier: context.id,
+  });
+});
+```
 
 ## Troubleshooting
 

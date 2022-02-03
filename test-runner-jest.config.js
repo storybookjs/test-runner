@@ -17,4 +17,5 @@ module.exports = {
   globalSetup: './playwright/global-setup.js',
   globalTeardown: './playwright/global-teardown.js',
   testEnvironment: './playwright/custom-environment.js',
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
 };

@@ -52,6 +52,11 @@ Object {
   "example-header": "describe(\\"Example/Header\\", () => {
   describe(\\"Logged In\\", () => {
     it(\\"test\\", async () => {
+      const context = {
+        id: \\"example-header--logged-in\\",
+        title: \\"Example/Header\\",
+        name: \\"Logged In\\"
+      };
       page.on('pageerror', err => {
         page.evaluate(({
           id,
@@ -61,15 +66,32 @@ Object {
           err: err.message
         });
       });
-      return page.evaluate(({
-        id
-      }) => __test(id), {
+
+      if (global.__sbPreRender) {
+        await global.__sbPreRender(page, context);
+      }
+
+      const result = await page.evaluate(({
+        id,
+        hasPlayFn
+      }) => __test(id, hasPlayFn), {
         id: \\"example-header--logged-in\\"
       });
+
+      if (global.__sbPostRender) {
+        await global.__sbPostRender(page, context);
+      }
+
+      return result;
     });
   });
   describe(\\"Logged Out\\", () => {
     it(\\"test\\", async () => {
+      const context = {
+        id: \\"example-header--logged-out\\",
+        title: \\"Example/Header\\",
+        name: \\"Logged Out\\"
+      };
       page.on('pageerror', err => {
         page.evaluate(({
           id,
@@ -79,17 +101,34 @@ Object {
           err: err.message
         });
       });
-      return page.evaluate(({
-        id
-      }) => __test(id), {
+
+      if (global.__sbPreRender) {
+        await global.__sbPreRender(page, context);
+      }
+
+      const result = await page.evaluate(({
+        id,
+        hasPlayFn
+      }) => __test(id, hasPlayFn), {
         id: \\"example-header--logged-out\\"
       });
+
+      if (global.__sbPostRender) {
+        await global.__sbPostRender(page, context);
+      }
+
+      return result;
     });
   });
 });",
   "example-page": "describe(\\"Example/Page\\", () => {
   describe(\\"Logged In\\", () => {
     it(\\"test\\", async () => {
+      const context = {
+        id: \\"example-page--logged-in\\",
+        title: \\"Example/Page\\",
+        name: \\"Logged In\\"
+      };
       page.on('pageerror', err => {
         page.evaluate(({
           id,
@@ -99,11 +138,23 @@ Object {
           err: err.message
         });
       });
-      return page.evaluate(({
-        id
-      }) => __test(id), {
+
+      if (global.__sbPreRender) {
+        await global.__sbPreRender(page, context);
+      }
+
+      const result = await page.evaluate(({
+        id,
+        hasPlayFn
+      }) => __test(id, hasPlayFn), {
         id: \\"example-page--logged-in\\"
       });
+
+      if (global.__sbPostRender) {
+        await global.__sbPostRender(page, context);
+      }
+
+      return result;
     });
   });
 });",
@@ -148,6 +199,11 @@ Object {
   "example-page": "describe(\\"Example/Page\\", () => {
   describe(\\"Logged In\\", () => {
     it(\\"test\\", async () => {
+      const context = {
+        id: \\"example-page--logged-in\\",
+        title: \\"Example/Page\\",
+        name: \\"Logged In\\"
+      };
       page.on('pageerror', err => {
         page.evaluate(({
           id,
@@ -157,11 +213,23 @@ Object {
           err: err.message
         });
       });
-      return page.evaluate(({
-        id
-      }) => __test(id), {
+
+      if (global.__sbPreRender) {
+        await global.__sbPreRender(page, context);
+      }
+
+      const result = await page.evaluate(({
+        id,
+        hasPlayFn
+      }) => __test(id, hasPlayFn), {
         id: \\"example-page--logged-in\\"
       });
+
+      if (global.__sbPostRender) {
+        await global.__sbPostRender(page, context);
+      }
+
+      return result;
     });
   });
 });",
