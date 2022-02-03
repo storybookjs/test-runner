@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const tempy = require('tempy');
+const { getCliOptions, getStorybookMain } = require('../dist/cjs/util/cli');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -103,15 +104,20 @@ async function fetchStoriesJson(url) {
 const main = async () => {
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   await checkStorybook(targetURL);
-  let args = process.argv.filter((arg) => arg !== '--stories-json');
 
-  if (args.length !== process.argv.length) {
+  const { jestOptions, runnerOptions } = getCliOptions()
+
+  if (runnerOptions.storiesJson) {
     storiesJsonTmpDir = await fetchStoriesJson(targetURL);
     process.env.TEST_ROOT = storiesJsonTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  await executeJestPlaywright(args);
+  // check if main.js exists, throw an error if not
+  getStorybookMain(runnerOptions.configDir);
+  process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
+
+  await executeJestPlaywright(jestOptions);
 };
 
 main().catch((e) => console.log(`[test-storybook] ${e}`));
