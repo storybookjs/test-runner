@@ -25,6 +25,14 @@ jobs:
           yarn build
           yarn test-storybook:ci
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2.3.1
+        if: failure()
+        with:
+          name: snapshotdiff
+          path: __snapshots__/__diff_output__
+          if-no-files-found: ignore
+
       - name: Run test runner (story store v7)
         run: |
           yarn build
