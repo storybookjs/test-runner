@@ -11,5 +11,7 @@ setPostRender(async (page, context) => {
   expect(image).toMatchImageSnapshot({
     customSnapshotsDir,
     customSnapshotIdentifier: context.id,
+    failureThreshold: 0.03,
+    failureThresholdType: 'percent',
   });
 });
