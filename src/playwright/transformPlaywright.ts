@@ -1,8 +1,9 @@
-import { resolve, join, relative } from 'path';
+import { resolve, relative } from 'path';
 import template from '@babel/template';
-import { serverRequire, normalizeStories } from '@storybook/core-common';
+import { normalizeStories } from '@storybook/core-common';
 import { autoTitle } from '@storybook/store';
 
+import { getStorybookMain } from '../util/cli';
 import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
@@ -40,16 +41,10 @@ export const testPrefixer = template(
 );
 
 const getDefaultTitle = (filename: string) => {
-  // we'll need to figure this out for different cases
-  // e.g. --config-dir
-  const configDir = resolve('.storybook');
   const workingDir = resolve();
+  const configDir = process.env.STORYBOOK_CONFIG_DIR;
 
-  const main = serverRequire(join(configDir, 'main'));
-
-  if (!main) {
-    throw new Error(`Could not load main.js in ${configDir}`);
-  }
+  const main = getStorybookMain(configDir);
 
   const normalizedStoriesEntries = normalizeStories(main.stories, {
     configDir,
