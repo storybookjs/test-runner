@@ -246,7 +246,7 @@ it('component--widget', async () => {
   // pre-render hook
   if (preRender) await preRender(page, context);
 
-  // render the story and run its paly function (if applicable)
+  // render the story and run its play function (if applicable)
   await page.execute('render', context);
 
   // post-render hook
