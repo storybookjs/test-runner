@@ -15,6 +15,7 @@ Storybook test runner turns all of your stories into executable tests.
     - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
     - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
   - [Experimental test hook API](#experimental-test-hook-api)
+    - [Image snapshot recipe](#image-snapshot-recipe)
   - [Troubleshooting](#troubleshooting)
     - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
     - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
@@ -235,12 +236,16 @@ The test runner renders a story and executes its [play function](https://storybo
 
 To enable use cases like visual or DOM snapshots, the test runner exports test hooks that can be overridden globally. These hooks give you access to the test lifecycle before and after the story is rendered.
 
-Consider the following pseudocode:
+The hooks, `preRender` and `postRender`, are functions that take a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+
+To visualize the test lifecycle, consider a simplified version of the test code automatically generated for each story in your Storybook:
 
 ```js
-it('component--widget', async () => {
-  const page = newPage();
-  const context = { id: 'component--widget', title: 'Component', name: 'Widget' };
+it('button--basic', async () => {
+  // filled in with data for the current story
+  const context = { id: 'button--basic', title: 'Button', name: 'Basic' };
+
+  // playwright page https://playwright.dev/docs/pages
   await page.goto(STORYBOOK_URL);
 
   // pre-render hook
@@ -254,9 +259,11 @@ it('component--widget', async () => {
 });
 ```
 
-The hooks here, `preRender` and `postRender` are functions that take a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+> **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
-Thus, to make the test runner perform image snapshotting, you might set up the following in your `jest-setup.js`:
+### Image snapshot recipe
+
+If you want to make the test runner take image snapshots, the following recipe uses test hooks in `jest-setup.js` to do it:
 
 ```js
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
@@ -275,8 +282,6 @@ setPostRender(async (page, context) => {
   });
 });
 ```
-
-> **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function when that's possible.
 
 ## Troubleshooting
 
