@@ -46,10 +46,17 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
+      import global from 'global';
+
       if (!require.main) {
         describe("foo/bar", () => {
         describe("A", () => {
           it("play-test", async () => {
+            const context = {
+              id: "foo-bar--a",
+              title: "foo/bar",
+              name: "A"
+            };
             page.on('pageerror', err => {
               page.evaluate(({
                 id,
@@ -59,13 +66,24 @@ describe('Playwright', () => {
                 err: err.message
               });
             });
-            return page.evaluate(({
+
+            if (global.__sbPreRender) {
+              await global.__sbPreRender(page, context);
+            }
+
+            const result = await page.evaluate(({
               id,
               hasPlayFn
             }) => __test(id, hasPlayFn), {
               id: "foo-bar--a",
               hasPlayFn: true
             });
+
+            if (global.__sbPostRender) {
+              await global.__sbPostRender(page, context);
+            }
+
+            return result;
           });
         });
       });
@@ -82,10 +100,17 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
+      import global from 'global';
+
       if (!require.main) {
         describe("foo/bar", () => {
         describe("A", () => {
           it("smoke-test", async () => {
+            const context = {
+              id: "foo-bar--a",
+              title: "foo/bar",
+              name: "A"
+            };
             page.on('pageerror', err => {
               page.evaluate(({
                 id,
@@ -95,13 +120,24 @@ describe('Playwright', () => {
                 err: err.message
               });
             });
-            return page.evaluate(({
+
+            if (global.__sbPreRender) {
+              await global.__sbPreRender(page, context);
+            }
+
+            const result = await page.evaluate(({
               id,
               hasPlayFn
             }) => __test(id, hasPlayFn), {
               id: "foo-bar--a",
               hasPlayFn: false
             });
+
+            if (global.__sbPostRender) {
+              await global.__sbPostRender(page, context);
+            }
+
+            return result;
           });
         });
       });
@@ -119,10 +155,17 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
+      import global from 'global';
+
       if (!require.main) {
         describe("Example/Header", () => {
         describe("A", () => {
           it("smoke-test", async () => {
+            const context = {
+              id: "example-header--a",
+              title: "Example/Header",
+              name: "A"
+            };
             page.on('pageerror', err => {
               page.evaluate(({
                 id,
@@ -132,13 +175,24 @@ describe('Playwright', () => {
                 err: err.message
               });
             });
-            return page.evaluate(({
+
+            if (global.__sbPreRender) {
+              await global.__sbPreRender(page, context);
+            }
+
+            const result = await page.evaluate(({
               id,
               hasPlayFn
             }) => __test(id, hasPlayFn), {
               id: "example-header--a",
               hasPlayFn: false
             });
+
+            if (global.__sbPostRender) {
+              await global.__sbPostRender(page, context);
+            }
+
+            return result;
           });
         });
       });
