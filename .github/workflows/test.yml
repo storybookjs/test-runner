@@ -16,6 +16,21 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Run tests
+      - name: Run jest tests
         run: |
           yarn test
+
+      - name: Run test runner (default config)
+        run: |
+          yarn build
+          yarn test-storybook:ci
+
+      - name: Run test runner (story store v7)
+        run: |
+          yarn build
+          STORY_STORE_V7=true yarn test-storybook:ci
+
+      - name: Run test runner (stories json mode)
+        run: |
+          yarn build
+          yarn test-storybook:ci-json

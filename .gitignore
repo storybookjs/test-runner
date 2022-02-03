@@ -5,5 +5,5 @@ build-storybook.log
 .DS_Store
 .env
 .cache
-stories/design-system
+stories/stress-test
 yarn-error.log

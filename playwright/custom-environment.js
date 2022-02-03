@@ -49,11 +49,11 @@ class CustomEnvironment extends PlaywrightEnvironment {
     await page.addScriptTag({
       content: `
         class StorybookTestRunnerError extends Error {
-          constructor(storyId, hasPlayFn, errorMessage) {
+          constructor(storyId, errorMessage) {
             super(errorMessage);
             this.name = 'StorybookTestRunnerError';
             const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
-            const finalStoryUrl = storyUrl + (hasPlayFn ? '&addonPanel=storybook/interactions/panel' : '');
+            const finalStoryUrl = \`\${storyUrl}&addonPanel=storybook/interactions/panel\`;
 
             this.message = \`\nAn error occurred in the following story:\n\${finalStoryUrl}\n\nMessage:\n \${errorMessage}\`;
           }
@@ -90,19 +90,18 @@ class CustomEnvironment extends PlaywrightEnvironment {
           });
         }
 
-        async function __test(storyId, hasPlayFn) {
+        async function __test(storyId) {
           try {
             await __waitForElement('#root');
           } catch(err) {
-            const message = \`Timed out waiting for Storybook to load after 10 seconds. Are you sure the Storybook is running correctly in that URL?\n\n\nHTML: \${document.body.innerHTML}\`;
-            throw new StorybookTestRunnerError(storyId, hasPlayFn, message);
+            const message = \`Timed out waiting for Storybook to load after 10 seconds. Are you sure the Storybook is running correctly in that URL? Is the Storybook private (e.g. under authentication layers)?\n\n\nHTML: \${document.body.innerHTML}\`;
+            throw new StorybookTestRunnerError(storyId, message);
           }
 
           const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
           if(!channel) {
             throw new StorybookTestRunnerError(
               storyId,
-              hasPlayFn,
               'The test runner could not access the Storybook channel. Are you sure the Storybook is running correctly in that URL?'
             );
           }
@@ -111,13 +110,13 @@ class CustomEnvironment extends PlaywrightEnvironment {
             channel.on('storyRendered', () => resolve(document.getElementById('root')));
             channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
             channel.on('storyErrored', ({ description }) => reject(
-              new StorybookTestRunnerError(storyId, hasPlayFn, description))
+              new StorybookTestRunnerError(storyId, description))
             );
             channel.on('storyThrewException', (error) => reject(
-              new StorybookTestRunnerError(storyId, hasPlayFn, error.message))
+              new StorybookTestRunnerError(storyId, error.message))
             );
             channel.on('storyMissing', (id) => id === storyId && reject(
-              new StorybookTestRunnerError(storyId, hasPlayFn, 'The story was missing when trying to access it.'))
+              new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.'))
             );
 
             channel.emit('setCurrentStory', { storyId });

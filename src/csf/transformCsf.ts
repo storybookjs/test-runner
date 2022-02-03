@@ -12,17 +12,17 @@ export interface TestContext {
   name: t.Literal;
   title: t.Literal;
   id: t.Literal;
-  hasPlayFn?: t.BooleanLiteral;
 }
-type FilePrefixer = () => t.Statement[];
-type TestPrefixer = (context: TestContext) => t.Statement[];
-const JEST_GLOBAL_REGEX = /(before|after)(All|Each)$/;
+type TemplateResult = t.Statement | t.Statement[];
+type FilePrefixer = () => TemplateResult;
+type TestPrefixer = (context: TestContext) => TemplateResult;
 
 interface TransformOptions {
   clearBody?: boolean;
   filePrefixer?: FilePrefixer;
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
+  defaultTitle?: string;
 }
 
 const prefixFunction = (
@@ -31,18 +31,15 @@ const prefixFunction = (
   input: t.Expression,
   testPrefixer?: TestPrefixer
 ) => {
-  const clone = t.cloneDeepWithoutLoc(input);
   const name = storyNameFromExport(key);
   const context: TestContext = {
     storyExport: t.identifier(key),
     name: t.stringLiteral(name), // FIXME .name annotation
-    title: t.stringLiteral(title), // FIXME: auto-title
+    title: t.stringLiteral(title),
     id: t.stringLiteral(toId(title, name)),
-    hasPlayFn: t.booleanLiteral(!!input),
   };
 
-  // instead, let's just make the prefixer return the function
-  const result = testPrefixer(context);
+  const result = makeArray(testPrefixer(context));
   const stmt = result[1] as t.ExpressionStatement;
   return stmt.expression;
 };
@@ -72,11 +69,20 @@ const makeDescribe = (key: string, tests: t.Statement[]): t.Statement | null => 
   );
 };
 
+const makeArray = (templateResult: TemplateResult) =>
+  Array.isArray(templateResult) ? templateResult : [templateResult];
+
 export const transformCsf = (
   code: string,
-  { filePrefixer, clearBody = false, testPrefixer, insertTestIfEmpty }: TransformOptions = {}
+  {
+    filePrefixer,
+    clearBody = false,
+    testPrefixer,
+    insertTestIfEmpty,
+    defaultTitle,
+  }: TransformOptions = {}
 ) => {
-  const csf = loadCsf(code, { defaultTitle: 'FIXME' });
+  const csf = loadCsf(code, { defaultTitle });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
@@ -107,7 +113,7 @@ export const transformCsf = (
 
   // FIXME: insert between imports
   if (filePrefixer) {
-    const { code: prefixCode } = generate(t.program(filePrefixer()), {});
+    const { code: prefixCode } = generate(t.program(makeArray(filePrefixer())), {});
     result = `${prefixCode}\n`;
   }
   if (!clearBody) result = `${result}${code}\n`;
