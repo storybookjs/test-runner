@@ -262,12 +262,18 @@ Thus, to make the test runner perform image snapshotting, you might set up the f
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 const { setPostRender } = require('@storybook/test-runner');
 
+expect.extend({ toMatchImageSnapshot });
+
+// use custom directory/id to align CSF and stories.json mode outputs
+const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
+
 setPostRender(async (page, context) => {
   const image = await page.screenshot();
-  expect(image).toMatchImageSnapshot();
+  expect(image).toMatchImageSnapshot({
+    customSnapshotsDir,
+    customSnapshotIdentifier: context.id,
+  });
 });
-
-expect.extend({ toMatchImageSnapshot });
 ```
 
 > **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function when that's possible.
