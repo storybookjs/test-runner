@@ -1,12 +1,11 @@
 import dedent from 'ts-dedent';
 import path from 'path';
 import * as coreCommon from '@storybook/core-common';
-import * as cli from '../util/cli';
+import * as storybookMain from '../util/getStorybookMain';
 
 import { transformPlaywright } from './transformPlaywright';
 
 jest.mock('@storybook/core-common');
-jest.mock('../util/cli');
 
 expect.addSnapshotSerializer({
   print: (val: any) => val.trim(),
@@ -17,7 +16,7 @@ describe('Playwright', () => {
   beforeEach(() => {
     const relativeSpy = jest.spyOn(path, 'relative');
     relativeSpy.mockReturnValueOnce('stories/basic/Header.stories.js');
-    jest.spyOn(cli, 'getStorybookMain').mockImplementation(() => ({
+    jest.spyOn(storybookMain, 'getStorybookMain').mockImplementation(() => ({
       stories: [
         {
           directory: '../stories/basic',

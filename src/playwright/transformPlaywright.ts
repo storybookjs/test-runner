@@ -1,9 +1,8 @@
-import { resolve, relative } from 'path';
+import { relative } from 'path';
 import template from '@babel/template';
-import { normalizeStories } from '@storybook/core-common';
 import { autoTitle } from '@storybook/store';
 
-import { getStorybookMain } from '../util/cli';
+import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
@@ -41,19 +40,7 @@ export const testPrefixer = template(
 );
 
 const getDefaultTitle = (filename: string) => {
-  const workingDir = resolve();
-  const configDir = process.env.STORYBOOK_CONFIG_DIR;
-
-  const main = getStorybookMain(configDir);
-
-  const normalizedStoriesEntries = normalizeStories(main.stories, {
-    configDir,
-    workingDir,
-  }).map((specifier) => ({
-    ...specifier,
-    importPathMatcher: new RegExp(specifier.importPathMatcher),
-  }));
-
+  const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
   const filePath = './' + relative(workingDir, filename);
 
   return autoTitle(filePath, normalizedStoriesEntries);

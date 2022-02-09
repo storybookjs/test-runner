@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const tempy = require('tempy');
-const { getCliOptions, getStorybookMain } = require('../dist/cjs/util/cli');
+const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -113,9 +113,10 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  // check if main.js exists, throw an error if not
-  getStorybookMain(runnerOptions.configDir);
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
+  
+  const { storiesPaths } = getStorybookMetadata();
+  process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
   await executeJestPlaywright(jestOptions);
 };
