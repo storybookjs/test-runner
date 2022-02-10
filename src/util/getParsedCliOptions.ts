@@ -37,5 +37,8 @@ export const getParsedCliOptions = () => {
     }
   }
 
-  return program.opts();
+  return {
+    options: program.opts(),
+    extraArgs: program.args,
+  };
 };
