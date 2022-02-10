@@ -20,6 +20,7 @@ type TestPrefixer = (context: TestContext) => TemplateResult;
 interface TransformOptions {
   clearBody?: boolean;
   filePrefixer?: FilePrefixer;
+  beforeEachPrefixer?: FilePrefixer;
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
   defaultTitle?: string;
@@ -60,13 +61,24 @@ const makePlayTest = (
   ];
 };
 
-const makeDescribe = (key: string, tests: t.Statement[]): t.Statement | null => {
+const makeDescribe = (
+  key: string,
+  tests: t.Statement[],
+  beforeEachBlock?: t.ExpressionStatement
+): t.Statement | null => {
+  const blockStatements = beforeEachBlock ? [beforeEachBlock, ...tests] : tests;
   return t.expressionStatement(
     t.callExpression(t.identifier('describe'), [
       t.stringLiteral(key),
-      t.arrowFunctionExpression([], t.blockStatement(tests)),
+      t.arrowFunctionExpression([], t.blockStatement(blockStatements)),
     ])
   );
+};
+
+const makeBeforeEach = (beforeEachPrefixer?: FilePrefixer) => {
+  const stmt = beforeEachPrefixer() as t.ExpressionStatement;
+
+  return t.expressionStatement(t.callExpression(t.identifier('beforeEach'), [stmt.expression]));
 };
 
 const makeArray = (templateResult: TemplateResult) =>
@@ -78,6 +90,7 @@ export const transformCsf = (
     filePrefixer,
     clearBody = false,
     testPrefixer,
+    beforeEachPrefixer,
     insertTestIfEmpty,
     defaultTitle,
   }: TransformOptions = {}
@@ -118,7 +131,14 @@ export const transformCsf = (
   }
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
-    const describe = makeDescribe(csf.meta.title, allTests);
+    if (beforeEachPrefixer) {
+      makeBeforeEach(beforeEachPrefixer);
+    }
+    const describe = makeDescribe(
+      csf.meta.title,
+      allTests,
+      beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
+    );
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}

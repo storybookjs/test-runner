@@ -51,6 +51,9 @@ describe('Playwright', () => {
 
       if (!require.main) {
         describe("foo/bar", () => {
+        beforeEach(async () => {
+          await jestPlaywright.resetPage();
+        });
         describe("A", () => {
           it("play-test", async () => {
             const context = {
@@ -104,6 +107,9 @@ describe('Playwright', () => {
 
       if (!require.main) {
         describe("foo/bar", () => {
+        beforeEach(async () => {
+          await jestPlaywright.resetPage();
+        });
         describe("A", () => {
           it("smoke-test", async () => {
             const context = {
@@ -158,6 +164,9 @@ describe('Playwright', () => {
 
       if (!require.main) {
         describe("Example/Header", () => {
+        beforeEach(async () => {
+          await jestPlaywright.resetPage();
+        });
         describe("A", () => {
           it("smoke-test", async () => {
             const context = {

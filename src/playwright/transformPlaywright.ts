@@ -9,6 +9,12 @@ const filePrefixer = template(`
   import global from 'global';
 `);
 
+const beforeEachPrefixer = template(`
+  async () => {
+    await jestPlaywright.resetPage()
+  }
+`);
+
 export const testPrefixer = template(
   `
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
@@ -52,6 +58,7 @@ export const transformPlaywright = (src: string, filename: string) => {
     filePrefixer,
     // @ts-ignore
     testPrefixer,
+    beforeEachPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
     defaultTitle,
