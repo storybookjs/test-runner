@@ -18,14 +18,14 @@ export const defaultRunnerOptions: CliOptions['runnerOptions'] = {
 };
 
 export const getCliOptions = () => {
-  const allOptions = getParsedCliOptions();
+  const { options: allOptions, extraArgs } = getParsedCliOptions();
 
   const defaultOptions: CliOptions = {
     runnerOptions: { ...defaultRunnerOptions },
     jestOptions: process.argv.splice(0, 2),
   };
 
-  return Object.keys(allOptions).reduce((acc, key: any) => {
+  const finalOptions = Object.keys(allOptions).reduce((acc, key: any) => {
     if (STORYBOOK_RUNNER_COMMANDS.includes(key)) {
       //@ts-ignore
       acc.runnerOptions[key] = allOptions[key];
@@ -41,4 +41,10 @@ export const getCliOptions = () => {
 
     return acc;
   }, defaultOptions);
+
+  if (extraArgs.length) {
+    finalOptions.jestOptions.push(...extraArgs);
+  }
+
+  return finalOptions;
 };
