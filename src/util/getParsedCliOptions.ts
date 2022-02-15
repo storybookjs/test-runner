@@ -11,7 +11,11 @@ export const getParsedCliOptions = () => {
     )
     .option('--no-cache', 'Disable the cache')
     .option('--clearCache', 'Deletes the Jest cache directory and then exits without running tests')
-    .option('--verbose', 'Display individual test results with the test suite hierarchy');
+    .option('--verbose', 'Display individual test results with the test suite hierarchy')
+    .option(
+      '-u, --updateSnapshot',
+      'Use this flag to re-record every snapshot that fails during this test run'
+    );
 
   program.exitOverride();
 
