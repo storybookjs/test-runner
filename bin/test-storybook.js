@@ -4,6 +4,7 @@
 
 const fetch = require('node-fetch');
 const fs = require('fs');
+const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
 const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
@@ -71,7 +72,13 @@ async function checkStorybook(url) {
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
-      `[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?`
+      dedent`[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
+      
+      If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can set the TARGET_URL variable like so:
+      
+      TARGET_URL=http://localhost:9009 yarn test-storybook
+      
+      More info at https://github.com/storybookjs/test-runner#getting-started`
     );
     process.exit(1);
   }
@@ -114,7 +121,7 @@ const main = async () => {
   }
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
-  
+
   const { storiesPaths } = getStorybookMetadata();
   process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
