@@ -111,6 +111,7 @@ Usage: test-storybook [options]
 | `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                        |
 | `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                  |
 | `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                             |
+| `-u`, `--updateSnapshot`        | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                        |
 
 ## Configuration
 
