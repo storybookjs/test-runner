@@ -7,12 +7,11 @@ import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
   import global from 'global';
+  const { setupPage } = require('../../dist/cjs');
 `);
 
 const beforeEachPrefixer = template(`
-  async () => {
-    await jestPlaywright.resetPage()
-  }
+  async () => setupPage(global.page)
 `);
 
 export const testPrefixer = template(

@@ -12,7 +12,7 @@ export const getJestConfig = () => {
     preset: 'jest-playwright-preset',
     globalSetup: '@storybook/test-runner/playwright/global-setup.js',
     globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
-    testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
+    // testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
     // @TODO: setupFilesAfterEnv: ['@storybook/test-runner/setup']
   };
 
