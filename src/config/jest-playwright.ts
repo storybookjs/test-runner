@@ -13,7 +13,7 @@ export const getJestConfig = () => {
     globalSetup: '@storybook/test-runner/playwright/global-setup.js',
     globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
     testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
-    // @TODO: setupFilesAfterEnv: ['@storybook/test-runner/setup']
+    setupFilesAfterEnv: ['@storybook/test-runner/playwright/jest-setup.js'],
   };
 
   if (TEST_MATCH) {
