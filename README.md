@@ -1,27 +1,25 @@
-# Storybook Test Runner
+<h1>Storybook Test Runner</h1>
 
 Storybook test runner turns all of your stories into executable tests.
 
-## Table of Contents
+<h2>Table of Contents</h2>
 
-- [Storybook Test Runner](#storybook-test-runner)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Getting started](#getting-started)
-  - [CLI Options](#cli-options)
-  - [Configuration](#configuration)
-  - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
-    - [Stories.json mode](#storiesjson-mode)
-  - [Running in CI](#running-in-ci)
-    - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
-    - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
-  - [Experimental test hook API](#experimental-test-hook-api)
-    - [Image snapshot recipe](#image-snapshot-recipe)
-    - [Render lifecycle](#render-lifecycle)
-  - [Troubleshooting](#troubleshooting)
-      - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
-      - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
-  - [Future work](#future-work)
+- [Features](#features)
+- [Getting started](#getting-started)
+- [CLI Options](#cli-options)
+- [Configuration](#configuration)
+- [Running against a deployed Storybook](#running-against-a-deployed-storybook)
+  - [Stories.json mode](#storiesjson-mode)
+- [Running in CI](#running-in-ci)
+  - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
+  - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+- [Experimental test hook API](#experimental-test-hook-api)
+  - [Image snapshot recipe](#image-snapshot-recipe)
+  - [Render lifecycle](#render-lifecycle)
+- [Troubleshooting](#troubleshooting)
+    - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+    - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+- [Future work](#future-work)
 
 ## Features
 
@@ -287,6 +285,8 @@ module.exports = {
   },
 };
 ```
+
+There is also an exported `TestRunnerConfig` type available for TypeScript users.
 
 ### Render lifecycle
 
