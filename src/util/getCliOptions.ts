@@ -4,13 +4,14 @@ type CliOptions = {
   runnerOptions: {
     storiesJson: boolean;
     configDir: string;
+    eject?: boolean;
   };
   jestOptions: string[];
 };
 
 type StorybookRunnerCommand = keyof CliOptions['runnerOptions'];
 
-const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = ['storiesJson', 'configDir'];
+const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = ['storiesJson', 'configDir', 'eject'];
 
 export const defaultRunnerOptions: CliOptions['runnerOptions'] = {
   configDir: '.storybook',
