@@ -15,6 +15,10 @@ export const getParsedCliOptions = () => {
     .option(
       '-u, --updateSnapshot',
       'Use this flag to re-record every snapshot that fails during this test run'
+    )
+    .option(
+      '--eject',
+      'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'
     );
 
   program.exitOverride();

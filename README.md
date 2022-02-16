@@ -111,33 +111,15 @@ Usage: test-storybook [options]
 | `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                  |
 | `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                             |
 | `-u`, `--updateSnapshot`        | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                        |
+| `--eject`                       | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                  |
 
 ## Configuration
 
 The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--maxWorkers`, etc.
 
-The test runner works out of the box, but you can override its Jest configuration by adding a `test-runner-jest.config.js` that sets up your environment in the root folder of your project.
+The test runner works out of the box, but if you want better control over its configuration, you can run `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project, which will be used by the test runner.
 
-```js
-// test-runner-jest.config.js
-module.exports = {
-  cacheDirectory: 'node_modules/.cache/storybook/test-runner',
-  testMatch: ['**/*.stories.[jt]s(x)?'],
-  transform: {
-    '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
-    '^.+\\.[jt]sx?$': 'babel-jest',
-  },
-  preset: 'jest-playwright-preset',
-  testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
-  testEnvironmentOptions: {
-    'jest-playwright': {
-      browsers: ['chromium', 'firefox', 'webkit'], // run tests against all browsers
-    },
-  },
-};
-```
-
-The runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium.
+The test runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium. For this you must eject the test runner configuration.
 
 ## Running against a deployed Storybook
 

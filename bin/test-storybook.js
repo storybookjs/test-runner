@@ -108,11 +108,29 @@ async function fetchStoriesJson(url) {
   return tmpDir;
 }
 
+function ejectConfiguration () {
+  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js')
+  const destination = path.resolve('test-runner-jest.config.js')
+  const fileAlreadyExists = fs.existsSync(destination)
+  
+  if(fileAlreadyExists) {
+    throw new Error('Found existing file. Please delete it and rerun this command')
+  }
+  
+  fs.copyFileSync(origin, destination)
+  console.log('[test-runner] Configuration file successfully copied as test-runner-jest.config.js')
+}
+
 const main = async () => {
+  const { jestOptions, runnerOptions } = getCliOptions();
+
+  if(runnerOptions.eject) {
+    ejectConfiguration();
+    process.exit(0);
+  }
+
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   await checkStorybook(targetURL);
-
-  const { jestOptions, runnerOptions } = getCliOptions()
 
   if (runnerOptions.storiesJson) {
     storiesJsonTmpDir = await fetchStoriesJson(targetURL);
