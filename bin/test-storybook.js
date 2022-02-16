@@ -114,7 +114,7 @@ function ejectConfiguration () {
   const fileAlreadyExists = fs.existsSync(destination)
   
   if(fileAlreadyExists) {
-    console.log('[test-runner] Found existing file, overriding...')
+    throw new Error('Found existing file. Please delete it and rerun this command')
   }
   
   fs.copyFileSync(origin, destination)
