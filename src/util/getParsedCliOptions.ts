@@ -6,6 +6,10 @@ export const getParsedCliOptions = () => {
     .option('-c, --config-dir <directory>', 'Directory where to load Storybook configurations from')
     .option('--watch', 'Run in watch mode')
     .option(
+      '--browsers <browsers...>',
+      'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit'
+    )
+    .option(
       '--maxWorkers <amount>',
       'Specifies the maximum number of workers the worker-pool will spawn for running tests'
     )

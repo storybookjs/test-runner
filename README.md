@@ -106,6 +106,7 @@ Usage: test-storybook [options]
 | `-s`, `--stories-json`          | Run in stories json mode (requires a compatible Storybook) <br/>`test-storybook --stories-json`                           |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                 |
 | `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                           |
+| `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox`   |
 | `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2` |
 | `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                        |
 | `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                  |

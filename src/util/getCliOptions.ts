@@ -1,21 +1,29 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
+import type { BrowserType } from 'jest-playwright-preset';
 
 type CliOptions = {
   runnerOptions: {
     storiesJson: boolean;
     configDir: string;
     eject?: boolean;
+    browsers?: BrowserType | BrowserType[];
   };
   jestOptions: string[];
 };
 
 type StorybookRunnerCommand = keyof CliOptions['runnerOptions'];
 
-const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = ['storiesJson', 'configDir', 'eject'];
+const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
+  'storiesJson',
+  'configDir',
+  'browsers',
+  'eject',
+];
 
 export const defaultRunnerOptions: CliOptions['runnerOptions'] = {
   configDir: '.storybook',
   storiesJson: false,
+  browsers: ['chromium'],
 };
 
 export const getCliOptions = () => {

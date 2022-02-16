@@ -132,6 +132,10 @@ const main = async () => {
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   await checkStorybook(targetURL);
 
+  if (runnerOptions.browsers) {
+    process.env.TEST_BROWSERS = runnerOptions.browsers.join(';');
+  }
+
   if (runnerOptions.storiesJson) {
     storiesJsonTmpDir = await fetchStoriesJson(targetURL);
     process.env.TEST_ROOT = storiesJsonTmpDir;
