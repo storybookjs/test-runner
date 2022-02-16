@@ -1,8 +1,9 @@
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import type { TestRunnerConfig } from '../dist/ts';
 
 const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
 
-module.exports = {
+const config: TestRunnerConfig = {
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },
@@ -16,3 +17,5 @@ module.exports = {
     });
   },
 };
+
+export default config;
