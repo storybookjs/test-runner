@@ -1,26 +1,25 @@
-# Storybook Test Runner
+<h1>Storybook Test Runner</h1>
 
 Storybook test runner turns all of your stories into executable tests.
 
-## Table of Contents
+<h2>Table of Contents</h2>
 
-- [Storybook Test Runner](#storybook-test-runner)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Getting started](#getting-started)
-  - [CLI Options](#cli-options)
-  - [Configuration](#configuration)
-  - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
-    - [Stories.json mode](#storiesjson-mode)
-  - [Running in CI](#running-in-ci)
-    - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
-    - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
-  - [Experimental test hook API](#experimental-test-hook-api)
-    - [Image snapshot recipe](#image-snapshot-recipe)
-  - [Troubleshooting](#troubleshooting)
+- [Features](#features)
+- [Getting started](#getting-started)
+- [CLI Options](#cli-options)
+- [Configuration](#configuration)
+- [Running against a deployed Storybook](#running-against-a-deployed-storybook)
+  - [Stories.json mode](#storiesjson-mode)
+- [Running in CI](#running-in-ci)
+  - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
+  - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+- [Experimental test hook API](#experimental-test-hook-api)
+  - [Image snapshot recipe](#image-snapshot-recipe)
+  - [Render lifecycle](#render-lifecycle)
+- [Troubleshooting](#troubleshooting)
     - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
     - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
-  - [Future work](#future-work)
+- [Future work](#future-work)
 
 ## Features
 
@@ -255,9 +254,41 @@ The test runner renders a story and executes its [play function](https://storybo
 
 To enable use cases like visual or DOM snapshots, the test runner exports test hooks that can be overridden globally. These hooks give you access to the test lifecycle before and after the story is rendered.
 
-The hooks, `preRender` and `postRender`, are functions that take a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
+
+The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+
+All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
 
 > **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
+
+### Image snapshot recipe
+
+Consider, for example, the following recipe to take image snapshots:
+
+```js
+// .storybook/test-runner.js
+const { toMatchImageSnapshot } = require('jest-image-snapshot');
+
+const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
+
+module.exports = {
+  setup() {
+    expect.extend({ toMatchImageSnapshot });
+  },
+  async postRender(page, context) {
+    const image = await page.screenshot();
+    expect(image).toMatchImageSnapshot({
+      customSnapshotsDir,
+      customSnapshotIdentifier: context.id,
+    });
+  },
+};
+```
+
+There is also an exported `TestRunnerConfig` type available for TypeScript users.
+
+### Render lifecycle
 
 To visualize the test lifecycle, consider a simplified version of the test code automatically generated for each story in your Storybook:
 
@@ -277,28 +308,6 @@ it('button--basic', async () => {
 
   // post-render hook
   if (postRender) await postRender(page, context);
-});
-```
-
-### Image snapshot recipe
-
-If you want to make the test runner take image snapshots, the following recipe uses test hooks in `jest-setup.js` to do it:
-
-```js
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
-const { setPostRender } = require('@storybook/test-runner');
-
-expect.extend({ toMatchImageSnapshot });
-
-// use custom directory/id to align CSF and stories.json mode outputs
-const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
-
-setPostRender(async (page, context) => {
-  const image = await page.screenshot();
-  expect(image).toMatchImageSnapshot({
-    customSnapshotsDir,
-    customSnapshotIdentifier: context.id,
-  });
 });
 ```
 

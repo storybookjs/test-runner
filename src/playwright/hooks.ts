@@ -9,6 +9,12 @@ export type TestContext = {
 
 export type TestHook = (page: Page, context: TestContext) => Promise<void>;
 
+export interface TestRunnerConfig {
+  setup?: () => void;
+  preRender?: TestHook;
+  postRender?: TestHook;
+}
+
 export const setPreRender = (preRender: TestHook) => {
   global.__sbPreRender = preRender;
 };
