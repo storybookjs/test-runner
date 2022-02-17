@@ -16,7 +16,9 @@ export const getJestConfig = () => {
     setupFilesAfterEnv: ['@storybook/test-runner/playwright/jest-setup.js'],
     testEnvironmentOptions: {
       'jest-playwright': {
-        browsers: TEST_BROWSERS.split(';'),
+        browsers: TEST_BROWSERS.split(',')
+          .filter(Boolean)
+          .map((p) => p.trim().toLowerCase()),
       },
     },
   };

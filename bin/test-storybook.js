@@ -132,8 +132,9 @@ const main = async () => {
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   await checkStorybook(targetURL);
 
-  if (runnerOptions.browsers) {
-    process.env.TEST_BROWSERS = runnerOptions.browsers.join(';');
+  // Use TEST_BROWSERS if set, otherwise get from --browser option
+  if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
+    process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
   }
 
   if (runnerOptions.storiesJson) {
