@@ -88,9 +88,11 @@ yarn storybook
 yarn test-storybook
 ```
 
-> **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, set the TARGET_URL before running your command like:
+> **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
 >
 > ```jsx
+> yarn test-storybook --url http://localhost:9009
+> or
 > TARGET_URL=http://localhost:9009 yarn test-storybook
 > ```
 
@@ -106,6 +108,7 @@ Usage: test-storybook [options]
 | `-s`, `--stories-json`          | Run in stories json mode (requires a compatible Storybook) <br/>`test-storybook --stories-json`                                  |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                        |
 | `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
+| `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`   |
 | `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium` |
 | `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`        |
 | `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                               |
@@ -124,11 +127,17 @@ The test runner uses [jest-playwright](https://github.com/playwright-community/j
 
 ## Running against a deployed Storybook
 
-By default, the test runner assumes that you're running it against a locally served Storybook.
+By default, the test runner assumes that you're running it against a locally served Storybook on port 6006.
 If you want to define a target url so it runs against deployed Storybooks, you can do so by passing the `TARGET_URL` environment variable:
 
 ```bash
 TARGET_URL=https://the-storybook-url-here.com yarn test-storybook
+```
+
+Or by using the `--url` flag:
+
+```bash
+yarn test-storybook --url https://the-storybook-url-here.com
 ```
 
 ### Stories.json mode
