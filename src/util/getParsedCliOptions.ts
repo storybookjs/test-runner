@@ -2,12 +2,21 @@ export const getParsedCliOptions = () => {
   const { program } = require('commander');
 
   program
-    .option('-s, --stories-json', 'Run in stories json mode (requires a compatible Storybook)')
-    .option('-c, --config-dir <directory>', 'Directory where to load Storybook configurations from')
-    .option('--watch', 'Run in watch mode')
+    .option(
+      '-s, --stories-json',
+      'Run in stories json mode (requires a compatible Storybook)',
+      false
+    )
+    .option(
+      '-c, --config-dir <directory>',
+      'Directory where to load Storybook configurations from',
+      '.storybook'
+    )
+    .option('--watch', 'Run in watch mode', false)
     .option(
       '--browsers <browsers...>',
-      'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit'
+      'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit',
+      ['chromium']
     )
     .option(
       '--maxWorkers <amount>',
