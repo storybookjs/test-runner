@@ -4,6 +4,7 @@ import type { BrowserType } from 'jest-playwright-preset';
 type CliOptions = {
   runnerOptions: {
     storiesJson?: boolean;
+    url?: string;
     configDir?: string;
     eject?: boolean;
     browsers?: BrowserType | BrowserType[];
@@ -18,6 +19,7 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'configDir',
   'browsers',
   'eject',
+  'url',
 ];
 
 export const getCliOptions = () => {

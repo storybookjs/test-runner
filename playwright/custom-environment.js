@@ -1,41 +1,16 @@
 require('regenerator-runtime/runtime');
 const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvironment').default;
 
-const sanitizeURL = (url) => {
-  let finalURL = url
-  // prepend URL protocol if not there
-  if (finalURL.indexOf("http://") === -1 && finalURL.indexOf("https://") === -1) {
-    finalURL = 'http://' + finalURL;
-  }
-
-  // remove iframe.html if present
-  finalURL = finalURL.replace(/iframe.html\s*$/, "");
-
-  // add forward slash at the end if not there
-  if (finalURL.slice(-1) !== '/') {
-    finalURL = finalURL + '/';
-  }
-
-  return finalURL;
-}
-
 class CustomEnvironment extends PlaywrightEnvironment {
   async setup() {
     await super.setup();
     const page = this.global.page;
     const start = new Date();
-    const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
+    const { TARGET_URL: targetUrl, REFERENCE_URL: referenceUrl } = process.env
 
-    const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
-
-    if ('TARGET_URL' in process.env && !process.env.TARGET_URL) {
-      console.log(`Received TARGET_URL but with a falsy value: ${process.env.TARGET_URL
-        }, will fallback to ${targetURL} instead.`)
-    }
-
-    await page.goto(`${targetURL}iframe.html`, { waitUntil: 'load' }).catch((err) => {
+    await page.goto(`${targetUrl}iframe.html`, { waitUntil: 'load' }).catch((err) => {
       if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
-        const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
+        const errorMessage = `Could not access the Storybook instance at ${targetUrl}. Are you sure it's running?\n\n${err.message}`;
         throw new Error(errorMessage)
       }
 
@@ -52,7 +27,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
           constructor(storyId, errorMessage) {
             super(errorMessage);
             this.name = 'StorybookTestRunnerError';
-            const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
+            const storyUrl = \`${referenceUrl || targetUrl}?path=/story/\${storyId}\`;
             const finalStoryUrl = \`\${storyUrl}&addonPanel=storybook/interactions/panel\`;
 
             this.message = \`\nAn error occurred in the following story:\n\${finalStoryUrl}\n\nMessage:\n \${errorMessage}\`;

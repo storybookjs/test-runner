@@ -74,9 +74,9 @@ async function checkStorybook(url) {
     console.error(
       dedent`[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
       
-      If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can set the TARGET_URL variable like so:
+      If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
       
-      TARGET_URL=http://localhost:9009 yarn test-storybook
+      yarn test-storybook --url http://localhost:9009
       
       More info at https://github.com/storybookjs/test-runner#getting-started`
     );
@@ -129,8 +129,14 @@ const main = async () => {
     process.exit(0);
   }
 
-  const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
+  const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
   await checkStorybook(targetURL);
+  
+  process.env.TARGET_URL = targetURL;
+  
+  if(process.env.REFERENCE_URL) {
+    process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
+  }
 
   // Use TEST_BROWSERS if set, otherwise get from --browser option
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
