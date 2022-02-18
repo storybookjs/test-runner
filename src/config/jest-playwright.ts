@@ -17,8 +17,8 @@ export const getJestConfig = () => {
     testEnvironmentOptions: {
       'jest-playwright': {
         browsers: TEST_BROWSERS.split(',')
-          .filter(Boolean)
-          .map((p) => p.trim().toLowerCase()),
+          .map((p) => p.trim().toLowerCase())
+          .filter(Boolean),
       },
     },
   };
