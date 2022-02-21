@@ -110,6 +110,7 @@
     "commander": "^9.0.0",
     "global": "^4.4.0",
     "jest-playwright-preset": "^1.7.0",
+    "jest-watch-typeahead": "^1.0.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",
     "tempy": "^1.0.1"
