@@ -4,9 +4,9 @@ export const getParsedCliOptions = () => {
   program
     .option(
       '-s, --stories-json',
-      'Run in stories json mode (requires a compatible Storybook)',
-      false
+      'Run in stories json mode. Automatically detected (requires a compatible Storybook)'
     )
+    .option('--no-stories-json', 'Disable stories json mode')
     .option(
       '-c, --config-dir <directory>',
       'Directory where to load Storybook configurations from',

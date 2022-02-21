@@ -105,7 +105,8 @@ Usage: test-storybook [options]
 | Options                         | Description                                                                                                                      |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `--help`                        | Output usage information <br/>`test-storybook --help`                                                                            |
-| `-s`, `--stories-json`          | Run in stories json mode (requires a compatible Storybook) <br/>`test-storybook --stories-json`                                  |
+| `-s`, `--stories-json`          | Run in stories json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --stories-json`          |
+| `--no-stories-json`             | Disables stories json mode <br/>`test-storybook --no-stories-json`                                                               |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                        |
 | `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
 | `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`   |
@@ -149,7 +150,7 @@ This is particularly useful for running against a deployed storybook because `st
 To run in stories.json mode, first make sure your Storybook has a v3 `stories.json` file. You can navigate to:
 
 ```
-https://the-storybook-url-here.com/stories.json
+https://your-storybook-url-here.com/stories.json
 ```
 
 It should be a JSON file and the first key should be `"v": 3` followed by a key called `"stories"` containing a map of story IDs to JSON objects.
@@ -167,10 +168,18 @@ module.exports = {
 };
 ```
 
-Once you have a valid `stories.json` file, you can run the test runner against it with the `--stories-json` flag:
+Once you have a valid `stories.json` file, your Storybook will be compatible with the "stories.json mode". 
+
+By default, the test runner will detect whether your Storybook URL is local or remote, and if it is remote, it will run in "stories.json mode" automatically. To disable it, you can pass the `--no-stories-json` flag:
 
 ```bash
-TARGET_URL=https://the-storybook-url-here.com yarn test-storybook --stories-json
+yarn test-storybook --no-stories-json
+```
+
+If you are running tests against a local Storybook but for some reason want to run in "stories.json mode", you can pass the `--stories-json` flag:
+
+```bash
+yarn test-storybook --stories-json
 ```
 
 > **NOTE:** stories.json mode is not compatible with watch mode.
