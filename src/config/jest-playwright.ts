@@ -21,6 +21,10 @@ export const getJestConfig = () => {
           .filter(Boolean),
       },
     },
+    watchPlugins: [
+      require.resolve('jest-watch-typeahead/filename'),
+      require.resolve('jest-watch-typeahead/testname'),
+    ],
   };
 
   if (TEST_MATCH) {
