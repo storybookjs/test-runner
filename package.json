@@ -109,6 +109,7 @@
     "@storybook/csf-tools": "^6.4.14",
     "commander": "^9.0.0",
     "global": "^4.4.0",
+    "is-localhost-ip": "^1.4.0",
     "jest-playwright-preset": "^1.7.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",

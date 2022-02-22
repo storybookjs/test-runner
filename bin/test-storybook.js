@@ -3,6 +3,7 @@
 'use strict';
 
 const fetch = require('node-fetch');
+const isLocalhostIp = require('is-localhost-ip');
 const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
@@ -22,11 +23,13 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
+const log = (message) => console.log(`[test-storybook] ${message}`)
+
 // Clean up tmp files globally in case of control-c
 let storiesJsonTmpDir;
 const cleanup = () => {
   if (storiesJsonTmpDir) {
-    console.log(`[test-storybook] Cleaning up ${storiesJsonTmpDir}`);
+    log(`Cleaning up ${storiesJsonTmpDir}`);
     fs.rmSync(storiesJsonTmpDir, { recursive: true, force: true });
   }
   process.exit();
@@ -98,7 +101,7 @@ async function fetchStoriesJson(url) {
       fs.writeFileSync(tmpFile, test);
     });
   } catch (err) {
-    console.error(`[test-storybook] Failed to fetch stories.json from ${storiesJsonUrl}`);
+    console.error(`Failed to fetch stories.json from ${storiesJsonUrl}`);
     console.error(
       'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode\n'
     );
@@ -108,12 +111,12 @@ async function fetchStoriesJson(url) {
   return tmpDir;
 }
 
-function ejectConfiguration () {
+function ejectConfiguration() {
   const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js')
   const destination = path.resolve('test-runner-jest.config.js')
   const fileAlreadyExists = fs.existsSync(destination)
-  
-  if(fileAlreadyExists) {
+
+  if (fileAlreadyExists) {
     throw new Error(dedent`Found existing file at:
     
     ${destination}
@@ -121,25 +124,25 @@ function ejectConfiguration () {
     Please delete it and rerun this command.
     \n`)
   }
-  
+
   fs.copyFileSync(origin, destination)
-  console.log('[test-runner] Configuration file successfully copied as test-runner-jest.config.js')
+  log('Configuration file successfully copied as test-runner-jest.config.js')
 }
 
 const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
 
-  if(runnerOptions.eject) {
+  if (runnerOptions.eject) {
     ejectConfiguration();
     process.exit(0);
   }
 
   const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
   await checkStorybook(targetURL);
-  
+
   process.env.TARGET_URL = targetURL;
-  
-  if(process.env.REFERENCE_URL) {
+
+  if (process.env.REFERENCE_URL) {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
   }
 
@@ -147,8 +150,15 @@ const main = async () => {
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
     process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
   }
+  const { hostname } = new URL(targetURL)
 
-  if (runnerOptions.storiesJson) {
+  const isLocalStorybookIp = await isLocalhostIp(hostname, true)
+  const shouldRunStoriesJson = runnerOptions.storiesJson !== false && !isLocalStorybookIp
+  if (shouldRunStoriesJson) {
+    log('Detected a remote Storybook URL, running in stories json mode. To disable this, run the command again with --no-stories-json')
+  }
+
+  if (runnerOptions.storiesJson || shouldRunStoriesJson) {
     storiesJsonTmpDir = await fetchStoriesJson(targetURL);
     process.env.TEST_ROOT = storiesJsonTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
@@ -162,4 +172,4 @@ const main = async () => {
   await executeJestPlaywright(jestOptions);
 };
 
-main().catch((e) => console.log(`[test-storybook] ${e}`));
+main().catch((e) => log(e));
