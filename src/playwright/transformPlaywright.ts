@@ -7,7 +7,7 @@ import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
   import global from 'global';
-  const { setupPage } = require('../../dist/cjs');
+  const { setupPage } = require('@storybook/test-runner');
 `);
 
 export const testPrefixer = template(
