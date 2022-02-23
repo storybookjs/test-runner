@@ -17,11 +17,7 @@ const sanitizeURL = (url) => {
   return finalURL;
 };
 
-export const setupPage = async () => {
-  // await jestPlaywright.resetPage();
-
-  const page = global.browser.newPage();
-
+export const setupPage = async (page) => {
   const start = new Date();
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
 

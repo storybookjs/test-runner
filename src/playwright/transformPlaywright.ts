@@ -10,33 +10,43 @@ const filePrefixer = template(`
   const { setupPage } = require('../../dist/cjs');
 `);
 
-const beforeEachPrefixer = template(`
-  async () => setupPage(global.page)
-`);
-
 export const testPrefixer = template(
   `
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => {
-      const context = { id: %%id%%, title: %%title%%, name: %%name%% };
+      const testFn = async() => {
+        const context = { id: %%id%%, title: %%title%%, name: %%name%% };
 
-      page.on('pageerror', (err) => {
-        page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
-      });
+        page.on('pageerror', (err) => {
+          page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
+        });
 
-      if(global.__sbPreRender) {
-        await global.__sbPreRender(page, context);
+        if(global.__sbPreRender) {
+          await global.__sbPreRender(page, context);
+        }
+
+        const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
+          id: %%id%%,
+        });
+  
+        if(global.__sbPostRender) {
+          await global.__sbPostRender(page, context);
+        }
+
+        return result;
+      };
+
+      try {
+        await testFn();
+      } catch(err) {
+        if(err.toString().includes('Execution context was destroyed')) {
+          await jestPlaywright.resetPage();
+          await setupPage(global.page);
+          await testFn();
+        } else {
+          throw err;
+        }
       }
-
-      const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
-        id: %%id%%,
-      });
-
-      if(global.__sbPostRender) {
-        await global.__sbPostRender(page, context);
-      }
-
-      return result;
     }
   `,
   {
@@ -57,7 +67,6 @@ export const transformPlaywright = (src: string, filename: string) => {
     filePrefixer,
     // @ts-ignore
     testPrefixer,
-    beforeEachPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
     defaultTitle,
