@@ -14,4 +14,8 @@ module.exports = {
   globalTeardown: './playwright/global-teardown.js',
   testEnvironment: './playwright/custom-environment.js',
   setupFilesAfterEnv: ['./playwright/jest-setup.js'],
+  // use local build when the package is referred
+  moduleNameMapper: {
+    '@storybook/test-runner': '<rootDir>/dist/cjs/index.js'
+  },
 };

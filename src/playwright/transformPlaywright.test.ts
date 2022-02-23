@@ -51,7 +51,7 @@ describe('Playwright', () => {
 
       const {
         setupPage
-      } = require('../../dist/cjs');
+      } = require('@storybook/test-runner');
 
       if (!require.main) {
         describe("foo/bar", () => {
@@ -122,7 +122,7 @@ describe('Playwright', () => {
 
       const {
         setupPage
-      } = require('../../dist/cjs');
+      } = require('@storybook/test-runner');
 
       if (!require.main) {
         describe("foo/bar", () => {
@@ -194,7 +194,7 @@ describe('Playwright', () => {
 
       const {
         setupPage
-      } = require('../../dist/cjs');
+      } = require('@storybook/test-runner');
 
       if (!require.main) {
         describe("Example/Header", () => {
