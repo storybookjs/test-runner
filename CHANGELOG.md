@@ -1,3 +1,26 @@
+# v0.0.3 (Wed Feb 23 2022)
+
+#### 🐛 Bug Fix
+
+- fix: reset page between tests [#47](https://github.com/storybookjs/test-runner/pull/47) ([@yannbf](https://github.com/yannbf))
+- feat: add typeahead jest plugin [#61](https://github.com/storybookjs/test-runner/pull/61) ([@yannbf](https://github.com/yannbf))
+- feat: auto detect stories json mode [#60](https://github.com/storybookjs/test-runner/pull/60) ([@yannbf](https://github.com/yannbf))
+- feat: add url flag [#58](https://github.com/storybookjs/test-runner/pull/58) ([@yannbf](https://github.com/yannbf))
+- feat: add browsers flag [#55](https://github.com/storybookjs/test-runner/pull/55) ([@yannbf](https://github.com/yannbf))
+- fix: add  file location to eject error message [#57](https://github.com/storybookjs/test-runner/pull/57) ([@yannbf](https://github.com/yannbf))
+- feat: add eject command [#54](https://github.com/storybookjs/test-runner/pull/54) ([@yannbf](https://github.com/yannbf))
+- Test-runner file for hook configuration [#53](https://github.com/storybookjs/test-runner/pull/53) ([@shilman](https://github.com/shilman))
+- feat: add update snapshot command to cli [#52](https://github.com/storybookjs/test-runner/pull/52) ([@yannbf](https://github.com/yannbf))
+- fix: improve error message in start-storybook [#51](https://github.com/storybookjs/test-runner/pull/51) ([@yannbf](https://github.com/yannbf))
+- Respect stories defined in main.js [#46](https://github.com/storybookjs/test-runner/pull/46) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.2 (Thu Feb 03 2022)
 
 #### 🐛 Bug Fix
