@@ -1,3 +1,15 @@
+# v0.0.4 (Wed Feb 23 2022)
+
+#### 🐛 Bug Fix
+
+- fix: use correct import in generated test [#65](https://github.com/storybookjs/test-runner/pull/65) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.3 (Wed Feb 23 2022)
 
 #### 🐛 Bug Fix
