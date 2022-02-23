@@ -2,16 +2,42 @@ export const getParsedCliOptions = () => {
   const { program } = require('commander');
 
   program
-    .option('-s, --stories-json', 'Run in stories json mode (requires a compatible Storybook)')
-    .option('-c, --config-dir <directory>', 'Directory where to load Storybook configurations from')
-    .option('--watch', 'Run in watch mode')
+    .option(
+      '-s, --stories-json',
+      'Run in stories json mode. Automatically detected (requires a compatible Storybook)'
+    )
+    .option('--no-stories-json', 'Disable stories json mode')
+    .option(
+      '-c, --config-dir <directory>',
+      'Directory where to load Storybook configurations from',
+      '.storybook'
+    )
+    .option('--watch', 'Run in watch mode', false)
+    .option(
+      '--browsers <browsers...>',
+      'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit',
+      ['chromium']
+    )
+    .option(
+      '--url <url>',
+      'Define the URL to run tests in. Useful for custom Storybook URLs',
+      'http://localhost:6006'
+    )
     .option(
       '--maxWorkers <amount>',
       'Specifies the maximum number of workers the worker-pool will spawn for running tests'
     )
     .option('--no-cache', 'Disable the cache')
     .option('--clearCache', 'Deletes the Jest cache directory and then exits without running tests')
-    .option('--verbose', 'Display individual test results with the test suite hierarchy');
+    .option('--verbose', 'Display individual test results with the test suite hierarchy')
+    .option(
+      '-u, --updateSnapshot',
+      'Use this flag to re-record every snapshot that fails during this test run'
+    )
+    .option(
+      '--eject',
+      'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'
+    );
 
   program.exitOverride();
 
