@@ -5,5 +5,5 @@ build-storybook.log
 .DS_Store
 .env
 .cache
-stories/stress-test
+stories/atoms/StressTest.stories.js
 yarn-error.log
