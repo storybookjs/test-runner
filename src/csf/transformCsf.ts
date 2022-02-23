@@ -75,7 +75,7 @@ const makeDescribe = (
   );
 };
 
-const makeBeforeEach = (beforeEachPrefixer?: FilePrefixer) => {
+const makeBeforeEach = (beforeEachPrefixer: FilePrefixer) => {
   const stmt = beforeEachPrefixer() as t.ExpressionStatement;
 
   return t.expressionStatement(t.callExpression(t.identifier('beforeEach'), [stmt.expression]));
@@ -131,9 +131,6 @@ export const transformCsf = (
   }
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
-    if (beforeEachPrefixer) {
-      makeBeforeEach(beforeEachPrefixer);
-    }
     const describe = makeDescribe(
       csf.meta.title,
       allTests,
