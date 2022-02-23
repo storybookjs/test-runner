@@ -1,10 +1,21 @@
 const { STRESS_TEST, STORY_STORE_V7, WITHOUT_DOCS } = process.env;
 
 const stories = [
+  '../stories/docs/**/*.stories.mdx',
+  // default title prefix
   {
-    directory: '../stories',
+    titlePrefix: 'Atoms',
+    directory: '../stories/atoms',
   },
+  // defined title prefix
+  {
+    titlePrefix: 'Molecules',
+    directory: '../stories/molecules',
+  },
+  // general glob
+  '../stories/pages/**/*.stories.*',
 ];
+
 
 if (STRESS_TEST) {
   stories.push('../stories/stress-test/*.stories.@(js|jsx|ts|tsx)');

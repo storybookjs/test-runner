@@ -3,10 +3,12 @@
 'use strict';
 
 const fetch = require('node-fetch');
+const isLocalhostIp = require('is-localhost-ip');
 const fs = require('fs');
+const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
-const { getCliOptions, getStorybookMain } = require('../dist/cjs/util/cli');
+const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -21,11 +23,13 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
+const log = (message) => console.log(`[test-storybook] ${message}`)
+
 // Clean up tmp files globally in case of control-c
 let storiesJsonTmpDir;
 const cleanup = () => {
   if (storiesJsonTmpDir) {
-    console.log(`[test-storybook] Cleaning up ${storiesJsonTmpDir}`);
+    log(`Cleaning up ${storiesJsonTmpDir}`);
     fs.rmSync(storiesJsonTmpDir, { recursive: true, force: true });
   }
   process.exit();
@@ -71,7 +75,13 @@ async function checkStorybook(url) {
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
-      `[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?`
+      dedent`[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
+      
+      If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
+      
+      yarn test-storybook --url http://localhost:9009
+      
+      More info at https://github.com/storybookjs/test-runner#getting-started`
     );
     process.exit(1);
   }
@@ -91,7 +101,7 @@ async function fetchStoriesJson(url) {
       fs.writeFileSync(tmpFile, test);
     });
   } catch (err) {
-    console.error(`[test-storybook] Failed to fetch stories.json from ${storiesJsonUrl}`);
+    console.error(`Failed to fetch stories.json from ${storiesJsonUrl}`);
     console.error(
       'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode\n'
     );
@@ -101,23 +111,65 @@ async function fetchStoriesJson(url) {
   return tmpDir;
 }
 
+function ejectConfiguration() {
+  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js')
+  const destination = path.resolve('test-runner-jest.config.js')
+  const fileAlreadyExists = fs.existsSync(destination)
+
+  if (fileAlreadyExists) {
+    throw new Error(dedent`Found existing file at:
+    
+    ${destination}
+    
+    Please delete it and rerun this command.
+    \n`)
+  }
+
+  fs.copyFileSync(origin, destination)
+  log('Configuration file successfully copied as test-runner-jest.config.js')
+}
+
 const main = async () => {
-  const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
+  const { jestOptions, runnerOptions } = getCliOptions();
+
+  if (runnerOptions.eject) {
+    ejectConfiguration();
+    process.exit(0);
+  }
+
+  const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
   await checkStorybook(targetURL);
 
-  const { jestOptions, runnerOptions } = getCliOptions()
+  process.env.TARGET_URL = targetURL;
 
-  if (runnerOptions.storiesJson) {
+  if (process.env.REFERENCE_URL) {
+    process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
+  }
+
+  // Use TEST_BROWSERS if set, otherwise get from --browser option
+  if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
+    process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
+  }
+  const { hostname } = new URL(targetURL)
+
+  const isLocalStorybookIp = await isLocalhostIp(hostname, true)
+  const shouldRunStoriesJson = runnerOptions.storiesJson !== false && !isLocalStorybookIp
+  if (shouldRunStoriesJson) {
+    log('Detected a remote Storybook URL, running in stories json mode. To disable this, run the command again with --no-stories-json')
+  }
+
+  if (runnerOptions.storiesJson || shouldRunStoriesJson) {
     storiesJsonTmpDir = await fetchStoriesJson(targetURL);
     process.env.TEST_ROOT = storiesJsonTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  // check if main.js exists, throw an error if not
-  getStorybookMain(runnerOptions.configDir);
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
+
+  const { storiesPaths } = getStorybookMetadata();
+  process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
   await executeJestPlaywright(jestOptions);
 };
 
-main().catch((e) => console.log(`[test-storybook] ${e}`));
+main().catch((e) => log(e));

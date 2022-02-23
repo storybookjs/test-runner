@@ -1,0 +1,17 @@
+import { join, resolve } from 'path';
+import { serverRequire } from '@storybook/core-common';
+import { TestRunnerConfig } from '../playwright/hooks';
+
+let testRunnerConfig: TestRunnerConfig;
+let loaded = false;
+
+export const getTestRunnerConfig = (configDir: string): TestRunnerConfig | undefined => {
+  // testRunnerConfig can be undefined
+  if (loaded) {
+    return testRunnerConfig;
+  }
+
+  testRunnerConfig = serverRequire(join(resolve(configDir), 'test-runner'));
+  loaded = true;
+  return testRunnerConfig;
+};

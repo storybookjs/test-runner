@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const storiesFolderPath = 'stories/stress-test';
+const storiesFolderPath = 'stories/atoms';
 
 if (!fs.existsSync(storiesFolderPath)) {
   fs.mkdirSync(storiesFolderPath);
@@ -11,7 +11,7 @@ const storyCount = Number(process.env.DYNAMIC_STORIES_COUNT) || 500;
 let content = `
 import React from 'react';
 
-import { Button } from '../basic/Button';
+import { Button } from './Button';
 
 export default {
   title: 'StressTest',

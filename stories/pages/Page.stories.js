@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Page } from './Page';
-import * as HeaderStories from './Header.stories';
+import * as HeaderStories from '../molecules/Header.stories';
 
 export default {
-  title: 'Example/Page',
+  title: 'Pages/Page',
   component: Page,
   play: async () => {},
 };
