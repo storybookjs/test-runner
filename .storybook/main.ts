@@ -28,6 +28,7 @@ const addons = [
   '@storybook/addon-interactions',
   '@storybook/addon-coverage',
   '@storybook/addon-mdx-gfm',
+  '@storybook/addon-a11y',
 ];
 module.exports = {
   stories,

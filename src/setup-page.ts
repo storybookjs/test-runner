@@ -75,8 +75,11 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
     await defaultPrepare({ page, browserContext, testRunnerConfig });
   }
 
-  // if we ever want to log something from the browser to node
+  // if we ever want to log something from the browser to node -- helps debugging
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
+  await page.exposeBinding('throwError', (_, message) => {
+    throw new Error(message);
+  });
 
   await page.addScriptTag({
     content: `
@@ -282,6 +285,67 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         });
       }
 
+      function checkViolations(results, storyId) {
+        const filterViolations = (violations, impactLevels) => {
+          if (impactLevels && impactLevels.length > 0) {
+            return violations.filter((v) => impactLevels.includes(v.impact));
+          }
+          return violations;
+        }
+      
+        const violations = filterViolations(
+          results.violations,
+          results.toolOptions ? results.toolOptions.impactLevels : []
+        )
+        
+        const reporter = (violations) => {
+          if (violations.length === 0) {
+            return [];
+          }
+
+          const lineBreak = '\\n\\n';
+          const horizontalLine = '\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500';
+          let violationNumber = 0
+          return violations
+            .map((violation) => {
+              const errorBody = violation.nodes
+                .map((node) => {
+                  violationNumber++;
+                  const selector = node.target.join(', ');
+                  const expectedText = \`Expected the HTML found at $('\${selector}') to have no violations:\` + lineBreak;
+                  return (
+                    bold(expectedText) +
+                    node.html +
+                    lineBreak +
+                    'Received:' +
+                    lineBreak +
+                    red(\`\${violation.help} (\${violation.id})\`) +
+                    lineBreak +
+                    yellow(node.failureSummary) +
+                    lineBreak +
+                    (violation.helpUrl
+                      ? \`You can find more information on this issue here: \\n\${bold(blue(violation.helpUrl))}\`
+                      : '') + '\\n----------------------------------'
+                  )
+                })
+                .join(lineBreak)
+
+              return \`Found \${violationNumber} accessibility violations:\\n\\n----------------------------------\\n \${errorBody}\`
+            })
+            .join(lineBreak + horizontalLine + lineBreak);
+        }
+        
+        const formattedViolations = reporter(violations);
+        const pass = formattedViolations.length === 0;
+      
+        const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
+        if (!pass) {
+          channel.emit('endReports', formattedViolations);
+        } else {
+          channel.emit('endReports');
+        }
+      }
+
       async function __getContext(storyId) {
         return globalThis.__STORYBOOK_PREVIEW__.storyStore.loadStory({ storyId });
       }
@@ -332,7 +396,22 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         })
 
         return new Promise((resolve, reject) => {
-          channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
+          // Each addon could have a "report" entry
+          // The test runner goes through the list
+          
+          channel.on('storybook/a11y/result', (results) => checkViolations(results, storyId));
+          channel.on('startReports', () => {
+            channel.emit('storybook/a11y/manual', storyId);
+          })
+          channel.on('endReports', (error) => {
+            if(error) {
+              reject(error);
+            }
+            resolve(document.getElementById('root'));
+          });
+          channel.on('${renderedEvent}', () => {
+            channel.emit('startReports');
+          });
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
           channel.on('storyErrored', ({ description }) => reject(
             new StorybookTestRunnerError(storyId, description, logs))
