@@ -39,8 +39,11 @@ export const setupPage = async (page) => {
   }); // FIXME: configure
   console.log(`page loaded in ${new Date() - start}ms.`);
 
-  // if we ever want to log something from the browser to node
+  // if we ever want to log something from the browser to node -- helps debugging
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
+  await page.exposeBinding('throwError', (_, message) => {
+    throw new Error(message);
+  });
 
   await page.addScriptTag({
     content: `
@@ -54,6 +57,12 @@ export const setupPage = async (page) => {
           this.message = \`\nAn error occurred in the following story:\n\${finalStoryUrl}\n\nMessage:\n \${errorMessage}\`;
         }
       }
+
+      const bold = (message) => \`\\u001b[1m\${message}\\u001b[22m\`;
+      const magenta = (message) => \`\\u001b[35m\${message}\\u001b[39m\`;
+      const blue = (message) => \`\\u001b[34m\${message}\\u001b[39m\`;
+      const red = (message) => \`\\u001b[31m\${message}\\u001b[39m\`;
+      const yellow = (message) => \`\\u001b[33m\${message}\\u001b[39m\`;
 
       async function __throwError(storyId, errorMessage) {
         throw new StorybookTestRunnerError(storyId, errorMessage);
@@ -86,6 +95,67 @@ export const setupPage = async (page) => {
         });
       }
 
+      function checkViolations(results, storyId) {
+        const filterViolations = (violations, impactLevels) => {
+          if (impactLevels && impactLevels.length > 0) {
+            return violations.filter((v) => impactLevels.includes(v.impact));
+          }
+          return violations;
+        }
+      
+        const violations = filterViolations(
+          results.violations,
+          results.toolOptions ? results.toolOptions.impactLevels : []
+        )
+        
+        const reporter = (violations) => {
+          if (violations.length === 0) {
+            return [];
+          }
+
+          const lineBreak = '\\n\\n';
+          const horizontalLine = '\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500';
+          let violationNumber = 0
+          return violations
+            .map((violation) => {
+              const errorBody = violation.nodes
+                .map((node) => {
+                  violationNumber++;
+                  const selector = node.target.join(', ');
+                  const expectedText = \`Expected the HTML found at $('\${selector}') to have no violations:\` + lineBreak;
+                  return (
+                    bold(expectedText) +
+                    node.html +
+                    lineBreak +
+                    'Received:' +
+                    lineBreak +
+                    red(\`\${violation.help} (\${violation.id})\`) +
+                    lineBreak +
+                    yellow(node.failureSummary) +
+                    lineBreak +
+                    (violation.helpUrl
+                      ? \`You can find more information on this issue here: \\n\${bold(blue(violation.helpUrl))}\`
+                      : '') + '\\n----------------------------------'
+                  )
+                })
+                .join(lineBreak)
+
+              return \`Found \${violationNumber} accessibility violations:\\n\\n----------------------------------\\n \${errorBody}\`
+            })
+            .join(lineBreak + horizontalLine + lineBreak);
+        }
+        
+        const formattedViolations = reporter(violations);
+        const pass = formattedViolations.length === 0;
+      
+        const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
+        if (!pass) {
+          channel.emit('endReports', formattedViolations);
+        } else {
+          channel.emit('endReports');
+        }
+      }
+
       async function __test(storyId) {
         try {
           await __waitForElement('#root');
@@ -103,7 +173,19 @@ export const setupPage = async (page) => {
         }
 
         return new Promise((resolve, reject) => {
-          channel.on('storyRendered', () => resolve(document.getElementById('root')));
+          channel.on('storybook/a11y/result', (results) => checkViolations(results, storyId));
+          channel.on('startReports', () => {
+            channel.emit('storybook/a11y/manual', storyId);
+          })
+          channel.on('endReports', (error) => {
+            if(error) {
+              reject(error);
+            }
+            resolve(document.getElementById('root'));
+          });
+          channel.on('storyRendered', () => {
+            channel.emit('startReports');
+          });
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
           channel.on('storyErrored', ({ description }) => reject(
             new StorybookTestRunnerError(storyId, description))
@@ -111,6 +193,7 @@ export const setupPage = async (page) => {
           channel.on('storyThrewException', (error) => reject(
             new StorybookTestRunnerError(storyId, error.message))
           );
+          
           channel.on('storyMissing', (id) => id === storyId && reject(
             new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.'))
           );
