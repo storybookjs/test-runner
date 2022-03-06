@@ -24,8 +24,6 @@
     "dist/**/*",
     "README.md",
     "playwright",
-    "jsdom",
-    "mocks",
     "*.js",
     "*.d.ts"
   ],
@@ -43,13 +41,11 @@
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --no-manager-cache --quiet\"",
     "build-storybook": "build-storybook",
     "release": "yarn build && auto shipit",
-    "test-storybook": "node bin/test-storybook.js --no-cache",
+    "test-storybook": "node bin/test-storybook.js",
+    "test-storybook:no-cache": "yarn test-storybook --no-cache",
+    "test-storybook:json": "yarn test-storybook --stories-json",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\"",
-    "test-storybook:ci-json": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --stories-json\"",
-    "test-storybook:jsdom": "jest --no-cache --config ./jsdom-jest.config.js -i",
-    "test-storybook:playwright-no-cache": "jest --no-cache --config ./test-runner-jest.config.js",
-    "test-storybook:playwright": "./bin/test-storybook.js",
-    "test-storybook:playwright-json": "./bin/test-storybook.js --stories-json",
+    "test-storybook:ci-json": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook:json\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js"
   },
   "bin": {
