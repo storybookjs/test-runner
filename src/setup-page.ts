@@ -20,6 +20,8 @@ const sanitizeURL = (url) => {
 export const setupPage = async (page) => {
   const start = new Date();
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
+  const viewMode = process.env.VIEW_MODE || 'story';
+  const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
 
   const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
 
@@ -103,7 +105,7 @@ export const setupPage = async (page) => {
         }
 
         return new Promise((resolve, reject) => {
-          channel.on('storyRendered', () => resolve(document.getElementById('root')));
+          channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
           channel.on('storyErrored', ({ description }) => reject(
             new StorybookTestRunnerError(storyId, description))
@@ -115,7 +117,7 @@ export const setupPage = async (page) => {
             new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.'))
           );
 
-          channel.emit('setCurrentStory', { storyId });
+          channel.emit('setCurrentStory', { storyId, viewMode: '${viewMode}' });
         });
       };
     `,
