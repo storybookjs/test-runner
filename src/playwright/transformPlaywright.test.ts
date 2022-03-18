@@ -251,4 +251,154 @@ describe('Playwright', () => {
       }
     `);
   });
+
+  it('should only generate specified test type when ONLY_TYPE option is set', () => {
+    process.env.ONLY_TYPE = 'play'
+
+    expect(
+      transformPlaywright(
+        dedent`
+        export default { title: 'foo/bar', component: Button };
+        export const A = () => {};
+        A.play = () => {};
+        export const B = () => {};
+      `,
+        filename
+      )
+    ).toMatchInlineSnapshot(`
+      import global from 'global';
+
+      const {
+        setupPage
+      } = require('@storybook/test-runner');
+
+      if (!require.main) {
+        describe("foo/bar", () => {
+        describe("A", () => {
+          it("play-test", async () => {
+            const testFn = async () => {
+              const context = {
+                id: "foo-bar--a",
+                title: "foo/bar",
+                name: "A"
+              };
+              page.on('pageerror', err => {
+                page.evaluate(({
+                  id,
+                  err
+                }) => __throwError(id, err), {
+                  id: "foo-bar--a",
+                  err: err.message
+                });
+              });
+
+              if (global.__sbPreRender) {
+                await global.__sbPreRender(page, context);
+              }
+
+              const result = await page.evaluate(({
+                id,
+                hasPlayFn
+              }) => __test(id, hasPlayFn), {
+                id: "foo-bar--a"
+              });
+
+              if (global.__sbPostRender) {
+                await global.__sbPostRender(page, context);
+              }
+
+              return result;
+            };
+
+            try {
+              await testFn();
+            } catch (err) {
+              if (err.toString().includes('Execution context was destroyed')) {
+                await jestPlaywright.resetPage();
+                await setupPage(global.page);
+                await testFn();
+              } else {
+                throw err;
+              }
+            }
+          });
+        });
+      });
+      }
+    `);
+
+    process.env.ONLY_TYPE = 'smoke'
+
+    expect(
+      transformPlaywright(
+        dedent`
+        export default { title: 'foo/bar', component: Button };
+        export const A = () => {};
+        A.play = () => {};
+        export const B = () => {};
+      `,
+        filename
+      )
+    ).toMatchInlineSnapshot(`
+      import global from 'global';
+
+      const {
+        setupPage
+      } = require('@storybook/test-runner');
+
+      if (!require.main) {
+        describe("foo/bar", () => {
+        describe("B", () => {
+          it("smoke-test", async () => {
+            const testFn = async () => {
+              const context = {
+                id: "foo-bar--b",
+                title: "foo/bar",
+                name: "B"
+              };
+              page.on('pageerror', err => {
+                page.evaluate(({
+                  id,
+                  err
+                }) => __throwError(id, err), {
+                  id: "foo-bar--b",
+                  err: err.message
+                });
+              });
+
+              if (global.__sbPreRender) {
+                await global.__sbPreRender(page, context);
+              }
+
+              const result = await page.evaluate(({
+                id,
+                hasPlayFn
+              }) => __test(id, hasPlayFn), {
+                id: "foo-bar--b"
+              });
+
+              if (global.__sbPostRender) {
+                await global.__sbPostRender(page, context);
+              }
+
+              return result;
+            };
+
+            try {
+              await testFn();
+            } catch (err) {
+              if (err.toString().includes('Execution context was destroyed')) {
+                await jestPlaywright.resetPage();
+                await setupPage(global.page);
+                await testFn();
+              } else {
+                throw err;
+              }
+            }
+          });
+        });
+      });
+      }
+    `);
+  });
 });

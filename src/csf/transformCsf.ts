@@ -4,6 +4,8 @@ import * as t from '@babel/types';
 import generate from '@babel/generator';
 import { toId, storyNameFromExport } from '@storybook/csf';
 import dedent from 'ts-dedent';
+import util from 'util'
+import type { StorybookTestType } from '../util/getCliOptions';
 
 const logger = console;
 
@@ -24,6 +26,7 @@ interface TransformOptions {
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
   defaultTitle?: string;
+  onlyType?: StorybookTestType;
 }
 
 const prefixFunction = (
@@ -49,12 +52,25 @@ const makePlayTest = (
   key: string,
   title: string,
   metaOrStoryPlay: t.Node,
-  testPrefix?: TestPrefixer
+  testPrefix?: TestPrefixer,
+  onlyType?: StorybookTestType,
 ): t.Statement[] => {
+  const testType = !!metaOrStoryPlay ? 'play-test' : 'smoke-test';
+
+  if (
+    onlyType &&
+    (
+      (onlyType === 'play' && testType !== 'play-test') ||
+      (onlyType === 'smoke' && testType !== 'smoke-test')
+    )
+  ) {
+    return [];
+  }
+
   return [
     t.expressionStatement(
       t.callExpression(t.identifier('it'), [
-        t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+        t.stringLiteral(testType),
         prefixFunction(key, title, metaOrStoryPlay as t.Expression, testPrefix),
       ])
     ),
@@ -93,6 +109,7 @@ export const transformCsf = (
     beforeEachPrefixer,
     insertTestIfEmpty,
     defaultTitle,
+    onlyType,
   }: TransformOptions = {}
 ) => {
   const csf = loadCsf(code, { defaultTitle });
@@ -111,7 +128,7 @@ export const transformCsf = (
   const playTests = storyExports
     .map((key: string) => {
       let tests: t.Statement[] = [];
-      tests = [...tests, ...makePlayTest(key, title, storyPlays[key], testPrefixer)];
+      tests = [...tests, ...makePlayTest(key, title, storyPlays[key], testPrefixer, onlyType)];
 
       if (tests.length) {
         return makeDescribe(key, tests);

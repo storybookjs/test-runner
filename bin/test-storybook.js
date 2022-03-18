@@ -137,6 +137,10 @@ const main = async () => {
     process.exit(0);
   }
 
+  if (runnerOptions.onlyType) {
+    process.env.ONLY_TYPE = runnerOptions.onlyType;
+  }
+
   const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
   await checkStorybook(targetURL);
 

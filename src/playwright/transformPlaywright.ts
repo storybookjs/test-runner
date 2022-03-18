@@ -2,7 +2,7 @@ import { relative } from 'path';
 import template from '@babel/template';
 import { autoTitle } from '@storybook/store';
 
-import { getStorybookMetadata } from '../util';
+import { getStorybookMetadata, StorybookTestType } from '../util';
 import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
@@ -70,6 +70,7 @@ export const transformPlaywright = (src: string, filename: string) => {
     insertTestIfEmpty: true,
     clearBody: true,
     defaultTitle,
+    onlyType: process.env.ONLY_TYPE as StorybookTestType,
   });
   return result;
 };
