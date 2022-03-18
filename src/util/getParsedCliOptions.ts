@@ -1,5 +1,5 @@
 export const getParsedCliOptions = () => {
-  const { program } = require('commander');
+  const { program, Option } = require('commander');
 
   program
     .option(
@@ -12,6 +12,12 @@ export const getParsedCliOptions = () => {
     )
     .option('--no-index-json', 'Disable index json mode')
     .option('--no-stories-json', 'Disable index json mode [deprecated, use --no-index-json]')
+    .addOption(
+      new Option(
+        '--only-type <testType>',
+        'Only run selected test type. Does not work with stories json mode.'
+      ).choices(['play', 'smoke'])
+    )
     .option(
       '-c, --config-dir <directory>',
       'Directory where to load Storybook configurations from',

@@ -246,6 +246,10 @@ const main = async () => {
 
   process.env.TARGET_URL = targetURL;
 
+  if (runnerOptions.onlyType) {
+    process.env.ONLY_TYPE = runnerOptions.onlyType;
+  }
+
   if (runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
   }

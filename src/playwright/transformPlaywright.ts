@@ -2,7 +2,7 @@ import { relative } from 'path';
 import template from '@babel/template';
 import { userOrAutoTitle } from '@storybook/store';
 
-import { getStorybookMetadata } from '../util';
+import { getStorybookMetadata, StorybookTestType } from '../util';
 import { transformCsf } from '../csf/transformCsf';
 import type { TestPrefixer } from '../csf/transformCsf';
 import dedent from 'ts-dedent';
@@ -80,6 +80,7 @@ export const transformPlaywright = (src: string, filename: string) => {
     insertTestIfEmpty: true,
     clearBody: true,
     makeTitle: makeTitleFactory(filename),
+    onlyType: process.env.ONLY_TYPE as StorybookTestType,
   });
   return result;
 };

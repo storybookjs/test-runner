@@ -1,6 +1,8 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
 import type { BrowserType } from 'jest-playwright-preset';
 
+export type StorybookTestType = 'play' | 'smoke';
+
 type CliOptions = {
   runnerOptions: {
     indexJson?: boolean;
@@ -10,6 +12,7 @@ type CliOptions = {
     coverage?: boolean;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
+    onlyType?: StorybookTestType;
   };
   jestOptions: string[];
 };
@@ -21,6 +24,7 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'configDir',
   'browsers',
   'eject',
+  'onlyType',
   'url',
   'coverage',
   'junit',
