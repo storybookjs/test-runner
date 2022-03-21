@@ -2,6 +2,8 @@
 
 Storybook test runner turns all of your stories into executable tests.
 
+Read the announcement: [Interaction Testing with Storybook](https://storybook.js.org/blog/interaction-testing-with-storybook/)
+
 <h2>Table of Contents</h2>
 
 - [Features](#features)
