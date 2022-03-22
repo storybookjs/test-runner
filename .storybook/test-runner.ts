@@ -1,10 +1,11 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
+import { injectAxe, checkA11y } from 'axe-playwright';
 import type { TestRunnerConfig } from '../dist/ts';
 
 const snapshotsDir = process.env.SNAPSHOTS_DIR || '__snapshots__';
 const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;
 
-const config: TestRunnerConfig = {
+const snapshotConfig: TestRunnerConfig = {
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },
@@ -19,4 +20,13 @@ const config: TestRunnerConfig = {
   },
 };
 
-export default config;
+const a11yConfig: TestRunnerConfig = {
+  async preRender(page, context) {
+    await injectAxe(page);
+  },
+  async postRender(page, context) {
+    await checkA11y(page);
+  },
+};
+
+export default a11yConfig;

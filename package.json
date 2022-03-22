@@ -97,10 +97,11 @@
     "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
   },
   "dependencies": {
-    "@storybook/csf": "0.0.2--canary.87bc651.0",
     "@storybook/core-common": "^6.4.14",
+    "@storybook/csf": "0.0.2--canary.87bc651.0",
     "@storybook/csf-tools": "^6.4.14",
     "@storybook/store": "^6.4.14",
+    "axe-playwright": "^1.1.11",
     "commander": "^9.0.0",
     "global": "^4.4.0",
     "is-localhost-ip": "^1.4.0",
