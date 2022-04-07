@@ -1,3 +1,23 @@
+# v0.0.5 (Thu Apr 07 2022)
+
+#### 🐛 Bug Fix
+
+- cleanup page opened log [#86](https://github.com/storybookjs/test-runner/pull/86) ([@yannbf](https://github.com/yannbf))
+- Add ability to test docs pages via VIEW_MODE env var [#79](https://github.com/storybookjs/test-runner/pull/79) ([@shilman](https://github.com/shilman))
+- cleanup jsdom related code [#67](https://github.com/storybookjs/test-runner/pull/67) ([@yannbf](https://github.com/yannbf))
+
+#### 🔩 Dependency Updates
+
+- Cleanup dependencies [#72](https://github.com/storybookjs/test-runner/pull/72) ([@shilman](https://github.com/shilman))
+
+#### Authors: 3
+
+- Gert Hengeveld ([@ghengeveld](https://github.com/ghengeveld))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.4 (Wed Feb 23 2022)
 
 #### 🐛 Bug Fix
