@@ -18,7 +18,6 @@ const sanitizeURL = (url) => {
 };
 
 export const setupPage = async (page) => {
-  const start = new Date();
   const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
@@ -39,7 +38,6 @@ export const setupPage = async (page) => {
 
     throw err;
   }); // FIXME: configure
-  console.log(`page loaded in ${new Date() - start}ms.`);
 
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
