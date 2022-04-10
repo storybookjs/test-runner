@@ -23,7 +23,7 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const log = (message) => console.log(`[test-storybook] ${message}`)
+const log = (message) => console.log(`[test-storybook] ${message}`);
 
 // Clean up tmp files globally in case of control-c
 let storiesJsonTmpDir;
@@ -112,9 +112,9 @@ async function fetchStoriesJson(url) {
 }
 
 function ejectConfiguration() {
-  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js')
-  const destination = path.resolve('test-runner-jest.config.js')
-  const fileAlreadyExists = fs.existsSync(destination)
+  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
+  const destination = path.resolve('test-runner-jest.config.js');
+  const fileAlreadyExists = fs.existsSync(destination);
 
   if (fileAlreadyExists) {
     throw new Error(dedent`Found existing file at:
@@ -122,11 +122,11 @@ function ejectConfiguration() {
     ${destination}
     
     Please delete it and rerun this command.
-    \n`)
+    \n`);
   }
 
-  fs.copyFileSync(origin, destination)
-  log('Configuration file successfully copied as test-runner-jest.config.js')
+  fs.copyFileSync(origin, destination);
+  log('Configuration file successfully copied as test-runner-jest.config.js');
 }
 
 const main = async () => {
@@ -150,12 +150,14 @@ const main = async () => {
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
     process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
   }
-  const { hostname } = new URL(targetURL)
+  const { hostname } = new URL(targetURL);
 
-  const isLocalStorybookIp = await isLocalhostIp(hostname, true)
-  const shouldRunStoriesJson = runnerOptions.storiesJson !== false && !isLocalStorybookIp
+  const isLocalStorybookIp = await isLocalhostIp(hostname, true);
+  const shouldRunStoriesJson = runnerOptions.storiesJson !== false && !isLocalStorybookIp;
   if (shouldRunStoriesJson) {
-    log('Detected a remote Storybook URL, running in stories json mode. To disable this, run the command again with --no-stories-json')
+    log(
+      'Detected a remote Storybook URL, running in stories json mode. To disable this, run the command again with --no-stories-json'
+    );
   }
 
   if (runnerOptions.storiesJson || shouldRunStoriesJson) {
@@ -166,8 +168,14 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const { storiesPaths } = getStorybookMetadata();
+  const { storiesPaths, lazyCompilation } = getStorybookMetadata();
   process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+
+  if (lazyCompilation && isLocalStorybookIp) {
+    log(
+      'Detected a lazy-compiled Storybook. This will likely cause issues; consider disabling `lazyCompilation` for `test-storybook`.'
+    );
+  }
 
   await executeJestPlaywright(jestOptions);
 };
