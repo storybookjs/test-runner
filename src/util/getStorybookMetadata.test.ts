@@ -65,4 +65,22 @@ describe.only('getStorybookMetadata', () => {
       `"<rootDir>/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js);<rootDir>/stories/complex/*.stories.@(js|ts)"`
     );
   });
+
+  it('should return lazyCompilation=false when unset', () => {
+    const mockedMain = { stories: [] };
+
+    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    process.env.STORYBOOK_CONFIG_DIR = '.storybook';
+    expect(getStorybookMetadata().lazyCompilation).toBe(false);
+  });
+  it('should return lazyCompilation=true when set', () => {
+    const mockedMain = {
+      stories: [],
+      core: { builder: { name: 'webpack5', options: { lazyCompilation: true } } },
+    };
+
+    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    process.env.STORYBOOK_CONFIG_DIR = '.storybook';
+    expect(getStorybookMetadata().lazyCompilation).toBe(true);
+  });
 });
