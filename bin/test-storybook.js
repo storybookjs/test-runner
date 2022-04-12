@@ -173,7 +173,7 @@ const main = async () => {
 
   if (lazyCompilation && isLocalStorybookIp) {
     log(
-      'Detected a lazy-compiled Storybook. This will likely cause issues; consider disabling `lazyCompilation` for `test-storybook`.'
+      `You're running Storybook with lazy compilation enabled, and will likely cause issues with the test runner locally. Consider disabling 'lazyCompilation' in ${runnerOptions.configDir}/main.js when running 'test-storybook' locally.`
     );
   }
 
