@@ -1,3 +1,16 @@
+# v0.0.6 (Tue Apr 12 2022)
+
+#### 🐛 Bug Fix
+
+- Log a warning if you try and run against a lazy-compiled storybook [#90](https://github.com/storybookjs/test-runner/pull/90) ([@tmeasday](https://github.com/tmeasday))
+
+#### Authors: 2
+
+- Tom Coleman ([@tmeasday](https://github.com/tmeasday))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.5 (Thu Apr 07 2022)
 
 #### 🐛 Bug Fix
