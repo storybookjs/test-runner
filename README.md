@@ -59,7 +59,7 @@ Then add it to your `.storybook/main.js` config and enable debugging:
 
 ```jsx
 module.exports = {
-  stories: ['@storybook/addon-interactions'],
+  addons: ['@storybook/addon-interactions'],
   features: {
     interactionsDebugger: true,
   },
