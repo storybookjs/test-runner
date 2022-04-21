@@ -23,6 +23,9 @@ export const setupPage = async (page) => {
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
 
   const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
+  const debugPrintLimit = process.env.DEBUG_PRINT_LIMIT
+    ? Number(process.env.DEBUG_PRINT_LIMIT)
+    : 1000;
 
   if ('TARGET_URL' in process.env && !process.env.TARGET_URL) {
     console.log(
@@ -44,6 +47,13 @@ export const setupPage = async (page) => {
 
   await page.addScriptTag({
     content: `
+      function truncate(input, limit) {
+        if (input.length > limit) {
+          return input.substring(0, limit) + '…';
+        }
+        return input;
+      }
+
       class StorybookTestRunnerError extends Error {
         constructor(storyId, errorMessage) {
           super(errorMessage);
@@ -51,7 +61,7 @@ export const setupPage = async (page) => {
           const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
           const finalStoryUrl = \`\${storyUrl}&addonPanel=storybook/interactions/panel\`;
 
-          this.message = \`\nAn error occurred in the following story:\n\${finalStoryUrl}\n\nMessage:\n \${errorMessage}\`;
+          this.message = \`\nAn error occurred in the following story. Access the link for full output:\n\${finalStoryUrl}\n\nMessage:\n \${truncate(errorMessage,${debugPrintLimit})}\`;
         }
       }
 
