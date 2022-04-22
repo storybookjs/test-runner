@@ -59,7 +59,7 @@ Then add it to your `.storybook/main.js` config and enable debugging:
 
 ```jsx
 module.exports = {
-  stories: ['@storybook/addon-interactions'],
+  addons: ['@storybook/addon-interactions'],
   features: {
     interactionsDebugger: true,
   },
@@ -315,6 +315,10 @@ it('button--basic', async () => {
 ```
 
 ## Troubleshooting
+
+#### The error output in the CLI is too short
+
+By default, the test runner truncates error outputs at 1000 characters, and you can check the full output directly in Storybook, in the browser. If you do want to change that limit, however, you can do so by setting the `DEBUG_PRINT_LIMIT` environment variable to a number of your choosing, for example, `DEBUG_PRINT_LIMIT=5000 yarn test-storybook`.
 
 #### The test runner seems flaky and keeps timing out
 
