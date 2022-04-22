@@ -1,3 +1,17 @@
+# v0.0.7 (Fri Apr 22 2022)
+
+#### 🐛 Bug Fix
+
+- Fixup README typo. [#93](https://github.com/storybookjs/test-runner/pull/93) ([@MichaelHatherly](https://github.com/MichaelHatherly))
+- Add output limit [#94](https://github.com/storybookjs/test-runner/pull/94) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Michael Hatherly ([@MichaelHatherly](https://github.com/MichaelHatherly))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.6 (Tue Apr 12 2022)
 
 #### 🐛 Bug Fix
