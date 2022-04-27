@@ -147,7 +147,7 @@ yarn test-storybook --url https://the-storybook-url-here.com
 
 By default, the test runner transforms your story files into tests. It also supports a secondary "stories.json mode" which runs directly against your Storybook's `stories.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `stories.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code.
+This is particularly useful for running against a deployed storybook because `stories.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` or `.svelte` stories, and stories.json mode must be used.
 
 To run in stories.json mode, first make sure your Storybook has a v3 `stories.json` file. You can navigate to:
 
