@@ -98,9 +98,9 @@
   },
   "dependencies": {
     "@storybook/csf": "0.0.2--canary.87bc651.0",
-    "@storybook/core-common": "^6.4.14",
-    "@storybook/csf-tools": "^6.4.14",
-    "@storybook/store": "^6.4.14",
+    "@storybook/core-common": "^6.4.0 || >= 6.5.0-alpha.1",
+    "@storybook/csf-tools": "^6.4.0 || >= 6.5.0-alpha.1",
+    "@storybook/store": "^6.4.0 || >= 6.5.0-alpha.1",
     "commander": "^9.0.0",
     "global": "^4.4.0",
     "is-localhost-ip": "^1.4.0",
