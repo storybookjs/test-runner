@@ -1,3 +1,22 @@
+# v0.0.8 (Thu Apr 28 2022)
+
+#### 🐛 Bug Fix
+
+- Move storybook packages to peer deps [#101](https://github.com/storybookjs/test-runner/pull/101) ([@IanVS](https://github.com/IanVS) [@yannbf](https://github.com/yannbf))
+- Limit jest to version 26 or 27 [#98](https://github.com/storybookjs/test-runner/pull/98) ([@bodograumann](https://github.com/bodograumann))
+
+#### 📝 Documentation
+
+- Document limitation for .mdx stories [#102](https://github.com/storybookjs/test-runner/pull/102) ([@IanVS](https://github.com/IanVS))
+
+#### Authors: 3
+
+- Bodo Graumann ([@bodograumann](https://github.com/bodograumann))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.7 (Fri Apr 22 2022)
 
 #### 🐛 Bug Fix
