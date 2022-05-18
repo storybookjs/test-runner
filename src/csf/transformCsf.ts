@@ -23,7 +23,7 @@ interface TransformOptions {
   beforeEachPrefixer?: FilePrefixer;
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
-  defaultTitle?: string;
+  makeTitle?: (userTitle: string) => string;
 }
 
 const prefixFunction = (
@@ -92,10 +92,10 @@ export const transformCsf = (
     testPrefixer,
     beforeEachPrefixer,
     insertTestIfEmpty,
-    defaultTitle,
+    makeTitle,
   }: TransformOptions = {}
 ) => {
-  const csf = loadCsf(code, { defaultTitle });
+  const csf = loadCsf(code, { makeTitle });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
