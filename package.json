@@ -60,10 +60,10 @@
     "@babel/template": "^7.14.5",
     "@babel/types": "^7.14.8",
     "@jest/types": "^27.0.6",
-    "@storybook/addon-essentials": "^6.5.0-rc.0",
-    "@storybook/addon-interactions": "^6.5.0-rc.0",
+    "@storybook/addon-essentials": "^6.5.0",
+    "@storybook/addon-interactions": "^6.5.0",
     "@storybook/jest": "^0.0.10",
-    "@storybook/react": "^6.5.0-rc.0",
+    "@storybook/react": "^6.5.0",
     "@storybook/testing-library": "^0.0.11",
     "@storybook/testing-react": "^1.2.4",
     "@testing-library/dom": "^8.1.0",
@@ -109,9 +109,9 @@
     "ts-dedent": "^2.0.0"
   },
   "peerDependencies": {
-    "@storybook/core-common": ">= 6.5.0-rc.0",
-    "@storybook/csf-tools": ">= 6.5.0-rc.0",
-    "@storybook/store": ">= 6.5.0-rc.0",
+    "@storybook/core-common": ">= 6.5.0",
+    "@storybook/csf-tools": ">= 6.5.0",
+    "@storybook/store": ">= 6.5.0",
     "jest": "^26.6.3 || ^27.0.0"
   }
 }
