@@ -4,7 +4,7 @@ import { toId } from '@storybook/csf';
 
 import { testPrefixer } from './transformPlaywright';
 
-type Story = { id: string; name: string; title: string; parameters?: Record<string, any> };
+type Story = { id: string; name: string; title: string; parameters?: Record<string, any>, kind: string, story: string };
 
 const makeTest = (story: Story): t.Statement => {
   const result: any = testPrefixer({
@@ -43,7 +43,7 @@ export const transformPlaywrightJson = (src: string) => {
   }
   const stories = Object.values(json.stories) as Story[];
   const titleIdToStories = stories.reduce((acc, story) => {
-    const titleId = toId(story.title);
+    const titleId = toId(story.kind, story.story);
     acc[titleId] = acc[titleId] || [];
     acc[titleId].push(story);
     return acc;
