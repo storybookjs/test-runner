@@ -2612,13 +2612,6 @@
   dependencies:
     lodash "^4.17.15"
 
-"@storybook/csf@0.0.2-alpha.0":
-  version "0.0.2-alpha.0"
-  resolved "https://registry.yarnpkg.com/@storybook/csf/-/csf-0.0.2-alpha.0.tgz#d97cdb01d8b5b5f8e05a61daced1a34b654395c5"
-  integrity sha512-3ml3SFPlpr1f4w4xAkVb4gI6dgw3E0pq+3WjBNqo5wxON45tLrkTkjDeMfuDh/B0lr7YCBJv88XbFxQn0fxTcw==
-  dependencies:
-    lodash "^4.17.15"
-
 "@storybook/docs-tools@6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@storybook/docs-tools/-/docs-tools-6.5.0.tgz#c3003ca20cff86f15b9e140522d12e8dfe5ae292"

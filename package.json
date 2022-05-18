@@ -97,7 +97,7 @@
     "icon": "https://user-images.githubusercontent.com/321738/63501763-88dbf600-c4cc-11e9-96cd-94adadc2fd72.png"
   },
   "dependencies": {
-    "@storybook/csf": "0.0.2-alpha.0",
+    "@storybook/csf": "0.0.2--canary.4566f4d.1",
     "commander": "^9.0.0",
     "global": "^4.4.0",
     "is-localhost-ip": "^1.4.0",
@@ -109,9 +109,9 @@
     "ts-dedent": "^2.0.0"
   },
   "peerDependencies": {
-    "@storybook/core-common": ">= 6.5.0",
-    "@storybook/csf-tools": ">= 6.5.0",
-    "@storybook/store": ">= 6.5.0",
+    "@storybook/core-common": "^6.5.0",
+    "@storybook/csf-tools": "^6.5.0",
+    "@storybook/store": "^6.5.0",
     "jest": "^26.6.3 || ^27.0.0"
   }
 }
