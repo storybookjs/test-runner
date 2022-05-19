@@ -49,7 +49,7 @@ describe('Playwright Json', () => {
     }`;
     expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
       Object {
-        "example-header--logged-in": "describe(\\"Example/Header\\", () => {
+        "example-header": "describe(\\"Example/Header\\", () => {
         describe(\\"Logged In\\", () => {
           it(\\"test\\", async () => {
             const testFn = async () => {
@@ -99,8 +99,6 @@ describe('Playwright Json', () => {
             }
           });
         });
-      });",
-        "example-header--logged-out": "describe(\\"Example/Header\\", () => {
         describe(\\"Logged Out\\", () => {
           it(\\"test\\", async () => {
             const testFn = async () => {
@@ -151,7 +149,7 @@ describe('Playwright Json', () => {
           });
         });
       });",
-        "example-page--logged-in": "describe(\\"Example/Page\\", () => {
+        "example-page": "describe(\\"Example/Page\\", () => {
         describe(\\"Logged In\\", () => {
           it(\\"test\\", async () => {
             const testFn = async () => {
@@ -240,7 +238,7 @@ describe('Playwright Json', () => {
     }`;
     expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
       Object {
-        "example-page--logged-in": "describe(\\"Example/Page\\", () => {
+        "example-page": "describe(\\"Example/Page\\", () => {
         describe(\\"Logged In\\", () => {
           it(\\"test\\", async () => {
             const testFn = async () => {
