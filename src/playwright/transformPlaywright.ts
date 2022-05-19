@@ -1,6 +1,6 @@
 import { relative } from 'path';
 import template from '@babel/template';
-import { autoTitle } from '@storybook/store';
+import { userOrAutoTitle } from '@storybook/store';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
@@ -54,22 +54,21 @@ export const testPrefixer = template(
   }
 );
 
-const getDefaultTitle = (filename: string) => {
+const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
   const filePath = './' + relative(workingDir, filename);
 
-  return autoTitle(filePath, normalizedStoriesEntries);
+  return (userTitle: string) => userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle);
 };
 
 export const transformPlaywright = (src: string, filename: string) => {
-  const defaultTitle = getDefaultTitle(filename);
   const result = transformCsf(src, {
     filePrefixer,
     // @ts-ignore
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
-    defaultTitle,
+    makeTitle: makeTitleFactory(filename),
   });
   return result;
 };
