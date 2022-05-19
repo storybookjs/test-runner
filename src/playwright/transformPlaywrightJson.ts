@@ -43,7 +43,7 @@ export const transformPlaywrightJson = (src: string) => {
   }
   const stories = Object.values(json.stories) as Story[];
   const titleIdToStories = stories.reduce((acc, story) => {
-    const titleId = toId(story.title, story.name);
+    const titleId = toId(story.title);
     acc[titleId] = acc[titleId] || [];
     acc[titleId].push(story);
     return acc;
