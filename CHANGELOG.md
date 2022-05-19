@@ -1,3 +1,29 @@
+# v0.1.0 (Thu May 19 2022)
+
+### Release Notes
+
+#### fix: Support Storybook 6.5 ([#107](https://github.com/storybookjs/test-runner/pull/107))
+
+### Breaking change 💥 
+
+This version adds support to Storybook 6.5 and drops support for Storybook 6.4. Unfortunately there was a breaking change in an internal API from `@storybook/store` which is used by the test runner, which **only affects users that use the auto title feature**. 
+
+Changes included from [this pull request](https://github.com/storybookjs/test-runner/pull/107) (#107)
+
+---
+
+#### 🚀 Enhancement
+
+- fix: Support Storybook 6.5 [#107](https://github.com/storybookjs/test-runner/pull/107) (valentin.palkovic.extern@elinvar.de [@yannbf](https://github.com/yannbf) [@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 3
+
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Valentin Palkovič (valentin.palkovic.extern@elinvar.de)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.8 (Thu Apr 28 2022)
 
 #### 🐛 Bug Fix
