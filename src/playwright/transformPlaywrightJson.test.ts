@@ -72,11 +72,9 @@ describe('Playwright Json', () => {
                 await global.__sbPreRender(page, context);
               }
 
-              await new Promise(resolve => {
-                page.on('load', () => {
-                  resolve();
-                });
-              });
+              await waitFor(() => page.evaluate(() => {
+                return typeof __test !== 'undefined';
+              }));
               const result = await page.evaluate(({
                 id,
                 hasPlayFn
@@ -126,11 +124,9 @@ describe('Playwright Json', () => {
                 await global.__sbPreRender(page, context);
               }
 
-              await new Promise(resolve => {
-                page.on('load', () => {
-                  resolve();
-                });
-              });
+              await waitFor(() => page.evaluate(() => {
+                return typeof __test !== 'undefined';
+              }));
               const result = await page.evaluate(({
                 id,
                 hasPlayFn
@@ -182,11 +178,9 @@ describe('Playwright Json', () => {
                 await global.__sbPreRender(page, context);
               }
 
-              await new Promise(resolve => {
-                page.on('load', () => {
-                  resolve();
-                });
-              });
+              await waitFor(() => page.evaluate(() => {
+                return typeof __test !== 'undefined';
+              }));
               const result = await page.evaluate(({
                 id,
                 hasPlayFn
@@ -276,11 +270,9 @@ describe('Playwright Json', () => {
                 await global.__sbPreRender(page, context);
               }
 
-              await new Promise(resolve => {
-                page.on('load', () => {
-                  resolve();
-                });
-              });
+              await waitFor(() => page.evaluate(() => {
+                return typeof __test !== 'undefined';
+              }));
               const result = await page.evaluate(({
                 id,
                 hasPlayFn

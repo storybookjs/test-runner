@@ -50,7 +50,8 @@ describe('Playwright', () => {
       import global from 'global';
 
       const {
-        setupPage
+        setupPage,
+        waitFor
       } = require('@storybook/test-runner');
 
       if (!require.main) {
@@ -77,11 +78,9 @@ describe('Playwright', () => {
                   await global.__sbPreRender(page, context);
                 }
         
-                await new Promise(resolve => {
-                  page.on('load', () => {
-                    resolve();
-                  });
-                });
+                await waitFor(() => page.evaluate(() => {
+                  return typeof __test !== 'undefined';
+                }));
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
@@ -126,7 +125,8 @@ describe('Playwright', () => {
       import global from 'global';
 
       const {
-        setupPage
+        setupPage,
+        waitFor
       } = require('@storybook/test-runner');
 
       if (!require.main) {
@@ -153,11 +153,9 @@ describe('Playwright', () => {
                   await global.__sbPreRender(page, context);
                 }
         
-                await new Promise(resolve => {
-                  page.on('load', () => {
-                    resolve();
-                  });
-                });
+                await waitFor(() => page.evaluate(() => {
+                  return typeof __test !== 'undefined';
+                }));
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
@@ -203,7 +201,8 @@ describe('Playwright', () => {
       import global from 'global';
 
       const {
-        setupPage
+        setupPage,
+        waitFor
       } = require('@storybook/test-runner');
 
       if (!require.main) {
@@ -230,11 +229,9 @@ describe('Playwright', () => {
                   await global.__sbPreRender(page, context);
                 }
         
-                await new Promise(resolve => {
-                  page.on('load', () => {
-                    resolve();
-                  });
-                });
+                await waitFor(() => page.evaluate(() => {
+                  return typeof __test !== 'undefined';
+                }));
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn

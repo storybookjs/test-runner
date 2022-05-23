@@ -7,7 +7,7 @@ import { transformCsf } from '../csf/transformCsf';
 
 const filePrefixer = template(`
   import global from 'global';
-  const { setupPage } = require('@storybook/test-runner');
+  const { setupPage, waitFor } = require('@storybook/test-runner');
 `);
 
 export const testPrefixer = template(
@@ -25,11 +25,9 @@ export const testPrefixer = template(
           await global.__sbPreRender(page, context);
         }
 
-        await new Promise((resolve) => {
-          page.on('load', () => {
-            resolve()
-          })
-        })
+        await waitFor(() => page.evaluate(() => {
+          return typeof __test !== 'undefined'
+        }))
 
         const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
           id: %%id%%,
