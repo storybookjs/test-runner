@@ -77,6 +77,11 @@ describe('Playwright', () => {
                   await global.__sbPreRender(page, context);
                 }
         
+                await new Promise(resolve => {
+                  page.on('load', () => {
+                    resolve();
+                  });
+                });
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
@@ -148,6 +153,11 @@ describe('Playwright', () => {
                   await global.__sbPreRender(page, context);
                 }
         
+                await new Promise(resolve => {
+                  page.on('load', () => {
+                    resolve();
+                  });
+                });
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
@@ -220,6 +230,11 @@ describe('Playwright', () => {
                   await global.__sbPreRender(page, context);
                 }
         
+                await new Promise(resolve => {
+                  page.on('load', () => {
+                    resolve();
+                  });
+                });
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn

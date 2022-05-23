@@ -25,6 +25,12 @@ export const testPrefixer = template(
           await global.__sbPreRender(page, context);
         }
 
+        await new Promise((resolve) => {
+          page.on('load', () => {
+            resolve()
+          })
+        })
+
         const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
           id: %%id%%,
         });
