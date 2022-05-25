@@ -316,6 +316,17 @@ it('button--basic', async () => {
 
 ## Troubleshooting
 
+#### Errors with Jest 28
+
+Jest 28 has been released, but unfortunately `jest-playwright` is not yet compatible with it, therefore the test-runner is also not compatible. You likely are having an issue that looks like this:
+
+```sh
+  TypeError: Jest: Got error running globalSetup
+  reason: Class extends value #<Object> is not a constructor or null
+```
+
+As soon as `jest-playwright` is compatible, so the test-runner will be too. Please follow [this issue](https://github.com/storybookjs/test-runner/issues/99) for updates.
+
 #### The error output in the CLI is too short
 
 By default, the test runner truncates error outputs at 1000 characters, and you can check the full output directly in Storybook, in the browser. If you do want to change that limit, however, you can do so by setting the `DEBUG_PRINT_LIMIT` environment variable to a number of your choosing, for example, `DEBUG_PRINT_LIMIT=5000 yarn test-storybook`.
