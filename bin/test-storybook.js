@@ -8,6 +8,7 @@ const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
+const semver = require('semver');
 const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
@@ -24,6 +25,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message) => console.log(`[test-storybook] ${message}`);
+const error = (message) => console.error(`[test-storybook] ${message}`);
 
 // Clean up tmp files globally in case of control-c
 let storiesJsonTmpDir;
@@ -54,6 +56,22 @@ function sanitizeURL(url) {
   }
 
   return finalURL;
+}
+
+const checkForIncompatibilities = () => {
+  try {
+    const jestVersion = require('jest/package.json').version
+    if (semver.gte(jestVersion, '28.0.0')) {
+      error(dedent`We detected that your project is using Jest 28.0.0 or higher, which is currently incompatible with the test runner.
+      
+      You can find more info at: https://github.com/storybookjs/test-runner#errors-with-jest-28
+      `)
+      process.exit(1)
+    }
+  } catch (err) {
+    error('We detected that Jest is not installed in your project. Please install it and run test-storybook again.')
+    process.exit(1)
+  }
 }
 
 async function executeJestPlaywright(args) {
@@ -130,6 +148,8 @@ function ejectConfiguration() {
 }
 
 const main = async () => {
+  checkForIncompatibilities();
+
   const { jestOptions, runnerOptions } = getCliOptions();
 
   if (runnerOptions.eject) {
