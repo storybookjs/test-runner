@@ -1,0 +1,51 @@
+name: Nightly checks
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Upgrade to storybook@next
+        run: |
+          npx storybook upgrade --prerelease
+
+      - name: Run test runner
+        run: |
+          yarn build
+          yarn test-storybook:ci
+
+  report_incoming_errors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report incoming errors
+        if: ${{ failure() }}
+        id: slack
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          channel-id: "${{ secrets.SLACK_CHANNEL_ID }}"
+          payload: |
+            {
+              "text": "[Test Runner] Nightly check has failed: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type":"section",
+                  "text":{
+                    "type":"mrkdwn",
+                    "text":"<${{ github.event.pull_request.html_url }}|View Pull Request>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
