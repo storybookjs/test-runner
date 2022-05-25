@@ -1,3 +1,20 @@
+# v0.1.1 (Wed May 25 2022)
+
+#### 🐛 Bug Fix
+
+- Add Jest compatibility check [#111](https://github.com/storybookjs/test-runner/pull/111) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Document issue with Jest on Windows CI [#105](https://github.com/storybookjs/test-runner/pull/105) ([@joshwooding](https://github.com/joshwooding))
+
+#### Authors: 2
+
+- Josh Wooding ([@joshwooding](https://github.com/joshwooding))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.1.0 (Thu May 19 2022)
 
 ### Release Notes
