@@ -1,5 +1,3 @@
-const { STRESS_TEST, STORY_STORE_V7, WITHOUT_DOCS } = process.env;
-
 const stories = [
   '../stories/docs/**/*.stories.mdx',
   // default title prefix
@@ -16,13 +14,12 @@ const stories = [
   '../stories/pages/**/*.stories.*',
 ];
 
-
-if (STRESS_TEST) {
+if (process.env.STRESS_TEST) {
   stories.push('../stories/stress-test/*.stories.@(js|jsx|ts|tsx)');
 }
 
 const addons = [
-  WITHOUT_DOCS
+  process.env.WITHOUT_DOCS
     ? {
         name: '@storybook/addon-essentials',
         options: {
@@ -37,7 +34,7 @@ module.exports = {
   stories,
   addons,
   features: {
-    storyStoreV7: STORY_STORE_V7 ? true : false,
+    storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
     buildStoriesJson: true,
   },
 };
