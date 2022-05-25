@@ -33,7 +33,6 @@ const addons = [
 module.exports = {
   stories,
   addons,
-  webpackFinal: async() => new Error('fail!'),
   features: {
     storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
     buildStoriesJson: true,
