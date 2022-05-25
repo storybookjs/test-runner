@@ -332,6 +332,16 @@ In either way, to fix it you should limit the amount of workers that run in para
 }
 ```
 
+#### The test runner reports "No tests found" running on a Windows CI
+
+There is currently a [bug](https://github.com/facebook/jest/issues/8536) in Jest which means tests cannot be on a separate drive than the project. To work around this you will need to set the `TEMP` environment variable to a temporary folder on the same drive as your project. Here's what that would look like on GitHub Actions:
+
+```yml
+env:
+  # Workaround for https://github.com/facebook/jest/issues/8536
+  TEMP: ${{ runner.temp }}
+```
+
 #### Adding the test runner to other CI environments
 
 As the test runner is based on playwright, depending on your CI setup you might need to use specific docker images or other configuration. In that case, you can refer to the [Playwright CI docs](https://playwright.dev/docs/ci) for more information.
