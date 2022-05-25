@@ -1,9 +1,12 @@
 name: Nightly checks
 
-on: [push]
+# runs every day at midnight
+on:
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
-  test:
+  test_storybook_prerelease:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,9 +28,11 @@ jobs:
           yarn build
           yarn test-storybook:ci
 
-  report_incoming_errors:
-    runs-on: ubuntu-latest
-    steps:
+      - name: Get prerelease version of Storybook
+        if: ${{ failure() }}
+        run: |
+          echo "sb_version=$(npm view @storybook/react@prerelease version)" >> $GITHUB_ENV
+      
       - name: Report incoming errors
         if: ${{ failure() }}
         id: slack
@@ -36,13 +41,33 @@ jobs:
           channel-id: "${{ secrets.SLACK_CHANNEL_ID }}"
           payload: |
             {
-              "text": "[Test Runner] Nightly check has failed: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
                 {
-                  "type":"section",
-                  "text":{
-                    "type":"mrkdwn",
-                    "text":"<${{ github.event.pull_request.html_url }}|View Pull Request>"
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":storybook: :runner: [Test Runner] The Nightly check has failed :alert:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Storybook version:*\n${{ env.sb_version }}"
+                    }
+                  ],
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View failure",
+                      "emoji": true
+                    },
+                    "value": "view_failure",
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                    "action_id": "button-action"
                   }
                 }
               ]
