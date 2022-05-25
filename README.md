@@ -316,6 +316,17 @@ it('button--basic', async () => {
 
 ## Troubleshooting
 
+#### Errors with Jest 28
+
+Jest 28 has been released, but unfortunately `jest-playwright` is not yet compatible with it, therefore the test-runner is also not compatible. You likely are having an issue that looks like this:
+
+```sh
+  TypeError: Jest: Got error running globalSetup
+  reason: Class extends value #<Object> is not a constructor or null
+```
+
+As soon as `jest-playwright` is compatible, so the test-runner will be too. Please follow [this issue](https://github.com/storybookjs/test-runner/issues/99) for updates.
+
 #### The error output in the CLI is too short
 
 By default, the test runner truncates error outputs at 1000 characters, and you can check the full output directly in Storybook, in the browser. If you do want to change that limit, however, you can do so by setting the `DEBUG_PRINT_LIMIT` environment variable to a number of your choosing, for example, `DEBUG_PRINT_LIMIT=5000 yarn test-storybook`.
@@ -330,6 +341,16 @@ In either way, to fix it you should limit the amount of workers that run in para
 {
   "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
 }
+```
+
+#### The test runner reports "No tests found" running on a Windows CI
+
+There is currently a [bug](https://github.com/facebook/jest/issues/8536) in Jest which means tests cannot be on a separate drive than the project. To work around this you will need to set the `TEMP` environment variable to a temporary folder on the same drive as your project. Here's what that would look like on GitHub Actions:
+
+```yml
+env:
+  # Workaround for https://github.com/facebook/jest/issues/8536
+  TEMP: ${{ runner.temp }}
 ```
 
 #### Adding the test runner to other CI environments
