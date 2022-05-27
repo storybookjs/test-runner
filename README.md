@@ -45,7 +45,7 @@ yarn add @storybook/test-runner -D
 Jest is a peer dependency. If you don't have it, also install it
 
 ```jsx
-yarn add jest@27.5.1 -D
+yarn add jest@27 -D
 ```
 
 <details>
