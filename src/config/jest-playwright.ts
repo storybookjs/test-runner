@@ -14,6 +14,7 @@ export const getJestConfig = () => {
     globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
     testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
     setupFilesAfterEnv: ['@storybook/test-runner/playwright/jest-setup.js'],
+    snapshotSerializers: ['jest-serializer-html'],
     testEnvironmentOptions: {
       'jest-playwright': {
         browsers: TEST_BROWSERS.split(',')

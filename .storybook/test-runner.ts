@@ -9,6 +9,7 @@ const config: TestRunnerConfig = {
     expect.extend({ toMatchImageSnapshot });
   },
   async postRender(page, context) {
+    // Visual snapshot tests
     const image = await page.screenshot({ fullPage: true });
     expect(image).toMatchImageSnapshot({
       customSnapshotsDir,
@@ -16,6 +17,11 @@ const config: TestRunnerConfig = {
       failureThreshold: 0.03,
       failureThresholdType: 'percent',
     });
+
+    const elementHandler = await page.$('#root');
+    const innerHTML = await elementHandler.innerHTML();
+    // HTML snapshot tests
+    expect(innerHTML).toMatchSnapshot();
   },
 };
 

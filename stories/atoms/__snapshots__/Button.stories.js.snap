@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Atoms/Button Demo play-test 2`] = `
+<button type="button">
+  Click
+</button>
+`;
+
+exports[`Atoms/Button FindBy play-test 2`] = `
+<button type="button">
+  Loaded!
+</button>
+`;
+
+exports[`Atoms/Button Primary smoke-test 2`] = `
+<button type="button"
+        class="storybook-button storybook-button--medium storybook-button--primary"
+>
+  Button
+</button>
+`;
+
+exports[`Atoms/Button WaitFor play-test 2`] = `
+<button type="button">
+  Click
+</button>
+`;
+
+exports[`Atoms/Button WaitForElementToBeRemoved play-test 2`] = `
+<button type="button">
+  Loaded!
+</button>
+`;
+
+exports[`Atoms/Button WithLoaders play-test 2`] = `
+<button type="button">
+  Todo: delectus aut autem
+</button>
+`;
