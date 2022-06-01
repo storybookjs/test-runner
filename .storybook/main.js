@@ -11,7 +11,7 @@ const stories = [
     directory: '../stories/molecules',
   },
   // general glob
-  '../stories/pages/**/*.stories.*',
+  '../stories/pages/**/*.stories.@(js|jsx|ts|tsx)',
 ];
 
 if (process.env.STRESS_TEST) {

@@ -145,23 +145,11 @@ yarn test-storybook --url https://the-storybook-url-here.com
 
 ### Index.json mode
 
-By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's `index.json`, a static index of all the stories.
+By default, the test runner transforms your story files into tests. It also supports a secondary "stories.json mode" which runs directly against your Storybook's `stories.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and index.json mode must be used.
+This is particularly useful for running against a deployed storybook because `stories.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and stories.json mode must be used.
 
-To run in index.json mode, y
-
-first make sure your Storybook has a v4 `index.json` file. You can navigate to:
-
-```
-https://your-storybook-url-here.com/index.json
-```
-
-It should be a JSON file and the first key should be `"v": 4` followed by a key called `"entries"` containing a map of story IDs to JSON objects.
-
-If you are on Storybok 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
-
-On Storybook 6.4 and 6.5, there is a similar file called `stories.json` that has `"v": 3`, available at:
+To run in stories.json mode, first make sure your Storybook has a v3 `stories.json` file. You can navigate to:
 
 ```
 https://your-storybook-url-here.com/stories.json
@@ -182,7 +170,7 @@ module.exports = {
 };
 ```
 
-Once you have a valid `stories.json` file, your Storybook will be compatible with the "index.json mode".
+Once you have a valid `stories.json` file, your Storybook will be compatible with the "stories.json mode". 
 
 By default, the test runner will detect whether your Storybook URL is local or remote, and if it is remote, it will run in "index.json mode" automatically. To disable it, you can pass the `--no-index-json` flag:
 
@@ -277,9 +265,25 @@ All three functions can be set up in the configuration file `.storybook/test-run
 
 > **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
+### DOM snapshot recipe
+
+The `postRender` function provides a [Playwright page](https://playwright.dev/docs/api/class-page) instance, of which you can use for DOM snapshot testing:
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  async postRender(page, context) {
+    // the #root element wraps the story
+    const elementHandler = await page.$('#root');
+    const innerHTML = await elementHandler.innerHTML();
+    expect(innerHTML).toMatchSnapshot();
+  },
+};
+```
+
 ### Image snapshot recipe
 
-Consider, for example, the following recipe to take image snapshots:
+Here's a slightly different recipe for image snapshot testing:
 
 ```js
 // .storybook/test-runner.js
