@@ -37,4 +37,7 @@ module.exports = {
     storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
     buildStoriesJson: true,
   },
+  core: {
+    disableTelemetry: true
+  }
 };
