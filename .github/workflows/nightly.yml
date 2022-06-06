@@ -19,20 +19,34 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
+      - name: Get current version of Storybook
+        run: |
+          echo "prev_sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+          echo "prev_sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+
       - name: Upgrade to storybook@next
         run: |
           npx storybook upgrade --prerelease
 
-      - name: Run test runner
+      # TODO: This should not be necessary once @storybook/csf is properly updated
+      - name: Fix local @storybook/csf version
         run: |
-          yarn build
-          yarn test-storybook:ci
+          yarn add @storybook/csf@0.0.2--canary.4566f4d.1
+
+      - name: Run test runner
+        uses: mathiasvr/command-output@v1
+        id: tests
+        with:
+          run: |
+            yarn build
+            yarn test-storybook:ci
 
       - name: Get prerelease version of Storybook
         if: ${{ failure() }}
         run: |
-          echo "sb_version=$(npm view @storybook/react@prerelease version)" >> $GITHUB_ENV
-      
+          echo "sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+          echo "sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+
       - name: Report incoming errors
         if: ${{ failure() }}
         id: slack
@@ -55,7 +69,11 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Storybook version:*\n${{ env.sb_version }}"
+                      "text": "*@storybook/react version:*\n${{ env.prev_sb_version }} >> ${{ env.sb_version }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*@storybook/csf version:*\n${{ env.prev_sb_csf_version }} >> ${{ env.sb_csf_version }}"
                     }
                   ],
                   "accessory": {
