@@ -15,11 +15,18 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
 - [Running in CI](#running-in-ci)
   - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
   - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+- [Setting up code coverage](#setting-up-code-coverage)
+  - [Instrument the code](#instrument-the-code)
+  - [Run tests with `--coverage` flag](#run-tests-with---coverage-flag)
 - [Experimental test hook API](#experimental-test-hook-api)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
 - [Troubleshooting](#troubleshooting)
+  - [Errors with Jest 28](#errors-with-jest-28)
+  - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+  - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-"no-tests-found"-running-on-a-windows-ci)
+  - [The test runner does not show reports in watch mode](#the-test-runner-does-not-show-reports-in-watch-mode)
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
 - [Future work](#future-work)
 
@@ -33,6 +40,7 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
 - 🐛 Debug them visually and interactively in a live browser with [addon-interactions](https://storybook.js.org/docs/react/essentials/interactions)
 - 🎭 Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)
 - 👀 Watch mode, filters, and the conveniences you'd expect
+- 📔 Code coverage reports
 
 ## Getting started
 
@@ -111,6 +119,7 @@ Usage: test-storybook [options]
 | `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                   |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                        |
 | `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
+| `--coverage`                    | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`         |
 | `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`   |
 | `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium` |
 | `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`        |
@@ -250,6 +259,71 @@ jobs:
 ```
 
 > **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
+
+## Setting up code coverage
+
+The test runner supports code coverage with the `--coverage` flag or `COLLECT_COVERAGE` environment variable. The pre-requisite is that your components are instrumented using [istanbul](https://istanbul.js.org/).
+
+### Instrument the code
+
+Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. In order to do so, you have to setup the instrumentation yourself.
+
+Install the istanbul babel plugin:
+
+```sh
+yarn add -D babel-plugin-istanbul
+```
+
+Storybook allows code transpilation with babel out of the box by configuring the `babel` function in your `main.js`. Add the `istanbul` plugin:
+
+```js
+// .storybook/main.js
+module.exports = {
+  // ...rest of your code here
+  babel: async (options) => {
+    options.plugins.push([
+      'istanbul',
+      {
+        // provide include patterns if you like
+        include: ['src/components/**'],
+        // provide exclude patterns if you like
+        exclude: [
+          '**/*.d.ts',
+          '**/*{.,-}{spec,stories,types}.{js,jsx,ts,tsx}',
+        ],
+      },
+    ]);
+
+    return options;
+  },
+};
+```
+
+The babel plugin has default options that might suffice to your project, however if you want to know which options are taken into account you can check them [here](https://github.com/istanbuljs/babel-plugin-istanbul/blob/master/src/index.js#L82).
+
+### Run tests with --coverage flag
+
+After setting up instrumentation, run Storybook then run the test-runner with `--coverage`:
+
+```sh
+yarn test-storybook --coverage
+```
+
+The test runner will report the results in the CLI and generate a `.nyc_output/coverage.json` file which can be used by `nyc`.
+
+![](.github/assets/coverage-result.png)
+
+Notice that it provides a message telling you that you can get a better, interactive summary of your code by running:
+
+```
+npx nyc report --reporter=lcov
+```
+
+This will generate a folder called `coverage`, containing an `index.html` file which can be explored and will show the coverage in detail:
+
+![](.github/assets/coverage-report-html.png)
+
+`nyc` is a dependency of the test runner so you will already have it in your project. In the example above, the `lcov` reporter was used, which generates an output compatible with tools like [Codecov](https://codecov.io/). However, you can configure it to generate different reports, and you can find more information [here](https://istanbul.js.org/docs/advanced/alternative-reporters/).
 
 ## Experimental test hook API
 
@@ -409,6 +483,10 @@ env:
   TEMP: ${{ runner.temp }}
 ```
 
+#### The test runner does not show reports in watch mode
+
+Because the displaying of reports and the underlying Jest process are separate, the reports can't be show in watch mode. However, the `.nyc_output/coverage.json` file is being generated, and you can show the reports by running `npx nyc report` in a separate terminal.
+
 #### Adding the test runner to other CI environments
 
 As the test runner is based on playwright, depending on your CI setup you might need to use specific docker images or other configuration. In that case, you can refer to the [Playwright CI docs](https://playwright.dev/docs/ci) for more information.
@@ -417,5 +495,4 @@ As the test runner is based on playwright, depending on your CI setup you might 
 
 Future plans involve adding support for the following features:
 
-- 🧪 Custom test functions
 - 📄 Run addon reports

@@ -21,11 +21,11 @@ if (process.env.STRESS_TEST) {
 const addons = [
   process.env.WITHOUT_DOCS
     ? {
-        name: '@storybook/addon-essentials',
-        options: {
-          docs: false,
-        },
-      }
+      name: '@storybook/addon-essentials',
+      options: {
+        docs: false,
+      },
+    }
     : '@storybook/addon-essentials',
   '@storybook/addon-interactions',
 ];
@@ -37,22 +37,20 @@ module.exports = {
     storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
     buildStoriesJson: true,
   },
-  babel: async (options) => ({
-    ...options,
-    plugins: [
-      ...options.plugins,
-      [
-        'istanbul',
-        {
-          include: ['stories/**'],
-          exclude: [
-            '**/*.d.ts',
-            '**/*{.,-}{spec,stories,types}.{js,jsx,ts,tsx}',
-          ],
-        },
-      ],
-    ],
-  }),
+  babel: async (options) => {
+    options.plugins.push([
+      'istanbul',
+      {
+        include: ['stories/**'],
+        exclude: [
+          '**/*.d.ts',
+          '**/*{.,-}{spec,stories,types}.{js,jsx,ts,tsx}',
+        ],
+      },
+    ])
+
+    return options
+  },
   core: {
     disableTelemetry: true
   }
