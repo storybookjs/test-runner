@@ -92,7 +92,7 @@ async function printCoverageReport() {
   // --skip-full in case we only want to show not fully covered code
   // --check-coverage if we want to break if coverage reaches certain threshold
   // idea: pass configuration object for thresholds https://www.npmjs.com/package/nyc#coverage-thresholds
-  execSync('npx nyc report ', { stdio: 'inherit' })
+  execSync('npx nyc report', { stdio: 'inherit' })
   log('For a better, interactive summary of coverage, run: \nnpx nyc report --reporter=lcov\n')
 }
 
