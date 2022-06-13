@@ -262,7 +262,7 @@ jobs:
 
 ## Setting up code coverage
 
-The test runner supports code coverage with the `--coverage` flag or `COLLECT_COVERAGE` environment variable. The pre-requisite is that your components are instrumented using [istanbul](https://istanbul.js.org/).
+The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_COLLECT_COVERAGE` environment variable. The pre-requisite is that your components are instrumented using [istanbul](https://istanbul.js.org/).
 
 ### Instrument the code
 

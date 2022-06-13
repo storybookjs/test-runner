@@ -172,7 +172,7 @@ const main = async () => {
   process.env.TARGET_URL = targetURL;
 
   if (runnerOptions.coverage) {
-    process.env.COLLECT_COVERAGE = 'true';
+    process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
   }
 
   if (process.env.REFERENCE_URL) {
@@ -212,7 +212,7 @@ const main = async () => {
 
   await executeJestPlaywright(jestOptions);
 
-  if (process.env.COLLECT_COVERAGE === 'true') {
+  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true') {
     printCoverageReport();
   }
 };
