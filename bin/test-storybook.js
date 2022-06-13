@@ -2,6 +2,7 @@
 //@ts-check
 'use strict';
 
+const { execSync } = require('child_process');
 const fetch = require('node-fetch');
 const isLocalhostIp = require('is-localhost-ip');
 const fs = require('fs');
@@ -87,6 +88,14 @@ async function executeJestPlaywright(args) {
   await jest.run(argv);
 }
 
+async function printCoverageReport() {
+  // --skip-full in case we only want to show not fully covered code
+  // --check-coverage if we want to break if coverage reaches certain threshold
+  // idea: pass configuration object for thresholds https://www.npmjs.com/package/nyc#coverage-thresholds
+  execSync('npx nyc report ', { stdio: 'inherit' })
+  log('For a better, interactive summary of coverage, run: \nnpx nyc report --reporter=lcov\n')
+}
+
 async function checkStorybook(url) {
   try {
     const res = await fetch(url, { method: 'HEAD' });
@@ -162,6 +171,10 @@ const main = async () => {
 
   process.env.TARGET_URL = targetURL;
 
+  if (runnerOptions.coverage) {
+    process.env.COLLECT_COVERAGE = 'true';
+  }
+
   if (process.env.REFERENCE_URL) {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
   }
@@ -198,6 +211,10 @@ const main = async () => {
   }
 
   await executeJestPlaywright(jestOptions);
+
+  if (process.env.COLLECT_COVERAGE === 'true') {
+    printCoverageReport();
+  }
 };
 
 main().catch((e) => log(e));

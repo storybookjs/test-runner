@@ -1,5 +1,6 @@
 export const getJestConfig = () => {
-  const { TEST_ROOT, TEST_MATCH, STORYBOOK_STORIES_PATTERN, TEST_BROWSERS } = process.env;
+  const { TEST_ROOT, TEST_MATCH, STORYBOOK_STORIES_PATTERN, TEST_BROWSERS, COLLECT_COVERAGE } =
+    process.env;
 
   let config = {
     rootDir: process.cwd(),
@@ -20,6 +21,7 @@ export const getJestConfig = () => {
         browsers: TEST_BROWSERS.split(',')
           .map((p) => p.trim().toLowerCase())
           .filter(Boolean),
+        collectCoverage: COLLECT_COVERAGE === 'true',
       },
     },
     watchPlugins: [
