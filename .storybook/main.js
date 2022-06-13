@@ -37,6 +37,22 @@ module.exports = {
     storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
     buildStoriesJson: true,
   },
+  babel: async (options) => ({
+    ...options,
+    plugins: [
+      ...options.plugins,
+      [
+        'istanbul',
+        {
+          include: ['stories/**'],
+          exclude: [
+            '**/*.d.ts',
+            '**/*{.,-}{spec,stories,types}.{js,jsx,ts,tsx}',
+          ],
+        },
+      ],
+    ],
+  }),
   core: {
     disableTelemetry: true
   }
