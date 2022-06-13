@@ -63,6 +63,10 @@ describe('Playwright Json', () => {
                 await global.__sbPostRender(page, context);
               }
 
+              if (global.__sbCollectCoverage) {
+                await jestPlaywright.saveCoverage(page);
+              }
+
               return result;
             };
 
@@ -110,6 +114,10 @@ describe('Playwright Json', () => {
 
               if (global.__sbPostRender) {
                 await global.__sbPostRender(page, context);
+              }
+
+              if (global.__sbCollectCoverage) {
+                await jestPlaywright.saveCoverage(page);
               }
 
               return result;
@@ -161,6 +169,10 @@ describe('Playwright Json', () => {
 
               if (global.__sbPostRender) {
                 await global.__sbPostRender(page, context);
+              }
+
+              if (global.__sbCollectCoverage) {
+                await jestPlaywright.saveCoverage(page);
               }
 
               return result;
@@ -237,6 +249,10 @@ describe('Playwright Json', () => {
 
               if (global.__sbPostRender) {
                 await global.__sbPostRender(page, context);
+              }
+
+              if (global.__sbCollectCoverage) {
+                await jestPlaywright.saveCoverage(page);
               }
 
               return result;
