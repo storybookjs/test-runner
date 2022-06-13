@@ -7,3 +7,5 @@ build-storybook.log
 .cache
 stories/atoms/StressTest.stories.js
 yarn-error.log
+.nyc_output
+coverage
