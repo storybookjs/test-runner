@@ -28,6 +28,7 @@ export const getJestConfig = () => {
       require.resolve('jest-watch-typeahead/filename'),
       require.resolve('jest-watch-typeahead/testname'),
     ],
+    watchPathIgnorePatterns: ['coverage', '.nyc_output', '.cache'],
   };
 
   if (TEST_MATCH) {
