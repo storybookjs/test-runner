@@ -12,3 +12,5 @@ if (testRunnerConfig) {
     setPostRender(testRunnerConfig.postRender);
   }
 }
+
+global.__sbCollectCoverage = process.env.COLLECT_COVERAGE === 'true'
