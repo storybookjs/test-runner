@@ -3,7 +3,7 @@ import * as cliHelper from './getParsedCliOptions';
 
 describe('getCliOptions', () => {
   it('returns custom options if passed', () => {
-    const customConfig = { configDir: 'custom', storiesJson: true };
+    const customConfig = { configDir: 'custom', indexJson: true };
     jest
       .spyOn(cliHelper, 'getParsedCliOptions')
       .mockReturnValue({ options: customConfig, extraArgs: [] });
