@@ -11,7 +11,7 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
 - [CLI Options](#cli-options)
 - [Configuration](#configuration)
 - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
-  - [Stories.json mode](#storiesjson-mode)
+  - [Index.json mode](#indexjson-mode)
 - [Running in CI](#running-in-ci)
   - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
   - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
@@ -19,8 +19,8 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
 - [Troubleshooting](#troubleshooting)
-    - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
-    - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+  - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+  - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
 - [Future work](#future-work)
 
 ## Features
@@ -107,8 +107,8 @@ Usage: test-storybook [options]
 | Options                         | Description                                                                                                                      |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `--help`                        | Output usage information <br/>`test-storybook --help`                                                                            |
-| `-s`, `--stories-json`          | Run in stories json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --stories-json`          |
-| `--no-stories-json`             | Disables stories json mode <br/>`test-storybook --no-stories-json`                                                               |
+| `-i`, `--index-json`            | Run in index json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --index-json`              |
+| `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                   |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                        |
 | `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
 | `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`   |
@@ -143,19 +143,31 @@ Or by using the `--url` flag:
 yarn test-storybook --url https://the-storybook-url-here.com
 ```
 
-### Stories.json mode
+### Index.json mode
 
-By default, the test runner transforms your story files into tests. It also supports a secondary "stories.json mode" which runs directly against your Storybook's `stories.json`, a static index of all the stories.
+By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's `index.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `stories.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and stories.json mode must be used.
+This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and index.json mode must be used.
 
-To run in stories.json mode, first make sure your Storybook has a v3 `stories.json` file. You can navigate to:
+To run in index.json mode, y
+
+first make sure your Storybook has a v4 `index.json` file. You can navigate to:
+
+```
+https://your-storybook-url-here.com/index.json
+```
+
+It should be a JSON file and the first key should be `"v": 4` followed by a key called `"entries"` containing a map of story IDs to JSON objects.
+
+If you are on Storybok 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
+
+On Storybook 6.4 and 6.5, there is a similar file called `stories.json` that has `"v": 3`, available at:
 
 ```
 https://your-storybook-url-here.com/stories.json
 ```
 
-It should be a JSON file and the first key should be `"v": 3` followed by a key called `"stories"` containing a map of story IDs to JSON objects.
+The test runner will also access that file if it is available (and `index.json` is not).
 
 If your Storybook does not have a `stories.json` file, you can generate one provided:
 
@@ -170,21 +182,21 @@ module.exports = {
 };
 ```
 
-Once you have a valid `stories.json` file, your Storybook will be compatible with the "stories.json mode". 
+Once you have a valid `stories.json` file, your Storybook will be compatible with the "index.json mode".
 
-By default, the test runner will detect whether your Storybook URL is local or remote, and if it is remote, it will run in "stories.json mode" automatically. To disable it, you can pass the `--no-stories-json` flag:
-
-```bash
-yarn test-storybook --no-stories-json
-```
-
-If you are running tests against a local Storybook but for some reason want to run in "stories.json mode", you can pass the `--stories-json` flag:
+By default, the test runner will detect whether your Storybook URL is local or remote, and if it is remote, it will run in "index.json mode" automatically. To disable it, you can pass the `--no-index-json` flag:
 
 ```bash
-yarn test-storybook --stories-json
+yarn test-storybook --no-index-json
 ```
 
-> **NOTE:** stories.json mode is not compatible with watch mode.
+If you are running tests against a local Storybook but for some reason want to run in "index.json mode", you can pass the `--index-json` flag:
+
+```bash
+yarn test-storybook --index-json
+```
+
+> **NOTE:** index.json mode is not compatible with watch mode.
 
 ## Running in CI
 
