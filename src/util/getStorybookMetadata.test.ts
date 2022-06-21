@@ -2,7 +2,7 @@ import * as storybookMain from './getStorybookMain';
 
 import { getStorybookMetadata } from './getStorybookMetadata';
 
-describe.only('getStorybookMetadata', () => {
+describe('getStorybookMetadata', () => {
   afterAll(() => {
     process.env.STORYBOOK_CONFIG_DIR = undefined;
   });
