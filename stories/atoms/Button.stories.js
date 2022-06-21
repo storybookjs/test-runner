@@ -24,6 +24,17 @@ Primary.args = {
   label: 'Button',
 };
 
+export const Secondary = Template.bind({});
+Secondary.args = {
+  ...Primary.args,
+  primary: false,
+};
+Secondary.parameters = {
+  tests: {
+    disableSnapshots: true
+  }
+}
+
 export const Demo = (args) => (
   <button type="button" onClick={() => args.onSubmit('clicked')}>
     Click

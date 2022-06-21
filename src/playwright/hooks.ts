@@ -1,5 +1,6 @@
 import global from 'global';
 import type { Page } from 'playwright';
+import type { StoryContext } from '@storybook/csf';
 
 export type TestContext = {
   id: string;
@@ -21,4 +22,11 @@ export const setPreRender = (preRender: TestHook) => {
 
 export const setPostRender = (postRender: TestHook) => {
   global.__sbPostRender = postRender;
+};
+
+export const getStoryContext = async (page: Page, context: TestContext): Promise<StoryContext> => {
+  // @ts-ignore
+  return page.evaluate(({ storyId }) => globalThis.__getContext(storyId), {
+    storyId: context.id,
+  });
 };
