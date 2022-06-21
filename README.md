@@ -330,6 +330,46 @@ it('button--basic', async () => {
 });
 ```
 
+### Global utility functions
+
+While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
+
+```js
+await getStoryContext(page, context);
+```
+
+You can use it for multiple use cases, and here's an example that combines the story context and accessibility testing:
+
+```js
+// .storybook/test-runner.js
+const { getStoryContext } = require('@storybook/test-runner');
+const { injectAxe, checkA11y } = require('axe-playwright');
+ 
+module.exports = {
+ async preRender(page, context) {
+   await injectAxe(page);
+ },
+ async postRender(page, context) {
+  // Get entire context of a story, including parameters, args, argTypes, etc.
+  const storyContext = await getStoryContext(page, context);
+
+  // Do not test a11y for stories that disable a11y
+  if (storyContext.parameters?.a11y?.disable) {
+    return;
+  }
+  
+   await checkA11y(page, '#root', {
+     detailedReport: true,
+     detailedReportOptions: {
+       html: true,
+     },
+     // pass axe options defined in @storybook/addon-a11y
+     axeOptions: storyContext.parameters?.a11y?.options
+   })
+ },
+};
+```
+
 ## Troubleshooting
 
 #### Errors with Jest 28

@@ -96,6 +96,10 @@ export const setupPage = async (page) => {
         });
       }
 
+      async function __getContext(storyId) {
+        return globalThis.__STORYBOOK_PREVIEW__.storyStore.loadStory({ storyId });
+      }
+
       async function __test(storyId) {
         try {
           await __waitForElement('#root');
@@ -104,7 +108,7 @@ export const setupPage = async (page) => {
           throw new StorybookTestRunnerError(storyId, message);
         }
 
-        const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
+        const channel = globalThis.__STORYBOOK_ADDONS_CHANNEL__;
         if(!channel) {
           throw new StorybookTestRunnerError(
             storyId,
