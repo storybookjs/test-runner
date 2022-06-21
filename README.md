@@ -19,8 +19,8 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
 - [Troubleshooting](#troubleshooting)
-    - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
-    - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+  - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+  - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
 - [Future work](#future-work)
 
 ## Features
@@ -45,7 +45,7 @@ yarn add @storybook/test-runner -D
 Jest is a peer dependency. If you don't have it, also install it
 
 ```jsx
-yarn add jest -D
+yarn add jest@27 -D
 ```
 
 <details>
@@ -170,7 +170,7 @@ module.exports = {
 };
 ```
 
-Once you have a valid `stories.json` file, your Storybook will be compatible with the "stories.json mode". 
+Once you have a valid `stories.json` file, your Storybook will be compatible with the "stories.json mode".
 
 By default, the test runner will detect whether your Storybook URL is local or remote, and if it is remote, it will run in "stories.json mode" automatically. To disable it, you can pass the `--no-stories-json` flag:
 
@@ -265,9 +265,25 @@ All three functions can be set up in the configuration file `.storybook/test-run
 
 > **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
+### DOM snapshot recipe
+
+The `postRender` function provides a [Playwright page](https://playwright.dev/docs/api/class-page) instance, of which you can use for DOM snapshot testing:
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  async postRender(page, context) {
+    // the #root element wraps the story
+    const elementHandler = await page.$('#root');
+    const innerHTML = await elementHandler.innerHTML();
+    expect(innerHTML).toMatchSnapshot();
+  },
+};
+```
+
 ### Image snapshot recipe
 
-Consider, for example, the following recipe to take image snapshots:
+Here's a slightly different recipe for image snapshot testing:
 
 ```js
 // .storybook/test-runner.js
@@ -312,6 +328,46 @@ it('button--basic', async () => {
   // post-render hook
   if (postRender) await postRender(page, context);
 });
+```
+
+### Global utility functions
+
+While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
+
+```js
+await getStoryContext(page, context);
+```
+
+You can use it for multiple use cases, and here's an example that combines the story context and accessibility testing:
+
+```js
+// .storybook/test-runner.js
+const { getStoryContext } = require('@storybook/test-runner');
+const { injectAxe, checkA11y } = require('axe-playwright');
+ 
+module.exports = {
+ async preRender(page, context) {
+   await injectAxe(page);
+ },
+ async postRender(page, context) {
+  // Get entire context of a story, including parameters, args, argTypes, etc.
+  const storyContext = await getStoryContext(page, context);
+
+  // Do not test a11y for stories that disable a11y
+  if (storyContext.parameters?.a11y?.disable) {
+    return;
+  }
+  
+   await checkA11y(page, '#root', {
+     detailedReport: true,
+     detailedReportOptions: {
+       html: true,
+     },
+     // pass axe options defined in @storybook/addon-a11y
+     axeOptions: storyContext.parameters?.a11y?.options
+   })
+ },
+};
 ```
 
 ## Troubleshooting
