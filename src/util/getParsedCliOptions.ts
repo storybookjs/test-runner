@@ -35,6 +35,10 @@ export const getParsedCliOptions = () => {
       'Use this flag to re-record every snapshot that fails during this test run'
     )
     .option(
+      '--coverage',
+      'Indicates that test coverage information should be collected and reported in the output'
+    )
+    .option(
       '--eject',
       'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'
     );

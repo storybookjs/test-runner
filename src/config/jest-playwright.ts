@@ -1,5 +1,11 @@
 export const getJestConfig = () => {
-  const { TEST_ROOT, TEST_MATCH, STORYBOOK_STORIES_PATTERN, TEST_BROWSERS } = process.env;
+  const {
+    TEST_ROOT,
+    TEST_MATCH,
+    STORYBOOK_STORIES_PATTERN,
+    TEST_BROWSERS,
+    STORYBOOK_COLLECT_COVERAGE,
+  } = process.env;
 
   let config = {
     rootDir: process.cwd(),
@@ -20,12 +26,14 @@ export const getJestConfig = () => {
         browsers: TEST_BROWSERS.split(',')
           .map((p) => p.trim().toLowerCase())
           .filter(Boolean),
+        collectCoverage: STORYBOOK_COLLECT_COVERAGE === 'true',
       },
     },
     watchPlugins: [
       require.resolve('jest-watch-typeahead/filename'),
       require.resolve('jest-watch-typeahead/testname'),
     ],
+    watchPathIgnorePatterns: ['coverage', '.nyc_output', '.cache'],
   };
 
   if (TEST_MATCH) {

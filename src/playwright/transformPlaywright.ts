@@ -33,6 +33,10 @@ export const testPrefixer = template(
           await global.__sbPostRender(page, context);
         }
 
+        if(global.__sbCollectCoverage) {
+          await jestPlaywright.saveCoverage(page);
+        }
+
         return result;
       };
 

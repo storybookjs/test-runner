@@ -74,6 +74,7 @@
     "auto": "^10.3.0",
     "babel-jest": "^27.0.6",
     "babel-loader": "^8.1.0",
+    "babel-plugin-istanbul": "^6.1.1",
     "concurrently": "^7.0.0",
     "jest": "^27.0.6",
     "jest-image-snapshot": "^4.5.1",
