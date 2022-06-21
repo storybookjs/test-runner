@@ -1,3 +1,36 @@
+# v0.2.0 (Tue Jun 21 2022)
+
+### Release Notes
+
+#### feat: provide global getStoryContext utility ([#125](https://github.com/storybookjs/test-runner/pull/125))
+
+
+
+---
+
+#### 🚀 Enhancement
+
+- feat: provide global getStoryContext utility [#125](https://github.com/storybookjs/test-runner/pull/125) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- chore(DEPS): update jest-playwright-preset [#119](https://github.com/storybookjs/test-runner/pull/119) ([@bodograumann](https://github.com/bodograumann))
+- chore(CI): add sb versions to report [skip release] [#118](https://github.com/storybookjs/test-runner/pull/118) ([@yannbf](https://github.com/yannbf))
+- feat: support DOM snapshot testing [#117](https://github.com/storybookjs/test-runner/pull/117) ([@yannbf](https://github.com/yannbf))
+- Add reporting to CI [#113](https://github.com/storybookjs/test-runner/pull/113) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Updates readme to lock Jest to version 27 [#115](https://github.com/storybookjs/test-runner/pull/115) ([@jonniebigodes](https://github.com/jonniebigodes))
+
+#### Authors: 3
+
+- [@jonniebigodes](https://github.com/jonniebigodes)
+- Bodo Graumann ([@bodograumann](https://github.com/bodograumann))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.1.1 (Wed May 25 2022)
 
 #### 🐛 Bug Fix
