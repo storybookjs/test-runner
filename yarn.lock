@@ -2055,6 +2055,14 @@
     lodash "^4.17.21"
     ts-dedent "^2.0.0"
 
+"@storybook/addon-coverage@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-coverage/-/addon-coverage-0.0.1.tgz#0eaf343a403c8a12a40839b40268bf51defef06f"
+  integrity sha512-Ml7GYmksZWqsXJhYig75UlFqEj3SMeKhLyMaHi0r6jCPdPSbl+osmWgmXnzQwdlqkhm7NrAIK+NYFVW/uTcMXA==
+  dependencies:
+    "@types/babel__core" "^7.1.19"
+    babel-plugin-istanbul "^6.1.1"
+
 "@storybook/addon-docs@6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@storybook/addon-docs/-/addon-docs-6.5.0.tgz#54457ddebbe87f40738503f6c939fac44a982926"
@@ -3022,7 +3030,7 @@
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.2.tgz#ed4e0ad92306a704f9fb132a0cfcf77486dbe2bc"
   integrity sha512-HnYpAE1Y6kRyKM/XkEuiRQhTHvkzMBurTHnpFLYLBGPIylZNPs9jJcuOOYWxPLJCSEtmZT0Y8rHDokKN7rRTig==
 
-"@types/babel__core@^7.0.0", "@types/babel__core@^7.1.14":
+"@types/babel__core@^7.0.0", "@types/babel__core@^7.1.14", "@types/babel__core@^7.1.19":
   version "7.1.19"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.19.tgz#7b497495b7d1b4812bdb9d02804d0576f43ee460"
   integrity sha512-WEOTgRsbYkvA/KCsDwVEGkd7WAr1e3g31VHQ8zy5gul/V1qKullU/BU5I68X5v7V3GnB9eotmom4v5a5gjxorw==
