@@ -28,6 +28,7 @@ const addons = [
     }
     : '@storybook/addon-essentials',
   '@storybook/addon-interactions',
+  '@storybook/addon-coverage',
 ];
 
 module.exports = {
@@ -36,20 +37,6 @@ module.exports = {
   features: {
     storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
     buildStoriesJson: true,
-  },
-  babel: async (options) => {
-    options.plugins.push([
-      'istanbul',
-      {
-        include: ['stories/**'],
-        exclude: [
-          '**/*.d.ts',
-          '**/*{.,-}{spec,stories,types}.{js,jsx,ts,tsx}',
-        ],
-      },
-    ])
-
-    return options
   },
   core: {
     disableTelemetry: true

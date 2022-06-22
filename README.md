@@ -266,40 +266,27 @@ The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_
 
 ### Instrument the code
 
-Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. In order to do so, you have to setup the instrumentation yourself.
+Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. You can either do that manually with whatever flavor of istanbul (babel, rollup, vite, webpack loader) configuration, or for select frameworks (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon.
 
 Install the istanbul babel plugin:
 
 ```sh
-yarn add -D babel-plugin-istanbul
+yarn add -D @storybook/addon-coverage
 ```
 
-Storybook allows code transpilation with babel out of the box by configuring the `babel` function in your `main.js`. Add the `istanbul` plugin:
+And register it in your `.storybook/main.js` file:
 
 ```js
 // .storybook/main.js
 module.exports = {
   // ...rest of your code here
-  babel: async (options) => {
-    options.plugins.push([
-      'istanbul',
-      {
-        // provide include patterns if you like
-        include: ['src/components/**'],
-        // provide exclude patterns if you like
-        exclude: [
-          '**/*.d.ts',
-          '**/*{.,-}{spec,stories,types}.{js,jsx,ts,tsx}',
-        ],
-      },
-    ]);
-
-    return options;
-  },
+  addons: [
+    "@storybook/addon-coverage",
+  ]
 };
 ```
 
-The babel plugin has default options that might suffice to your project, however if you want to know which options are taken into account you can check them [here](https://github.com/istanbuljs/babel-plugin-istanbul/blob/master/src/index.js#L82).
+The addon has default options that might suffice to your project, however if you want to know how to customize the addon[here](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
 
 ### Run tests with --coverage flag
 
