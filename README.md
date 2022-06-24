@@ -16,8 +16,10 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
   - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
   - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
 - [Setting up code coverage](#setting-up-code-coverage)
-  - [Instrument the code](#instrument-the-code)
-  - [Run tests with `--coverage` flag](#run-tests-with---coverage-flag)
+  - [1 - Instrument the code](#1---instrument-the-code)
+    - [Using @storybook/addon-coverage](#using-storybookaddon-coverage)
+    - [Manually configuring Istanbul](#manually-configuring-istanbul)
+  - [2 - Run tests with `--coverage` flag](#2---run-tests-with---coverage-flag)
 - [Experimental test hook API](#experimental-test-hook-api)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
@@ -26,7 +28,6 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-"no-tests-found"-running-on-a-windows-ci)
-  - [The test runner does not show reports in watch mode](#the-test-runner-does-not-show-reports-in-watch-mode)
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
 - [Future work](#future-work)
 
@@ -264,11 +265,15 @@ jobs:
 
 The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_COLLECT_COVERAGE` environment variable. The pre-requisite is that your components are instrumented using [istanbul](https://istanbul.js.org/).
 
-### Instrument the code
+### 1 - Instrument the code
 
-Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. You can either do that manually with whatever flavor of istanbul (babel, rollup, vite, webpack loader) configuration, or for select frameworks (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon.
+Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. This is done by configuring [istanbul](https://istanbul.js.org/) in your Storybook. You can achieve that in two different ways: 
 
-Install the istanbul babel plugin:
+#### Using @storybook/addon-coverage
+
+For select frameworks (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
+
+Install `@storybook/addon-coverage`:
 
 ```sh
 yarn add -D @storybook/addon-coverage
@@ -286,9 +291,13 @@ module.exports = {
 };
 ```
 
-The addon has default options that might suffice to your project, however if you want to know how to customize the addon[here](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
+The addon has default options that might suffice to your project, however if you want to customize the addon you can see how it's done [here](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
 
-### Run tests with --coverage flag
+#### Manually configuring istanbul
+
+Some frameworks or Storybook builders might not automatically accept babel plugins. In that case, you will have to manually configure whatever flavor of [istanbul](https://istanbul.js.org/) (rollup, vite, webpack loader) your project might require.
+
+### 2 - Run tests with --coverage flag
 
 After setting up instrumentation, run Storybook then run the test-runner with `--coverage`:
 
@@ -296,21 +305,25 @@ After setting up instrumentation, run Storybook then run the test-runner with `-
 yarn test-storybook --coverage
 ```
 
-The test runner will report the results in the CLI and generate a `.nyc_output/coverage.json` file which can be used by `nyc`.
+The test runner will report the results in the CLI and generate a `coverage/storybook/coverage-storybook.json` file which can be used by `nyc`.
 
 ![](.github/assets/coverage-result.png)
 
-Notice that it provides a message telling you that you can get a better, interactive summary of your code by running:
+If you want to generate reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
+
+Here's an example generating an `lcov` report:
 
 ```
-npx nyc report --reporter=lcov
+npx nyc report --reporter=lcov -t coverage/storybook --report-dir coverage/storybook
 ```
 
-This will generate a folder called `coverage`, containing an `index.html` file which can be explored and will show the coverage in detail:
+This will generate a more detailed, interactive coverage summary that you can access at `coverage/storybook/index.html` file which can be explored and will show the coverage in detail:
 
 ![](.github/assets/coverage-report-html.png)
 
-`nyc` is a dependency of the test runner so you will already have it in your project. In the example above, the `lcov` reporter was used, which generates an output compatible with tools like [Codecov](https://codecov.io/). However, you can configure it to generate different reports, and you can find more information [here](https://istanbul.js.org/docs/advanced/alternative-reporters/).
+If you are using tools like [Codecov](https://codecov.io/), the coverage will be detected automatically. In case you have multiple coverage files in the coverage folder, they will be merged automatically by Codecov.
+
+If you want certain parts of your code to be deliberately ignored, you can use istanbul [parsing hints](https://github.com/istanbuljs/nyc#parsing-hints-ignoring-lines).
 
 ## Experimental test hook API
 
@@ -469,10 +482,6 @@ env:
   # Workaround for https://github.com/facebook/jest/issues/8536
   TEMP: ${{ runner.temp }}
 ```
-
-#### The test runner does not show reports in watch mode
-
-Because the displaying of reports and the underlying Jest process are separate, the reports can't be show in watch mode. However, the `.nyc_output/coverage.json` file is being generated, and you can show the reports by running `npx nyc report` in a separate terminal.
 
 #### Adding the test runner to other CI environments
 
