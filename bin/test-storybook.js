@@ -59,7 +59,7 @@ async function reportCoverage() {
   // move the coverage files from .nyc_output folder (coming from jest-playwright) to coverage, then delete .nyc_output
   fs.renameSync(
     `${coverageFolderE2E}/coverage.json`,
-    `${coverageFolder}/coverage-storybook-final.json`,
+    `${coverageFolder}/coverage-storybook.json`,
   );
   fs.rmSync(coverageFolderE2E, { recursive: true });
 
