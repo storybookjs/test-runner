@@ -1,4 +1,4 @@
-name: Test
+name: Tests-extended
 
 on: [push]
 
@@ -15,15 +15,6 @@ jobs:
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
-
-      - name: Run jest tests
-        run: |
-          yarn test
-
-      - name: Run test runner (default config)
-        run: |
-          yarn build
-          yarn test-storybook:ci
 
       - name: Run test runner (story store v7)
         run: |
