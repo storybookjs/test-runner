@@ -323,9 +323,30 @@ This will generate a more detailed, interactive coverage summary that you can ac
 
 The `nyc` command will respect [nyc configuration files](https://github.com/istanbuljs/nyc#common-configuration-options) if you have them in your project.
 
-If you are using tools like [Codecov](https://codecov.io/), the coverage will be detected automatically. In case you have multiple coverage files in the coverage folder, they will be merged automatically by Codecov.
-
 If you want certain parts of your code to be deliberately ignored, you can use istanbul [parsing hints](https://github.com/istanbuljs/nyc#parsing-hints-ignoring-lines).
+
+### 3 - Merging code coverage with coverage from other tools
+
+The test runner reports coverage related to the `coverage/storybook/coverage-storybook.json` file. This is by design, showing you the coverage which is tested while running Storybook. 
+
+Now, you might have other tests (e.g. unit tests) which are _not_ covered in Storybook but are covered when running tests with Jest, which you might also generate coverage files from, for instance. In such cases, if you are using tools like [Codecov](https://codecov.io/) to automate reporting, the coverage files will be detected automatically and if there are multiple files in the coverage folder, they will be merged automatically.
+
+Alternatively, in case you want to merge coverages from other tools, you should:
+
+1 - move or copy the `coverage/storybook/coverage-storybook.json` into `coverage/coverage-storybook.json`;
+2 - run `nyc report` against the `coverage` folder.
+
+Here's an example on how to achieve that:
+
+```json
+{
+  "scripts": {
+    "test:coverage": "jest --coverage",
+    "test-storybook:coverage": "test-storybook --coverage",
+    "coverage-report": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && nyc report --reporter=html -t coverage --report-dir coverage"
+  }
+}
+```
 
 ## Experimental test hook API
 
