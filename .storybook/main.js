@@ -21,13 +21,14 @@ if (process.env.STRESS_TEST) {
 const addons = [
   process.env.WITHOUT_DOCS
     ? {
-        name: '@storybook/addon-essentials',
-        options: {
-          docs: false,
-        },
-      }
+      name: '@storybook/addon-essentials',
+      options: {
+        docs: false,
+      },
+    }
     : '@storybook/addon-essentials',
   '@storybook/addon-interactions',
+  '@storybook/addon-coverage',
 ];
 
 module.exports = {

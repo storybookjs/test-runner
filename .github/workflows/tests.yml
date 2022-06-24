@@ -1,0 +1,31 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Run jest tests
+        run: |
+          yarn test --coverage
+
+      - name: Run test runner
+        run: |
+          yarn build
+          yarn test-storybook:ci-coverage
+      
+      - name: Generate code coverage
+        uses: codecov/codecov-action@v2
+        with:
+          verbose: true
