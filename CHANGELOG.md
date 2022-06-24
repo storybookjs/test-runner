@@ -1,3 +1,27 @@
+# v0.3.0 (Fri Jun 24 2022)
+
+### Release Notes
+
+#### Support code coverage ([#120](https://github.com/storybookjs/test-runner/pull/120))
+
+#### Support code coverage ([#120](https://github.com/storybookjs/test-runner/pull/120))
+
+---
+
+#### 🚀 Enhancement
+
+- Support code coverage [#120](https://github.com/storybookjs/test-runner/pull/120) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Improve code coverage for coverage merging [#130](https://github.com/storybookjs/test-runner/pull/130) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.2.0 (Tue Jun 21 2022)
 
 ### Release Notes
