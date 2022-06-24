@@ -14,7 +14,6 @@ const config: TestRunnerConfig = {
     const { parameters } = await getStoryContext(page, context);
 
     if (parameters?.tests?.disableSnapshots) {
-      console.log('skipping story ', context.id);
       return;
     }
 

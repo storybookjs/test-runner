@@ -35,11 +35,47 @@ const cleanup = () => {
     log(`Cleaning up ${storiesJsonTmpDir}`);
     fs.rmSync(storiesJsonTmpDir, { recursive: true, force: true });
   }
-  process.exit();
 };
 
-process.on('SIGINT', cleanup);
-process.on('beforeExit', cleanup);
+let isWatchMode = false;
+async function reportCoverage() {
+  if (isWatchMode || process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
+    return
+  }
+
+  const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
+  const coverageFolder = path.resolve(process.cwd(), 'coverage/storybook');
+
+  // in case something goes wrong and .nyc_output does not exist, bail
+  if (!fs.existsSync(coverageFolderE2E)) {
+    return
+  }
+
+  // if there's no coverage folder, create one
+  if (!fs.existsSync(coverageFolder)) {
+    fs.mkdirSync(coverageFolder, { recursive: true });
+  }
+
+  // move the coverage files from .nyc_output folder (coming from jest-playwright) to coverage, then delete .nyc_output
+  fs.renameSync(
+    `${coverageFolderE2E}/coverage.json`,
+    `${coverageFolder}/coverage-storybook.json`,
+  );
+  fs.rmSync(coverageFolderE2E, { recursive: true });
+
+  // --skip-full in case we only want to show not fully covered code
+  // --check-coverage if we want to break if coverage reaches certain threshold
+  // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
+  execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, { stdio: 'inherit' })
+} 
+
+const onProcessEnd = () => {
+  cleanup();
+  reportCoverage();
+}
+
+process.on('SIGINT', onProcessEnd);
+process.on('exit', onProcessEnd);
 
 function sanitizeURL(url) {
   let finalURL = url;
@@ -86,14 +122,6 @@ async function executeJestPlaywright(args) {
   argv.push('--config', jestConfigPath);
 
   await jest.run(argv);
-}
-
-async function printCoverageReport() {
-  // --skip-full in case we only want to show not fully covered code
-  // --check-coverage if we want to break if coverage reaches certain threshold
-  // idea: pass configuration object for thresholds https://www.npmjs.com/package/nyc#coverage-thresholds
-  execSync('npx nyc report', { stdio: 'inherit' })
-  log('For a better, interactive summary of coverage, run: \nnpx nyc report --reporter=lcov\n')
 }
 
 async function checkStorybook(url) {
@@ -166,6 +194,9 @@ const main = async () => {
     process.exit(0);
   }
 
+  // set this flag to skip reporting coverage in watch mode
+  isWatchMode = jestOptions.watch;
+
   const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
   await checkStorybook(targetURL);
 
@@ -211,10 +242,6 @@ const main = async () => {
   }
 
   await executeJestPlaywright(jestOptions);
-
-  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true') {
-    printCoverageReport();
-  }
 };
 
 main().catch((e) => log(e));

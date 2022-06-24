@@ -45,6 +45,7 @@
     "test-storybook:no-cache": "yarn test-storybook --no-cache",
     "test-storybook:json": "yarn test-storybook --stories-json",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\"",
+    "test-storybook:ci-coverage": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --coverage\"",
     "test-storybook:ci-json": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook:json\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js"
   },
@@ -60,6 +61,7 @@
     "@babel/template": "^7.14.5",
     "@babel/types": "^7.14.8",
     "@jest/types": "^27.0.6",
+    "@storybook/addon-coverage": "^0.0.1",
     "@storybook/addon-essentials": "^6.5.0",
     "@storybook/addon-interactions": "^6.5.0",
     "@storybook/jest": "^0.0.10",
