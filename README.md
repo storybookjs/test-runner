@@ -321,6 +321,8 @@ This will generate a more detailed, interactive coverage summary that you can ac
 
 ![](.github/assets/coverage-report-html.png)
 
+The `nyc` command will respect [nyc configuration files](https://github.com/istanbuljs/nyc#common-configuration-options) if you have them in your project.
+
 If you are using tools like [Codecov](https://codecov.io/), the coverage will be detected automatically. In case you have multiple coverage files in the coverage folder, they will be merged automatically by Codecov.
 
 If you want certain parts of your code to be deliberately ignored, you can use istanbul [parsing hints](https://github.com/istanbuljs/nyc#parsing-hints-ignoring-lines).
