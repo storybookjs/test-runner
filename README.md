@@ -15,11 +15,19 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
 - [Running in CI](#running-in-ci)
   - [1. Running against deployed Storybooks on Github Actions deployment](#1-running-against-deployed-storybooks-on-github-actions-deployment)
   - [2. Running against locally built Storybooks in CI](#2-running-against-locally-built-storybooks-in-ci)
+- [Setting up code coverage](#setting-up-code-coverage)
+  - [1 - Instrument the code](#1---instrument-the-code)
+    - [Using @storybook/addon-coverage](#using-storybookaddon-coverage)
+    - [Manually configuring Istanbul](#manually-configuring-istanbul)
+  - [2 - Run tests with `--coverage` flag](#2---run-tests-with---coverage-flag)
 - [Experimental test hook API](#experimental-test-hook-api)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
 - [Troubleshooting](#troubleshooting)
+  - [Errors with Jest 28](#errors-with-jest-28)
+  - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
+  - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-"no-tests-found"-running-on-a-windows-ci)
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
 - [Future work](#future-work)
 
@@ -33,6 +41,7 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
 - 🐛 Debug them visually and interactively in a live browser with [addon-interactions](https://storybook.js.org/docs/react/essentials/interactions)
 - 🎭 Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)
 - 👀 Watch mode, filters, and the conveniences you'd expect
+- 📔 Code coverage reports
 
 ## Getting started
 
@@ -45,7 +54,7 @@ yarn add @storybook/test-runner -D
 Jest is a peer dependency. If you don't have it, also install it
 
 ```jsx
-yarn add jest -D
+yarn add jest@27 -D
 ```
 
 <details>
@@ -111,6 +120,7 @@ Usage: test-storybook [options]
 | `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                   |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                        |
 | `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
+| `--coverage`                    | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`         |
 | `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`   |
 | `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium` |
 | `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`        |
@@ -263,6 +273,93 @@ jobs:
 
 > **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
 
+## Setting up code coverage
+
+The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_COLLECT_COVERAGE` environment variable. The pre-requisite is that your components are instrumented using [istanbul](https://istanbul.js.org/).
+
+### 1 - Instrument the code
+
+Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. This is done by configuring [istanbul](https://istanbul.js.org/) in your Storybook. You can achieve that in two different ways: 
+
+#### Using @storybook/addon-coverage
+
+For select frameworks (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
+
+Install `@storybook/addon-coverage`:
+
+```sh
+yarn add -D @storybook/addon-coverage
+```
+
+And register it in your `.storybook/main.js` file:
+
+```js
+// .storybook/main.js
+module.exports = {
+  // ...rest of your code here
+  addons: [
+    "@storybook/addon-coverage",
+  ]
+};
+```
+
+The addon has default options that might suffice to your project, however if you want to customize the addon you can see how it's done [here](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
+
+#### Manually configuring istanbul
+
+Some frameworks or Storybook builders might not automatically accept babel plugins. In that case, you will have to manually configure whatever flavor of [istanbul](https://istanbul.js.org/) (rollup, vite, webpack loader) your project might require.
+
+### 2 - Run tests with --coverage flag
+
+After setting up instrumentation, run Storybook then run the test-runner with `--coverage`:
+
+```sh
+yarn test-storybook --coverage
+```
+
+The test runner will report the results in the CLI and generate a `coverage/storybook/coverage-storybook.json` file which can be used by `nyc`.
+
+![](.github/assets/coverage-result.png)
+
+If you want to generate reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
+
+Here's an example generating an `lcov` report:
+
+```
+npx nyc report --reporter=lcov -t coverage/storybook --report-dir coverage/storybook
+```
+
+This will generate a more detailed, interactive coverage summary that you can access at `coverage/storybook/index.html` file which can be explored and will show the coverage in detail:
+
+![](.github/assets/coverage-report-html.png)
+
+The `nyc` command will respect [nyc configuration files](https://github.com/istanbuljs/nyc#common-configuration-options) if you have them in your project.
+
+If you want certain parts of your code to be deliberately ignored, you can use istanbul [parsing hints](https://github.com/istanbuljs/nyc#parsing-hints-ignoring-lines).
+
+### 3 - Merging code coverage with coverage from other tools
+
+The test runner reports coverage related to the `coverage/storybook/coverage-storybook.json` file. This is by design, showing you the coverage which is tested while running Storybook. 
+
+Now, you might have other tests (e.g. unit tests) which are _not_ covered in Storybook but are covered when running tests with Jest, which you might also generate coverage files from, for instance. In such cases, if you are using tools like [Codecov](https://codecov.io/) to automate reporting, the coverage files will be detected automatically and if there are multiple files in the coverage folder, they will be merged automatically.
+
+Alternatively, in case you want to merge coverages from other tools, you should:
+
+1 - move or copy the `coverage/storybook/coverage-storybook.json` into `coverage/coverage-storybook.json`;
+2 - run `nyc report` against the `coverage` folder.
+
+Here's an example on how to achieve that:
+
+```json
+{
+  "scripts": {
+    "test:coverage": "jest --coverage",
+    "test-storybook:coverage": "test-storybook --coverage",
+    "coverage-report": "cp coverage/storybook/coverage-storybook.json coverage/coverage-storybook.json && nyc report --reporter=html -t coverage --report-dir coverage"
+  }
+}
+```
+
 ## Experimental test hook API
 
 The test runner renders a story and executes its [play function](https://storybook.js.org/docs/react/writing-stories/play-function) if one exists. However, there are certain behaviors that are not possible to achieve via the play function, which executes in the browser. For example, if you want the test runner to take visual snapshots for you, this is something that is possible via Playwright/Jest, but must be executed in Node.
@@ -277,9 +374,25 @@ All three functions can be set up in the configuration file `.storybook/test-run
 
 > **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
+### DOM snapshot recipe
+
+The `postRender` function provides a [Playwright page](https://playwright.dev/docs/api/class-page) instance, of which you can use for DOM snapshot testing:
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  async postRender(page, context) {
+    // the #root element wraps the story
+    const elementHandler = await page.$('#root');
+    const innerHTML = await elementHandler.innerHTML();
+    expect(innerHTML).toMatchSnapshot();
+  },
+};
+```
+
 ### Image snapshot recipe
 
-Consider, for example, the following recipe to take image snapshots:
+Here's a slightly different recipe for image snapshot testing:
 
 ```js
 // .storybook/test-runner.js
@@ -324,6 +437,46 @@ it('button--basic', async () => {
   // post-render hook
   if (postRender) await postRender(page, context);
 });
+```
+
+### Global utility functions
+
+While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
+
+```js
+await getStoryContext(page, context);
+```
+
+You can use it for multiple use cases, and here's an example that combines the story context and accessibility testing:
+
+```js
+// .storybook/test-runner.js
+const { getStoryContext } = require('@storybook/test-runner');
+const { injectAxe, checkA11y } = require('axe-playwright');
+ 
+module.exports = {
+ async preRender(page, context) {
+   await injectAxe(page);
+ },
+ async postRender(page, context) {
+  // Get entire context of a story, including parameters, args, argTypes, etc.
+  const storyContext = await getStoryContext(page, context);
+
+  // Do not test a11y for stories that disable a11y
+  if (storyContext.parameters?.a11y?.disable) {
+    return;
+  }
+  
+   await checkA11y(page, '#root', {
+     detailedReport: true,
+     detailedReportOptions: {
+       html: true,
+     },
+     // pass axe options defined in @storybook/addon-a11y
+     axeOptions: storyContext.parameters?.a11y?.options
+   })
+ },
+};
 ```
 
 ## Troubleshooting
@@ -373,5 +526,4 @@ As the test runner is based on playwright, depending on your CI setup you might 
 
 Future plans involve adding support for the following features:
 
-- 🧪 Custom test functions
 - 📄 Run addon reports

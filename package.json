@@ -1,6 +1,6 @@
 {
   "name": "@storybook/test-runner",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "description": "Test runner for Storybook stories",
   "keywords": [
     "storybook-addons",
@@ -45,6 +45,7 @@
     "test-storybook:no-cache": "yarn test-storybook --no-cache",
     "test-storybook:json": "yarn test-storybook --stories-json",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook\"",
+    "test-storybook:ci-coverage": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --coverage\"",
     "test-storybook:ci-json": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook:json\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js"
   },
@@ -60,6 +61,7 @@
     "@babel/template": "^7.14.5",
     "@babel/types": "^7.14.8",
     "@jest/types": "^27.0.6",
+    "@storybook/addon-coverage": "^0.0.1",
     "@storybook/addon-essentials": "^6.5.0",
     "@storybook/addon-interactions": "^6.5.0",
     "@storybook/jest": "^0.0.10",
@@ -74,6 +76,7 @@
     "auto": "^10.3.0",
     "babel-jest": "^27.0.6",
     "babel-loader": "^8.1.0",
+    "babel-plugin-istanbul": "^6.1.1",
     "concurrently": "^7.0.0",
     "jest": "^27.0.6",
     "jest-image-snapshot": "^4.5.1",
@@ -101,7 +104,8 @@
     "commander": "^9.0.0",
     "global": "^4.4.0",
     "is-localhost-ip": "^1.4.0",
-    "jest-playwright-preset": "^1.7.0",
+    "jest-playwright-preset": "^1.7.2",
+    "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^1.0.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",
