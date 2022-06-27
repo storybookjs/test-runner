@@ -68,9 +68,7 @@ function groupByTitleId<T extends { title: ComponentTitle }>(entries: T[]) {
  * Generate one test file per component so that Jest can
  * run them in parallel.
  */
-export const transformPlaywrightJson = (src: string) => {
-  const index = JSON.parse(src);
-
+export const transformPlaywrightJson = (index: Record<string, any>) => {
   let titleIdToEntries: Record<string, V4Entry[]>;
   if (index.v === 3) {
     const titleIdToStories = groupByTitleId<V3Story>(

@@ -67,7 +67,7 @@ async function reportCoverage() {
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
   execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, { stdio: 'inherit' })
-} 
+}
 
 const onProcessEnd = () => {
   cleanup();
@@ -144,15 +144,48 @@ async function checkStorybook(url) {
   }
 }
 
-async function fetchIndex(url) {
+async function getIndexJson(url) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
+
+  const [indexRes, storiesRes] = await Promise.all([
+    fetch(indexJsonUrl),
+    fetch(storiesJsonUrl)
+  ]);
+
+  if (indexRes.ok) {
+    try {
+      const json = await indexRes.text();
+      return JSON.parse(json);
+    } catch (err) { }
+  }
+
+  if(storiesRes.ok) {
+    try {
+      const json = await storiesRes.text();
+      return JSON.parse(json);
+    } catch (err) { }
+  }
+
+  throw new Error(dedent`
+    Failed to fetch index data from the project.
+
+    Make sure that either of these URLs are available with valid data in your Storybook:
+    ${
+      // TODO: switch order once index.json becomes more common than stories.json
+      storiesJsonUrl
+    }
+    ${indexJsonUrl}
+
+    More info: https://github.com/storybookjs/test-runner/blob/main/README.md#indexjson-mode
+  `);
+}
+
+async function getIndexTempDir(url) {
   let tmpDir;
   try {
-    const [indexRes, storiesRes] = await Promise.all([fetch(indexJsonUrl), fetch(storiesJsonUrl)]);
-    const res = indexRes.ok ? indexRes : storiesRes;
-    const json = await res.text();
-    const titleIdToTest = transformPlaywrightJson(json);
+    const indexJson = await getIndexJson(url)
+    const titleIdToTest = transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
     Object.entries(titleIdToTest).forEach(([titleId, test]) => {
@@ -160,11 +193,7 @@ async function fetchIndex(url) {
       fs.writeFileSync(tmpFile, test);
     });
   } catch (err) {
-    console.error(`Failed to fetch index.json from ${indexJsonUrl}`);
-    console.error(
-      'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode\n'
-    );
-    console.error(err);
+    error(err);
     process.exit(1);
   }
   return tmpDir;
@@ -224,12 +253,12 @@ const main = async () => {
   const shouldRunIndexJson = runnerOptions.indexJson !== false && !isLocalStorybookIp;
   if (shouldRunIndexJson) {
     log(
-      'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json'
+      'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
     );
   }
 
   if (runnerOptions.indexJson || shouldRunIndexJson) {
-    indexTmpDir = await fetchIndex(targetURL);
+    indexTmpDir = await getIndexTempDir(targetURL);
     process.env.TEST_ROOT = indexTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
