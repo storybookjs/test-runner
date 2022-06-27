@@ -155,13 +155,16 @@ yarn test-storybook --url https://the-storybook-url-here.com
 
 ### Index.json mode
 
-By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's `index.json`, a static index of all the stories.
+By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's index data, which dependending on your Storybook version is located in a `stories.json` or `index.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync--or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and index.json mode must be used.
+This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and `index.json` mode must be used.
 
-To run in index.json mode, y
+<!-- TODO: switch details to 6.4 once Storybook 7.0 becomes default -->
 
-first make sure your Storybook has a v4 `index.json` file. You can navigate to:
+<details>
+<summary>If you're using Storybook 7.0</summary>
+
+To run in `index.json` mode, first make sure your Storybook has a v4 `index.json` file. You can find it when navigating to:
 
 ```
 https://your-storybook-url-here.com/index.json
@@ -169,19 +172,19 @@ https://your-storybook-url-here.com/index.json
 
 It should be a JSON file and the first key should be `"v": 4` followed by a key called `"entries"` containing a map of story IDs to JSON objects.
 
-If you are on Storybok 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
+In Storybok 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
 
-On Storybook 6.4 and 6.5, there is a similar file called `stories.json` that has `"v": 3`, available at:
+</details>
+
+On Storybook 6.4 and 6.5, to run in `index.json` mode, first make sure your Storybook has a file called `stories.json` that has `"v": 3`, available at:
 
 ```
 https://your-storybook-url-here.com/stories.json
 ```
 
-The test runner will also access that file if it is available (and `index.json` is not).
+If your Storybook does not have a `stories.json` file, you can generate one, provided:
 
-If your Storybook does not have a `stories.json` file, you can generate one provided:
-
-- You are running SB6.4 or above
+- You are running Storybook 6.4 or above
 - You are not using `storiesOf` stories
 
 To enable `stories.json` in your Storybook, set the `buildStoriesJson` feature flag in `.storybook/main.js`:
