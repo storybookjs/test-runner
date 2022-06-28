@@ -393,7 +393,7 @@ module.exports = {
 };
 ```
 
-As snapshots by default get stored alongside the test file, and tests get generated in a temporary folder, you will need to `--eject` and configure a custom [`snapshotResolver`](https://jestjs.io/docs/configuration#snapshotresolver-string) like this:
+When running with `--stories-json`, tests get generated in a temporary folder and snapshots get stored alongside. You will need to `--eject` and configure a custom [`snapshotResolver`](https://jestjs.io/docs/configuration#snapshotresolver-string) to store them elsewhere, e.g. in your working directory:
 
 ```js
 const path = require('path');
