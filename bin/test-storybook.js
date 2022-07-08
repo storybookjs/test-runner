@@ -87,6 +87,9 @@ function sanitizeURL(url) {
   // remove iframe.html if present
   finalURL = finalURL.replace(/iframe.html\s*$/, '');
 
+  // remove index.html if present
+  finalURL = finalURL.replace(/index.html\s*$/, '');
+
   // add forward slash at the end if not there
   if (finalURL.slice(-1) !== '/') {
     finalURL = finalURL + '/';
@@ -230,8 +233,10 @@ const main = async () => {
   // set this flag to skip reporting coverage in watch mode
   isWatchMode = jestOptions.watch;
 
-  const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
-  await checkStorybook(targetURL);
+  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
+  await checkStorybook(rawTargetURL);
+
+  const targetURL = sanitizeURL(rawTargetURL)
 
   process.env.TARGET_URL = targetURL;
 
