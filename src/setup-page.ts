@@ -9,6 +9,9 @@ const sanitizeURL = (url) => {
   // remove iframe.html if present
   finalURL = finalURL.replace(/iframe.html\s*$/, '');
 
+  // remove index.html if present
+  finalURL = finalURL.replace(/index.html\s*$/, '');
+
   // add forward slash at the end if not there
   if (finalURL.slice(-1) !== '/') {
     finalURL = finalURL + '/';
@@ -18,7 +21,7 @@ const sanitizeURL = (url) => {
 };
 
 export const setupPage = async (page) => {
-  const targetURL = sanitizeURL(process.env.TARGET_URL || `http://localhost:6006`);
+  const targetURL = new URL('iframe.html', process.env.TARGET_URL).toString();
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
 
@@ -33,7 +36,7 @@ export const setupPage = async (page) => {
     );
   }
 
-  await page.goto(`${targetURL}iframe.html`, { waitUntil: 'load' }).catch((err) => {
+  await page.goto(targetURL, { waitUntil: 'load' }).catch((err) => {
     if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
       const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
       throw new Error(errorMessage);
