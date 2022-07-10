@@ -110,7 +110,7 @@ const checkForIncompatibilities = () => {
     }
   } catch (err) {
     error(
-      'We detected that Jest is not installed in your project. Please install it and run test-storybook again.'
+      'We detected that Jest is not installed in your project. Please install Jest@27 and run test-storybook again.'
     );
     process.exit(1);
   }
