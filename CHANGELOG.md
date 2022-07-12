@@ -1,3 +1,23 @@
+# v0.4.0 (Tue Jul 12 2022)
+
+#### 🚀 Enhancement
+
+- Fetch `index.json` and refer to "index json" mode. [#124](https://github.com/storybookjs/test-runner/pull/124) ([@tmeasday](https://github.com/tmeasday) [@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- fix: support index.html URLs [#139](https://github.com/storybookjs/test-runner/pull/139) ([@yannbf](https://github.com/yannbf))
+- Document need for a custom snapshotResolver [#131](https://github.com/storybookjs/test-runner/pull/131) ([@FokkeZB](https://github.com/FokkeZB))
+
+#### Authors: 4
+
+- Fokke Zandbergen ([@FokkeZB](https://github.com/FokkeZB))
+- Kaelig Deloumeau-Prigent ([@kaelig](https://github.com/kaelig))
+- Tom Coleman ([@tmeasday](https://github.com/tmeasday))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.3.0 (Fri Jun 24 2022)
 
 ### Release Notes
