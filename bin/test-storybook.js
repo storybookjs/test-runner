@@ -231,7 +231,7 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
-  isWatchMode = jestOptions.watch;
+  isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
   await checkStorybook(rawTargetURL);

@@ -119,7 +119,8 @@ Usage: test-storybook [options]
 | `-i`, `--index-json`            | Run in index json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --index-json`              |
 | `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                   |
 | `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                        |
-| `--watch`                       | Run in watch mode <br/>`test-storybook --watch`                                                                                  |
+| `--watch`                       | Watch files for changes and rerun tests related to changed files.<br/>`test-storybook --watch`                                   |
+| `--watchAll`                    | Watch files for changes and rerun all tests when something changes.<br/>`test-storybook --watchAll`                              |
 | `--coverage`                    | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`         |
 | `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`   |
 | `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium` |
@@ -132,7 +133,7 @@ Usage: test-storybook [options]
 
 ## Configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--maxWorkers`, etc.
+The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc.
 
 The test runner works out of the box, but if you want better control over its configuration, you can run `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project, which will be used by the test runner.
 
