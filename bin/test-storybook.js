@@ -29,11 +29,11 @@ const log = (message) => console.log(`[test-storybook] ${message}`);
 const error = (message) => console.error(`[test-storybook] ${message}`);
 
 // Clean up tmp files globally in case of control-c
-let storiesJsonTmpDir;
+let indexTmpDir;
 const cleanup = () => {
-  if (storiesJsonTmpDir) {
-    log(`Cleaning up ${storiesJsonTmpDir}`);
-    fs.rmSync(storiesJsonTmpDir, { recursive: true, force: true });
+  if (indexTmpDir) {
+    log(`Cleaning up ${indexTmpDir}`);
+    fs.rmSync(indexTmpDir, { recursive: true, force: true });
   }
 };
 
@@ -67,7 +67,7 @@ async function reportCoverage() {
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
   execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, { stdio: 'inherit' })
-} 
+}
 
 const onProcessEnd = () => {
   cleanup();
@@ -87,6 +87,9 @@ function sanitizeURL(url) {
   // remove iframe.html if present
   finalURL = finalURL.replace(/iframe.html\s*$/, '');
 
+  // remove index.html if present
+  finalURL = finalURL.replace(/index.html\s*$/, '');
+
   // add forward slash at the end if not there
   if (finalURL.slice(-1) !== '/') {
     finalURL = finalURL + '/';
@@ -97,19 +100,21 @@ function sanitizeURL(url) {
 
 const checkForIncompatibilities = () => {
   try {
-    const jestVersion = require('jest/package.json').version
+    const jestVersion = require('jest/package.json').version;
     if (semver.gte(jestVersion, '28.0.0')) {
       error(dedent`We detected that your project is using Jest 28.0.0 or higher, which is currently incompatible with the test runner.
       
       You can find more info at: https://github.com/storybookjs/test-runner#errors-with-jest-28
-      `)
-      process.exit(1)
+      `);
+      process.exit(1);
     }
   } catch (err) {
-    error('We detected that Jest is not installed in your project. Please install it and run test-storybook again.')
-    process.exit(1)
+    error(
+      'We detected that Jest is not installed in your project. Please install Jest@27 and run test-storybook again.'
+    );
+    process.exit(1);
   }
-}
+};
 
 async function executeJestPlaywright(args) {
   const jest = require('jest');
@@ -142,13 +147,48 @@ async function checkStorybook(url) {
   }
 }
 
-async function fetchStoriesJson(url) {
+async function getIndexJson(url) {
+  const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
+
+  const [indexRes, storiesRes] = await Promise.all([
+    fetch(indexJsonUrl),
+    fetch(storiesJsonUrl)
+  ]);
+
+  if (indexRes.ok) {
+    try {
+      const json = await indexRes.text();
+      return JSON.parse(json);
+    } catch (err) { }
+  }
+
+  if(storiesRes.ok) {
+    try {
+      const json = await storiesRes.text();
+      return JSON.parse(json);
+    } catch (err) { }
+  }
+
+  throw new Error(dedent`
+    Failed to fetch index data from the project.
+
+    Make sure that either of these URLs are available with valid data in your Storybook:
+    ${
+      // TODO: switch order once index.json becomes more common than stories.json
+      storiesJsonUrl
+    }
+    ${indexJsonUrl}
+
+    More info: https://github.com/storybookjs/test-runner/blob/main/README.md#indexjson-mode
+  `);
+}
+
+async function getIndexTempDir(url) {
   let tmpDir;
   try {
-    const res = await fetch(storiesJsonUrl);
-    const json = await res.text();
-    const titleIdToTest = transformPlaywrightJson(json);
+    const indexJson = await getIndexJson(url)
+    const titleIdToTest = transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
     Object.entries(titleIdToTest).forEach(([titleId, test]) => {
@@ -156,11 +196,7 @@ async function fetchStoriesJson(url) {
       fs.writeFileSync(tmpFile, test);
     });
   } catch (err) {
-    console.error(`Failed to fetch stories.json from ${storiesJsonUrl}`);
-    console.error(
-      'More info: https://github.com/storybookjs/test-runner/blob/main/README.md#storiesjson-mode\n'
-    );
-    console.error(err);
+    error(err);
     process.exit(1);
   }
   return tmpDir;
@@ -195,10 +231,12 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
-  isWatchMode = jestOptions.watch;
+  isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
-  const targetURL = sanitizeURL(process.env.TARGET_URL || runnerOptions.url);
-  await checkStorybook(targetURL);
+  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
+  await checkStorybook(rawTargetURL);
+
+  const targetURL = sanitizeURL(rawTargetURL)
 
   process.env.TARGET_URL = targetURL;
 
@@ -217,16 +255,16 @@ const main = async () => {
   const { hostname } = new URL(targetURL);
 
   const isLocalStorybookIp = await isLocalhostIp(hostname, true);
-  const shouldRunStoriesJson = runnerOptions.storiesJson !== false && !isLocalStorybookIp;
-  if (shouldRunStoriesJson) {
+  const shouldRunIndexJson = runnerOptions.indexJson !== false && !isLocalStorybookIp;
+  if (shouldRunIndexJson) {
     log(
-      'Detected a remote Storybook URL, running in stories json mode. To disable this, run the command again with --no-stories-json'
+      'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
     );
   }
 
-  if (runnerOptions.storiesJson || shouldRunStoriesJson) {
-    storiesJsonTmpDir = await fetchStoriesJson(targetURL);
-    process.env.TEST_ROOT = storiesJsonTmpDir;
+  if (runnerOptions.indexJson || shouldRunIndexJson) {
+    indexTmpDir = await getIndexTempDir(targetURL);
+    process.env.TEST_ROOT = indexTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
 

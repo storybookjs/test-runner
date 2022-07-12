@@ -3,16 +3,26 @@ export const getParsedCliOptions = () => {
 
   program
     .option(
-      '-s, --stories-json',
-      'Run in stories json mode. Automatically detected (requires a compatible Storybook)'
+      '-i, --index-json',
+      'Run in index json mode. Automatically detected (requires a compatible Storybook)'
     )
-    .option('--no-stories-json', 'Disable stories json mode')
+    .option(
+      '-s, --stories-json',
+      'Run in index json mode. Automatically detected (requires a compatible Storybook) [deprecated, use --index-json]'
+    )
+    .option('--no-index-json', 'Disable index json mode')
+    .option('--no-stories-json', 'Disable index json mode [deprecated, use --no-index-json]')
     .option(
       '-c, --config-dir <directory>',
       'Directory where to load Storybook configurations from',
       '.storybook'
     )
-    .option('--watch', 'Run in watch mode', false)
+    .option('--watch', 'Watch files for changes and rerun tests related to changed files', false)
+    .option(
+      '--watchAll',
+      'Watch files for changes and rerun all tests when something changes',
+      false
+    )
     .option(
       '--browsers <browsers...>',
       'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit',
@@ -67,8 +77,12 @@ export const getParsedCliOptions = () => {
     }
   }
 
+  const { storiesJson, ...options } = program.opts();
   return {
-    options: program.opts(),
+    options: {
+      indexJson: storiesJson,
+      ...options,
+    },
     extraArgs: program.args,
   };
 };
