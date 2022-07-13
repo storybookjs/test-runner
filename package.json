@@ -102,9 +102,9 @@
   },
   "dependencies": {
     "@storybook/csf": "0.0.2--canary.4566f4d.1",
+    "can-bind-to-host": "^1.0.0",
     "commander": "^9.0.0",
     "global": "^4.4.0",
-    "is-localhost-ip": "^1.4.0",
     "jest-playwright-preset": "^1.7.2",
     "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^1.0.0",
