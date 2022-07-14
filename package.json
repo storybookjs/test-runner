@@ -102,7 +102,7 @@
   },
   "dependencies": {
     "@storybook/csf": "0.0.2--canary.4566f4d.1",
-    "can-bind-to-host": "^1.0.0",
+    "can-bind-to-host": "^1.1.0",
     "commander": "^9.0.0",
     "global": "^4.4.0",
     "jest-playwright-preset": "^1.7.2",

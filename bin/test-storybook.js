@@ -4,7 +4,7 @@
 
 const { execSync } = require('child_process');
 const fetch = require('node-fetch');
-const canBindToHost = require('can-bind-to-host');
+const canBindToHost = require('can-bind-to-host').default;
 const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
@@ -254,7 +254,7 @@ const main = async () => {
   }
   const { hostname } = new URL(targetURL);
 
-  const isLocalStorybookIp = await canBindToHost(hostname, true);
+  const isLocalStorybookIp = await canBindToHost(hostname);
   const shouldRunIndexJson = runnerOptions.indexJson !== false && !isLocalStorybookIp;
   if (shouldRunIndexJson) {
     log(
