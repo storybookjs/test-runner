@@ -2,8 +2,6 @@
 
 Storybook test runner turns all of your stories into executable tests.
 
-See the announcement of Interaction Testing with Storybook in detail in [this blogpost](https://storybook.js.org/blog/interaction-testing-with-storybook/) or watch [this video](https://www.youtube.com/watch?v=Ex52FHKyc7E&ab_channel=Storybook) to see it in action.
-
 <h2>Table of Contents</h2>
 
 - [Features](#features)
@@ -46,6 +44,8 @@ See the announcement of Interaction Testing with Storybook in detail in [this bl
 - 📔 Code coverage reports
 
 ## How it works
+
+See the announcement of Interaction Testing with Storybook in detail in [this blog post](https://storybook.js.org/blog/interaction-testing-with-storybook/) or watch [this video](https://www.youtube.com/watch?v=Ex52FHKyc7E&ab_channel=Storybook) to see it in action.
 
 The Storybook test runner uses Jest as a runner, and Playwright as a testing framework. Each one of your `.stories` files is transformed into a spec file, and each story becomes a test, which is run in a headless browser.
 
