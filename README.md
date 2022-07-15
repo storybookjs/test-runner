@@ -2,11 +2,12 @@
 
 Storybook test runner turns all of your stories into executable tests.
 
-Read the announcement: [Interaction Testing with Storybook](https://storybook.js.org/blog/interaction-testing-with-storybook/)
+See the announcement of Interaction Testing with Storybook in detail in [this blogpost](https://storybook.js.org/blog/interaction-testing-with-storybook/) or watch [this video](https://www.youtube.com/watch?v=Ex52FHKyc7E&ab_channel=Storybook) to see it in action.
 
 <h2>Table of Contents</h2>
 
 - [Features](#features)
+- [How it works](#how-it-works)
 - [Getting started](#getting-started)
 - [CLI Options](#cli-options)
 - [Configuration](#configuration)
@@ -20,6 +21,7 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
     - [Using @storybook/addon-coverage](#using-storybookaddon-coverage)
     - [Manually configuring Istanbul](#manually-configuring-istanbul)
   - [2 - Run tests with `--coverage` flag](#2---run-tests-with---coverage-flag)
+  - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
 - [Experimental test hook API](#experimental-test-hook-api)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
@@ -42,6 +44,18 @@ Read the announcement: [Interaction Testing with Storybook](https://storybook.js
 - 🎭 Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)
 - 👀 Watch mode, filters, and the conveniences you'd expect
 - 📔 Code coverage reports
+
+## How it works
+
+The Storybook test runner uses Jest as a runner, and Playwright as a testing framework. Each one of your `.stories` files is transformed into a spec file, and each story becomes a test, which is run in a headless browser.
+
+The test runner is simple in design – it just visits each story from a running Storybook instance and makes sure the component is not failing:
+- For stories without a `play` function, it verifies whether the story rendered without any errors. This is essentially a smoke test.
+- For those with a `play` function, it also checks for errors in the `play` function and that all assertions passed. This is essentially an [interaction test](https://storybook.js.org/docs/react/writing-tests/interaction-testing#write-an-interaction-test).
+
+If there are any failures, the test runner will provide an output with the error, alongside with a link to the failing story, so you can see the error yourself and debug it directly in the browser:
+
+![](.github/assets/click-to-debug.gif)
 
 ## Getting started
 
