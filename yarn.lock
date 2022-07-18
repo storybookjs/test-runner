@@ -4778,6 +4778,11 @@ camelcase@^6.2.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.3.0.tgz#5685b95eb209ac9c0c177467778c9c84df58ba9a"
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
+can-bind-to-host@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/can-bind-to-host/-/can-bind-to-host-1.1.1.tgz#e858f37e78303eca045926992335f1a83cd16fcf"
+  integrity sha512-N77gqI16w76kZEmb5keGBWJRydYaYv2N1wJc7vbg7ElSHI8jcMsyvFPtyJ4lFL3jFbloAqbilnZKU+TYJaGhNg==
+
 caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001332:
   version "1.0.30001341"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001341.tgz#59590c8ffa8b5939cf4161f00827b8873ad72498"
@@ -7750,11 +7755,6 @@ is-hexadecimal@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/is-hexadecimal/-/is-hexadecimal-1.0.4.tgz#cc35c97588da4bd49a8eedd6bc4082d44dcb23a7"
   integrity sha512-gyPJuv83bHMpocVYoqof5VDiZveEoGoFL8m3BXNb2VW8Xs+rz9kqO8LOQ5DH6EsuvilT1ApazU0pyl+ytbPtlw==
-
-is-localhost-ip@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/is-localhost-ip/-/is-localhost-ip-1.4.0.tgz#dd66aaabcbb5dbbc943e00adad5f715d2c3b3a1d"
-  integrity sha512-cN7SzlY7BVxSeoJu5equjsZaKSgD4HCfXrTwu0Jgbq5BbT1BU+D7Lyi/l1KO8H0un0JTlxcQaT/GWVapu+DIDg==
 
 is-map@^2.0.2:
   version "2.0.2"
