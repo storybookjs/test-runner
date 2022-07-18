@@ -1,3 +1,25 @@
+# v0.5.0 (Mon Jul 18 2022)
+
+### Release Notes
+
+#### Replace is-localhost-ip with can-bind-to-host ([#144](https://github.com/storybookjs/test-runner/pull/144))
+
+### Features
+
+This release replaces an internal dependency `is-localhost-ip` with `can-bind-to-host` due to a licensing issue in `can-bind-to-host`.
+
+---
+
+#### 🚀 Enhancement
+
+
+#### Authors: 2
+
+- Slava Knyazev ([@knyzorg](https://github.com/knyzorg))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.4.0 (Tue Jul 12 2022)
 
 #### 🚀 Enhancement
