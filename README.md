@@ -24,6 +24,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
 - [Troubleshooting](#troubleshooting)
+  - [Jest 27 support](#jest-27-support)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-"no-tests-found"-running-on-a-windows-ci)
@@ -511,6 +512,31 @@ module.exports = {
 ```
 
 ## Troubleshooting
+
+#### Jest 27 support
+
+[`jest-playwright` 2.0.0](https://github.com/playwright-community/jest-playwright/releases/tag/v2.0.0) has a breaking change of requiring Jest 28+. To support older versions of Jest you will need to use [Yarn resolutions](https://yarnpkg.com/configuration/manifest/#resolutions) or [NPM overrides](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#overrides) to downgrade `jest-playwright-preset` to `^1.7.2`.
+
+
+```json
+// Yarn resolutions in your projects package.json
+{
+  "resolutions": {
+    "jest-playwright-preset": "^1.7.2"
+  }
+}
+```
+
+```json
+// NPM overrides in your projects package.json
+{
+  "overrides": {
+    "@storybook/test-runner": {
+      "jest-playwright-preset": "^1.7.2"
+    }
+  }
+}
+```
 
 #### The error output in the CLI is too short
 
