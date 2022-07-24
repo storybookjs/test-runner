@@ -101,16 +101,16 @@ function sanitizeURL(url) {
 const checkForIncompatibilities = () => {
   try {
     const jestVersion = require('jest/package.json').version;
-    if (semver.gte(jestVersion, '28.0.0')) {
-      error(dedent`We detected that your project is using Jest 28.0.0 or higher, which is currently incompatible with the test runner.
+    if (semver.lte(jestVersion, '28.0.0')) {
+      error(dedent`We detected that your project is using Jest below 28.0.0, which is incompatible with the test runner.
       
-      You can find more info at: https://github.com/storybookjs/test-runner#errors-with-jest-28
+      You can find more info at: https://github.com/storybookjs/test-runner
       `);
       process.exit(1);
     }
   } catch (err) {
     error(
-      'We detected that Jest is not installed in your project. Please install Jest@27 and run test-storybook again.'
+      'We detected that Jest is not installed in your project. Please install Jest@28 and run test-storybook again.'
     );
     process.exit(1);
   }
