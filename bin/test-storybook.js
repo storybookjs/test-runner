@@ -40,7 +40,7 @@ const cleanup = () => {
 let isWatchMode = false;
 async function reportCoverage() {
   if (isWatchMode || process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
-    return
+    return;
   }
 
   const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
@@ -48,7 +48,7 @@ async function reportCoverage() {
 
   // in case something goes wrong and .nyc_output does not exist, bail
   if (!fs.existsSync(coverageFolderE2E)) {
-    return
+    return;
   }
 
   // if there's no coverage folder, create one
@@ -57,22 +57,21 @@ async function reportCoverage() {
   }
 
   // move the coverage files from .nyc_output folder (coming from jest-playwright) to coverage, then delete .nyc_output
-  fs.renameSync(
-    `${coverageFolderE2E}/coverage.json`,
-    `${coverageFolder}/coverage-storybook.json`,
-  );
+  fs.renameSync(`${coverageFolderE2E}/coverage.json`, `${coverageFolder}/coverage-storybook.json`);
   fs.rmSync(coverageFolderE2E, { recursive: true });
 
   // --skip-full in case we only want to show not fully covered code
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
-  execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, { stdio: 'inherit' })
+  execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
+    stdio: 'inherit',
+  });
 }
 
 const onProcessEnd = () => {
   cleanup();
   reportCoverage();
-}
+};
 
 process.on('SIGINT', onProcessEnd);
 process.on('exit', onProcessEnd);
@@ -101,16 +100,12 @@ function sanitizeURL(url) {
 const checkForIncompatibilities = () => {
   try {
     const jestVersion = require('jest/package.json').version;
-    if (semver.lte(jestVersion, '28.0.0')) {
-      error(dedent`We detected that your project is using Jest below 28.0.0, which is incompatible with the test runner.
-      
-      You can find more info at: https://github.com/storybookjs/test-runner
-      `);
-      process.exit(1);
+    if (semver.valid(jestVersion) === null) {
+      throw new Error('Not valid Jest version or no Jest installed');
     }
   } catch (err) {
     error(
-      'We detected that Jest is not installed in your project. Please install Jest@28 and run test-storybook again.'
+      'We detected that Jest is not installed in your project. Please install Jest and run test-storybook again.'
     );
     process.exit(1);
   }
@@ -151,23 +146,20 @@ async function getIndexJson(url) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
 
-  const [indexRes, storiesRes] = await Promise.all([
-    fetch(indexJsonUrl),
-    fetch(storiesJsonUrl)
-  ]);
+  const [indexRes, storiesRes] = await Promise.all([fetch(indexJsonUrl), fetch(storiesJsonUrl)]);
 
   if (indexRes.ok) {
     try {
       const json = await indexRes.text();
       return JSON.parse(json);
-    } catch (err) { }
+    } catch (err) {}
   }
 
-  if(storiesRes.ok) {
+  if (storiesRes.ok) {
     try {
       const json = await storiesRes.text();
       return JSON.parse(json);
-    } catch (err) { }
+    } catch (err) {}
   }
 
   throw new Error(dedent`
@@ -187,7 +179,7 @@ async function getIndexJson(url) {
 async function getIndexTempDir(url) {
   let tmpDir;
   try {
-    const indexJson = await getIndexJson(url)
+    const indexJson = await getIndexJson(url);
     const titleIdToTest = transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
@@ -236,7 +228,7 @@ const main = async () => {
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
   await checkStorybook(rawTargetURL);
 
-  const targetURL = sanitizeURL(rawTargetURL)
+  const targetURL = sanitizeURL(rawTargetURL);
 
   process.env.TARGET_URL = targetURL;
 
