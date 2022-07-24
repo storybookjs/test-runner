@@ -68,7 +68,7 @@ yarn add @storybook/test-runner -D
 Jest is a peer dependency. If you don't have it, also install it
 
 ```jsx
-yarn add jest@27 -D
+yarn add jest@28 -D
 ```
 
 <details>
@@ -512,17 +512,6 @@ module.exports = {
 ```
 
 ## Troubleshooting
-
-#### Errors with Jest 28
-
-Jest 28 has been released, but unfortunately `jest-playwright` is not yet compatible with it, therefore the test-runner is also not compatible. You likely are having an issue that looks like this:
-
-```sh
-  TypeError: Jest: Got error running globalSetup
-  reason: Class extends value #<Object> is not a constructor or null
-```
-
-As soon as `jest-playwright` is compatible, so the test-runner will be too. Please follow [this issue](https://github.com/storybookjs/test-runner/issues/99) for updates.
 
 #### The error output in the CLI is too short
 
