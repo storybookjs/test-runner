@@ -8491,7 +8491,7 @@ jest-mock@^28.1.3:
     "@jest/types" "^28.1.3"
     "@types/node" "*"
 
-jest-playwright-preset@^2.0.0:
+"jest-playwright-preset@^1.7.2 || ^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/jest-playwright-preset/-/jest-playwright-preset-2.0.0.tgz#624edcbdd31d5242a3420f9eda01781c4d657f70"
   integrity sha512-pV5ruTJJMen3lwshUL4dlSqLlP8z4q9MXqWJkmy+sB6HYfzXoqBHzhl+5hslznhnSVTe4Dwu+reiiwcUJpYUbw==
