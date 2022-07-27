@@ -301,7 +301,7 @@ Given that your components' code runs in the context of a real browser, they hav
 
 #### Using @storybook/addon-coverage
 
-For select frameworks (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
+For select frameworks with Webpack (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
 
 Install `@storybook/addon-coverage`:
 
@@ -325,7 +325,7 @@ The addon has default options that might suffice to your project, however if you
 
 #### Manually configuring istanbul
 
-Some frameworks or Storybook builders might not automatically accept babel plugins. In that case, you will have to manually configure whatever flavor of [istanbul](https://istanbul.js.org/) (rollup, vite, webpack loader) your project might require.
+Some frameworks or Storybook builders (e.g. Vite) might not automatically accept babel plugins. In that case, you will have to manually configure whatever flavor of [istanbul](https://istanbul.js.org/) (Rollup, Vite, Webpack loader) your project might require. You can find recipes in [this repository](https://github.com/yannbf/storybook-coverage-recipes) that include many different configurations and steps on how to set up coverage in each of them.
 
 ### 2 - Run tests with --coverage flag
 
