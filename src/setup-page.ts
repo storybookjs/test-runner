@@ -56,20 +56,22 @@ export const setupPage = async (page) => {
         }
         return input;
       }
-
+      
       class StorybookTestRunnerError extends Error {
-        constructor(storyId, errorMessage) {
+        constructor(storyId, errorMessage, logs) {
           super(errorMessage);
           this.name = 'StorybookTestRunnerError';
           const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
           const finalStoryUrl = \`\${storyUrl}&addonPanel=storybook/interactions/panel\`;
+          const separator = '\\n\\n--------------------------------------------------';
+          const extraLogs = logs.length > 0 ? separator + "\\n\\nBrowser logs:\\n\\n"+ logs.join('\\n') : '';
 
-          this.message = \`\nAn error occurred in the following story. Access the link for full output:\n\${finalStoryUrl}\n\nMessage:\n \${truncate(errorMessage,${debugPrintLimit})}\`;
+          this.message = \`\nAn error occurred in the following story. Access the link for full output:\n\${finalStoryUrl}\n\nMessage:\n \${truncate(errorMessage,${debugPrintLimit})}\n\${extraLogs}\`;
         }
       }
 
-      async function __throwError(storyId, errorMessage) {
-        throw new StorybookTestRunnerError(storyId, errorMessage);
+      async function __throwError(storyId, errorMessage, logs) {
+        throw new StorybookTestRunnerError(storyId, errorMessage, logs);
       }
 
       async function __waitForElement(selector) {
@@ -119,17 +121,30 @@ export const setupPage = async (page) => {
           );
         }
 
+        let logs = [];
+
+        const spyOnConsole = (originalFn) => {
+          return function() {
+            const [txt, ...args] = arguments;
+            logs.push(originalFn.name + ": " + txt + (args.length > 0 ? " " + JSON.stringify(args) : ""));
+            originalFn.apply(console, arguments);
+          }
+        }
+        console.log = spyOnConsole(console.log);
+        console.warn = spyOnConsole(console.warn);
+        console.error = spyOnConsole(console.error);
+
         return new Promise((resolve, reject) => {
           channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
           channel.on('storyErrored', ({ description }) => reject(
-            new StorybookTestRunnerError(storyId, description))
+            new StorybookTestRunnerError(storyId, description, logs))
           );
           channel.on('storyThrewException', (error) => reject(
-            new StorybookTestRunnerError(storyId, error.message))
+            new StorybookTestRunnerError(storyId, error.message, logs))
           );
           channel.on('storyMissing', (id) => id === storyId && reject(
-            new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.'))
+            new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.', logs))
           );
 
           channel.emit('setCurrentStory', { storyId, viewMode: '${viewMode}' });
