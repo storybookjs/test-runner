@@ -1,4 +1,5 @@
 const { transform: babelTransform } = require('@babel/core');
+const semver = require('semver');
 const { transformPlaywright } = require('../dist/cjs/playwright/transformPlaywright');
 
 module.exports = {
@@ -15,6 +16,24 @@ module.exports = {
         '@babel/preset-react',
       ],
     });
-    return result ? result.code : src;
+
+    if (result) {
+      /**
+       * To support Jest 28 we need to check the version of Jest used in the project.
+       * As process() and processAsync() methods of a custom transformer module cannot return a string anymore.
+       * They must always return an object. See https://jestjs.io/docs/upgrading-to-jest28#transformer
+       */
+      const jestVersion = require('jest/package.json').version;
+
+      if (semver.lte(jestVersion, '28.0.0')) {
+        return result.code;
+      }
+
+      return {
+        code: result.code,
+      };
+    }
+
+    return src;
   },
 };
