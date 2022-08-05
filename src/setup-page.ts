@@ -166,7 +166,8 @@ export const setupPage = async (page) => {
         // collect logs to show upon test error
         let logs = [];
 
-        const spyOnConsole = (originalFn, name) => {
+        const spyOnConsole = (method, name) => {
+          const originalFn = console[method];
           return function () {
             const message = [...arguments].map(composeMessage).join(', ');
             const prefix = \`\${bold(name)}: \`;
@@ -175,10 +176,19 @@ export const setupPage = async (page) => {
           };
         };
 
-        console.log = spyOnConsole(console.log, blue('log'));
-        console.warn = spyOnConsole(console.warn, yellow('warn'));
-        console.error = spyOnConsole(console.error, red('error'));
-        console.trace = spyOnConsole(console.trace, magenta('trace'));
+        // console methods + color function for their prefix
+        const spiedMethods = {
+          log: blue,
+          warn: yellow,
+          error: red,
+          trace: magenta,
+          group: magenta,
+          groupCollapsed: magenta,
+        }
+        
+        Object.entries(spiedMethods).forEach(([method, color]) => {
+          console[method] = spyOnConsole(method, color(method))
+        })
 
         return new Promise((resolve, reject) => {
           channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
