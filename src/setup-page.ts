@@ -50,6 +50,48 @@ export const setupPage = async (page) => {
 
   await page.addScriptTag({
     content: `
+      // colorizes the console output
+      const bold = (message) => \`\\u001b[1m\${message}\\u001b[22m\`;
+      const magenta = (message) => \`\\u001b[35m\${message}\\u001b[39m\`;
+      const blue = (message) => \`\\u001b[34m\${message}\\u001b[39m\`;
+      const red = (message) => \`\\u001b[31m\${message}\\u001b[39m\`;
+      const yellow = (message) => \`\\u001b[33m\${message}\\u001b[39m\`;
+      
+      // removes circular references from the object
+      function serializer(replacer, cycleReplacer) {
+        let stack = [],
+          keys = [];
+
+        if (cycleReplacer == null)
+          cycleReplacer = function (_key, value) {
+            if (stack[0] === value) return '[Circular]';
+            return '[Circular ~.' + keys.slice(0, stack.indexOf(value)).join('.') + ']';
+          };
+
+        return function (key, value) {
+          if (stack.length > 0) {
+            let thisPos = stack.indexOf(this);
+            ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
+            ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
+            if (~stack.indexOf(value)) value = cycleReplacer.call(this, key, value);
+          } else {
+            stack.push(value);
+          }
+
+          return replacer == null ? value : replacer.call(this, key, value);
+        };
+      }
+
+      function safeStringify(obj, replacer, spaces, cycleReplacer) {
+        return JSON.stringify(obj, serializer(replacer, cycleReplacer), spaces);
+      }
+
+      function composeMessage(args) {
+        if (typeof args === 'undefined') return "undefined";
+        if (typeof args === 'string') return args;
+        return safeStringify(args);
+      }
+
       function truncate(input, limit) {
         if (input.length > limit) {
           return input.substring(0, limit) + '…';
@@ -120,19 +162,23 @@ export const setupPage = async (page) => {
             'The test runner could not access the Storybook channel. Are you sure the Storybook is running correctly in that URL?'
           );
         }
-
+        
+        // collect logs to show upon test error
         let logs = [];
 
-        const spyOnConsole = (originalFn) => {
-          return function() {
-            const [txt, ...args] = arguments;
-            logs.push(originalFn.name + ": " + txt + (args.length > 0 ? " " + JSON.stringify(args) : ""));
+        const spyOnConsole = (originalFn, name) => {
+          return function () {
+            const message = [...arguments].map(composeMessage).join(', ');
+            const prefix = \`\${bold(name)}: \`;
+            logs.push(prefix + message);
             originalFn.apply(console, arguments);
-          }
-        }
-        console.log = spyOnConsole(console.log);
-        console.warn = spyOnConsole(console.warn);
-        console.error = spyOnConsole(console.error);
+          };
+        };
+
+        console.log = spyOnConsole(console.log, blue('log'));
+        console.warn = spyOnConsole(console.warn, yellow('warn'));
+        console.error = spyOnConsole(console.error, red('error'));
+        console.trace = spyOnConsole(console.trace, magenta('trace'));
 
         return new Promise((resolve, reject) => {
           channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
