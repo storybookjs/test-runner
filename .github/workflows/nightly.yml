@@ -4,6 +4,11 @@ name: Nightly checks
 on:
   schedule:
     - cron: "0 0 * * *"
+  workflow_dispatch:
+  # To test fixes on push rather than wait for the scheduling
+  push:
+    branches:
+      - fix/nightly
 
 jobs:
   test_storybook_prerelease:
@@ -24,9 +29,9 @@ jobs:
           echo "prev_sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
           echo "prev_sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
 
-      - name: Upgrade to storybook@next
+      - name: Upgrade to storybook@future
         run: |
-          npx storybook upgrade --prerelease
+          npx storybook@future upgrade --prerelease --yes
 
       # TODO: This should not be necessary once @storybook/csf is properly updated
       - name: Fix local @storybook/csf version
