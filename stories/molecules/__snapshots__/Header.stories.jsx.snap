@@ -31,6 +31,13 @@ exports[`Molecules/Header LoggedIn smoke-test 2`] = `
       </h1>
     </div>
     <div>
+      <span class="welcome">
+        Welcome,
+        <b>
+          Jane Doe
+        </b>
+        !
+      </span>
       <button type="button"
               class="storybook-button storybook-button--small storybook-button--secondary"
       >
