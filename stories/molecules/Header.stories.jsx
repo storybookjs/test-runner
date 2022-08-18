@@ -4,14 +4,18 @@ import { Header } from './Header';
 
 export default {
   component: Header,
-  play: async () => {},
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const Template = (args) => <Header {...args} />;
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {
-  user: {},
+  user: {
+    name: 'Jane Doe',
+  },
 };
 
 export const LoggedOut = Template.bind({});

@@ -24,3 +24,9 @@ h1 {
 button + button {
   margin-left: 10px;
 }
+
+.welcome {
+  color: #333;
+  font-size: 14px;
+  margin-right: 10px;
+}
