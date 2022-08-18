@@ -8,7 +8,7 @@ section {
   color: #333;
 }
 
-h2 {
+section h2 {
   font-weight: 900;
   font-size: 32px;
   line-height: 1;
@@ -17,25 +17,25 @@ h2 {
   vertical-align: top;
 }
 
-p {
+section p {
   margin: 1em 0;
 }
 
-a {
+section a {
   text-decoration: none;
   color: #1ea7fd;
 }
 
-ul {
+section ul {
   padding-left: 30px;
   margin: 1em 0;
 }
 
-li {
+section li {
   margin-bottom: 8px;
 }
 
-.tip {
+section .tip {
   display: inline-block;
   border-radius: 1em;
   font-size: 11px;
@@ -48,14 +48,14 @@ li {
   vertical-align: top;
 }
 
-.tip-wrapper {
+section .tip-wrapper {
   font-size: 13px;
   line-height: 20px;
   margin-top: 40px;
   margin-bottom: 40px;
 }
 
-.tip-wrapper svg {
+section .tip-wrapper svg {
   display: inline-block;
   height: 12px;
   width: 12px;
@@ -64,6 +64,6 @@ li {
   margin-top: 3px;
 }
 
-.tip-wrapper svg path {
+section .tip-wrapper svg path {
   fill: #1ea7fd;
 }

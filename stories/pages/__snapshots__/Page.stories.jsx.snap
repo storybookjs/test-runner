@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Pages/Page LoggedIn smoke-test 2`] = `
+exports[`Pages/Page LoggedIn play-test 2`] = `
 <article>
   <header>
     <div class="wrapper">
@@ -32,6 +32,13 @@ exports[`Pages/Page LoggedIn smoke-test 2`] = `
         </h1>
       </div>
       <div>
+        <span class="welcome">
+          Welcome,
+          <b>
+            Jane Doe
+          </b>
+          !
+        </span>
         <button type="button"
                 class="storybook-button storybook-button--small storybook-button--secondary"
         >
@@ -69,11 +76,11 @@ exports[`Pages/Page LoggedIn smoke-test 2`] = `
     </ul>
     <p>
       Get a guided tutorial on component-driven development at
-      <a href="https://www.learnstorybook.com"
+      <a href="https://storybook.js.org/tutorials/"
          target="_blank"
          rel="noopener noreferrer"
       >
-        Learn Storybook
+        Storybook tutorials
       </a>
       . Read more in the
       <a href="https://storybook.js.org/docs"
@@ -184,11 +191,11 @@ exports[`Pages/Page LoggedOut smoke-test 2`] = `
     </ul>
     <p>
       Get a guided tutorial on component-driven development at
-      <a href="https://www.learnstorybook.com"
+      <a href="https://storybook.js.org/tutorials/"
          target="_blank"
          rel="noopener noreferrer"
       >
-        Learn Storybook
+        Storybook tutorials
       </a>
       . Read more in the
       <a href="https://storybook.js.org/docs"
