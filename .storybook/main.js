@@ -1,4 +1,4 @@
-const stories = [
+let stories = [
   '../stories/docs/**/*.stories.mdx',
   // default title prefix
   {
@@ -16,6 +16,10 @@ const stories = [
 
 if (process.env.STRESS_TEST) {
   stories.push('../stories/stress-test/*.stories.@(js|jsx|ts|tsx)');
+}
+
+if(process.env.TEST_FAILURES) {
+  stories = ['../stories/expected-failures/*.stories.@(js|jsx|ts|tsx)'];
 }
 
 const addons = [
