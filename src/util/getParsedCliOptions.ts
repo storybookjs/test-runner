@@ -18,11 +18,7 @@ export const getParsedCliOptions = () => {
       '.storybook'
     )
     .option('--watch', 'Watch files for changes and rerun tests related to changed files', false)
-    .option(
-      '--watchAll',
-      'Watch files for changes and rerun all tests when something changes',
-      false
-    )
+    .option('--watchAll', 'Watch files for changes and rerun all tests when something changes')
     .option(
       '--browsers <browsers...>',
       'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit',
