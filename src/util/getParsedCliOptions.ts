@@ -45,6 +45,14 @@ export const getParsedCliOptions = () => {
       'Use this flag to re-record every snapshot that fails during this test run'
     )
     .option(
+      '--json',
+      'Prints the test results in JSON. This mode will send all other test output and user messages to stderr.'
+    )
+    .option(
+      '--outputFile',
+      'Write test results to a file when the --json option is also specified.'
+    )
+    .option(
       '--coverage',
       'Indicates that test coverage information should be collected and reported in the output'
     )

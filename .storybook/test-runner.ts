@@ -4,6 +4,7 @@ import type { TestRunnerConfig } from '../dist/ts';
 
 const snapshotsDir = process.env.SNAPSHOTS_DIR || '__snapshots__';
 const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;
+const skipSnapshots = process.env.SKIP_SNAPSHOTS === 'true';
 
 const config: TestRunnerConfig = {
   setup() {
@@ -14,6 +15,10 @@ const config: TestRunnerConfig = {
     const { parameters } = await getStoryContext(page, context);
 
     if (parameters?.tests?.disableSnapshots) {
+      return;
+    }
+
+    if (skipSnapshots) {
       return;
     }
 
