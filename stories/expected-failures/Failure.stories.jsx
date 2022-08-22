@@ -11,8 +11,7 @@ export default {
 const Template = (args) => <Page {...args} />;
 
 export const ComponentThrowsErrors = () => {
-  // throw new Error('Component has a failure');
-  return <div>Oi</div>
+  throw new Error('Component has a failure');
 }
 
 export const PlayFnThrowsErrors = Template.bind({});
