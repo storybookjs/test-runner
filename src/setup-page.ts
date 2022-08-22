@@ -1,5 +1,7 @@
-//@ts-nocheck
-const sanitizeURL = (url) => {
+import type { Page } from 'playwright';
+import dedent from 'ts-dedent';
+
+const sanitizeURL = (url: string) => {
   let finalURL = url;
   // prepend URL protocol if not there
   if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
@@ -20,9 +22,10 @@ const sanitizeURL = (url) => {
   return finalURL;
 };
 
-export const setupPage = async (page) => {
+export const setupPage = async (page: Page) => {
   const targetURL = new URL('iframe.html', process.env.TARGET_URL).toString();
   const viewMode = process.env.VIEW_MODE || 'story';
+  const isCoverageMode = process.env.STORYBOOK_COLLECT_COVERAGE === 'true';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
 
   const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
@@ -43,7 +46,20 @@ export const setupPage = async (page) => {
     }
 
     throw err;
-  }); // FIXME: configure
+  });
+
+  if (isCoverageMode) {
+    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+    if (!isCoverageSetupCorrectly) {
+      throw new Error(
+        dedent`
+          [Test runner] An error occurred when evaluating code coverage:
+          The code in Storybook is not instrumented, which means the coverage setup is not correct.
+          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage
+        `
+      );
+    }
+  }
 
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
