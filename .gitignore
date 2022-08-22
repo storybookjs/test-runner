@@ -9,3 +9,4 @@ stories/atoms/StressTest.stories.js
 yarn-error.log
 .nyc_output
 coverage
+test-results.json
