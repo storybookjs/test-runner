@@ -12,7 +12,7 @@ const Template = (args) => <Page {...args} />;
 
 export const ComponentThrowsErrors = () => {
   throw new Error('Component has a failure');
-}
+};
 
 export const PlayFnThrowsErrors = Template.bind({});
 PlayFnThrowsErrors.play = () => {

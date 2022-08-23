@@ -50,6 +50,7 @@ See the announcement of Interaction Testing with Storybook in detail in [this bl
 The Storybook test runner uses Jest as a runner, and Playwright as a testing framework. Each one of your `.stories` files is transformed into a spec file, and each story becomes a test, which is run in a headless browser.
 
 The test runner is simple in design – it just visits each story from a running Storybook instance and makes sure the component is not failing:
+
 - For stories without a `play` function, it verifies whether the story rendered without any errors. This is essentially a smoke test.
 - For those with a `play` function, it also checks for errors in the `play` function and that all assertions passed. This is essentially an [interaction test](https://storybook.js.org/docs/react/writing-tests/interaction-testing#write-an-interaction-test).
 
@@ -299,7 +300,7 @@ The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_
 
 ### 1 - Instrument the code
 
-Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. This is done by configuring [istanbul](https://istanbul.js.org/) in your Storybook. You can achieve that in two different ways: 
+Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. This is done by configuring [istanbul](https://istanbul.js.org/) in your Storybook. You can achieve that in two different ways:
 
 #### Using @storybook/addon-coverage
 
@@ -317,9 +318,7 @@ And register it in your `.storybook/main.js` file:
 // .storybook/main.js
 module.exports = {
   // ...rest of your code here
-  addons: [
-    "@storybook/addon-coverage",
-  ]
+  addons: ['@storybook/addon-coverage'],
 };
 ```
 
@@ -359,7 +358,7 @@ If you want certain parts of your code to be deliberately ignored, you can use i
 
 ### 3 - Merging code coverage with coverage from other tools
 
-The test runner reports coverage related to the `coverage/storybook/coverage-storybook.json` file. This is by design, showing you the coverage which is tested while running Storybook. 
+The test runner reports coverage related to the `coverage/storybook/coverage-storybook.json` file. This is by design, showing you the coverage which is tested while running Storybook.
 
 Now, you might have other tests (e.g. unit tests) which are _not_ covered in Storybook but are covered when running tests with Jest, which you might also generate coverage files from, for instance. In such cases, if you are using tools like [Codecov](https://codecov.io/) to automate reporting, the coverage files will be detected automatically and if there are multiple files in the coverage folder, they will be merged automatically.
 
@@ -487,40 +486,43 @@ You can use it for multiple use cases, and here's an example that combines the s
 // .storybook/test-runner.js
 const { getStoryContext } = require('@storybook/test-runner');
 const { injectAxe, checkA11y } = require('axe-playwright');
- 
-module.exports = {
- async preRender(page, context) {
-   await injectAxe(page);
- },
- async postRender(page, context) {
-  // Get entire context of a story, including parameters, args, argTypes, etc.
-  const storyContext = await getStoryContext(page, context);
 
-  // Do not test a11y for stories that disable a11y
-  if (storyContext.parameters?.a11y?.disable) {
-    return;
-  }
-  
-   await checkA11y(page, '#root', {
-     detailedReport: true,
-     detailedReportOptions: {
-       html: true,
-     },
-     // pass axe options defined in @storybook/addon-a11y
-     axeOptions: storyContext.parameters?.a11y?.options
-   })
- },
+module.exports = {
+  async preRender(page, context) {
+    await injectAxe(page);
+  },
+  async postRender(page, context) {
+    // Get entire context of a story, including parameters, args, argTypes, etc.
+    const storyContext = await getStoryContext(page, context);
+
+    // Do not test a11y for stories that disable a11y
+    if (storyContext.parameters?.a11y?.disable) {
+      return;
+    }
+
+    await checkA11y(page, '#root', {
+      detailedReport: true,
+      detailedReportOptions: {
+        html: true,
+      },
+      // pass axe options defined in @storybook/addon-a11y
+      axeOptions: storyContext.parameters?.a11y?.options,
+    });
+  },
 };
 ```
 
 ## Troubleshooting
 
 #### Errors with Jest 28
+
 Jest 28 has been released, but unfortunately `jest-playwright` is not yet compatible with it, therefore the test-runner is also not compatible. You likely are having an issue that looks like this:
+
 ```sh
   TypeError: Jest: Got error running globalSetup
   reason: Class extends value #<Object> is not a constructor or null
 ```
+
 As soon as `jest-playwright` is compatible, so the test-runner will be too. Please follow [this issue](https://github.com/storybookjs/test-runner/issues/99) for updates.
 
 #### The error output in the CLI is too short

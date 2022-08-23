@@ -123,21 +123,21 @@ jobs:
       - name: Fix local @storybook/csf version
         run: |
           yarn add @storybook/csf@0.0.2--canary.4566f4d.1
-      
+
       - name: Run test runner and expect failure
         uses: mathiasvr/command-output@v1
         with:
           run: |
             yarn build
             yarn test-storybook:ci-failures
-      
+
       - name: Process test results
         if: ${{ always() }}
         id: tests
         uses: sergeysova/jq-action@v2
         with:
           cmd: 'jq .numPassedTests test-results.json -r'
-      
+
       - name: Set failure check to env
         if: ${{ always() }}
         run: |

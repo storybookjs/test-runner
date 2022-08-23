@@ -1,11 +1,6 @@
 import React from 'react';
 import { expect } from '@storybook/jest';
-import {
-  within,
-  waitFor,
-  userEvent,
-  waitForElementToBeRemoved,
-} from '@storybook/testing-library';
+import { within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/testing-library';
 
 import { Button } from './Button';
 
@@ -31,9 +26,9 @@ Secondary.args = {
 };
 Secondary.parameters = {
   tests: {
-    disableSnapshots: true
-  }
-}
+    disableSnapshots: true,
+  },
+};
 
 export const Demo = (args) => (
   <button type="button" onClick={() => args.onSubmit('clicked')}>

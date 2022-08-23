@@ -6,7 +6,7 @@ const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvi
 class CustomEnvironment extends PlaywrightEnvironment {
   async setup() {
     await super.setup();
-    await setupPage(this.global.page)
+    await setupPage(this.global.page);
   }
 
   async teardown() {
