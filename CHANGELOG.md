@@ -1,3 +1,59 @@
+# v0.6.0 (Tue Aug 23 2022)
+
+### Release Notes
+
+#### fix --watch cli option ([#168](https://github.com/storybookjs/test-runner/pull/168))
+
+#### Fixes
+
+The `--watch` flag was previously not working, and now it's fixed.
+
+#### feat: throw error on unconfigured coverage when running with --coverage ([#166](https://github.com/storybookjs/test-runner/pull/166))
+
+#### Features
+
+The test runner now throws an error when running `yarn test-storybook --coverage` and the coverage is not correctly set up. This could mean that an user might be running `--coverage` without instrumenting their code with istanbul, which would lead to problems!
+
+#### feat: add console logs on test failure ([#157](https://github.com/storybookjs/test-runner/pull/157))
+
+#### Features
+
+[feat: add console logs on test failure](https://github.com/storybookjs/test-runner/pull/157#top)
+This version adds console logs to the output of failed tests, in order to as provide as much information as possible to help you diagnose your issues.
+
+#### feat: jest 28 support ([#154](https://github.com/storybookjs/test-runner/pull/154))
+
+### Features
+
+This release updates `jest-playwright` to version [2.0.0](https://github.com/playwright-community/jest-playwright/releases/tag/v2.0.0) which adds support for Jest 28. In order to maintain backwards compatibility with Jest 27, you might have to take a few steps in case you are installing the test runner for the first time, or if you don't keep package locks in your project. 
+
+You can find more info at https://github.com/storybookjs/test-runner#jest-27-support
+
+---
+
+#### 🚀 Enhancement
+
+- feat: add console logs on test failure [#157](https://github.com/storybookjs/test-runner/pull/157) ([@yannbf](https://github.com/yannbf))
+- feat: jest 28 support [#154](https://github.com/storybookjs/test-runner/pull/154) ([@andykenward](https://github.com/andykenward) [@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Add commit hooks [#170](https://github.com/storybookjs/test-runner/pull/170) ([@yannbf](https://github.com/yannbf))
+- undo Jest 28 support [#169](https://github.com/storybookjs/test-runner/pull/169) ([@yannbf](https://github.com/yannbf))
+- fix --watch cli option [#168](https://github.com/storybookjs/test-runner/pull/168) ([@yannbf](https://github.com/yannbf))
+- feat: throw error on unconfigured coverage when running with --coverage [#166](https://github.com/storybookjs/test-runner/pull/166) ([@yannbf](https://github.com/yannbf))
+- Document new cli options [#167](https://github.com/storybookjs/test-runner/pull/167) ([@yannbf](https://github.com/yannbf))
+- Add nightly check for failures [#165](https://github.com/storybookjs/test-runner/pull/165) ([@yannbf](https://github.com/yannbf))
+- Update stories in example Storybook [#164](https://github.com/storybookjs/test-runner/pull/164) ([@yannbf](https://github.com/yannbf))
+- use storybook@future on nightly script [#162](https://github.com/storybookjs/test-runner/pull/162) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Andy Kenward ([@andykenward](https://github.com/andykenward))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.5.0 (Mon Jul 18 2022)
 
 ### Release Notes
