@@ -3,10 +3,15 @@ name: Nightly checks
 # runs every day at midnight
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+  # To test fixes on push rather than wait for the scheduling
+  push:
+    branches:
+      - fix/nightly
 
 jobs:
-  test_storybook_prerelease:
+  assert_test_runner:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,15 +29,14 @@ jobs:
           echo "prev_sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
           echo "prev_sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
 
-      - name: Upgrade to storybook@next
+      - name: Upgrade to storybook@future
         run: |
-          npx storybook upgrade --prerelease
+          npx storybook@future upgrade --prerelease --yes
 
       # TODO: This should not be necessary once @storybook/csf is properly updated
       - name: Fix local @storybook/csf version
         run: |
           yarn add @storybook/csf@0.0.2--canary.4566f4d.1
-
       - name: Run test runner
         uses: mathiasvr/command-output@v1
         id: tests
@@ -52,7 +56,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.19.0
         with:
-          channel-id: "${{ secrets.SLACK_CHANNEL_ID }}"
+          channel-id: '${{ secrets.SLACK_CHANNEL_ID }}'
           payload: |
             {
               "blocks": [
@@ -61,6 +65,104 @@ jobs:
                   "text": {
                     "type": "plain_text",
                     "text": ":storybook: :runner: [Test Runner] The Nightly check has failed :alert:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*@storybook/react version:*\n${{ env.prev_sb_version }} >> ${{ env.sb_version }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*@storybook/csf version:*\n${{ env.prev_sb_csf_version }} >> ${{ env.sb_csf_version }}"
+                    }
+                  ],
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View failure",
+                      "emoji": true
+                    },
+                    "value": "view_failure",
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                    "action_id": "button-action"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+  assert_test_runner_failures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Get current version of Storybook
+        run: |
+          echo "prev_sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+          echo "prev_sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+
+      - name: Upgrade to storybook@future
+        run: |
+          npx storybook@future upgrade --prerelease --yes
+
+      # TODO: This should not be necessary once @storybook/csf is properly updated
+      - name: Fix local @storybook/csf version
+        run: |
+          yarn add @storybook/csf@0.0.2--canary.4566f4d.1
+
+      - name: Run test runner and expect failure
+        uses: mathiasvr/command-output@v1
+        with:
+          run: |
+            yarn build
+            yarn test-storybook:ci-failures
+
+      - name: Process test results
+        if: ${{ always() }}
+        id: tests
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: 'jq .numPassedTests test-results.json -r'
+
+      - name: Set failure check to env
+        if: ${{ always() }}
+        run: |
+          echo "FAILED=${{ steps.tests.outputs.value > 0 }}" >> $GITHUB_ENV
+
+      - name: Get prerelease version of Storybook
+        if: ${{ always() && env.FAILED == 'true' }}
+        run: |
+          echo "sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+          echo "sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
+
+      - name: Report if any test passes
+        if: ${{ always() && env.FAILED == 'true' }}
+        id: slack
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          channel-id: '${{ secrets.SLACK_CHANNEL_ID }}'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":storybook: :runner: [Test Runner] The Nightly check for **failures** has passed :thinking_face:",
                     "emoji": true
                   }
                 },

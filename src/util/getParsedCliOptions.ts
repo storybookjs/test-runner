@@ -18,11 +18,7 @@ export const getParsedCliOptions = () => {
       '.storybook'
     )
     .option('--watch', 'Watch files for changes and rerun tests related to changed files', false)
-    .option(
-      '--watchAll',
-      'Watch files for changes and rerun all tests when something changes',
-      false
-    )
+    .option('--watchAll', 'Watch files for changes and rerun all tests when something changes')
     .option(
       '--browsers <browsers...>',
       'Define browsers to run tests in. Could be one or multiple of: chromium, firefox, webkit',
@@ -43,6 +39,14 @@ export const getParsedCliOptions = () => {
     .option(
       '-u, --updateSnapshot',
       'Use this flag to re-record every snapshot that fails during this test run'
+    )
+    .option(
+      '--json',
+      'Prints the test results in JSON. This mode will send all other test output and user messages to stderr.'
+    )
+    .option(
+      '--outputFile',
+      'Write test results to a file when the --json option is also specified.'
     )
     .option(
       '--coverage',
