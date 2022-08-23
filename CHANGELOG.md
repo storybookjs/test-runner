@@ -1,3 +1,25 @@
+# v0.6.1 (Tue Aug 23 2022)
+
+### Release Notes
+
+#### support Storybook 7.0 root selector ([#172](https://github.com/storybookjs/test-runner/pull/172))
+
+### Feature:
+
+In Storybook 7.0, the root selector changed from #root to #storybook-root. Both selectors are now supported in the internals of the test runner
+
+---
+
+#### 🐛 Bug Fix
+
+- support Storybook 7.0 root selector [#172](https://github.com/storybookjs/test-runner/pull/172) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.6.0 (Tue Aug 23 2022)
 
 ### Release Notes
