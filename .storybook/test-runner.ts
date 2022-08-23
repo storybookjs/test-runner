@@ -31,7 +31,7 @@ const config: TestRunnerConfig = {
       failureThresholdType: 'percent',
     });
 
-    const elementHandler = await page.$('#root');
+    const elementHandler = (await page.$('#root')) || (await page.$('#storybook-root'));
     const innerHTML = await elementHandler.innerHTML();
     // HTML snapshot tests
     expect(innerHTML).toMatchSnapshot();
