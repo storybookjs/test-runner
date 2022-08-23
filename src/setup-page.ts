@@ -132,22 +132,22 @@ export const setupPage = async (page: Page) => {
         throw new StorybookTestRunnerError(storyId, errorMessage, logs);
       }
 
-      async function __waitForElement(selector) {
+      async function __waitForStorybook() {
         return new Promise((resolve, reject) => {
 
           const timeout = setTimeout(() => {
             reject();
           }, 10000);
 
-          if (document.querySelector(selector)) {
+          if (document.querySelector('#root') || document.querySelector('#storybook-root')) {
             clearTimeout(timeout);
-            return resolve(document.querySelector(selector));
+            return resolve();
           }
 
           const observer = new MutationObserver(mutations => {
-            if (document.querySelector(selector)) {
+            if (document.querySelector('#root') || document.querySelector('#storybook-root')) {
               clearTimeout(timeout);
-              resolve(document.querySelector(selector));
+              resolve();
               observer.disconnect();
             }
           });
@@ -165,7 +165,7 @@ export const setupPage = async (page: Page) => {
 
       async function __test(storyId) {
         try {
-          await __waitForElement('#root');
+          await __waitForStorybook();
         } catch(err) {
           const message = \`Timed out waiting for Storybook to load after 10 seconds. Are you sure the Storybook is running correctly in that URL? Is the Storybook private (e.g. under authentication layers)?\n\n\nHTML: \${document.body.innerHTML}\`;
           throw new StorybookTestRunnerError(storyId, message);
