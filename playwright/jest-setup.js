@@ -13,4 +13,4 @@ if (testRunnerConfig) {
   }
 }
 
-global.__sbCollectCoverage = process.env.STORYBOOK_COLLECT_COVERAGE === 'true'
+global.__sbCollectCoverage = process.env.STORYBOOK_COLLECT_COVERAGE === 'true';

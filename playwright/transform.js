@@ -15,7 +15,7 @@ module.exports = {
         '@babel/preset-react',
       ],
     });
-    
+
     return result ? result.code : src;
   },
 };

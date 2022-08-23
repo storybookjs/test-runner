@@ -16,6 +16,6 @@ module.exports = {
   setupFilesAfterEnv: ['./playwright/jest-setup.js'],
   // use local build when the package is referred
   moduleNameMapper: {
-    '@storybook/test-runner': '<rootDir>/dist/cjs/index.js'
+    '@storybook/test-runner': '<rootDir>/dist/cjs/index.js',
   },
 };
