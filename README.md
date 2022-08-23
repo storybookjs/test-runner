@@ -17,17 +17,19 @@ Storybook test runner turns all of your stories into executable tests.
 - [Setting up code coverage](#setting-up-code-coverage)
   - [1 - Instrument the code](#1---instrument-the-code)
     - [Using @storybook/addon-coverage](#using-storybookaddon-coverage)
-    - [Manually configuring Istanbul](#manually-configuring-istanbul)
-  - [2 - Run tests with `--coverage` flag](#2---run-tests-with---coverage-flag)
+    - [Manually configuring istanbul](#manually-configuring-istanbul)
+  - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
 - [Experimental test hook API](#experimental-test-hook-api)
+  - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
+  - [Global utility functions](#global-utility-functions)
 - [Troubleshooting](#troubleshooting)
   - [Errors with Jest 28](#errors-with-jest-28)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
-  - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-"no-tests-found"-running-on-a-windows-ci)
+  - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-no-tests-found-running-on-a-windows-ci)
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
 - [Future work](#future-work)
 
@@ -401,7 +403,7 @@ The `postRender` function provides a [Playwright page](https://playwright.dev/do
 // .storybook/test-runner.js
 module.exports = {
   async postRender(page, context) {
-    // the #root element wraps the story
+    // the #root element wraps the story. From Storybook 7.0 onwards, the selector should be #storybook-root
     const elementHandler = await page.$('#root');
     const innerHTML = await elementHandler.innerHTML();
     expect(innerHTML).toMatchSnapshot();
@@ -500,6 +502,7 @@ module.exports = {
       return;
     }
 
+    // from Storybook 7.0 onwards, the selector should be #storybook-root
     await checkA11y(page, '#root', {
       detailedReport: true,
       detailedReportOptions: {
