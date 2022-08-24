@@ -1,3 +1,23 @@
+# v0.6.2 (Wed Aug 24 2022)
+
+### Release Notes
+
+#### feat: turn Jest into an internal dependency ([#175](https://github.com/storybookjs/test-runner/pull/175))
+
+The Storybook test runner will now contain Jest as an internal dependency, which means that if you installed Jest just for the purpose of using the Storybook test runner, you can now remove it!
+
+---
+
+#### 🐛 Bug Fix
+
+- feat: turn Jest into an internal dependency [#175](https://github.com/storybookjs/test-runner/pull/175) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.6.1 (Tue Aug 23 2022)
 
 ### Release Notes
