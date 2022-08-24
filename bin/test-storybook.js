@@ -99,18 +99,23 @@ function sanitizeURL(url) {
 
 const checkForIncompatibilities = () => {
   try {
-    const jestVersion = require('jest/package.json').version;
-    if (semver.gte(jestVersion, '28.0.0')) {
-      error(dedent`We detected that your project is using Jest 28.0.0 or higher, which is currently incompatible with the test runner.
-      
-      You can find more info at: https://github.com/storybookjs/test-runner#errors-with-jest-28
-      `);
-      process.exit(1);
+    const jestVersion = require(path.join('jest', 'package.json')).version;
+    const isJestCompatible =
+      semver.satisfies(jestVersion, '^26.6.3') || semver.satisfies(jestVersion, '^27.0.0');
+    if (!isJestCompatible) {
+      throw new Error('INCOMPATIBLE_VERSION', { cause: jestVersion });
     }
   } catch (err) {
-    error(
-      'We detected that Jest is not installed in your project. Please install Jest@27 and run test-storybook again.'
-    );
+    if (err.message === 'INCOMPATIBLE_VERSION') {
+      error(dedent`We detected that your project is using Jest ${err.cause}, which is incompatible with this version of the test runner.
+        
+        You can find more info at: https://github.com/storybookjs/test-runner#jest-compatibility
+        `);
+    } else {
+      error(
+        `There was an issue while trying to resolve the Jest version of your project. Please file an issue at https://github.com/storybookjs/test-runner/issues`
+      );
+    }
     process.exit(1);
   }
 };

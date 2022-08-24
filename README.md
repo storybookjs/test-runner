@@ -7,6 +7,7 @@ Storybook test runner turns all of your stories into executable tests.
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Getting started](#getting-started)
+  - [Jest compatibility](#jest-compatibility)
 - [CLI Options](#cli-options)
 - [Configuration](#configuration)
 - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
@@ -26,7 +27,6 @@ Storybook test runner turns all of your stories into executable tests.
   - [Render lifecycle](#render-lifecycle)
   - [Global utility functions](#global-utility-functions)
 - [Troubleshooting](#troubleshooting)
-  - [Errors with Jest 28](#errors-with-jest-28)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-no-tests-found-running-on-a-windows-ci)
@@ -62,37 +62,11 @@ If there are any failures, the test runner will provide an output with the error
 
 ## Getting started
 
-1. Install the test runner and the interactions addon in Storybook:
+1. Install the test runner:
 
 ```jsx
 yarn add @storybook/test-runner -D
 ```
-
-Jest is a peer dependency. If you don't have it, also install it
-
-```jsx
-yarn add jest@27 -D
-```
-
-<details>
-  <summary>1.1 Optional instructions to install the Interactions addon for visual debugging of play functions</summary>
-
-```jsx
-yarn add @storybook/addon-interactions @storybook/jest @storybook/testing-library -D
-```
-
-Then add it to your `.storybook/main.js` config and enable debugging:
-
-```jsx
-module.exports = {
-  addons: ['@storybook/addon-interactions'],
-  features: {
-    interactionsDebugger: true,
-  },
-};
-```
-
-</details>
 
 2. Add a `test-storybook` script to your package.json
 
@@ -104,13 +78,15 @@ module.exports = {
 }
 ```
 
-3. Run Storybook (the test runner runs against a running Storybook instance):
+3. Optionally, follow [the documentation](https://storybook.js.org/docs/react/writing-tests/interaction-testing#set-up-the-interactions-addon) for writing interaction tests and using [addon-interactions](https://storybook.js.org/addons/@storybook/addon-interactions/) to visualize the interactions with an interactive debugger in Storybook.
+
+4. Run Storybook (the test runner runs against a running Storybook instance):
 
 ```jsx
 yarn storybook
 ```
 
-4. Run the test runner:
+5. Run the test runner:
 
 ```jsx
 yarn test-storybook
@@ -123,6 +99,16 @@ yarn test-storybook
 > or
 > TARGET_URL=http://localhost:9009 yarn test-storybook
 > ```
+
+### Jest compatibility
+
+The Storybook test runner comes with Jest installed as an internal dependency. In case you are also using Jest as a dependency in your project, in order to avoid possible conflicts, you should use a compatible version of the test runner.
+
+| Jest version | Test runner version |
+| ------------ | ------------------- |
+| ^26.6.3      | ^0.6.2              |
+| ^27.0.0      | ^0.6.2              |
+| ^28.0.0      | ^0.7.0 and higher   |
 
 ## CLI Options
 
@@ -152,11 +138,13 @@ Usage: test-storybook [options]
 
 ## Configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc.
+The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc.
 
 The test runner works out of the box, but if you want better control over its configuration, you can run `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project, which will be used by the test runner.
 
 The test runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium. For this you must eject the test runner configuration.
+
+> **NOTE:** The Jest options relate to the version of Jest that come in the test runner. You can check the [Jest compatibility table](#jest-compatibility) for reference.
 
 ## Running against a deployed Storybook
 
@@ -516,17 +504,6 @@ module.exports = {
 ```
 
 ## Troubleshooting
-
-#### Errors with Jest 28
-
-Jest 28 has been released, but unfortunately `jest-playwright` is not yet compatible with it, therefore the test-runner is also not compatible. You likely are having an issue that looks like this:
-
-```sh
-  TypeError: Jest: Got error running globalSetup
-  reason: Class extends value #<Object> is not a constructor or null
-```
-
-As soon as `jest-playwright` is compatible, so the test-runner will be too. Please follow [this issue](https://github.com/storybookjs/test-runner/issues/99) for updates.
 
 #### The error output in the CLI is too short
 
