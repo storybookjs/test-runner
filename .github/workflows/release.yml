@@ -1,6 +1,9 @@
 name: Release
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - jest-27
 
 jobs:
   release:
