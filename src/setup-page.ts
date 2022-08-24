@@ -48,19 +48,6 @@ export const setupPage = async (page: Page) => {
     throw err;
   });
 
-  if (isCoverageMode) {
-    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-    if (!isCoverageSetupCorrectly) {
-      throw new Error(
-        dedent`
-          [Test runner] An error occurred when evaluating code coverage:
-          The code in Storybook is not instrumented, which means the coverage setup is not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage
-        `
-      );
-    }
-  }
-
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
 

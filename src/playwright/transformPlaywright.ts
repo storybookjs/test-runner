@@ -4,11 +4,18 @@ import { userOrAutoTitle } from '@storybook/store';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
+import dedent from 'ts-dedent';
 
 const filePrefixer = template(`
   import global from 'global';
   const { setupPage } = require('@storybook/test-runner');
 `);
+
+const coverageErrorMessage = dedent`
+  [Test runner] An error occurred when evaluating code coverage:
+  The code in this story is not instrumented, which means the coverage setup is likely not correct.
+  More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage
+`;
 
 export const testPrefixer = template(
   `
@@ -34,6 +41,11 @@ export const testPrefixer = template(
         }
 
         if(global.__sbCollectCoverage) {
+          const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+          if (!isCoverageSetupCorrectly) {
+            throw new Error(\`${coverageErrorMessage}\`);
+          }
+
           await jestPlaywright.saveCoverage(page);
         }
 
