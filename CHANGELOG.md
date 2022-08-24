@@ -1,3 +1,23 @@
+# v0.6.3 (Wed Aug 24 2022)
+
+### Release Notes
+
+#### Support storyStoreV7 in coverage check ([#177](https://github.com/storybookjs/test-runner/pull/177))
+
+This release fixes an issue where the coverage check was not working for projects using storyStoreV7.
+
+---
+
+#### 🐛 Bug Fix
+
+- Support storyStoreV7 in coverage check [#177](https://github.com/storybookjs/test-runner/pull/177) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.6.2 (Wed Aug 24 2022)
 
 ### Release Notes
