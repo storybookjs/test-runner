@@ -2,7 +2,7 @@ const { transform: babelTransform } = require('@babel/core');
 const { transformPlaywright } = require('../dist/cjs/playwright/transformPlaywright');
 
 module.exports = {
-  process(src, filename, config) {
+  process(src, filename) {
     const csfTest = transformPlaywright(src, filename);
 
     const result = babelTransform(csfTest, {
@@ -16,6 +16,6 @@ module.exports = {
       ],
     });
 
-    return result ? result.code : src;
+    return result ? { code: result.code } : src;
   },
 };

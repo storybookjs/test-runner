@@ -2,6 +2,8 @@
 
 Storybook test runner turns all of your stories into executable tests.
 
+> ⚠️⚠️ If you're using **Jest 27** and can't migrate to Jest 28, please check the [Jest 27 support](#jest-27-support) section below.
+
 <h2>Table of Contents</h2>
 
 - [Features](#features)

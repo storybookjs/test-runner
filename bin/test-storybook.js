@@ -96,12 +96,10 @@ function sanitizeURL(url) {
 
   return finalURL;
 }
-
 const checkForIncompatibilities = () => {
   try {
     const jestVersion = require(path.join('jest', 'package.json')).version;
-    const isJestCompatible =
-      semver.satisfies(jestVersion, '^26.6.3') || semver.satisfies(jestVersion, '^27.0.0');
+    const isJestCompatible = semver.satisfies(jestVersion, '^28.0.0');
     if (!isJestCompatible) {
       throw new Error('INCOMPATIBLE_VERSION', { cause: jestVersion });
     }
