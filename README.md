@@ -2,16 +2,15 @@
 
 Storybook test runner turns all of your stories into executable tests.
 
-> ⚠️⚠️ If you're using **Jest 27** and can't migrate to Jest 28, please check the [Jest 27 support](#jest-27-support) section below.
-
 <h2>Table of Contents</h2>
 
 - [Features](#features)
 - [How it works](#how-it-works)
 - [Getting started](#getting-started)
-  - [Jest compatibility](#jest-compatibility)
 - [CLI Options](#cli-options)
-- [Configuration](#configuration)
+- [Ejecting configuration](#ejecting-configuration)
+  - [Jest-playwright options](#jest-playwright-options)
+  - [Jest options](#jest-options)
 - [Test reporters](#test-reporters)
 - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
   - [Index.json mode](#indexjson-mode)
@@ -104,16 +103,6 @@ yarn test-storybook
 > TARGET_URL=http://localhost:9009 yarn test-storybook
 > ```
 
-### Jest compatibility
-
-The Storybook test runner comes with Jest installed as an internal dependency. In case you are also using Jest as a dependency in your project, in order to avoid possible conflicts, you should use a compatible version of the test runner.
-
-| Jest version | Test runner version |
-| ------------ | ------------------- |
-| ^26.6.3      | ^0.6.2              |
-| ^27.0.0      | ^0.6.2              |
-| ^28.0.0      | ^0.7.0 and higher   |
-
 ## CLI Options
 
 ```plaintext
@@ -141,15 +130,26 @@ Usage: test-storybook [options]
 | `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`        |
 | `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                |
 
-## Configuration
+## Ejecting configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc.
+The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
 
-The test runner works out of the box, but if you want better control over its configuration, you can run `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project, which will be used by the test runner.
+The configuration file will accept options for two runners:
 
-The test runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium. For this you must eject the test runner configuration.
+#### Jest-playwright options
 
-> **NOTE:** The Jest options relate to the version of Jest that come in the test runner. You can check the [Jest compatibility table](#jest-compatibility) for reference.
+The test runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it.
+
+#### Jest options
+
+The Storybook test runner comes with Jest installed as an internal dependency. You can pass Jest options based on the version of Jest that comes with the test runner.
+
+| Test runner version | Jest version       |
+| ------------------- | ------------------ |
+| ^0.6.2              | ^26.6.3 or ^27.0.0 |
+| ^0.7.0              | ^28.0.0            |
+
+> If you're already using a compatible version of Jest, the test runner will use it, instead of installing a duplicate version in your node_modules folder.
 
 ## Test reporters
 
