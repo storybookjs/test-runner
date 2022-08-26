@@ -97,31 +97,14 @@ function sanitizeURL(url) {
   return finalURL;
 }
 
-const checkForIncompatibilities = () => {
-  try {
-    const jestVersion = require(path.join('jest', 'package.json')).version;
-    const isJestCompatible =
-      semver.satisfies(jestVersion, '^26.6.3') || semver.satisfies(jestVersion, '^27.0.0');
-    if (!isJestCompatible) {
-      throw new Error('INCOMPATIBLE_VERSION', { cause: jestVersion });
-    }
-  } catch (err) {
-    if (err.message === 'INCOMPATIBLE_VERSION') {
-      error(dedent`We detected that your project is using Jest ${err.cause}, which is incompatible with this version of the test runner.
-        
-        You can find more info at: https://github.com/storybookjs/test-runner#jest-compatibility
-        `);
-    } else {
-      error(
-        `There was an issue while trying to resolve the Jest version of your project. Please file an issue at https://github.com/storybookjs/test-runner/issues`
-      );
-    }
-    process.exit(1);
-  }
-};
-
 async function executeJestPlaywright(args) {
-  const jest = require('jest');
+  // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
+  const jestPath = path.dirname(
+    require.resolve('jest', {
+      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
+    })
+  );
+  const jest = require(jestPath);
   let argv = args.slice(2);
 
   const jestConfigPath = fs.existsSync('test-runner-jest.config.js')
@@ -222,8 +205,6 @@ function ejectConfiguration() {
 }
 
 const main = async () => {
-  checkForIncompatibilities();
-
   const { jestOptions, runnerOptions } = getCliOptions();
 
   if (runnerOptions.eject) {
