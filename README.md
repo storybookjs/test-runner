@@ -31,6 +31,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-no-tests-found-running-on-a-windows-ci)
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+  - [Merging test coverage results in wrong coverage](#merging-test-coverage-results-in-wrong-coverage)
 - [Future work](#future-work)
 
 ## Features
@@ -369,6 +370,8 @@ Here's an example on how to achieve that:
 }
 ```
 
+> NOTE: If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issue when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
+
 ## Experimental test hook API
 
 The test runner renders a story and executes its [play function](https://storybook.js.org/docs/react/writing-stories/play-function) if one exists. However, there are certain behaviors that are not possible to achieve via the play function, which executes in the browser. For example, if you want the test runner to take visual snapshots for you, this is something that is possible via Playwright/Jest, but must be executed in Node.
@@ -534,6 +537,18 @@ env:
 #### Adding the test runner to other CI environments
 
 As the test runner is based on playwright, depending on your CI setup you might need to use specific docker images or other configuration. In that case, you can refer to the [Playwright CI docs](https://playwright.dev/docs/ci) for more information.
+
+#### Merging test coverage results in wrong coverage
+
+After merging test coverage reports coming from the test runner with reports from other tools (e.g. Jest), if the end result is **not** what you expected. Here's why:
+
+The test runner uses `babel` as coverage provider, which behaves in a certain way when evaluating code coverage. If your other reports happen to use a different coverage provider than `babel`, such as `v8`, they will evaluate the coverage differently. Once merged, the results will likely be wrong.
+
+Example: in `v8`, import and export lines are counted as coverable pieces of code, however in `babel`, they are not. This impacts the percentage of coverage calculation.
+
+While the test runner does not provide `v8` as an option for coverage provider, it is recommended that you set your application's Jest config to use `coverageProvider: 'babel'` if you can, so that the reports line up as expected and get merged correctly.
+
+For more context, [here's some explanation](https://github.com/facebook/jest/issues/11188#issue-830796941) why `v8` is not a 1:1 replacement for Babel/Istanbul coverage.
 
 ## Future work
 
