@@ -1,3 +1,23 @@
+# v0.7.0 (Fri Aug 26 2022)
+
+### Release Notes
+
+#### Update Jest to 28 ([#174](https://github.com/storybookjs/test-runner/pull/174))
+
+This release updates the internal version of Jest to version 28. You can now remove `jest` and `jest-preset-playwright` from your `package.json` if you're not using them in other parts of your project!
+
+---
+
+#### 🚀 Enhancement
+
+- Update Jest to 28 [#174](https://github.com/storybookjs/test-runner/pull/174) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.6.4 (Fri Aug 26 2022)
 
 ### Release Notes
