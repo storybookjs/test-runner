@@ -10,3 +10,4 @@ yarn-error.log
 .nyc_output
 coverage
 test-results.json
+**/junit.xml

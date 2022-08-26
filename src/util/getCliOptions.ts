@@ -8,6 +8,7 @@ type CliOptions = {
     configDir?: string;
     eject?: boolean;
     coverage?: boolean;
+    junit?: boolean;
     browsers?: BrowserType | BrowserType[];
   };
   jestOptions: string[];
@@ -22,6 +23,7 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'eject',
   'url',
   'coverage',
+  'junit',
 ];
 
 export const getCliOptions = () => {
