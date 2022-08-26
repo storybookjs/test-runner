@@ -16,6 +16,6 @@ module.exports = {
       ],
     });
 
-    return result ? { code: result.code } : src;
+    return { code: result ? result.code : src };
   },
 };
