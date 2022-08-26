@@ -1,3 +1,32 @@
+# v0.6.4 (Fri Aug 26 2022)
+
+### Release Notes
+
+#### add --junit flag to test runner ([#179](https://github.com/storybookjs/test-runner/pull/179))
+
+The test runner now supports JUnit XML test reports out of the box with a `--junit` flag:
+```sh
+yarn test-storybook --junit
+```
+
+With that flag, the test runner will add `jest-junit` to the reporters list and generate a test report in a JUnit XML format. You can further configure the behavior of `jest-junit` by either setting specific `JEST_JUNIT_*` environment variables or by defining a `jest-junit` field in your package.json with the options you want, which will be respected when generating the report. You can look at all available options here: https://github.com/jest-community/jest-junit#configuration
+
+---
+
+#### 🐛 Bug Fix
+
+- add --junit flag to test runner [#179](https://github.com/storybookjs/test-runner/pull/179) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Add remark regarding different coverage providers [#180](https://github.com/storybookjs/test-runner/pull/180) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.6.3 (Wed Aug 24 2022)
 
 ### Release Notes
