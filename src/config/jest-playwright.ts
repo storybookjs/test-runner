@@ -5,11 +5,15 @@ export const getJestConfig = () => {
     STORYBOOK_STORIES_PATTERN,
     TEST_BROWSERS,
     STORYBOOK_COLLECT_COVERAGE,
+    STORYBOOK_JUNIT,
   } = process.env;
+
+  const reporters = STORYBOOK_JUNIT ? ['default', 'jest-junit'] : ['default'];
 
   let config = {
     rootDir: process.cwd(),
     roots: TEST_ROOT ? [TEST_ROOT] : undefined,
+    reporters,
     testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
     transform: {
       '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',

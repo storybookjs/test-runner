@@ -10,6 +10,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Jest compatibility](#jest-compatibility)
 - [CLI Options](#cli-options)
 - [Configuration](#configuration)
+- [Test reporters](#test-reporters)
 - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
   - [Index.json mode](#indexjson-mode)
 - [Running in CI](#running-in-ci)
@@ -31,6 +32,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-no-tests-found-running-on-a-windows-ci)
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
+  - [Merging test coverage results in wrong coverage](#merging-test-coverage-results-in-wrong-coverage)
 - [Future work](#future-work)
 
 ## Features
@@ -135,6 +137,7 @@ Usage: test-storybook [options]
 | `--eject`                       | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                             |
 | `--json`                        | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json` |
 | `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`        |
+| `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                |
 
 ## Configuration
 
@@ -145,6 +148,12 @@ The test runner works out of the box, but if you want better control over its co
 The test runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium. For this you must eject the test runner configuration.
 
 > **NOTE:** The Jest options relate to the version of Jest that come in the test runner. You can check the [Jest compatibility table](#jest-compatibility) for reference.
+
+## Test reporters
+
+The test runner uses default Jest reporters, but you can add additional reporters by ejecting the configuration as explained above and overriding (or merging with) the `reporters` property.
+
+Additionally, if you pass `--junit` to `test-storybook`, the test runner will add `jest-junit` to the reporters list and generate a test report in a JUnit XML format. You can further configure the behavior of `jest-junit` by either setting specific `JEST_JUNIT_*` environment variables or by defining a `jest-junit` field in your package.json with the options you want, which will be respected when generating the report. You can look at all available options here: https://github.com/jest-community/jest-junit#configuration
 
 ## Running against a deployed Storybook
 
@@ -330,7 +339,7 @@ The test runner will report the results in the CLI and generate a `coverage/stor
 
 ![](.github/assets/coverage-result.png)
 
-If you want to generate reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
+If you want to generate coverage reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
 
 Here's an example generating an `lcov` report:
 
@@ -368,6 +377,8 @@ Here's an example on how to achieve that:
   }
 }
 ```
+
+> NOTE: If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issue when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
 
 ## Experimental test hook API
 
@@ -534,6 +545,18 @@ env:
 #### Adding the test runner to other CI environments
 
 As the test runner is based on playwright, depending on your CI setup you might need to use specific docker images or other configuration. In that case, you can refer to the [Playwright CI docs](https://playwright.dev/docs/ci) for more information.
+
+#### Merging test coverage results in wrong coverage
+
+After merging test coverage reports coming from the test runner with reports from other tools (e.g. Jest), if the end result is **not** what you expected. Here's why:
+
+The test runner uses `babel` as coverage provider, which behaves in a certain way when evaluating code coverage. If your other reports happen to use a different coverage provider than `babel`, such as `v8`, they will evaluate the coverage differently. Once merged, the results will likely be wrong.
+
+Example: in `v8`, import and export lines are counted as coverable pieces of code, however in `babel`, they are not. This impacts the percentage of coverage calculation.
+
+While the test runner does not provide `v8` as an option for coverage provider, it is recommended that you set your application's Jest config to use `coverageProvider: 'babel'` if you can, so that the reports line up as expected and get merged correctly.
+
+For more context, [here's some explanation](https://github.com/facebook/jest/issues/11188#issue-830796941) why `v8` is not a 1:1 replacement for Babel/Istanbul coverage.
 
 ## Future work
 
