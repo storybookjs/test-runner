@@ -10,6 +10,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Jest compatibility](#jest-compatibility)
 - [CLI Options](#cli-options)
 - [Configuration](#configuration)
+- [Test reporters](#test-reporters)
 - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
   - [Index.json mode](#indexjson-mode)
 - [Running in CI](#running-in-ci)
@@ -136,6 +137,7 @@ Usage: test-storybook [options]
 | `--eject`                       | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                             |
 | `--json`                        | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json` |
 | `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`        |
+| `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                |
 
 ## Configuration
 
@@ -146,6 +148,12 @@ The test runner works out of the box, but if you want better control over its co
 The test runner uses [jest-playwright](https://github.com/playwright-community/jest-playwright) and you can pass [testEnvironmentOptions](https://github.com/playwright-community/jest-playwright#configuration) to further configure it, such as how it's done above to run tests against all browsers instead of just chromium. For this you must eject the test runner configuration.
 
 > **NOTE:** The Jest options relate to the version of Jest that come in the test runner. You can check the [Jest compatibility table](#jest-compatibility) for reference.
+
+## Test reporters
+
+The test runner uses default Jest reporters, but you can add additional reporters by ejecting the configuration as explained above and overriding (or merging with) the `reporters` property.
+
+Additionally, if you pass `--junit` to `test-storybook`, the test runner will add `jest-junit` to the reporters list and generate a test report in a JUnit XML format. You can further configure the behavior of `jest-junit` by either setting specific `JEST_JUNIT_*` environment variables or by defining a `jest-junit` field in your package.json with the options you want, which will be respected when generating the report. You can look at all available options here: https://github.com/jest-community/jest-junit#configuration
 
 ## Running against a deployed Storybook
 
@@ -331,7 +339,7 @@ The test runner will report the results in the CLI and generate a `coverage/stor
 
 ![](.github/assets/coverage-result.png)
 
-If you want to generate reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
+If you want to generate coverage reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
 
 Here's an example generating an `lcov` report:
 

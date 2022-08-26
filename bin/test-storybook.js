@@ -245,6 +245,10 @@ const main = async () => {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
   }
 
+  if (runnerOptions.junit) {
+    process.env.STORYBOOK_JUNIT = 'true';
+  }
+
   if (process.env.REFERENCE_URL) {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
   }
