@@ -488,7 +488,7 @@ You can use it for multiple use cases, and here's an example that combines the s
 ```js
 // .storybook/test-runner.js
 const { getStoryContext } = require('@storybook/test-runner');
-const { injectAxe, checkA11y } = require('axe-playwright');
+const { injectAxe, checkA11y, configureAxe } = require('axe-playwright');
 
 module.exports = {
   async preRender(page, context) {
@@ -502,6 +502,11 @@ module.exports = {
     if (storyContext.parameters?.a11y?.disable) {
       return;
     }
+
+    // Apply story-level a11y rules
+    await configureAxe(page, {
+      rules: storyContext.parameters?.a11y?.config?.rules,
+    })
 
     // from Storybook 7.0 onwards, the selector should be #storybook-root
     await checkA11y(page, '#root', {
