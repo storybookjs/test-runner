@@ -1,3 +1,22 @@
+# v0.7.1 (Tue Sep 06 2022)
+
+#### 🐛 Bug Fix
+
+- Add missing dependencies [#187](https://github.com/storybookjs/test-runner/pull/187) ([@IanVS](https://github.com/IanVS))
+
+#### 📝 Documentation
+
+- docs(README): Update a11y recipe [#186](https://github.com/storybookjs/test-runner/pull/186) (nagisa@hanayoku.com)
+
+#### Authors: 4
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Nagisa Ando ([@nagisaando](https://github.com/nagisaando))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.7.0 (Fri Aug 26 2022)
 
 ### Release Notes
