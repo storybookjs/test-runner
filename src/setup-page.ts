@@ -202,6 +202,9 @@ export const setupPage = async (page: Page) => {
           channel.on('storyThrewException', (error) => reject(
             new StorybookTestRunnerError(storyId, error.message, logs))
           );
+          channel.on('playFunctionThrewException', (error) => reject(
+            new StorybookTestRunnerError(storyId, error.message, logs))
+          );
           channel.on('storyMissing', (id) => id === storyId && reject(
             new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.', logs))
           );
