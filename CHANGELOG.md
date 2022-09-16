@@ -1,3 +1,19 @@
+# v0.7.2 (Fri Sep 16 2022)
+
+#### 🐛 Bug Fix
+
+- Support Storybook 7.0 play function exceptions [#190](https://github.com/storybookjs/test-runner/pull/190) ([@tmeasday](https://github.com/tmeasday) [@yannbf](https://github.com/yannbf))
+- fix snapshots & remove vscode color settings [#192](https://github.com/storybookjs/test-runner/pull/192) ([@ndelangen](https://github.com/ndelangen))
+
+#### Authors: 4
+
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- Tom Coleman ([@tmeasday](https://github.com/tmeasday))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.7.1 (Tue Sep 06 2022)
 
 #### 🐛 Bug Fix
