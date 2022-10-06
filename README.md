@@ -27,7 +27,9 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
-  - [Global utility functions](#global-utility-functions)
+  - [Utility functions](#utility-functions)
+    - [getStoryContext](#getstorycontext)
+    - [isTestRunner](#istestrunner)
 - [Troubleshooting](#troubleshooting)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -475,7 +477,11 @@ it('button--basic', async () => {
 });
 ```
 
-### Global utility functions
+### Utility functions
+
+For more specific use cases, the test runner provides utility functions that could be useful to you.
+
+#### getStoryContext
 
 While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
 
@@ -506,7 +512,7 @@ module.exports = {
     // Apply story-level a11y rules
     await configureAxe(page, {
       rules: storyContext.parameters?.a11y?.config?.rules,
-    })
+    });
 
     // from Storybook 7.0 onwards, the selector should be #storybook-root
     await checkA11y(page, '#root', {
@@ -520,6 +526,25 @@ module.exports = {
   },
 };
 ```
+
+#### isTestRunner
+
+The `isTestRunner` function can be used to determine if a story is rendering in the context of the test runner.
+
+```js
+import { isTestRunner } from '@storybook/test-runner/is-test-runner';
+export const MyStory = () => (
+  <div>
+    <p>Is this story running in the test runner?</p>
+    <p>{isTestRunner() ? 'Yes' : 'No'}</p>
+  </div>
+);
+```
+
+The result of `isTestRunner()` will be true in the following scenarios:
+
+1. In the browser, when the story is rendered while running the test runner
+2. In node, if you prepend your Storybook script with `STORYBOOK_TEST_RUNNER=true`
 
 ## Troubleshooting
 

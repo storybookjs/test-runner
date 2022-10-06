@@ -125,6 +125,7 @@
     "jest-watch-typeahead": "^2.0.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",
+    "read-pkg-up": "^7.0.1",
     "regenerator-runtime": "^0.13.9",
     "semver": "^7.3.7",
     "tempy": "^1.0.1",

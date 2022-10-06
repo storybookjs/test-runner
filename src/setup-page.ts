@@ -1,5 +1,5 @@
 import type { Page } from 'playwright';
-import dedent from 'ts-dedent';
+import readPackageUp from 'read-pkg-up';
 
 const sanitizeURL = (url: string) => {
   let finalURL = url;
@@ -25,8 +25,9 @@ const sanitizeURL = (url: string) => {
 export const setupPage = async (page: Page) => {
   const targetURL = new URL('iframe.html', process.env.TARGET_URL).toString();
   const viewMode = process.env.VIEW_MODE || 'story';
-  const isCoverageMode = process.env.STORYBOOK_COLLECT_COVERAGE === 'true';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
+  const { packageJson } = await readPackageUp();
+  const { version: testRunnerVersion } = packageJson;
 
   const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
   const debugPrintLimit = process.env.DEBUG_PRINT_LIMIT
@@ -102,6 +103,17 @@ export const setupPage = async (page: Page) => {
         return input;
       }
       
+      function addToUserAgent(extra) {
+        const originalUserAgent = globalThis.navigator.userAgent;
+        if (!originalUserAgent.includes(extra)) {
+          Object.defineProperty(globalThis.navigator, 'userAgent', {
+            get: function () {
+              return [originalUserAgent, extra].join(' ');
+            },
+          });
+        }
+      };
+
       class StorybookTestRunnerError extends Error {
         constructor(storyId, errorMessage, logs) {
           super(errorMessage);
@@ -166,6 +178,8 @@ export const setupPage = async (page: Page) => {
           );
         }
         
+        addToUserAgent(\`(StorybookTestRunner@${testRunnerVersion})\`);
+
         // collect logs to show upon test error
         let logs = [];
 
