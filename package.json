@@ -18,7 +18,21 @@
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/ts/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/ts/index.d.ts"
+    },
+    "./is-test-runner": {
+      "import": "./dist/esm/is-test-runner.mjs",
+      "require": "./dist/cjs/is-test-runner.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "test-storybook": "./bin/test-storybook.js"
+  },
   "files": [
     "bin",
     "dist/**/*",
@@ -30,8 +44,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "buildBabel": "concurrently \"yarn buildBabel:cjs\" \"yarn buildBabel:esm\"",
-    "buildBabel:cjs": "babel ./src -d ./dist/cjs --extensions \".js,.jsx,.ts,.tsx\"",
-    "buildBabel:esm": "babel ./src -d ./dist/esm --env-name esm --extensions \".js,.jsx,.ts,.tsx\"",
+    "buildBabel:cjs": "babel ./src -d ./dist/cjs --extensions \".js,.jsx,.ts,.tsx,.cjs,.mjs\"",
+    "buildBabel:esm": "babel ./src -d ./dist/esm --env-name esm --extensions \".js,.jsx,.ts,.tsx,.cjs,.mjs\"",
     "buildTsc": "tsc --declaration --emitDeclarationOnly --outDir ./dist/ts",
     "prebuild": "yarn clean",
     "build": "concurrently \"yarn buildBabel\" \"yarn buildTsc\"",
@@ -51,9 +65,6 @@
     "test-storybook:ci-json": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && SKIP_SNAPSHOTS=true yarn test-storybook:json\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js",
     "prepare": "husky install"
-  },
-  "bin": {
-    "test-storybook": "./bin/test-storybook.js"
   },
   "devDependencies": {
     "@auto-it/released": "^10.37.1",
