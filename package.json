@@ -25,8 +25,9 @@
       "types": "./dist/ts/index.d.ts"
     },
     "./is-test-runner": {
-      "import": "./dist/esm/is-test-runner/is-test-runner.js",
-      "require": "./dist/cjs/is-test-runner/is-test-runner.js"
+      "import": "./is-test-runner.mjs",
+      "require": "./is-test-runner.cjs",
+      "types": "./is-test-runner.d.ts"
     },
     "./package.json": "./package.json"
   },
