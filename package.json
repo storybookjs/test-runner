@@ -19,6 +19,9 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/ts/index.d.ts",
+  "bin": {
+    "test-storybook": "./bin/test-storybook.js"
+  },
   "files": [
     "bin",
     "dist/**/*",
@@ -51,9 +54,6 @@
     "test-storybook:ci-json": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && SKIP_SNAPSHOTS=true yarn test-storybook:json\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js",
     "prepare": "husky install"
-  },
-  "bin": {
-    "test-storybook": "./bin/test-storybook.js"
   },
   "devDependencies": {
     "@auto-it/released": "^10.37.1",
@@ -125,6 +125,7 @@
     "jest-watch-typeahead": "^2.0.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",
+    "read-pkg-up": "^7.0.1",
     "regenerator-runtime": "^0.13.9",
     "semver": "^7.3.7",
     "tempy": "^1.0.1",

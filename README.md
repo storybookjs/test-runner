@@ -27,7 +27,9 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
-  - [Global utility functions](#global-utility-functions)
+  - [Utility functions](#utility-functions)
+    - [getStoryContext](#getstorycontext)
+    - [StorybookTestRunner user agent](#storybooktestrunner-user-agent)
 - [Troubleshooting](#troubleshooting)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -475,7 +477,11 @@ it('button--basic', async () => {
 });
 ```
 
-### Global utility functions
+### Utility functions
+
+For more specific use cases, the test runner provides utility functions that could be useful to you.
+
+#### getStoryContext
 
 While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
 
@@ -506,7 +512,7 @@ module.exports = {
     // Apply story-level a11y rules
     await configureAxe(page, {
       rules: storyContext.parameters?.a11y?.config?.rules,
-    })
+    });
 
     // from Storybook 7.0 onwards, the selector should be #storybook-root
     await checkA11y(page, '#root', {
@@ -520,6 +526,29 @@ module.exports = {
   },
 };
 ```
+
+#### StorybookTestRunner user agent
+
+The test-runner adds a `StorybookTestRunner` entry to the browser's user agent. You can use it to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
+
+```js
+export const MyStory = () => {
+  const isTestRunner = window.navigator.userAgent.match(/StorybookTestRunner/);
+  return (
+    <div>
+      <p>Is this story running in the test runner?</p>
+      <p>{isTestRunner ? 'Yes' : 'No'}</p>
+    </div>
+  );
+};
+```
+
+Given that this check is happening in the browser, it is only applicable in the following scenarios:
+
+- inside of a render/template function of a story
+- inside of a play function
+- inside of preview.js
+- inside any other code that is executed in the browser
 
 ## Troubleshooting
 
@@ -570,3 +599,4 @@ For more context, [here's some explanation](https://github.com/facebook/jest/iss
 Future plans involve adding support for the following features:
 
 - 📄 Run addon reports
+- ⚙️ Spawning Storybook via the test runner in a single command
