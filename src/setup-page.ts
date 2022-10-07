@@ -115,7 +115,7 @@ export const setupPage = async (page: Page) => {
       };
 
       class StorybookTestRunnerError extends Error {
-        constructor(storyId, errorMessage, logs) {
+        constructor(storyId, errorMessage, logs = []) {
           super(errorMessage);
           this.name = 'StorybookTestRunnerError';
           const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
