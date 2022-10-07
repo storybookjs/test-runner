@@ -29,9 +29,9 @@ process.on('unhandledRejection', (err) => {
 const log = (message) => console.log(`[test-storybook] ${message}`);
 const error = (err) => {
   if (err instanceof Error) {
-    console.error(`[test-storybook] ${err.message} \n\n${err.stack}`);
+    console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
   } else {
-    console.error(`[test-storybook] ${err}`);
+    console.error(`\x1b[31m[test-storybook]\x1b[0m ${err}`);
   }
 };
 
@@ -129,7 +129,7 @@ async function checkStorybook(url) {
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
-      dedent`[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
+      dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
       
       If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
       
