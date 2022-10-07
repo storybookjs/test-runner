@@ -26,7 +26,13 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message) => console.log(`[test-storybook] ${message}`);
-const error = (message) => console.error(`[test-storybook] ${message}`);
+const error = (err) => {
+  if (err instanceof Error) {
+    console.error(`[test-storybook] ${err.message} \n\n${err.stack}`);
+  } else {
+    console.error(`[test-storybook] ${err}`);
+  }
+};
 
 // Clean up tmp files globally in case of control-c
 let indexTmpDir;
