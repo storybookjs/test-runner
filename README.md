@@ -29,7 +29,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Render lifecycle](#render-lifecycle)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
-    - [isTestRunner](#istestrunner)
+    - [StorybookTestRunner user agent](#storybooktestrunner-user-agent)
 - [Troubleshooting](#troubleshooting)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -527,35 +527,28 @@ module.exports = {
 };
 ```
 
-#### isTestRunner
+#### StorybookTestRunner user agent
 
-The `isTestRunner` function can be used to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
+The test-runner adds a `StorybookTestRunner` entry to the browser's user agent. You can use it to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
 
 ```js
-import { isTestRunner } from '@storybook/test-runner/is-test-runner';
-export const MyStory = () => (
-  <div>
-    <p>Is this story running in the test runner?</p>
-    <p>{isTestRunner() ? 'Yes' : 'No'}</p>
-  </div>
-);
+export const MyStory = () => {
+  const isTestRunner = window.navigator.userAgent.match(/StorybookTestRunner/);
+  return (
+    <div>
+      <p>Is this story running in the test runner?</p>
+      <p>{isTestRunner ? 'Yes' : 'No'}</p>
+    </div>
+  );
+};
 ```
 
-The result of `isTestRunner()` will be true in the following scenarios:
+Given that this check is happening in the browser, it is only applicable in the following scenarios:
 
-1. In the browser, when the story is rendered while running the test runner. This is only applicable in the following scenarios:
-
-   - inside of a render/template function
-   - inside of a play function
-   - inside of preview.js
-   - inside any other code that is executed in the browser
-
-2. In node, if you prepend your Storybook script with `STORYBOOK_TEST_RUNNER=true`.\*
-
-> **Warning**
->
-> - Currently, given that you have to run Storybook before the test-runner, the `isTestRunner` function will return `false` when running in node even if you are running the test-runner, unless you set the STORYBOOK_TEST_RUNNER environment variable. An example of execution in node is if you're using that function to set parameters or args, or inside of main.js.
->   In the future, once the test-runner can spawn Storybook, this will no longer be the case.
+- inside of a render/template function of a story
+- inside of a play function
+- inside of preview.js
+- inside any other code that is executed in the browser
 
 ## Troubleshooting
 

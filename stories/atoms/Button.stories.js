@@ -1,6 +1,6 @@
 import React from 'react';
 import { expect } from '@storybook/jest';
-import { isTestRunner } from '../../is-test-runner';
+import { isTestRunner } from '../../.storybook/is-test-runner';
 import { within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/testing-library';
 
 import { Button } from './Button';
