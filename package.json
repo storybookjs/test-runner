@@ -18,19 +18,7 @@
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/ts/index.d.ts"
-    },
-    "./is-test-runner": {
-      "import": "./is-test-runner.mjs",
-      "require": "./is-test-runner.cjs",
-      "types": "./is-test-runner.d.ts"
-    },
-    "./package.json": "./package.json"
-  },
+  "types": "dist/ts/index.d.ts",
   "bin": {
     "test-storybook": "./bin/test-storybook.js"
   },
@@ -45,8 +33,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "buildBabel": "concurrently \"yarn buildBabel:cjs\" \"yarn buildBabel:esm\"",
-    "buildBabel:cjs": "babel ./src -d ./dist/cjs --extensions \".js,.jsx,.ts,.tsx,.cjs,.mjs\"",
-    "buildBabel:esm": "babel ./src -d ./dist/esm --env-name esm --extensions \".js,.jsx,.ts,.tsx,.cjs,.mjs\"",
+    "buildBabel:cjs": "babel ./src -d ./dist/cjs --extensions \".js,.jsx,.ts,.tsx\" --copy-files is-test-runner.js",
+    "buildBabel:esm": "babel ./src -d ./dist/esm --env-name esm --extensions \".js,.jsx,.ts,.tsx\" --copy-files is-test-runner.js",
     "buildTsc": "tsc --declaration --emitDeclarationOnly --outDir ./dist/ts",
     "prebuild": "yarn clean",
     "build": "concurrently \"yarn buildBabel\" \"yarn buildTsc\"",
