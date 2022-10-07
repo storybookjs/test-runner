@@ -529,7 +529,7 @@ module.exports = {
 
 #### isTestRunner
 
-The `isTestRunner` function can be used to determine if a story is rendering in the context of the test runner.
+The `isTestRunner` function can be used to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
 
 ```js
 import { isTestRunner } from '@storybook/test-runner/is-test-runner';
@@ -543,8 +543,19 @@ export const MyStory = () => (
 
 The result of `isTestRunner()` will be true in the following scenarios:
 
-1. In the browser, when the story is rendered while running the test runner
-2. In node, if you prepend your Storybook script with `STORYBOOK_TEST_RUNNER=true`
+1. In the browser, when the story is rendered while running the test runner. This is only applicable in the following scenarios:
+
+   - inside of a render/template function
+   - inside of a play function
+   - inside of preview.js
+   - inside any other code that is executed in the browser
+
+2. In node, if you prepend your Storybook script with `STORYBOOK_TEST_RUNNER=true`.\*
+
+> **Warning**
+>
+> - Currently, given that you have to run Storybook before the test-runner, the `isTestRunner` function will return `false` when running in node even if you are running the test-runner, unless you set the STORYBOOK_TEST_RUNNER environment variable. An example of execution in node is if you're using that function to set parameters or args, or inside of main.js.
+>   In the future, once the test-runner can spawn Storybook, this will no longer be the case.
 
 ## Troubleshooting
 
@@ -595,3 +606,4 @@ For more context, [here's some explanation](https://github.com/facebook/jest/iss
 Future plans involve adding support for the following features:
 
 - 📄 Run addon reports
+- ⚙️ Spawning Storybook via the test runner in a single command
