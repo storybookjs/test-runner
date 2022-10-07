@@ -9,7 +9,8 @@ const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
-const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
+const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
+const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
