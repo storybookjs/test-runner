@@ -1,14 +1,7 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-exports.isTestRunner = isTestRunner;
-
 /**
  * Returns whether the story is rendering inside of the Storybook test runner.
  */
-function isTestRunner() {
+export function isTestRunner() {
   const isTestRunnerInNode = process?.env?.STORYBOOK_TEST_RUNNER === 'true';
   const isTestRunnerInBrowser = !!(
     typeof window !== 'undefined' &&
