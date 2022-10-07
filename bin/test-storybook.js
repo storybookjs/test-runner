@@ -9,13 +9,13 @@ const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
-const semver = require('semver');
 const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
+process.env.STORYBOOK_TEST_RUNNER = 'true';
 process.env.PUBLIC_URL = '';
 
 // Makes the script crash on unhandled rejections instead of silently

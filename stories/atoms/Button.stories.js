@@ -1,5 +1,6 @@
 import React from 'react';
 import { expect } from '@storybook/jest';
+import { isTestRunner } from '../../.storybook/is-test-runner';
 import { within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/testing-library';
 
 import { Button } from './Button';
@@ -108,4 +109,26 @@ WithLoaders.play = async ({ args, canvasElement }) => {
   const todoItem = await canvas.findByText('Todo: delectus aut autem');
   await userEvent.click(todoItem);
   await expect(args.onSubmit).toHaveBeenCalledWith('delectus aut autem');
+};
+
+export const UserAgent = () => (
+  <div>
+    <p>
+      <strong>isTestRunner:</strong> {isTestRunner().toString()}
+    </p>
+    <p>
+      <strong>User agent:</strong> {window.navigator.userAgent}
+    </p>
+  </div>
+);
+UserAgent.play = async () => {
+  if (isTestRunner()) {
+    await expect(window.navigator.userAgent).toContain('StorybookTestRunner');
+  }
+};
+UserAgent.parameters = {
+  tests: {
+    skip: true,
+    disableSnapshots: true,
+  },
 };
