@@ -274,4 +274,7 @@ const main = async () => {
   await executeJestPlaywright(jestOptions);
 };
 
-main().catch((e) => log(e));
+main().catch((e) => {
+  error(e);
+  process.exit(1);
+});
