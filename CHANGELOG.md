@@ -1,3 +1,21 @@
+# v0.8.0 (Fri Oct 07 2022)
+
+#### 🚀 Enhancement
+
+- Add isTestRunner utility [#198](https://github.com/storybookjs/test-runner/pull/198) ([@yannbf](https://github.com/yannbf) [@IanVS](https://github.com/IanVS))
+
+#### 🐛 Bug Fix
+
+- Fix StorybookTestRunnerError – length on undefined [#194](https://github.com/storybookjs/test-runner/pull/194) ([@ericclemmons](https://github.com/ericclemmons))
+
+#### Authors: 3
+
+- Eric Clemmons ([@ericclemmons](https://github.com/ericclemmons))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.7.2 (Fri Sep 16 2022)
 
 #### 🐛 Bug Fix
