@@ -9,7 +9,8 @@ const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
-const { getCliOptions, getStorybookMetadata } = require('../dist/cjs/util');
+const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
+const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -26,7 +27,13 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message) => console.log(`[test-storybook] ${message}`);
-const error = (message) => console.error(`[test-storybook] ${message}`);
+const error = (err) => {
+  if (err instanceof Error) {
+    console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
+  } else {
+    console.error(`\x1b[31m[test-storybook]\x1b[0m ${err}`);
+  }
+};
 
 // Clean up tmp files globally in case of control-c
 let indexTmpDir;
@@ -122,7 +129,7 @@ async function checkStorybook(url) {
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
-      dedent`[test-storybook] It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
+      dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
       
       If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
       
@@ -268,4 +275,7 @@ const main = async () => {
   await executeJestPlaywright(jestOptions);
 };
 
-main().catch((e) => log(e));
+main().catch((e) => {
+  error(e);
+  process.exit(1);
+});
