@@ -129,7 +129,7 @@ jobs:
         with:
           run: |
             yarn build
-            yarn test-storybook:ci-failures
+            ! yarn test-storybook:ci-failures
 
       - name: Process test results
         if: ${{ always() }}

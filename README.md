@@ -111,26 +111,27 @@ yarn test-storybook
 Usage: test-storybook [options]
 ```
 
-| Options                         | Description                                                                                                                          |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `--help`                        | Output usage information <br/>`test-storybook --help`                                                                                |
-| `-i`, `--index-json`            | Run in index json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --index-json`                  |
-| `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                       |
-| `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                            |
-| `--watch`                       | Watch files for changes and rerun tests related to changed files.<br/>`test-storybook --watch`                                       |
-| `--watchAll`                    | Watch files for changes and rerun all tests when something changes.<br/>`test-storybook --watchAll`                                  |
-| `--coverage`                    | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`             |
-| `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`       |
-| `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`     |
-| `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`            |
-| `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                                   |
-| `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                             |
-| `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                        |
-| `-u`, `--updateSnapshot`        | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                                   |
-| `--eject`                       | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                             |
-| `--json`                        | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json` |
-| `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`        |
-| `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                |
+| Options                         | Description                                                                                                                                                                   |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--help`                        | Output usage information <br/>`test-storybook --help`                                                                                                                         |
+| `-i`, `--index-json`            | Run in index json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --index-json`                                                           |
+| `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                                                                |
+| `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                                                                     |
+| `--watch`                       | Watch files for changes and rerun tests related to changed files.<br/>`test-storybook --watch`                                                                                |
+| `--watchAll`                    | Watch files for changes and rerun all tests when something changes.<br/>`test-storybook --watchAll`                                                                           |
+| `--coverage`                    | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`                                                      |
+| `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
+| `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
+| `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
+| `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
+| `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
+| `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
+| `-u`, `--updateSnapshot`        | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                                                                            |
+| `--eject`                       | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                                                                      |
+| `--json`                        | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
+| `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
+| `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
+| `--ci`                          | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 
 ## Ejecting configuration
 
@@ -303,11 +304,11 @@ The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_
 
 ### 1 - Instrument the code
 
-Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. This is done by configuring [istanbul](https://istanbul.js.org/) in your Storybook. You can achieve that in two different ways:
+Instrumenting the code is an important step, which allows lines of code to be tracked by Storybook. This is normally achieved by using instrumentation libraries such as the [Istanbul Babel plugin](https://github.com/istanbuljs/babel-plugin-istanbul), or its Vite counterpart. In Storybook, you can set up instrumentation in two different ways:
 
 #### Using @storybook/addon-coverage
 
-For select frameworks with Webpack (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
+For select frameworks (React, Preact, HTML, Web components, Svelte and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
 
 Install `@storybook/addon-coverage`:
 
@@ -325,11 +326,13 @@ module.exports = {
 };
 ```
 
-The addon has default options that might suffice to your project, however if you want to customize the addon you can see how it's done [here](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
+The addon has default options that might suffice for your project, and it accepts an [options object for project-specific configuration](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
 
 #### Manually configuring istanbul
 
-Some frameworks or Storybook builders (e.g. Vite) might not automatically accept babel plugins. In that case, you will have to manually configure whatever flavor of [istanbul](https://istanbul.js.org/) (Rollup, Vite, Webpack loader) your project might require. You can find recipes in [this repository](https://github.com/yannbf/storybook-coverage-recipes) that include many different configurations and steps on how to set up coverage in each of them.
+If your framework does not use Babel or Vite, such as Angular, you will have to manually configure whatever flavor of [Istanbul](https://istanbul.js.org/) (Webpack loader, etc.) your project might require. Also, if your project uses Vue or Svelte, you will need to add one extra configuration for nyc.
+
+You can find recipes in [this repository](https://github.com/yannbf/storybook-coverage-recipes) that include many different configurations and steps on how to set up coverage in each of them.
 
 ### 2 - Run tests with --coverage flag
 
@@ -342,6 +345,9 @@ yarn test-storybook --coverage
 The test runner will report the results in the CLI and generate a `coverage/storybook/coverage-storybook.json` file which can be used by `nyc`.
 
 ![](.github/assets/coverage-result.png)
+
+> **Note**
+> If your components are not shown in the report and you're using Vue or Svelte, it's probably because you're missing a .nycrc.json file to specify the file extensions. Use the [recipes](https://github.com/yannbf/storybook-coverage-recipes) for reference on how to set that up.
 
 If you want to generate coverage reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
 
