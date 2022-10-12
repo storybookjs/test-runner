@@ -56,6 +56,10 @@ export const getParsedCliOptions = () => {
     .option(
       '--eject',
       'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'
+    )
+    .option(
+      '--ci',
+      'Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require to be run with --updateSnapshot.'
     );
 
   program.exitOverride();
