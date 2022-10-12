@@ -1,3 +1,28 @@
+# v0.9.0 (Wed Oct 12 2022)
+
+#### 🚀 Enhancement
+
+- feat: add cli option --ci [#204](https://github.com/storybookjs/test-runner/pull/204) ([@italoteix](https://github.com/italoteix))
+
+#### 🐛 Bug Fix
+
+- Upgrade preset-env to latest [#202](https://github.com/storybookjs/test-runner/pull/202) ([@shilman](https://github.com/shilman))
+- Fix nightly check for failures [#197](https://github.com/storybookjs/test-runner/pull/197) ([@yannbf](https://github.com/yannbf))
+- Improve error logging and ensure non-zero exit [#201](https://github.com/storybookjs/test-runner/pull/201) ([@IanVS](https://github.com/IanVS))
+
+#### 📝 Documentation
+
+- Docs: update coverage section now that the addon supports Vite [#205](https://github.com/storybookjs/test-runner/pull/205) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Ítalo Teixeira ([@italoteix](https://github.com/italoteix))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.8.0 (Fri Oct 07 2022)
 
 #### 🚀 Enhancement
