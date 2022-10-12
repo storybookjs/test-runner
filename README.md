@@ -303,11 +303,11 @@ The test runner supports code coverage with the `--coverage` flag or `STORYBOOK_
 
 ### 1 - Instrument the code
 
-Given that your components' code runs in the context of a real browser, they have to be instrumented so that the test runner is able to collect coverage. This is done by configuring [istanbul](https://istanbul.js.org/) in your Storybook. You can achieve that in two different ways:
+Instrumenting the code is an important step, which allows lines of code to be tracked by Storybook. This is normally achieved by using instrumentation libraries such as the [Istanbul Babel plugin](https://github.com/istanbuljs/babel-plugin-istanbul), or its Vite counterpart. In Storybook, you can set up instrumentation in two different ways:
 
 #### Using @storybook/addon-coverage
 
-For select frameworks with Webpack (React, Preact, HTML, Web components and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
+For select frameworks (React, Preact, HTML, Web components, Svelte and Vue) you can use the [@storybook/addon-coverage](https://github.com/storybookjs/addon-coverage) addon, which will automatically configure the plugin for you.
 
 Install `@storybook/addon-coverage`:
 
@@ -325,11 +325,13 @@ module.exports = {
 };
 ```
 
-The addon has default options that might suffice to your project, however if you want to customize the addon you can see how it's done [here](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
+The addon has default options that might suffice for your project, and it accepts an [options object for project-specific configuration](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
 
 #### Manually configuring istanbul
 
-Some frameworks or Storybook builders (e.g. Vite) might not automatically accept babel plugins. In that case, you will have to manually configure whatever flavor of [istanbul](https://istanbul.js.org/) (Rollup, Vite, Webpack loader) your project might require. You can find recipes in [this repository](https://github.com/yannbf/storybook-coverage-recipes) that include many different configurations and steps on how to set up coverage in each of them.
+If your framework does not use Babel or Vite, such as Angular, you will have to manually configure whatever flavor of [Istanbul](https://istanbul.js.org/) (Webpack loader, etc.) your project might require. Also, if your project uses Vue or Svelte, you will need to add one extra configuration for nyc.
+
+You can find recipes in [this repository](https://github.com/yannbf/storybook-coverage-recipes) that include many different configurations and steps on how to set up coverage in each of them.
 
 ### 2 - Run tests with --coverage flag
 
@@ -342,6 +344,9 @@ yarn test-storybook --coverage
 The test runner will report the results in the CLI and generate a `coverage/storybook/coverage-storybook.json` file which can be used by `nyc`.
 
 ![](.github/assets/coverage-result.png)
+
+> **Note**
+> If your components are not shown in the report and you're using Vue or Svelte, it's probably because you're missing a .nycrc.json file to specify the file extensions. Use the [recipes](https://github.com/yannbf/storybook-coverage-recipes) for reference on how to set that up.
 
 If you want to generate coverage reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
 
