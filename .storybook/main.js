@@ -45,4 +45,8 @@ module.exports = {
   core: {
     disableTelemetry: true,
   },
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
+  },
 };
