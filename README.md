@@ -37,6 +37,8 @@ Storybook test runner turns all of your stories into executable tests.
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
   - [Merging test coverage results in wrong coverage](#merging-test-coverage-results-in-wrong-coverage)
 - [Future work](#future-work)
+- [Contributing](#contributing)
+  - [Branch/release structure](#branchrelease-structure)
 
 ## Features
 
@@ -600,3 +602,17 @@ Future plans involve adding support for the following features:
 
 - 📄 Run addon reports
 - ⚙️ Spawning Storybook via the test runner in a single command
+
+---
+
+## Contributing
+
+We welcome contributions to the test runner!
+
+### Branch/release structure
+
+1. All PRs should target the `next` branch, which depends on the `next` version of Storybook.
+2. When merged, a new version of this package will be released on the `next` NPM tag.
+3. If the change contains a bugfix that needs to be patched back to the stable version, please note that in PR description.
+4. PRs labeled `pick` will get cherry-picked back to the `main-prerelease` branch and will generate a release on the `prerelease` npm tag.
+5. Once valided, `prerelease` PRs will get merged back to the `main` branch, which will generate a release on the `latest` npm tag.
