@@ -615,4 +615,4 @@ We welcome contributions to the test runner!
 2. When merged, a new version of this package will be released on the `next` NPM tag.
 3. If the change contains a bugfix that needs to be patched back to the stable version, please note that in PR description.
 4. PRs labeled `pick` will get cherry-picked back to the `main-prerelease` branch and will generate a release on the `prerelease` npm tag.
-5. Once valided, `prerelease` PRs will get merged back to the `main` branch, which will generate a release on the `latest` npm tag.
+5. Once validated, `prerelease` PRs will get merged back to the `main` branch, which will generate a release on the `latest` npm tag.
