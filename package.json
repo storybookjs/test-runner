@@ -112,7 +112,7 @@
     "@babel/template": "^7.14.5",
     "@babel/types": "^7.14.8",
     "@storybook/core-common": "next",
-    "@storybook/csf": "0.0.2--canary.4566f4d.1",
+    "@storybook/csf": "next",
     "@storybook/csf-tools": "next",
     "@storybook/store": "next",
     "can-bind-to-host": "^1.1.1",
