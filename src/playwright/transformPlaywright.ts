@@ -4,6 +4,7 @@ import { userOrAutoTitle } from '@storybook/store';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
+import type { TestPrefixer } from '../csf/transformCsf';
 import dedent from 'ts-dedent';
 
 const filePrefixer = template(`
@@ -68,7 +69,7 @@ export const testPrefixer = template(
   {
     plugins: ['jsx'],
   }
-);
+) as any as TestPrefixer;
 
 const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
@@ -80,7 +81,6 @@ const makeTitleFactory = (filename: string) => {
 export const transformPlaywright = (src: string, filename: string) => {
   const result = transformCsf(src, {
     filePrefixer,
-    // @ts-ignore
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,

@@ -15,7 +15,7 @@ export interface TestContext {
 }
 type TemplateResult = t.Statement | t.Statement[];
 type FilePrefixer = () => TemplateResult;
-type TestPrefixer = (context: TestContext) => TemplateResult;
+export type TestPrefixer = (context: TestContext) => TemplateResult;
 
 interface TransformOptions {
   clearBody?: boolean;
