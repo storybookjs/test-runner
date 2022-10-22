@@ -132,7 +132,7 @@
     "ts-dedent": "^2.0.0"
   },
   "auto": {
-    "prereleaseBranches": ["next", "main-prerelease"],
+    "prereleaseBranches": ["next", "prerelease"],
     "plugins": [
       "npm",
       "released"
