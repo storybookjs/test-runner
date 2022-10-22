@@ -2068,7 +2068,7 @@
     remark-slug "^6.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-essentials@^7.0.0-alpha.41":
+"@storybook/addon-essentials@next":
   version "7.0.0-alpha.41"
   resolved "https://registry.yarnpkg.com/@storybook/addon-essentials/-/addon-essentials-7.0.0-alpha.41.tgz#549afaf8201cf8beba989d098599535d87fd6c9d"
   integrity sha512-Nx1qr/bW0uGt1xtenr87QmrEg1BPaYn0cuxBEfiGMWuHgv8RvSuyOCRsl9I4155PJ73FqYo0/xx0RJMn9iRsbQ==
@@ -2097,7 +2097,7 @@
     "@storybook/core-events" "7.0.0-alpha.41"
     global "^4.4.0"
 
-"@storybook/addon-interactions@^7.0.0-alpha.41":
+"@storybook/addon-interactions@next":
   version "7.0.0-alpha.41"
   resolved "https://registry.yarnpkg.com/@storybook/addon-interactions/-/addon-interactions-7.0.0-alpha.41.tgz#14907e695e9c3a8f9a948293585d4e2d915ade54"
   integrity sha512-SJZ/5N6CJVypDCHNqf5XX5jy/2My4f9qVkUHceNCH2wvF2mi/WxboSW8W9K7yk45euShR3+l7qkS0hL9ieqF7g==
@@ -2499,7 +2499,7 @@
     regenerator-runtime "^0.13.7"
     util-deprecate "^1.0.2"
 
-"@storybook/core-common@7.0.0-alpha.41", "@storybook/core-common@^7.0.0-alpha.41":
+"@storybook/core-common@7.0.0-alpha.41", "@storybook/core-common@next":
   version "7.0.0-alpha.41"
   resolved "https://registry.yarnpkg.com/@storybook/core-common/-/core-common-7.0.0-alpha.41.tgz#acc773316c988c1da29b663876ca530589a34242"
   integrity sha512-aWl8HCoQti9BeiGo7f2AqN2ZfiC+vNL4JK4NS+HJrJNB6Dc5n798vSQHeO76qtzbUwn8G+le4nkXUaSPt/hbXA==
@@ -2599,7 +2599,7 @@
     "@types/node" "^16.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/csf-tools@7.0.0-alpha.41", "@storybook/csf-tools@^7.0.0-alpha.41":
+"@storybook/csf-tools@7.0.0-alpha.41", "@storybook/csf-tools@next":
   version "7.0.0-alpha.41"
   resolved "https://registry.yarnpkg.com/@storybook/csf-tools/-/csf-tools-7.0.0-alpha.41.tgz#6a5bb5a50d2d35c395aace12138f119a95dfe44b"
   integrity sha512-N5NY1RIlTNgcFZ1WVH3S6wfff4+aUceb1A2Qqhxls66BMrzbz/TrIZoROtsD/KLET9GEJden3RBYV++T7SdkhA==
@@ -2786,7 +2786,7 @@
     "@storybook/react" "7.0.0-alpha.41"
     "@types/node" "^16.0.0"
 
-"@storybook/react@7.0.0-alpha.41", "@storybook/react@^7.0.0-alpha.41":
+"@storybook/react@7.0.0-alpha.41", "@storybook/react@next":
   version "7.0.0-alpha.41"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-7.0.0-alpha.41.tgz#390f4a4d2fabccacbb5987ad9916f623a4032ee5"
   integrity sha512-7Zva0qpu1dTliEXpBDW/WewRu+20ptwXObQGJfM6LXbrASrigNqZ2N5ozAMcQ3bxp6YN2UtDLA/qM3wsbRzqbg==
@@ -2850,7 +2850,7 @@
     lodash "^4.17.21"
     prettier ">=2.2.1 <=2.3.0"
 
-"@storybook/store@7.0.0-alpha.41", "@storybook/store@^7.0.0-alpha.41":
+"@storybook/store@7.0.0-alpha.41", "@storybook/store@next":
   version "7.0.0-alpha.41"
   resolved "https://registry.yarnpkg.com/@storybook/store/-/store-7.0.0-alpha.41.tgz#dc269538479a350c2897e48050b6f891a1b030d0"
   integrity sha512-FuubkWU8WNGCma6VcGP7FjU/EpJsFU2Fqj0BUyPkyUAxfCjFceSnYXUbx2FNvJA1GOKmrLYEToYnOLndNH6Fmg==
@@ -7450,7 +7450,7 @@ jest-changed-files@^28.1.3:
     execa "^5.0.0"
     p-limit "^3.1.0"
 
-jest-circus@^28.1.3:
+jest-circus@^28.0.0, jest-circus@^28.1.3:
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/jest-circus/-/jest-circus-28.1.3.tgz#d14bd11cf8ee1a03d69902dc47b6bd4634ee00e4"
   integrity sha512-cZ+eS5zc79MBwt+IhQhiEp0OeBddpc1n8MBo1nMB8A7oPMKEO+Sre+wHaLJexQUj9Ya/8NOBY0RESUgYjB6fow==
@@ -7569,7 +7569,7 @@ jest-each@^28.1.3:
     jest-util "^28.1.3"
     pretty-format "^28.1.3"
 
-jest-environment-node@^28.1.3:
+jest-environment-node@^28.0.0, jest-environment-node@^28.1.3:
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/jest-environment-node/-/jest-environment-node-28.1.3.tgz#7e74fe40eb645b9d56c0c4b70ca4357faa349be5"
   integrity sha512-ugP6XOhEpjAEhGYvp5Xj989ns5cB1K6ZdjBYuS30umT4CQEETaxSiPcZ/E1kFktX4GkrcM4qu07IIlDYX1gp+A==
