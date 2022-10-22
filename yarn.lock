@@ -2633,6 +2633,15 @@
   dependencies:
     lodash "^4.17.15"
 
+"@storybook/csf@next":
+  version "0.0.2-next.0"
+  resolved "https://registry.yarnpkg.com/@storybook/csf/-/csf-0.0.2-next.0.tgz#114f51645d10a3cf8486999802eed4393f1ab54c"
+  integrity sha512-1LG7EvTVOuU7g4sgKB3UWbs3WrxiQNlGTIZ9tz65CKLu7OumJUG8lyS6mkwRtGEyTi5PI8hfYxeCu79yzyv8rg==
+  dependencies:
+    expect-type "^0.14.2"
+    lodash "^4.17.15"
+    type-fest "^2.19.0"
+
 "@storybook/docs-mdx@0.0.1-canary.12433cf.0":
   version "0.0.1-canary.12433cf.0"
   resolved "https://registry.yarnpkg.com/@storybook/docs-mdx/-/docs-mdx-0.0.1-canary.12433cf.0.tgz#054edfc4dc4fe2dfc311c7d9e4721f70e2dd7e0c"
@@ -5858,6 +5867,11 @@ expect-playwright@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/expect-playwright/-/expect-playwright-0.8.0.tgz#6d4ebe0bdbdd3c1693d880d97153b96a129ae4e8"
   integrity sha512-+kn8561vHAY+dt+0gMqqj1oY+g5xWrsuGMk4QGxotT2WS545nVqqjs37z6hrYfIuucwqthzwJfCJUEYqixyljg==
+
+expect-type@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/expect-type/-/expect-type-0.14.2.tgz#3924d0e596455a9b27af48e8a99c582cdd4506eb"
+  integrity sha512-ed3+tr5ujbIYXZ8Pl/VgIphwJQ0q5tBLGGdn7Zvwt1WyPBRX83xjT5pT77P/GkuQbctx0K2ZNSSan7eruJqTCQ==
 
 expect@^28.1.3:
   version "28.1.3"
