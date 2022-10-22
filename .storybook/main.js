@@ -39,10 +39,14 @@ module.exports = {
   stories,
   addons,
   features: {
-    storyStoreV7: process.env.STORY_STORE_V7 ? true : false,
+    storyStoreV7: process.env.STORY_STORE_V7 === 'false' ? false : true,
     buildStoriesJson: true,
   },
   core: {
     disableTelemetry: true,
+  },
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
   },
 };
