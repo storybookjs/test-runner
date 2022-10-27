@@ -32,7 +32,7 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
-      `"<rootDir>/stories/basic/**/*.@(mdx|stories.mdx|stories.tsx|stories.ts|stories.jsx|stories.js)"`
+      `"<rootDir>/stories\\\\basic\\\\**\\\\*.@(mdx|stories.mdx|stories.tsx|stories.ts|stories.jsx|stories.js)"`
     );
   });
 
@@ -44,7 +44,7 @@ describe('getStorybookMetadata', () => {
     jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
-    expect(storiesPaths).toMatchInlineSnapshot(`"<rootDir>/**/stories/*.stories.@(js|ts)"`);
+    expect(storiesPaths).toMatchInlineSnapshot(`"<rootDir>/**\\\\stories\\\\*.stories.@(js|ts)"`);
   });
 
   it('should return storiesPath from mixed CSF2 and CSF3 style config', () => {
@@ -62,7 +62,7 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
-      `"<rootDir>/stories/basic/**/*.@(mdx|stories.mdx|stories.tsx|stories.ts|stories.jsx|stories.js);<rootDir>/stories/complex/*.stories.@(js|ts)"`
+      `"<rootDir>/stories\\\\basic\\\\**\\\\*.@(mdx|stories.mdx|stories.tsx|stories.ts|stories.jsx|stories.js);<rootDir>/stories\\\\complex\\\\*.stories.@(js|ts)"`
     );
   });
 

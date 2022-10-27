@@ -28,7 +28,12 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-header": "describe(\\"Example/Header\\", () => {
+          "example-header": "import global from 'global';
+
+        const {
+          setupPage
+        } = require('@storybook/test-runner');
+        describe(\\"Example/Header\\", () => {
           describe(\\"Logged In\\", () => {
             it(\\"test\\", async () => {
               const testFn = async () => {
@@ -152,7 +157,12 @@ describe('Playwright Json', () => {
             });
           });
         });",
-          "example-page": "describe(\\"Example/Page\\", () => {
+          "example-page": "import global from 'global';
+
+        const {
+          setupPage
+        } = require('@storybook/test-runner');
+        describe(\\"Example/Page\\", () => {
           describe(\\"Logged In\\", () => {
             it(\\"test\\", async () => {
               const testFn = async () => {
@@ -240,7 +250,12 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-page": "describe(\\"Example/Page\\", () => {
+          "example-page": "import global from 'global';
+
+        const {
+          setupPage
+        } = require('@storybook/test-runner');
+        describe(\\"Example/Page\\", () => {
           describe(\\"Logged In\\", () => {
             it(\\"test\\", async () => {
               const testFn = async () => {
@@ -356,7 +371,12 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-header": "describe(\\"Example/Header\\", () => {
+          "example-header": "import global from 'global';
+
+        const {
+          setupPage
+        } = require('@storybook/test-runner');
+        describe(\\"Example/Header\\", () => {
           describe(\\"Logged In\\", () => {
             it(\\"test\\", async () => {
               const testFn = async () => {
@@ -480,7 +500,12 @@ describe('Playwright Json', () => {
             });
           });
         });",
-          "example-page": "describe(\\"Example/Page\\", () => {
+          "example-page": "import global from 'global';
+
+        const {
+          setupPage
+        } = require('@storybook/test-runner');
+        describe(\\"Example/Page\\", () => {
           describe(\\"Logged In\\", () => {
             it(\\"test\\", async () => {
               const testFn = async () => {
@@ -581,7 +606,12 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-page": "describe(\\"Example/Page\\", () => {
+          "example-page": "import global from 'global';
+
+        const {
+          setupPage
+        } = require('@storybook/test-runner');
+        describe(\\"Example/Page\\", () => {
           describe(\\"Logged In\\", () => {
             it(\\"test\\", async () => {
               const testFn = async () => {
