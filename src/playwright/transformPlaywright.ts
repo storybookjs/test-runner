@@ -8,7 +8,7 @@ import type { TestPrefixer } from '../csf/transformCsf';
 import dedent from 'ts-dedent';
 
 export const filePrefixer = template(`
-  import global from 'global';
+  const global = require('global');
   const { setupPage } = require('@storybook/test-runner');
 `);
 
