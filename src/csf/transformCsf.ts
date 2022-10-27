@@ -2,7 +2,7 @@
 import { loadCsf } from '@storybook/csf-tools';
 import * as t from '@babel/types';
 import generate from '@babel/generator';
-import { toId, storyNameFromExport } from '@storybook/csf';
+import { storyNameFromExport, toId } from '@storybook/csf';
 import dedent from 'ts-dedent';
 
 const logger = console;
@@ -81,7 +81,7 @@ const makeBeforeEach = (beforeEachPrefixer: FilePrefixer) => {
   return t.expressionStatement(t.callExpression(t.identifier('beforeEach'), [stmt.expression]));
 };
 
-const makeArray = (templateResult: TemplateResult) =>
+export const makeArray = (templateResult: TemplateResult) =>
   Array.isArray(templateResult) ? templateResult : [templateResult];
 
 export const transformCsf = (

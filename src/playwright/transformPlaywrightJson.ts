@@ -1,8 +1,9 @@
 import * as t from '@babel/types';
 import generate from '@babel/generator';
 import { ComponentTitle, StoryId, StoryName, toId } from '@storybook/csf';
-
-import { testPrefixer } from './transformPlaywright';
+import dedent from 'ts-dedent';
+import { filePrefixer, testPrefixer } from './transformPlaywright';
+import { makeArray } from '../csf/transformCsf';
 
 const makeTest = (entry: V4Entry): t.Statement => {
   const result: any = testPrefixer({
@@ -27,7 +28,12 @@ const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
-type V4Entry = { type?: 'story' | 'docs'; id: StoryId; name: StoryName; title: ComponentTitle };
+type V4Entry = {
+  type?: 'story' | 'docs';
+  id: StoryId;
+  name: StoryName;
+  title: ComponentTitle;
+};
 type V4Index = {
   v: 4;
   entries: Record<StoryId, V4Entry>;
@@ -87,7 +93,10 @@ export const transformPlaywrightJson = (index: Record<string, any>) => {
       const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
       const program = t.program([makeDescribe(stories[0].title, storyTests)]);
 
-      const { code } = generate(program, {});
+      const { code: testCode } = generate(program, {});
+
+      const { code: prefixCode } = generate(t.program(makeArray(filePrefixer())), {});
+      const code = dedent`${prefixCode}\n${testCode}`;
 
       acc[titleId] = code;
     }
