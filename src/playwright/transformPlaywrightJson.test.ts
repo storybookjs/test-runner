@@ -28,7 +28,7 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-header": "import global from 'global';
+          "example-header": "const global = require('global');
 
         const {
           setupPage
@@ -157,7 +157,7 @@ describe('Playwright Json', () => {
             });
           });
         });",
-          "example-page": "import global from 'global';
+          "example-page": "const global = require('global');
 
         const {
           setupPage
@@ -250,7 +250,7 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-page": "import global from 'global';
+          "example-page": "const global = require('global');
 
         const {
           setupPage
@@ -371,7 +371,7 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-header": "import global from 'global';
+          "example-header": "const global = require('global');
 
         const {
           setupPage
@@ -500,7 +500,7 @@ describe('Playwright Json', () => {
             });
           });
         });",
-          "example-page": "import global from 'global';
+          "example-page": "const global = require('global');
 
         const {
           setupPage
@@ -606,7 +606,7 @@ describe('Playwright Json', () => {
       };
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         Object {
-          "example-page": "import global from 'global';
+          "example-page": "const global = require('global');
 
         const {
           setupPage
