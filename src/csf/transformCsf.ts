@@ -14,7 +14,7 @@ export interface TestContext {
   id: t.Literal;
 }
 type TemplateResult = t.Statement | t.Statement[];
-type FilePrefixer = () => TemplateResult;
+export type FilePrefixer = () => TemplateResult;
 export type TestPrefixer = (context: TestContext) => TemplateResult;
 
 interface TransformOptions {

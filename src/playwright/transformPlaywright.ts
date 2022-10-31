@@ -4,13 +4,13 @@ import { userOrAutoTitle } from '@storybook/store';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
-import type { TestPrefixer } from '../csf/transformCsf';
+import type { FilePrefixer, TestPrefixer } from '../csf/transformCsf';
 import dedent from 'ts-dedent';
 
 export const filePrefixer = template(`
   const global = require('global');
   const { setupPage } = require('@storybook/test-runner');
-`);
+`) as any as FilePrefixer;
 
 const coverageErrorMessage = dedent`
   [Test runner] An error occurred when evaluating code coverage:

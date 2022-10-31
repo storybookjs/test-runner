@@ -47,7 +47,7 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
-      import global from 'global';
+      const global = require('global');
 
       const {
         setupPage
@@ -130,7 +130,7 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
-      import global from 'global';
+      const global = require('global');
 
       const {
         setupPage
@@ -214,7 +214,7 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
-      import global from 'global';
+      const global = require('global');
 
       const {
         setupPage
