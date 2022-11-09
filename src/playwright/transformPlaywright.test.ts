@@ -47,12 +47,6 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
-      import global from 'global';
-
-      const {
-        setupPage
-      } = require('@storybook/test-runner');
-
       if (!require.main) {
         describe("Example/foo/bar", () => {
           describe("A", () => {
@@ -73,8 +67,8 @@ describe('Playwright', () => {
                   });
                 });
         
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
         
                 const result = await page.evaluate(({
@@ -84,11 +78,11 @@ describe('Playwright', () => {
                   id: "example-foo-bar--a"
                 });
         
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
         
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
         
                   if (!isCoverageSetupCorrectly) {
@@ -107,8 +101,9 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -130,12 +125,6 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
-      import global from 'global';
-
-      const {
-        setupPage
-      } = require('@storybook/test-runner');
-
       if (!require.main) {
         describe("Example/foo/bar", () => {
           describe("A", () => {
@@ -156,8 +145,8 @@ describe('Playwright', () => {
                   });
                 });
         
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
         
                 const result = await page.evaluate(({
@@ -167,11 +156,11 @@ describe('Playwright', () => {
                   id: "example-foo-bar--a"
                 });
         
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
         
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
         
                   if (!isCoverageSetupCorrectly) {
@@ -190,8 +179,9 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -214,12 +204,6 @@ describe('Playwright', () => {
         filename
       )
     ).toMatchInlineSnapshot(`
-      import global from 'global';
-
-      const {
-        setupPage
-      } = require('@storybook/test-runner');
-
       if (!require.main) {
         describe("Example/Header", () => {
           describe("A", () => {
@@ -240,8 +224,8 @@ describe('Playwright', () => {
                   });
                 });
         
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
         
                 const result = await page.evaluate(({
@@ -251,11 +235,11 @@ describe('Playwright', () => {
                   id: "example-header--a"
                 });
         
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
         
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
         
                   if (!isCoverageSetupCorrectly) {
@@ -274,8 +258,9 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;

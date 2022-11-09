@@ -1,4 +1,3 @@
-import global from 'global';
 import type { Page } from 'playwright';
 import type { StoryContext } from '@storybook/csf';
 
@@ -17,11 +16,11 @@ export interface TestRunnerConfig {
 }
 
 export const setPreRender = (preRender: TestHook) => {
-  global.__sbPreRender = preRender;
+  globalThis.__sbPreRender = preRender;
 };
 
 export const setPostRender = (postRender: TestHook) => {
-  global.__sbPostRender = postRender;
+  globalThis.__sbPostRender = postRender;
 };
 
 export const getStoryContext = async (page: Page, context: TestContext): Promise<StoryContext> => {
