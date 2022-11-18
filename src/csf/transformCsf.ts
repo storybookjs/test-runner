@@ -5,8 +5,6 @@ import generate from '@babel/generator';
 import { toId, storyNameFromExport } from '@storybook/csf';
 import dedent from 'ts-dedent';
 
-const logger = console;
-
 export interface TestContext {
   storyExport?: t.Identifier;
   name: t.Literal;
@@ -15,11 +13,10 @@ export interface TestContext {
 }
 type TemplateResult = t.Statement | t.Statement[];
 type FilePrefixer = () => TemplateResult;
-type TestPrefixer = (context: TestContext) => TemplateResult;
+export type TestPrefixer = (context: TestContext) => TemplateResult;
 
 interface TransformOptions {
   clearBody?: boolean;
-  filePrefixer?: FilePrefixer;
   beforeEachPrefixer?: FilePrefixer;
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
@@ -87,7 +84,6 @@ const makeArray = (templateResult: TemplateResult) =>
 export const transformCsf = (
   code: string,
   {
-    filePrefixer,
     clearBody = false,
     testPrefixer,
     beforeEachPrefixer,
@@ -124,11 +120,6 @@ export const transformCsf = (
 
   let result = '';
 
-  // FIXME: insert between imports
-  if (filePrefixer) {
-    const { code: prefixCode } = generate(t.program(makeArray(filePrefixer())), {});
-    result = `${prefixCode}\n`;
-  }
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
     const describe = makeDescribe(

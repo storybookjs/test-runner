@@ -116,7 +116,6 @@
     "can-bind-to-host": "^1.1.1",
     "commander": "^9.0.0",
     "expect-playwright": "^0.8.0",
-    "global": "^4.4.0",
     "jest": "^28.0.0",
     "jest-junit": "^14.0.0",
     "jest-playwright-preset": "^2.0.0",
