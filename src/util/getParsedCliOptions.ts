@@ -60,6 +60,10 @@ export const getParsedCliOptions = () => {
     .option(
       '--ci',
       'Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require to be run with --updateSnapshot.'
+    )
+    .option(
+      '--headers <headers>',
+      'Additional headers passed to storybook endpoint. Useful for remote storybook deployments behind Basic Auth.'
     );
 
   program.exitOverride();

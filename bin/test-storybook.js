@@ -123,9 +123,9 @@ async function executeJestPlaywright(args) {
   await jest.run(argv);
 }
 
-async function checkStorybook(url) {
+async function checkStorybook(url, headers) {
   try {
-    const res = await fetch(url, { method: 'HEAD' });
+    const res = await fetch(url, { method: 'HEAD', headers });
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
@@ -223,7 +223,8 @@ const main = async () => {
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
-  await checkStorybook(rawTargetURL);
+  const headers = !!runnerOptions.headers ? JSON.parse(runnerOptions.headers) : {};
+  await checkStorybook(rawTargetURL, headers);
 
   const targetURL = sanitizeURL(rawTargetURL);
 

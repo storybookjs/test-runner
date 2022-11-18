@@ -10,6 +10,10 @@ type CliOptions = {
     coverage?: boolean;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
+    /**
+     * Stringified JSON
+     */
+    headers?: string;
   };
   jestOptions: string[];
 };
@@ -24,6 +28,7 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'url',
   'coverage',
   'junit',
+  'headers',
 ];
 
 export const getCliOptions = () => {
