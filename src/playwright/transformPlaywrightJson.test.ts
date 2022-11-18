@@ -47,8 +47,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -58,11 +58,11 @@ describe('Playwright Json', () => {
                   id: \\"example-header--logged-in\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -81,8 +81,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -108,8 +109,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -119,11 +120,11 @@ describe('Playwright Json', () => {
                   id: \\"example-header--logged-out\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -142,8 +143,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged Out\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -171,8 +173,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -182,11 +184,11 @@ describe('Playwright Json', () => {
                   id: \\"example-page--logged-in\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -205,8 +207,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -259,8 +262,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -270,11 +273,11 @@ describe('Playwright Json', () => {
                   id: \\"example-page--logged-in\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -293,8 +296,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -375,8 +379,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -386,11 +390,11 @@ describe('Playwright Json', () => {
                   id: \\"example-header--logged-in\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -409,8 +413,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -436,8 +441,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -447,11 +452,11 @@ describe('Playwright Json', () => {
                   id: \\"example-header--logged-out\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -470,8 +475,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged Out\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -499,8 +505,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -510,11 +516,11 @@ describe('Playwright Json', () => {
                   id: \\"example-page--logged-in\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -533,8 +539,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
@@ -600,8 +607,8 @@ describe('Playwright Json', () => {
                   });
                 });
 
-                if (global.__sbPreRender) {
-                  await global.__sbPreRender(page, context);
+                if (globalThis.__sbPreRender) {
+                  await globalThis.__sbPreRender(page, context);
                 }
 
                 const result = await page.evaluate(({
@@ -611,11 +618,11 @@ describe('Playwright Json', () => {
                   id: \\"example-page--logged-in\\"
                 });
 
-                if (global.__sbPostRender) {
-                  await global.__sbPostRender(page, context);
+                if (globalThis.__sbPostRender) {
+                  await globalThis.__sbPostRender(page, context);
                 }
 
-                if (global.__sbCollectCoverage) {
+                if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
 
                   if (!isCoverageSetupCorrectly) {
@@ -634,8 +641,9 @@ describe('Playwright Json', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await setupPage(global.page);
+                  await globalThis.__sbSetupPage(globalThis.page);
                   await testFn();
                 } else {
                   throw err;
