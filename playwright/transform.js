@@ -1,19 +1,15 @@
-const { transform: babelTransform } = require('@babel/core');
-const { transformPlaywright } = require('../dist/cjs/playwright/transformPlaywright');
+const { transformSync: swcTransform } = require('@swc/core');
+const { transformPlaywright } = require('../dist/playwright/transformPlaywright');
 
 module.exports = {
   process(src, filename) {
     const csfTest = transformPlaywright(src, filename);
 
-    const result = babelTransform(csfTest, {
+    const result = swcTransform(csfTest, {
       filename,
-      babelrc: false,
-      configFile: false,
-      presets: [
-        ['@babel/preset-env', { targets: { node: 'current' } }],
-        '@babel/preset-typescript',
-        '@babel/preset-react',
-      ],
+      module: {
+        type: 'commonjs',
+      },
     });
 
     return { code: result ? result.code : src };

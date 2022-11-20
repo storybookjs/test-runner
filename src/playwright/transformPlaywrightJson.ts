@@ -86,7 +86,7 @@ export const transformPlaywrightJson = (index: Record<string, any>) => {
     if (stories.length) {
       const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
       const program = t.program([makeDescribe(stories[0].title, storyTests)]);
-
+      // @ts-ignore
       const { code } = generate(program, {});
 
       acc[titleId] = code;

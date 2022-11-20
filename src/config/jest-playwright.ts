@@ -15,12 +15,12 @@ import path from 'path';
 const getJestPlaywrightConfig = () => {
   const presetBasePath = path.dirname(
     require.resolve('jest-playwright-preset', {
-      paths: [path.join(__dirname, '../../node_modules')],
+      paths: [path.join(__dirname, '../node_modules')],
     })
   );
   const expectPlaywrightPath = path.dirname(
     require.resolve('expect-playwright', {
-      paths: [path.join(__dirname, '../../node_modules')],
+      paths: [path.join(__dirname, '../node_modules')],
     })
   );
   return {
@@ -55,7 +55,7 @@ export const getJestConfig = () => {
     testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
     transform: {
       '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
-      '^.+\\.[jt]sx?$': 'babel-jest',
+      '^.+\\.[jt]sx?$': '@swc/jest',
     },
     snapshotSerializers: ['jest-serializer-html'],
     testEnvironmentOptions: {

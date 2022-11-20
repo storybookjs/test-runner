@@ -1,6 +1,6 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { getStoryContext } from '../dist/cjs/playwright/hooks';
-import type { TestRunnerConfig } from '../dist/ts';
+import { getStoryContext } from '../dist/playwright/hooks';
+import type { TestRunnerConfig } from '../dist';
 
 const snapshotsDir = process.env.SNAPSHOTS_DIR || '__snapshots__';
 const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;
