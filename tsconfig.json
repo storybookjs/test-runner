@@ -13,7 +13,7 @@
     "noImplicitAny": true,
     "rootDir": "./src",
     "skipLibCheck": true,
-    "target": "es5",
+    "target": "es6",
     "types": ["jest", "node"],
     "moduleResolution": "node"
   },

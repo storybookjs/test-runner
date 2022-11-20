@@ -127,6 +127,7 @@ export const transformCsf = (
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
     );
+    // @ts-ignore
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
