@@ -23,11 +23,9 @@
     "test-storybook": "./dist/test-storybook.js"
   },
   "files": [
-    "bin",
-    "dist/**/*",
+    "dist",
     "README.md",
     "playwright",
-    "*.js",
     "*.d.ts"
   ],
   "scripts": {
