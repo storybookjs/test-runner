@@ -4,12 +4,8 @@ import { userOrAutoTitle } from '@storybook/store';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
+import type { TestPrefixer } from '../csf/transformCsf';
 import dedent from 'ts-dedent';
-
-const filePrefixer = template(`
-  import global from 'global';
-  const { setupPage } = require('@storybook/test-runner');
-`);
 
 const coverageErrorMessage = dedent`
   [Test runner] An error occurred when evaluating code coverage:
@@ -28,19 +24,19 @@ export const testPrefixer = template(
           page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
         });
 
-        if(global.__sbPreRender) {
-          await global.__sbPreRender(page, context);
+        if(globalThis.__sbPreRender) {
+          await globalThis.__sbPreRender(page, context);
         }
 
         const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
           id: %%id%%,
         });
   
-        if(global.__sbPostRender) {
-          await global.__sbPostRender(page, context);
+        if(globalThis.__sbPostRender) {
+          await globalThis.__sbPostRender(page, context);
         }
 
-        if(global.__sbCollectCoverage) {
+        if(globalThis.__sbCollectCoverage) {
           const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
           if (!isCoverageSetupCorrectly) {
             throw new Error(\`${coverageErrorMessage}\`);
@@ -56,8 +52,9 @@ export const testPrefixer = template(
         await testFn();
       } catch(err) {
         if(err.toString().includes('Execution context was destroyed')) {
+          console.log(\`An error occurred in the following story, most likely because of a navigation: "\${%%title%%}/\${%%name%%}". Retrying...\`);
           await jestPlaywright.resetPage();
-          await setupPage(global.page);
+          await globalThis.__sbSetupPage(globalThis.page);
           await testFn();
         } else {
           throw err;
@@ -68,7 +65,7 @@ export const testPrefixer = template(
   {
     plugins: ['jsx'],
   }
-);
+) as any as TestPrefixer;
 
 const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
@@ -79,8 +76,6 @@ const makeTitleFactory = (filename: string) => {
 
 export const transformPlaywright = (src: string, filename: string) => {
   const result = transformCsf(src, {
-    filePrefixer,
-    // @ts-ignore
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
