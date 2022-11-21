@@ -1,6 +1,6 @@
 {
   "name": "@storybook/test-runner",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Test runner for Storybook stories",
   "keywords": [
     "storybook-addons",
@@ -117,8 +117,8 @@
     "commander": "^9.0.0",
     "expect-playwright": "^0.8.0",
     "jest": "^28.0.0",
-    "jest-environment-node":"^28.0.0",
-    "jest-circus":"^28.0.0",
+    "jest-environment-node": "^28.0.0",
+    "jest-circus": "^28.0.0",
     "jest-junit": "^14.0.0",
     "jest-playwright-preset": "^2.0.0",
     "jest-runner": "^28.0.0",
