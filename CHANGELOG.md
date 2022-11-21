@@ -1,3 +1,20 @@
+# v0.9.1 (Mon Nov 21 2022)
+
+#### 🐛 Bug Fix
+
+- Release 0.9.1 [#223](https://github.com/storybookjs/test-runner/pull/223) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman))
+- Fix missing dependencies [#209](https://github.com/storybookjs/test-runner/pull/209) ([@bryanjtc](https://github.com/bryanjtc))
+- Make setup-page globally available for index.json mode compatibility [#217](https://github.com/storybookjs/test-runner/pull/217) ([@yannbf](https://github.com/yannbf))
+- Upgrade nightly to next instead of future [#213](https://github.com/storybookjs/test-runner/pull/213) ([@shilman](https://github.com/shilman))
+
+#### Authors: 3
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.9.0 (Wed Oct 12 2022)
 
 #### 🚀 Enhancement
