@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-//@ts-check
 'use strict';
 
 const { execSync } = require('child_process');
@@ -253,6 +252,7 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
+  //@ts-ignore
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
@@ -276,6 +276,7 @@ const main = async () => {
 
   // Use TEST_BROWSERS if set, otherwise get from --browser option
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
+    //@ts-ignore
     process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
   }
   const { hostname } = new URL(targetURL);
