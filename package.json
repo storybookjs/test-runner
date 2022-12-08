@@ -20,7 +20,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "test-storybook": "./dist/test-storybook.js"
+    "test-storybook": "./dist/test-storybook"
   },
   "files": [
     "dist",
@@ -36,7 +36,7 @@
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --no-manager-cache --quiet\"",
     "build-storybook": "storybook build",
     "release": "yarn build && auto shipit",
-    "test-storybook": "node dist/test-storybook.js",
+    "test-storybook": "node dist/test-storybook",
     "test-storybook:failures": "SKIP_SNAPSHOTS=true TEST_FAILURES=1 yarn test-storybook --json --outputFile test-results.json",
     "test-storybook:no-cache": "yarn test-storybook --no-cache",
     "test-storybook:json": "yarn test-storybook --stories-json",

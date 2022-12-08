@@ -1,17 +1,16 @@
 #!/usr/bin/env node
-//@ts-check
 'use strict';
 
-const { execSync } = require('child_process');
-const fetch = require('node-fetch');
-const canBindToHost = require('can-bind-to-host').default;
-const fs = require('fs');
-const dedent = require('ts-dedent').default;
-const path = require('path');
-const tempy = require('tempy');
-const { getCliOptions } = require('../src/util/getCliOptions');
-const { getStorybookMetadata } = require('../src/util/getStorybookMetadata');
-const { transformPlaywrightJson } = require('../src/playwright/transformPlaywrightJson');
+import { execSync } from 'child_process';
+import fetch from 'node-fetch';
+import canBindToHost from 'can-bind-to-host';
+import fs from 'fs';
+import dedent from 'ts-dedent';
+import path from 'path';
+import tempy from 'tempy';
+import { getCliOptions } from '../src/util/getCliOptions';
+import { getStorybookMetadata } from '../src/util/getStorybookMetadata';
+import { transformPlaywrightJson } from '../src/playwright/transformPlaywrightJson';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -220,6 +219,7 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
+  //@ts-ignore
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
@@ -243,6 +243,7 @@ const main = async () => {
 
   // Use TEST_BROWSERS if set, otherwise get from --browser option
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
+    //@ts-ignore
     process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
   }
   const { hostname } = new URL(targetURL);
