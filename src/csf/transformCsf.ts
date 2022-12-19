@@ -126,8 +126,7 @@ export const transformCsf = (
       csf.meta.title,
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
-    );
-    // @ts-ignore
+    ) as babel.types.Node;
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
