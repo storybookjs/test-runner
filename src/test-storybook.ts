@@ -8,9 +8,9 @@ import fs from 'fs';
 import dedent from 'ts-dedent';
 import path from 'path';
 import tempy from 'tempy';
-import { getCliOptions } from '../src/util/getCliOptions';
-import { getStorybookMetadata } from '../src/util/getStorybookMetadata';
-import { transformPlaywrightJson } from '../src/playwright/transformPlaywrightJson';
+import { getCliOptions, JestOptions } from './util/getCliOptions';
+import { getStorybookMetadata } from './util/getStorybookMetadata';
+import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -25,8 +25,8 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const log = (message) => console.log(`[test-storybook] ${message}`);
-const error = (err) => {
+const log = (message: string) => console.log(`[test-storybook] ${message}`);
+const error = (err: { message: any; stack: any }) => {
   if (err instanceof Error) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
   } else {
@@ -35,7 +35,7 @@ const error = (err) => {
 };
 
 // Clean up tmp files globally in case of control-c
-let indexTmpDir;
+let indexTmpDir: fs.PathLike;
 const cleanup = () => {
   if (indexTmpDir) {
     log(`Cleaning up ${indexTmpDir}`);
@@ -82,7 +82,7 @@ const onProcessEnd = () => {
 process.on('SIGINT', onProcessEnd);
 process.on('exit', onProcessEnd);
 
-function sanitizeURL(url) {
+function sanitizeURL(url: string) {
   let finalURL = url;
   // prepend URL protocol if not there
   if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
@@ -103,7 +103,7 @@ function sanitizeURL(url) {
   return finalURL;
 }
 
-async function executeJestPlaywright(args) {
+async function executeJestPlaywright(args: JestOptions) {
   // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
   const jestPath = path.dirname(
     require.resolve('jest', {
@@ -122,7 +122,7 @@ async function executeJestPlaywright(args) {
   await jest.run(argv);
 }
 
-async function checkStorybook(url) {
+async function checkStorybook(url: any) {
   try {
     const res = await fetch(url, { method: 'HEAD' });
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
@@ -140,7 +140,7 @@ async function checkStorybook(url) {
   }
 }
 
-async function getIndexJson(url) {
+async function getIndexJson(url: string | URL) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
 
@@ -174,8 +174,8 @@ async function getIndexJson(url) {
   `);
 }
 
-async function getIndexTempDir(url) {
-  let tmpDir;
+async function getIndexTempDir(url: any) {
+  let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
     const titleIdToTest = transformPlaywrightJson(indexJson);
@@ -219,7 +219,6 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
-  //@ts-ignore
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
@@ -243,8 +242,9 @@ const main = async () => {
 
   // Use TEST_BROWSERS if set, otherwise get from --browser option
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
-    //@ts-ignore
-    process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
+    if (Array.isArray(runnerOptions.browsers))
+      process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
+    else process.env.TEST_BROWSERS = runnerOptions.browsers;
   }
   const { hostname } = new URL(targetURL);
 

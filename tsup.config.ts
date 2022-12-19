@@ -10,12 +10,4 @@ export default defineConfig([
       options.platform = 'node';
     },
   },
-  {
-    clean: true,
-    entry: ['bin'],
-    format: ['cjs', 'esm'],
-    esbuildOptions(options, context) {
-      options.platform = 'node';
-    },
-  },
 ]);

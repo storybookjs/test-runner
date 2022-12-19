@@ -1,4 +1,11 @@
-export const getParsedCliOptions = () => {
+import type { CliOptions } from './getCliOptions';
+
+type ParsedCliOptions = {
+  options: CliOptions['runnerOptions'];
+  extraArgs: CliOptions['jestOptions'];
+};
+
+export const getParsedCliOptions = (): ParsedCliOptions => {
   const { program } = require('commander');
 
   program
