@@ -1,3 +1,15 @@
+# v0.9.2 (Tue Dec 20 2022)
+
+#### 🐛 Bug Fix
+
+- Fix target url in error feedback [#234](https://github.com/storybookjs/test-runner/pull/234) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.9.1 (Mon Nov 21 2022)
 
 #### 🐛 Bug Fix
