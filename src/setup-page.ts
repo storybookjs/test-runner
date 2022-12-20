@@ -23,7 +23,8 @@ const sanitizeURL = (url: string) => {
 };
 
 export const setupPage = async (page: Page) => {
-  const targetURL = new URL('iframe.html', process.env.TARGET_URL).toString();
+  const targetURL = process.env.TARGET_URL;
+
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
   const { packageJson } = await readPackageUp();
@@ -40,7 +41,8 @@ export const setupPage = async (page: Page) => {
     );
   }
 
-  await page.goto(targetURL, { waitUntil: 'load' }).catch((err) => {
+  const iframeURL = new URL('iframe.html', process.env.TARGET_URL).toString();
+  await page.goto(iframeURL, { waitUntil: 'load' }).catch((err) => {
     if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
       const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
       throw new Error(errorMessage);
