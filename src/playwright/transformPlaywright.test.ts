@@ -66,37 +66,29 @@ describe('Playwright', () => {
                     err: err.message
                   });
                 });
-        
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
-        
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
                   id: "example-foo-bar--a"
                 });
-        
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
                 }
-        
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-        
                   if (!isCoverageSetupCorrectly) {
                     throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
         The code in this story is not instrumented, which means the coverage setup is likely not correct.
         More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
                   }
-        
                   await jestPlaywright.saveCoverage(page);
                 }
-        
                 return result;
               };
-        
               try {
                 await testFn();
               } catch (err) {
@@ -144,37 +136,29 @@ describe('Playwright', () => {
                     err: err.message
                   });
                 });
-        
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
-        
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
                   id: "example-foo-bar--a"
                 });
-        
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
                 }
-        
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-        
                   if (!isCoverageSetupCorrectly) {
                     throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
         The code in this story is not instrumented, which means the coverage setup is likely not correct.
         More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
                   }
-        
                   await jestPlaywright.saveCoverage(page);
                 }
-        
                 return result;
               };
-        
               try {
                 await testFn();
               } catch (err) {
@@ -223,37 +207,29 @@ describe('Playwright', () => {
                     err: err.message
                   });
                 });
-        
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
-        
                 const result = await page.evaluate(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--a"
                 });
-        
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
                 }
-        
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-        
                   if (!isCoverageSetupCorrectly) {
                     throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
         The code in this story is not instrumented, which means the coverage setup is likely not correct.
         More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
                   }
-        
                   await jestPlaywright.saveCoverage(page);
                 }
-        
                 return result;
               };
-        
               try {
                 await testFn();
               } catch (err) {
