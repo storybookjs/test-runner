@@ -1,6 +1,6 @@
 import { join, resolve } from 'path';
 import { serverRequire } from '@storybook/core-common';
-import type { StorybookConfig } from '@storybook/core-common';
+import type { StorybookConfig } from '@storybook/types';
 
 let storybookMainConfig: StorybookConfig;
 
