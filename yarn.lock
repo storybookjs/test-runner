@@ -2581,7 +2581,7 @@
     react-refresh "^0.11.0"
     semver "^7.3.7"
 
-"@storybook/preview-api@7.0.0-beta.15", "@storybook/preview-api@next":
+"@storybook/preview-api@7.0.0-beta.15":
   version "7.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@storybook/preview-api/-/preview-api-7.0.0-beta.15.tgz#b40cf896e3c0884a3bcf832ddbe0d3edf469b995"
   integrity sha512-PmDjnOJY1VVYcGtItv9HuXkQXY+bjpz5zy0jO6bgJY7o/9ayqzwOCVszAKE+GeJ3u9RwOlYj5LfRCcbIN5XSqw==
@@ -2687,7 +2687,7 @@
     memoizerific "^1.11.3"
     qs "^6.10.0"
 
-"@storybook/store@7.0.0-beta.15":
+"@storybook/store@7.0.0-beta.15", "@storybook/store@next":
   version "7.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@storybook/store/-/store-7.0.0-beta.15.tgz#4d834f36998c380a322d9c4728ab48791cbdd9f1"
   integrity sha512-XGpxEP9jgp1DB6EgMIaxK3MWR3g9VooOTcqeUMAMbgLV+hiTQVbxaJ3AfSdv0zbmF9bdGUFTpCRIefDx2auMlQ==
@@ -10353,7 +10353,7 @@ webpack-virtual-modules@^0.4.3, webpack-virtual-modules@^0.4.5:
   resolved "https://registry.yarnpkg.com/webpack-virtual-modules/-/webpack-virtual-modules-0.4.6.tgz#3e4008230731f1db078d9cb6f68baf8571182b45"
   integrity sha512-5tyDlKLqPfMqjT3Q9TAqf2YqjwmnUleZwzJi1A5qXnlBCdj2AtOJ6wAWdglTIDOPgOiOrXeBeFcsQ8+aGQ6QbA==
 
-webpack@5, webpack@^5.75.0:
+webpack@5:
   version "5.75.0"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.75.0.tgz#1e440468647b2505860e94c9ff3e44d5b582c152"
   integrity sha512-piaIaoVJlqMsPtX/+3KTTO6jfvrSYgauFVdt8cr9LTHKmcq/AMd4mhzsiP7ZF/PGRNPGA8336jldh9l2Kt2ogQ==

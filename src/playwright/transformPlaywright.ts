@@ -1,6 +1,6 @@
 import { relative } from 'path';
 import template from '@babel/template';
-import { userOrAutoTitle } from '@storybook/preview-api';
+import { userOrAutoTitle } from '@storybook/store';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';

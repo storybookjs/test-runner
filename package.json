@@ -84,8 +84,7 @@
     "storybook": "next",
     "ts-jest": "^28.0.8",
     "typescript": "~4.9.4",
-    "wait-on": "^6.0.0",
-    "webpack": "^5.75.0"
+    "wait-on": "^6.0.0"
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx,css,md}": "prettier --write"
@@ -111,7 +110,7 @@
     "@storybook/core-common": "next",
     "@storybook/csf": "next",
     "@storybook/csf-tools": "next",
-    "@storybook/preview-api": "next",
+    "@storybook/store": "next",
     "can-bind-to-host": "^1.1.1",
     "commander": "^9.0.0",
     "expect-playwright": "^0.8.0",
