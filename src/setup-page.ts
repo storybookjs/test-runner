@@ -63,39 +63,137 @@ export const setupPage = async (page: Page) => {
       const red = (message) => \`\\u001b[31m\${message}\\u001b[39m\`;
       const yellow = (message) => \`\\u001b[33m\${message}\\u001b[39m\`;
       
-      // removes circular references from the object
-      function serializer(replacer, cycleReplacer) {
-        let stack = [],
-          keys = [];
+      // Code taken and adjusted from https://github.com/davidmarkclements/fast-safe-stringify
+      var LIMIT_REPLACE_NODE = '[...]'
+      var CIRCULAR_REPLACE_NODE = '[Circular]'
 
-        if (cycleReplacer == null)
-          cycleReplacer = function (_key, value) {
-            if (stack[0] === value) return '[Circular]';
-            return '[Circular ~.' + keys.slice(0, stack.indexOf(value)).join('.') + ']';
-          };
+      var arr = []
+      var replacerStack = []
 
-        return function (key, value) {
-          if (stack.length > 0) {
-            let thisPos = stack.indexOf(this);
-            ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
-            ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
-            if (~stack.indexOf(value)) value = cycleReplacer.call(this, key, value);
+      function defaultOptions () {
+        return {
+          depthLimit: Number.MAX_SAFE_INTEGER,
+          edgesLimit: Number.MAX_SAFE_INTEGER
+        }
+      }
+
+      // Regular stringify
+      function stringify (obj, replacer, spacer, options) {
+        if (typeof options === 'undefined') {
+          options = defaultOptions()
+        }
+
+        decirc(obj, '', 0, [], undefined, 0, options)
+        var res
+        try {
+          if (replacerStack.length === 0) {
+            res = JSON.stringify(obj, replacer, spacer)
           } else {
-            stack.push(value);
+            res = JSON.stringify(obj, replaceGetterValues(replacer), spacer)
+          }
+        } catch (_) {
+          return JSON.stringify('[unable to serialize, circular reference is too complex to analyze]')
+        } finally {
+          while (arr.length !== 0) {
+            var part = arr.pop()
+            if (part.length === 4) {
+              Object.defineProperty(part[0], part[1], part[3])
+            } else {
+              part[0][part[1]] = part[2]
+            }
+          }
+        }
+        return res
+      }
+
+      function setReplace (replace, val, k, parent) {
+        var propertyDescriptor = Object.getOwnPropertyDescriptor(parent, k)
+        if (propertyDescriptor.get !== undefined) {
+          if (propertyDescriptor.configurable) {
+            Object.defineProperty(parent, k, { value: replace })
+            arr.push([parent, k, val, propertyDescriptor])
+          } else {
+            replacerStack.push([val, k, replace])
+          }
+        } else {
+          parent[k] = replace
+          arr.push([parent, k, val])
+        }
+      }
+
+      function decirc (val, k, edgeIndex, stack, parent, depth, options) {
+        depth += 1
+        var i
+        if (typeof val === 'object' && val !== null) {
+          for (i = 0; i < stack.length; i++) {
+            if (stack[i] === val) {
+              setReplace(CIRCULAR_REPLACE_NODE, val, k, parent)
+              return
+            }
           }
 
-          return replacer == null ? value : replacer.call(this, key, value);
-        };
+          if (
+            typeof options.depthLimit !== 'undefined' &&
+            depth > options.depthLimit
+          ) {
+            setReplace(LIMIT_REPLACE_NODE, val, k, parent)
+            return
+          }
+
+          if (
+            typeof options.edgesLimit !== 'undefined' &&
+            edgeIndex + 1 > options.edgesLimit
+          ) {
+            setReplace(LIMIT_REPLACE_NODE, val, k, parent)
+            return
+          }
+
+          stack.push(val)
+          // Optimize for Arrays. Big arrays could kill the performance otherwise!
+          if (Array.isArray(val)) {
+            for (i = 0; i < val.length; i++) {
+              decirc(val[i], i, i, stack, val, depth, options)
+            }
+          } else {
+            var keys = Object.keys(val)
+            for (i = 0; i < keys.length; i++) {
+              var key = keys[i]
+              decirc(val[key], key, i, stack, val, depth, options)
+            }
+          }
+          stack.pop()
+        }
       }
 
-      function safeStringify(obj, replacer, spaces, cycleReplacer) {
-        return JSON.stringify(obj, serializer(replacer, cycleReplacer), spaces);
+      // wraps replacer function to handle values we couldn't replace
+      // and mark them as replaced value
+      function replaceGetterValues (replacer) {
+        replacer =
+          typeof replacer !== 'undefined'
+            ? replacer
+            : function (k, v) {
+              return v
+            }
+        return function (key, val) {
+          if (replacerStack.length > 0) {
+            for (var i = 0; i < replacerStack.length; i++) {
+              var part = replacerStack[i]
+              if (part[1] === key && part[0] === val) {
+                val = part[2]
+                replacerStack.splice(i, 1)
+                break
+              }
+            }
+          }
+          return replacer.call(this, key, val)
+        }
       }
-
+      // end of fast-safe-stringify code
+      
       function composeMessage(args) {
         if (typeof args === 'undefined') return "undefined";
         if (typeof args === 'string') return args;
-        return safeStringify(args);
+        return stringify(args, null, null, { depthLimit: 5, edgesLimit: 100 });
       }
 
       function truncate(input, limit) {
