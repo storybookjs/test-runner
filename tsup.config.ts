@@ -4,7 +4,7 @@ export default defineConfig([
   {
     clean: true,
     entry: ['./src/**/!(*.{d,test}).{js,jsx,ts,tsx}'],
-    format: ['cjs', 'esm'],
+    format: ['cjs'],
     dts: true,
     esbuildOptions(options, context) {
       options.platform = 'node';
