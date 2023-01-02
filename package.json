@@ -20,7 +20,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "test-storybook": "./dist/test-storybook"
+    "test-storybook": "./dist/test-storybook.js"
   },
   "files": [
     "dist",
