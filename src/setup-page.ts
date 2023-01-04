@@ -41,7 +41,8 @@ export const setupPage = async (page: Page) => {
     );
   }
 
-  const iframeURL = new URL('iframe.html', process.env.TARGET_URL).toString();
+  const pageName = process.env.INSTRUMENT ? 'iframe.html' : 'iframe.html?instrument=true';
+  const iframeURL = new URL(pageName, process.env.TARGET_URL).toString();
   await page.goto(iframeURL, { waitUntil: 'load' }).catch((err) => {
     if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
       const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
