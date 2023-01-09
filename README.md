@@ -135,6 +135,7 @@ Usage: test-storybook [options]
 | `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
 | `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
 | `--ci`                          | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
+| `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3` |
 
 ## Ejecting configuration
 
