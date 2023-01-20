@@ -11,6 +11,7 @@ const path = require('path');
 const tempy = require('tempy');
 const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
 const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
+const { getTestRunnerConfig } = require('../dist/cjs/util/getTestRunnerConfig');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -18,6 +19,8 @@ process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
 process.env.STORYBOOK_TEST_RUNNER = 'true';
 process.env.PUBLIC_URL = '';
+
+let getHttpHeaders = (_url) => Promise.resolve({});
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -125,7 +128,8 @@ async function executeJestPlaywright(args) {
 
 async function checkStorybook(url) {
   try {
-    const res = await fetch(url, { method: 'HEAD' });
+    const headers = await getHttpHeaders(url);
+    const res = await fetch(url, { method: 'HEAD', headers });
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
@@ -144,8 +148,13 @@ async function checkStorybook(url) {
 async function getIndexJson(url) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
+  const headers = await getHttpHeaders(url);
+  const fetchOptions = { headers };
 
-  const [indexRes, storiesRes] = await Promise.all([fetch(indexJsonUrl), fetch(storiesJsonUrl)]);
+  const [indexRes, storiesRes] = await Promise.all([
+    fetch(indexJsonUrl, fetchOptions),
+    fetch(storiesJsonUrl, fetchOptions),
+  ]);
 
   if (indexRes.ok) {
     try {
@@ -219,6 +228,13 @@ const main = async () => {
     process.exit(0);
   }
 
+  process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
+
+  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir);
+  if (testRunnerConfig.getHttpHeaders) {
+    getHttpHeaders = testRunnerConfig.getHttpHeaders;
+  }
+
   // set this flag to skip reporting coverage in watch mode
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
@@ -260,8 +276,6 @@ const main = async () => {
     process.env.TEST_ROOT = indexTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
   }
-
-  process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
   const { storiesPaths, lazyCompilation } = getStorybookMetadata();
   process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;

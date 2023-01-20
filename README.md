@@ -24,6 +24,8 @@ Storybook test runner turns all of your stories into executable tests.
   - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
 - [Experimental test hook API](#experimental-test-hook-api)
+  - [prepare](#prepare)
+  - [getHttpHeaders](#gethttpheaders)
   - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
@@ -401,9 +403,41 @@ To enable use cases like visual or DOM snapshots, the test runner exports test h
 
 There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
 
-The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
+
+Apart from these hooks, there are additional properties you can set in `.storybook/test-runner.js`:
+
+#### prepare
+
+The test-runner has a default `prepare` function which gets the browser in the right environment before testing the stories. You can override this behavior, in case you might want to hack the behavior of the browser. For example, you might want to set a cookie, or add query parameters to the visiting URL, or do some authentication before reaching the Storybook URL. You can do that by overriding the `prepare` function.
+
+The `prepare` function receives an object containing:
+
+- `browserContext`: a [Playwright Browser Context](https://playwright.dev/docs/api/class-browsercontext) instance
+- `page`: a [Playwright Page](https://playwright.dev/docs/api/class-page) instance.
+- `testRunnerConfig`: the test runner configuration object, coming from the `.storybook/test-runner.js`.
+
+For reference, please use the [default `prepare`](https://github.com/storybookjs/test-runner/blob/next/src/setup-page.ts#L12) function as a starting point.
+
+> **NOTE:** If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
+
+#### getHttpHeaders
+
+The test-runner makes a few `fetch` calls to check the status of a Storybook instance, and to get the index of the Storybook's stories. Additionally, it visits a page using Playwright. In all of these scenarios, it's possible, depending on where your Storybook is hosted, that you might need to set some HTTP headers. For example, if your Storybook is hosted behind a basic authentication, you might need to set the `Authorization` header. You can do so by passing a `getHttpHeaders` function to your test-runner config. That function receives the `url` of the fetch calls and page visits, and should return an object with the headers to be set.
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  getHttpHeaders: async (url) => {
+    const token = url.includes('prod') ? 'XYZ' : 'ABC';
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  },
+};
+```
 
 > **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
