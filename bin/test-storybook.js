@@ -104,7 +104,7 @@ function sanitizeURL(url) {
   return finalURL;
 }
 
-async function executeJestPlaywright(args) {
+async function executeJestPlaywright(jestOptions, runnerOptions) {
   // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
   const jestPath = path.dirname(
     require.resolve('jest', {
@@ -112,11 +112,10 @@ async function executeJestPlaywright(args) {
     })
   );
   const jest = require(jestPath);
-  let argv = args.slice(2);
+  let argv = jestOptions.slice(2);
 
-  const jestConfigPath = fs.existsSync('test-runner-jest.config.js')
-    ? 'test-runner-jest.config.js'
-    : path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
+  const jestConfigPath =
+    runnerOptions.runnerDir ?? path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
 
   argv.push('--config', jestConfigPath);
 
@@ -272,7 +271,7 @@ const main = async () => {
     );
   }
 
-  await executeJestPlaywright(jestOptions);
+  await executeJestPlaywright(jestOptions, runnerOptions);
 };
 
 main().catch((e) => {

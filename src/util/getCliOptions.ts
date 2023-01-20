@@ -10,6 +10,7 @@ type CliOptions = {
     coverage?: boolean;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
+    runnerDir?: string;
   };
   jestOptions: string[];
 };
@@ -24,6 +25,7 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'url',
   'coverage',
   'junit',
+  'runnerDir',
 ];
 
 export const getCliOptions = () => {

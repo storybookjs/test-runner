@@ -64,6 +64,10 @@ export const getParsedCliOptions = () => {
     .option(
       '--shard <shardIndex/shardCount>',
       'Splits your test suite across different machines to run in CI.'
+    )
+    .option(
+      '-d, --runnerDir <directory>',
+      'Directory where to load test runner configuration from'
     );
 
   program.exitOverride();
