@@ -60,6 +60,10 @@ export const getParsedCliOptions = () => {
     .option(
       '--ci',
       'Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require to be run with --updateSnapshot.'
+    )
+    .option(
+      '--shard <shardIndex/shardCount>',
+      'Splits your test suite across different machines to run in CI.'
     );
 
   program.exitOverride();
