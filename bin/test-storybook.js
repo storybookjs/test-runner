@@ -115,7 +115,9 @@ async function executeJestPlaywright(jestOptions, runnerOptions) {
   let argv = jestOptions.slice(2);
 
   const jestConfigPath =
-    runnerOptions.runnerDir ?? path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
+    runnerOptions.runnerDir ?? fs.existsSync('test-runner-jest.config.js')
+      ? 'test-runner-jest.config.js'
+      : path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
 
   argv.push('--config', jestConfigPath);
 
