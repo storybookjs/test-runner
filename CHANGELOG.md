@@ -1,3 +1,17 @@
+# v0.9.3 (Fri Jan 20 2023)
+
+#### 🐛 Bug Fix
+
+- feat: add shard cli option [#246](https://github.com/storybookjs/test-runner/pull/246) ([@yannbf](https://github.com/yannbf))
+- feat: add shard cli option [#243](https://github.com/storybookjs/test-runner/pull/243) ([@Niznikr](https://github.com/Niznikr) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Robert Niznik ([@Niznikr](https://github.com/Niznikr))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.9.2 (Tue Dec 20 2022)
 
 #### 🐛 Bug Fix
