@@ -27,7 +27,7 @@ export const getParsedCliOptions = () => {
     .option(
       '--url <url>',
       'Define the URL to run tests in. Useful for custom Storybook URLs',
-      'http://localhost:6006'
+      'http://127.0.0.1:6006'
     )
     .option(
       '--maxWorkers <amount>',
