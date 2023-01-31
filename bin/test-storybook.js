@@ -230,7 +230,7 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir);
+  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || {};
   if (testRunnerConfig.getHttpHeaders) {
     getHttpHeaders = testRunnerConfig.getHttpHeaders;
   }
