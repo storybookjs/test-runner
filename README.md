@@ -429,7 +429,7 @@ test:
   steps:
     - run:
         command: yarn test-storybook --coverage --shard=$(expr $CIRCLE_NODE_INDEX + 1)/$CIRCLE_NODE_TOTAL
-        command: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+        command: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${CIRCLE_NODE_INDEX + 1}.json
 report-coverage:
   steps:
     - run:
@@ -444,7 +444,7 @@ test:
   parallel: 4
   script:
     - yarn test-storybook --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL
-    - mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+    - mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${CI_NODE_INDEX}.json
 report-coverage:
   script:
     - yarn nyc merge coverage/storybook merged-output/merged-coverage.json
