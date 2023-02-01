@@ -14,9 +14,11 @@ import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 const glob_og = require('glob');
 
-const glob = function (pattern, options) {
+const glob = function (pattern: string, options?: any): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    glob_og(pattern, options, (err, files) => (err === null ? resolve(files) : reject(err)));
+    glob_og(pattern, options, (err: Error, files: string[]) =>
+      err === null ? resolve(files) : reject(err)
+    );
   });
 };
 
