@@ -133,7 +133,7 @@ async function checkStorybook(url) {
       
       If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
       
-      yarn test-storybook --url http://localhost:9009
+      yarn test-storybook --url http://127.0.0.1:9009
       
       More info at https://github.com/storybookjs/test-runner#getting-started`
     );
@@ -222,7 +222,7 @@ const main = async () => {
   // set this flag to skip reporting coverage in watch mode
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
-  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
+  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
   await checkStorybook(rawTargetURL);
 
   const targetURL = sanitizeURL(rawTargetURL);

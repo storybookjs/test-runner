@@ -100,9 +100,9 @@ yarn test-storybook
 > **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
 >
 > ```jsx
-> yarn test-storybook --url http://localhost:9009
+> yarn test-storybook --url http://127.0.0.1:9009
 > or
-> TARGET_URL=http://localhost:9009 yarn test-storybook
+> TARGET_URL=http://127.0.0.1:9009 yarn test-storybook
 > ```
 
 ## CLI Options
