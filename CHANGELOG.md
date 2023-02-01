@@ -1,3 +1,20 @@
+# v0.9.4 (Wed Feb 01 2023)
+
+#### 🐛 Bug Fix
+
+- Release 0.9.4 [#258](https://github.com/storybookjs/test-runner/pull/258) ([@yannbf](https://github.com/yannbf))
+- Support other test-runner config extensions [#259](https://github.com/storybookjs/test-runner/pull/259) ([@yannbf](https://github.com/yannbf))
+- Use ipv4 loopback address [#252](https://github.com/storybookjs/test-runner/pull/252) ([@IanVS](https://github.com/IanVS))
+- Fix safe json stringify code [#239](https://github.com/storybookjs/test-runner/pull/239) ([@hansottowirtz](https://github.com/hansottowirtz))
+
+#### Authors: 3
+
+- Hans Otto Wirtz ([@hansottowirtz](https://github.com/hansottowirtz))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.9.3 (Fri Jan 20 2023)
 
 #### 🐛 Bug Fix
