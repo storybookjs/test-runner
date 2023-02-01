@@ -23,6 +23,7 @@ Storybook test runner turns all of your stories into executable tests.
     - [Manually configuring istanbul](#manually-configuring-istanbul)
   - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
+  - [4 - Run tests with --shard flag](#4---run-tests-with---shard-flag)
 - [Experimental test hook API](#experimental-test-hook-api)
   - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
@@ -393,6 +394,62 @@ Here's an example on how to achieve that:
 ```
 
 > NOTE: If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issue when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
+
+### 4 - Run tests with --shard flag
+
+The test-runner collects all coverage in one file `coverage/storybook/coverage-storybook.json`. To split the coverage file you should rename it using the `shard-index`. To report the coverage you should merge the coverage files with the nyc merge command.
+
+Github CI example:
+
+```yml
+test:
+  name: Running Test-storybook (${{ matrix.shard }})
+  strategy:
+    matrix:
+      shard: [1, 2, 3, 4]
+  steps:
+    - name: Testing storybook
+      uses: yarn test-storybook --coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+    - name: Renaming coverage file
+      uses: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+report-coverage:
+  name: Reporting storybook coverage
+  steps:
+    - name: Merging coverage
+      uses: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+    - name: Report coverage
+      uses: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
+Circle CI example:
+
+```yml
+test:
+  parallelism: 4
+  steps:
+    - run:
+        command: yarn test-storybook --coverage --shard=$(expr $CIRCLE_NODE_INDEX + 1)/$CIRCLE_NODE_TOTAL
+        command: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+report-coverage:
+  steps:
+    - run:
+        command: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+        command: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
+Gitlab CI example:
+
+```yml
+test:
+  parallel: 4
+  script:
+    - yarn test-storybook --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL
+    - mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+report-coverage:
+  script:
+    - yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+    - yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
 
 ## Experimental test hook API
 
