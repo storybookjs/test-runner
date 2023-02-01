@@ -13,6 +13,14 @@ const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
 const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
+const glob_og = require('glob');
+
+const glob = function (pattern, options) {
+  return new Promise((resolve, reject) => {
+    glob_og(pattern, options, (err, files) => (err === null ? resolve(files) : reject(err)));
+  });
+};
+
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
@@ -114,9 +122,18 @@ async function executeJestPlaywright(args) {
   const jest = require(jestPath);
   let argv = args.slice(2);
 
-  const jestConfigPath = fs.existsSync('test-runner-jest.config.js')
-    ? 'test-runner-jest.config.js'
-    : path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
+  // jest configs could either come in the root dir, or inside of the Storybook config dir
+  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
+  const [userDefinedJestConfig] = (
+    await Promise.all([
+      glob(path.join(configDir, 'test-runner-jest*')),
+      glob(path.join('test-runner-jest*')),
+    ])
+  ).reduce((a, b) => a.concat(b), []);
+
+  const jestConfigPath =
+    userDefinedJestConfig ||
+    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
   argv.push('--config', jestConfigPath);
 
