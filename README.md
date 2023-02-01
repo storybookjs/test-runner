@@ -97,7 +97,8 @@ yarn storybook
 yarn test-storybook
 ```
 
-> **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
+> **Note**
+> The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
 >
 > ```jsx
 > yarn test-storybook --url http://127.0.0.1:9009
@@ -137,6 +138,9 @@ Usage: test-storybook [options]
 ## Ejecting configuration
 
 The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
+
+> **Note**
+> The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
 
 The configuration file will accept options for two runners:
 
@@ -232,7 +236,8 @@ If you are running tests against a local Storybook but for some reason want to r
 yarn test-storybook --index-json
 ```
 
-> **NOTE:** index.json mode is not compatible with watch mode.
+> **Note**
+> index.json mode is not compatible with watch mode.
 
 ## Running in CI
 
@@ -265,7 +270,8 @@ jobs:
           TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
-> **_NOTE:_** If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
+> **Note**
+> If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
 
 ### 2. Running against locally built Storybooks in CI
 
@@ -297,7 +303,8 @@ jobs:
         run: yarn test-storybook:ci
 ```
 
-> **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
+> **Note**
+> Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
 
 ## Setting up code coverage
 
@@ -389,7 +396,8 @@ Here's an example on how to achieve that:
 }
 ```
 
-> NOTE: If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issue when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
+> **Note**
+> If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issues when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
 
 ## Experimental test hook API
 
@@ -403,7 +411,8 @@ The render functions are async functions that receive a [Playwright Page](https:
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
 
-> **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
+> **Note**
+> These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
 ### DOM snapshot recipe
 
