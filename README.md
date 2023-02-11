@@ -187,7 +187,9 @@ yarn test-storybook --url https://the-storybook-url-here.com
 
 By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's index data, which dependending on your Storybook version is located in a `stories.json` or `index.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and `index.json` mode must be used.
+This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code.
+
+Furthermore, it is not possible to run the test-runner directly against `.mdx` stories or custom CSF dialects like when writing Svelte native stories with [`addon-svelte-csf`](https://github.com/storybookjs/addon-svelte-csf). In these cases `index.json` mode must be used.
 
 <!-- TODO: switch details to 6.4 once Storybook 7.0 becomes default -->
 
