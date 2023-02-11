@@ -189,7 +189,7 @@ By default, the test runner transforms your story files into tests. It also supp
 
 This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code.
 
-Furthermore, it is not possible to run the test-runner directly against `.mdx` stories or custom CSF dialects like when writing Svelte native stories with `addon-svelte-csf`. In these cases `index.json` mode must be used.
+Furthermore, it is not possible to run the test-runner directly against `.mdx` stories or custom CSF dialects like when writing Svelte native stories with [`addon-svelte-csf`](https://github.com/storybookjs/addon-svelte-csf). In these cases `index.json` mode must be used.
 
 <!-- TODO: switch details to 6.4 once Storybook 7.0 becomes default -->
 
