@@ -12,6 +12,7 @@ const tempy = require('tempy');
 const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
 const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
+const semver = require('semver');
 
 const glob_og = require('glob');
 
@@ -78,9 +79,13 @@ async function reportCoverage() {
   // --skip-full in case we only want to show not fully covered code
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
-  execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
-    stdio: 'inherit',
-  });
+  const command = getPackageManagerCommand().exec;
+  execSync(
+    `${command} nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`,
+    {
+      stdio: 'inherit',
+    }
+  );
 }
 
 const onProcessEnd = () => {
@@ -158,6 +163,45 @@ async function checkStorybook(url) {
   }
 }
 
+// Copied from github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L29-35
+function detectPackageManager(dir = '') {
+  return fs.existsSync(path.join(dir, 'pnpm-lock.yaml'))
+    ? 'pnpm'
+    : fs.existsSync(path.join(dir, 'yarn.lock'))
+    ? 'yarn'
+    : 'npm';
+}
+
+// Copied from github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L48-106
+function getPackageManagerCommand(packageManager = detectPackageManager()) {
+  const commands = {
+    npm: () => ({
+      exec: 'npx',
+    }),
+    pnpm: () => {
+      const pnpmVersion = getPackageManagerVersion('pnpm');
+      const useExec = semver.gte(pnpmVersion, '6.13.0');
+
+      return {
+        exec: useExec ? 'pnpm exec' : 'pnpx',
+      };
+    },
+    yarn: () => {
+      const yarnVersion = getPackageManagerVersion('yarn');
+      const useBerry = semver.gte(yarnVersion, '2.0.0');
+      return {
+        exec: useBerry ? 'yarn exec' : 'yarn',
+      };
+    },
+  };
+
+  return commands[packageManager]();
+}
+
+// Copied from https://github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L113-L117
+function getPackageManagerVersion(packageManager = detectPackageManager()) {
+  return execSync(`${packageManager} --version`).toString('utf-8').trim();
+}
 async function getIndexJson(url) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
