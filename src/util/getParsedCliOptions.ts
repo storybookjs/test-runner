@@ -52,6 +52,11 @@ export const getParsedCliOptions = () => {
       '--coverage',
       'Indicates that test coverage information should be collected and reported in the output'
     )
+    .option(
+      '--coverageDirectory <directory>',
+      'Directory where to write coverage report output',
+      'coverage/storybook'
+    )
     .option('--junit', 'Indicates that test information should be reported in a junit file')
     .option(
       '--eject',

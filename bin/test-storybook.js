@@ -59,7 +59,10 @@ async function reportCoverage() {
   }
 
   const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
-  const coverageFolder = path.resolve(process.cwd(), 'coverage/storybook');
+  const coverageFolder = path.resolve(
+    process.cwd(),
+    process.env.STORYBOOK_COVERAGE_DIRECTORY ?? 'coverage/storybook'
+  );
 
   // in case something goes wrong and .nyc_output does not exist, bail
   if (!fs.existsSync(coverageFolderE2E)) {
@@ -248,6 +251,10 @@ const main = async () => {
 
   if (runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
+  }
+
+  if (runnerOptions.coverageDirectory) {
+    process.env.STORYBOOK_COVERAGE_DIRECTORY = runnerOptions.coverageDirectory;
   }
 
   if (runnerOptions.junit) {
