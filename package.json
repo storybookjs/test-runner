@@ -110,7 +110,7 @@
     "@storybook/core-common": "next",
     "@storybook/csf": "next",
     "@storybook/csf-tools": "next",
-    "@storybook/store": "next",
+    "@storybook/preview-api": "next",
     "can-bind-to-host": "^1.1.1",
     "commander": "^9.0.0",
     "expect-playwright": "^0.8.0",
