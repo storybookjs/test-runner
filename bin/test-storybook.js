@@ -14,6 +14,14 @@ const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata'
 const { getTestRunnerConfig } = require('../dist/cjs/util/getTestRunnerConfig');
 const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
 
+const glob_og = require('glob');
+
+const glob = function (pattern, options) {
+  return new Promise((resolve, reject) => {
+    glob_og(pattern, options, (err, files) => (err === null ? resolve(files) : reject(err)));
+  });
+};
+
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
@@ -117,9 +125,18 @@ async function executeJestPlaywright(args) {
   const jest = require(jestPath);
   let argv = args.slice(2);
 
-  const jestConfigPath = fs.existsSync('test-runner-jest.config.js')
-    ? 'test-runner-jest.config.js'
-    : path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
+  // jest configs could either come in the root dir, or inside of the Storybook config dir
+  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
+  const [userDefinedJestConfig] = (
+    await Promise.all([
+      glob(path.join(configDir, 'test-runner-jest*')),
+      glob(path.join('test-runner-jest*')),
+    ])
+  ).reduce((a, b) => a.concat(b), []);
+
+  const jestConfigPath =
+    userDefinedJestConfig ||
+    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
   argv.push('--config', jestConfigPath);
 
@@ -137,7 +154,7 @@ async function checkStorybook(url) {
       
       If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
       
-      yarn test-storybook --url http://localhost:9009
+      yarn test-storybook --url http://127.0.0.1:9009
       
       More info at https://github.com/storybookjs/test-runner#getting-started`
     );
@@ -238,7 +255,7 @@ const main = async () => {
   // set this flag to skip reporting coverage in watch mode
   isWatchMode = jestOptions.watch || jestOptions.watchAll;
 
-  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://localhost:6006';
+  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
   await checkStorybook(rawTargetURL);
 
   const targetURL = sanitizeURL(rawTargetURL);

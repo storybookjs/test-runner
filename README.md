@@ -102,12 +102,13 @@ yarn storybook
 yarn test-storybook
 ```
 
-> **NOTE:** The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
+> **Note**
+> The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
 >
 > ```jsx
-> yarn test-storybook --url http://localhost:9009
+> yarn test-storybook --url http://127.0.0.1:9009
 > or
-> TARGET_URL=http://localhost:9009 yarn test-storybook
+> TARGET_URL=http://127.0.0.1:9009 yarn test-storybook
 > ```
 
 ## CLI Options
@@ -116,31 +117,35 @@ yarn test-storybook
 Usage: test-storybook [options]
 ```
 
-| Options                         | Description                                                                                                                                                                   |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--help`                        | Output usage information <br/>`test-storybook --help`                                                                                                                         |
-| `-i`, `--index-json`            | Run in index json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --index-json`                                                           |
-| `--no-index-json`               | Disables index json mode <br/>`test-storybook --no-index-json`                                                                                                                |
-| `-c`, `--config-dir [dir-name]` | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                                                                     |
-| `--watch`                       | Watch files for changes and rerun tests related to changed files.<br/>`test-storybook --watch`                                                                                |
-| `--watchAll`                    | Watch files for changes and rerun all tests when something changes.<br/>`test-storybook --watchAll`                                                                           |
-| `--coverage`                    | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`                                                      |
-| `--url`                         | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
-| `--browsers`                    | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
-| `--maxWorkers [amount]`         | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
-| `--no-cache`                    | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
-| `--clearCache`                  | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
-| `--verbose`                     | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
-| `-u`, `--updateSnapshot`        | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                                                                            |
-| `--eject`                       | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                                                                      |
-| `--json`                        | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
-| `--outputFile`                  | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
-| `--junit`                       | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
-| `--ci`                          | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
+| Options                           | Description                                                                                                                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--help`                          | Output usage information <br/>`test-storybook --help`                                                                                                                         |
+| `-i`, `--index-json`              | Run in index json mode. Automatically detected (requires a compatible Storybook) <br/>`test-storybook --index-json`                                                           |
+| `--no-index-json`                 | Disables index json mode <br/>`test-storybook --no-index-json`                                                                                                                |
+| `-c`, `--config-dir [dir-name]`   | Directory where to load Storybook configurations from <br/>`test-storybook -c .storybook`                                                                                     |
+| `--watch`                         | Watch files for changes and rerun tests related to changed files.<br/>`test-storybook --watch`                                                                                |
+| `--watchAll`                      | Watch files for changes and rerun all tests when something changes.<br/>`test-storybook --watchAll`                                                                           |
+| `--coverage`                      | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`                                                      |
+| `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
+| `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
+| `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
+| `--no-cache`                      | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
+| `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
+| `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
+| `-u`, `--updateSnapshot`          | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                                                                            |
+| `--eject`                         | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                                                                      |
+| `--json`                          | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
+| `--outputFile`                    | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
+| `--junit`                         | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
+| `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
+| `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 
 ## Ejecting configuration
 
 The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
+
+> **Note**
+> The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
 
 The configuration file will accept options for two runners:
 
@@ -184,7 +189,9 @@ yarn test-storybook --url https://the-storybook-url-here.com
 
 By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's index data, which dependending on your Storybook version is located in a `stories.json` or `index.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and `index.json` mode must be used.
+This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code.
+
+Furthermore, it is not possible to run the test-runner directly against `.mdx` stories or custom CSF dialects like when writing Svelte native stories with [`addon-svelte-csf`](https://github.com/storybookjs/addon-svelte-csf). In these cases `index.json` mode must be used.
 
 <!-- TODO: switch details to 6.4 once Storybook 7.0 becomes default -->
 
@@ -236,7 +243,8 @@ If you are running tests against a local Storybook but for some reason want to r
 yarn test-storybook --index-json
 ```
 
-> **NOTE:** index.json mode is not compatible with watch mode.
+> **Note**
+> index.json mode is not compatible with watch mode.
 
 ## Running in CI
 
@@ -269,7 +277,8 @@ jobs:
           TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
-> **_NOTE:_** If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
+> **Note**
+> If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
 
 ### 2. Running against locally built Storybooks in CI
 
@@ -301,7 +310,8 @@ jobs:
         run: yarn test-storybook:ci
 ```
 
-> **_NOTE:_** Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
+> **Note**
+> Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
 
 ## Setting up code coverage
 
@@ -393,7 +403,8 @@ Here's an example on how to achieve that:
 }
 ```
 
-> NOTE: If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issue when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
+> **Note**
+> If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issues when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
 
 ## Experimental test hook API
 
@@ -421,7 +432,8 @@ The `prepare` function receives an object containing:
 
 For reference, please use the [default `prepare`](https://github.com/storybookjs/test-runner/blob/next/src/setup-page.ts#L12) function as a starting point.
 
-> **NOTE:** If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
+> **Note**
+> If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
 
 #### getHttpHeaders
 
@@ -439,7 +451,8 @@ module.exports = {
 };
 ```
 
-> **NOTE:** These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
+> **Note**
+> These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
 
 ### DOM snapshot recipe
 
