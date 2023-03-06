@@ -75,7 +75,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -129,7 +129,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged Out\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -185,7 +185,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -266,7 +266,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -375,7 +375,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -429,7 +429,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Header\\"}/\${\\"Logged Out\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -485,7 +485,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -579,7 +579,7 @@ describe('Playwright Json', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Example/Page\\"}/\${\\"Logged In\\"}\\". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
