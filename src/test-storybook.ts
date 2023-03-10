@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 'use strict';
 
+import { JestOptions } from './util/getCliOptions';
+import fs from 'fs';
+
 const { execSync } = require('child_process');
 const fetch = require('node-fetch');
 const canBindToHost = require('can-bind-to-host').default;
-const fs = require('fs');
 const dedent = require('ts-dedent').default;
 const path = require('path');
 const tempy = require('tempy');
-const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
-const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
-const { getTestRunnerConfig } = require('../dist/cjs/util/getTestRunnerConfig');
-const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
+const { getCliOptions } = require('./util/getCliOptions');
+const { getStorybookMetadata } = require('./util/getStorybookMetadata');
+const { getTestRunnerConfig } = require('./util/getTestRunnerConfig');
+const { transformPlaywrightJson } = require('./playwright/transformPlaywrightJson');
 
 const glob_og = require('glob');
 
@@ -29,7 +31,7 @@ process.env.NODE_ENV = 'test';
 process.env.STORYBOOK_TEST_RUNNER = 'true';
 process.env.PUBLIC_URL = '';
 
-let getHttpHeaders = (_url) => Promise.resolve({});
+let getHttpHeaders = (_url: string | URL) => Promise.resolve({});
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -211,7 +213,7 @@ async function getIndexTempDir(url: any) {
     tmpDir = tempy.directory();
     Object.entries(titleIdToTest).forEach(([titleId, test]) => {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
-      fs.writeFileSync(tmpFile, test);
+      fs.writeFileSync(tmpFile, test as string);
     });
   } catch (err) {
     error(err);
