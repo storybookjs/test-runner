@@ -124,7 +124,7 @@
     "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^2.0.0",
     "node-fetch": "^2",
-    "playwright": "^1.14.0",
+    "playwright": "^1.32.1",
     "read-pkg-up": "^7.0.1",
     "regenerator-runtime": "^0.13.9",
     "semver": "^7.3.7",
