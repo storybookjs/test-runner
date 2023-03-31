@@ -10,9 +10,9 @@ module.exports = {
       babelrc: false,
       configFile: false,
       presets: [
-        ['@babel/preset-env', { targets: { node: 'current' } }],
-        '@babel/preset-typescript',
-        '@babel/preset-react',
+        require.resolve("@babel/preset-env", { targets: { node: 'current' } }),
+        require.resolve('@babel/preset-typescript'),
+        require.resolve('@babel/preset-react'),
       ],
     });
 
