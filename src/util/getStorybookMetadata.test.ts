@@ -32,7 +32,7 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
-      `"<rootDir>/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
+      `"<rootDir>/stories/basic/**/*.@(mdx|stories.@(tsx|ts|jsx|js))"`
     );
   });
 
@@ -62,7 +62,7 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
-      `"<rootDir>/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js);<rootDir>/stories/complex/*.stories.@(js|ts)"`
+      `"<rootDir>/stories/basic/**/*.@(mdx|stories.@(tsx|ts|jsx|js));<rootDir>/stories/complex/*.stories.@(js|ts)"`
     );
   });
 

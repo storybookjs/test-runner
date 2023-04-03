@@ -6,6 +6,7 @@ Storybook test runner turns all of your stories into executable tests.
 
 - [Features](#features)
 - [How it works](#how-it-works)
+- [Storybook compatibility](#storybook-compatibility)
 - [Getting started](#getting-started)
 - [CLI Options](#cli-options)
 - [Ejecting configuration](#ejecting-configuration)
@@ -24,6 +25,8 @@ Storybook test runner turns all of your stories into executable tests.
   - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
 - [Experimental test hook API](#experimental-test-hook-api)
+  - [prepare](#prepare)
+  - [getHttpHeaders](#gethttpheaders)
   - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
@@ -37,6 +40,9 @@ Storybook test runner turns all of your stories into executable tests.
   - [Adding the test runner to other CI environments](#adding-the-test-runner-to-other-ci-environments)
   - [Merging test coverage results in wrong coverage](#merging-test-coverage-results-in-wrong-coverage)
 - [Future work](#future-work)
+- [Contributing](#contributing)
+  - [Branch structure](#branch-structure)
+  - [Release process](#release-process)
 
 ## Features
 
@@ -64,6 +70,15 @@ The test runner is simple in design – it just visits each story from a running
 If there are any failures, the test runner will provide an output with the error, alongside with a link to the failing story, so you can see the error yourself and debug it directly in the browser:
 
 ![](.github/assets/click-to-debug.gif)
+
+## Storybook compatibility
+
+Use the following table to use the correct version of this package, based on the version of Storybook you're using:
+
+| Test runner version | Storybook version |
+| ------------------- | ----------------- |
+| ^0.10.0             | ^7.0.0            |
+| ~0.9.4              | ^6.4.0            |
 
 ## Getting started
 
@@ -184,7 +199,9 @@ yarn test-storybook --url https://the-storybook-url-here.com
 
 By default, the test runner transforms your story files into tests. It also supports a secondary "index.json mode" which runs directly against your Storybook's index data, which dependending on your Storybook version is located in a `stories.json` or `index.json`, a static index of all the stories.
 
-This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code. Furthermore, it is not possible to run the test-runner directly against `.mdx` stories, and `index.json` mode must be used.
+This is particularly useful for running against a deployed storybook because `index.json` is guaranteed to be in sync with the Storybook you are testing. In the default, story file-based mode, your local story files may be out of sync – or you might not even have access to the source code.
+
+Furthermore, it is not possible to run the test-runner directly against `.mdx` stories or custom CSF dialects like when writing Svelte native stories with [`addon-svelte-csf`](https://github.com/storybookjs/addon-svelte-csf). In these cases `index.json` mode must be used.
 
 <!-- TODO: switch details to 6.4 once Storybook 7.0 becomes default -->
 
@@ -407,9 +424,42 @@ To enable use cases like visual or DOM snapshots, the test runner exports test h
 
 There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
 
-The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
+
+Apart from these hooks, there are additional properties you can set in `.storybook/test-runner.js`:
+
+#### prepare
+
+The test-runner has a default `prepare` function which gets the browser in the right environment before testing the stories. You can override this behavior, in case you might want to hack the behavior of the browser. For example, you might want to set a cookie, or add query parameters to the visiting URL, or do some authentication before reaching the Storybook URL. You can do that by overriding the `prepare` function.
+
+The `prepare` function receives an object containing:
+
+- `browserContext`: a [Playwright Browser Context](https://playwright.dev/docs/api/class-browsercontext) instance
+- `page`: a [Playwright Page](https://playwright.dev/docs/api/class-page) instance.
+- `testRunnerConfig`: the test runner configuration object, coming from the `.storybook/test-runner.js`.
+
+For reference, please use the [default `prepare`](https://github.com/storybookjs/test-runner/blob/next/src/setup-page.ts#L12) function as a starting point.
+
+> **Note**
+> If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
+
+#### getHttpHeaders
+
+The test-runner makes a few `fetch` calls to check the status of a Storybook instance, and to get the index of the Storybook's stories. Additionally, it visits a page using Playwright. In all of these scenarios, it's possible, depending on where your Storybook is hosted, that you might need to set some HTTP headers. For example, if your Storybook is hosted behind a basic authentication, you might need to set the `Authorization` header. You can do so by passing a `getHttpHeaders` function to your test-runner config. That function receives the `url` of the fetch calls and page visits, and should return an object with the headers to be set.
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  getHttpHeaders: async (url) => {
+    const token = url.includes('prod') ? 'XYZ' : 'ABC';
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  },
+};
+```
 
 > **Note**
 > These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
@@ -459,6 +509,8 @@ module.exports = {
     expect.extend({ toMatchImageSnapshot });
   },
   async postRender(page, context) {
+    // If you want to take screenshot of multiple browsers, use
+    // page.context().browser().browserType().name() to get the browser name to prefix the file name
     const image = await page.screenshot();
     expect(image).toMatchImageSnapshot({
       customSnapshotsDir,
@@ -616,3 +668,23 @@ Future plans involve adding support for the following features:
 
 - 📄 Run addon reports
 - ⚙️ Spawning Storybook via the test runner in a single command
+
+---
+
+## Contributing
+
+We welcome contributions to the test runner!
+
+### Branch structure
+
+- **next** - the `next` version on npm, and the development branch where most work occurs
+- **prerelease** - the `prerelease` version on npm, where eventual changes to `main` get tested
+- **main** - the `latest` version on npm and the stable version that most users use
+
+### Release process
+
+1. All PRs should target the `next` branch, which depends on the `next` version of Storybook.
+2. When merged, a new version of this package will be released on the `next` NPM tag.
+3. If the change contains a bugfix that needs to be patched back to the stable version, please note that in PR description.
+4. PRs labeled `pick` will get cherry-picked back to the `prerelease` branch and will generate a release on the `prerelease` npm tag.
+5. Once validated, `prerelease` PRs will get merged back to the `main` branch, which will generate a release on the `latest` npm tag.
