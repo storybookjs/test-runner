@@ -108,7 +108,7 @@
     "@babel/template": "^7.20.7",
     "@babel/types": "^7.20.7",
     "@storybook/core-common": "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0",
-    "@storybook/csf": "next",
+    "@storybook/csf": "^0.1.0",
     "@storybook/csf-tools": "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0",
     "@storybook/preview-api": "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0",
     "can-bind-to-host": "^1.1.1",
