@@ -6,6 +6,7 @@ Storybook test runner turns all of your stories into executable tests.
 
 - [Features](#features)
 - [How it works](#how-it-works)
+- [Storybook compatibility](#storybook-compatibility)
 - [Getting started](#getting-started)
 - [CLI Options](#cli-options)
 - [Ejecting configuration](#ejecting-configuration)
@@ -69,6 +70,15 @@ The test runner is simple in design – it just visits each story from a running
 If there are any failures, the test runner will provide an output with the error, alongside with a link to the failing story, so you can see the error yourself and debug it directly in the browser:
 
 ![](.github/assets/click-to-debug.gif)
+
+## Storybook compatibility
+
+Use the following table to use the correct version of this package, based on the version of Storybook you're using:
+
+| Test runner version | Storybook version |
+| ------------------- | ----------------- |
+| ^0.10.0             | ^7.0.0            |
+| ~0.9.4              | ^6.4.0            |
 
 ## Getting started
 

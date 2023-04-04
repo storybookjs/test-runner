@@ -1,3 +1,106 @@
+# v0.9.4 (Wed Feb 01 2023)
+
+#### 🐛 Bug Fix
+
+- Release 0.9.4 [#258](https://github.com/storybookjs/test-runner/pull/258) ([@yannbf](https://github.com/yannbf))
+- Support other test-runner config extensions [#259](https://github.com/storybookjs/test-runner/pull/259) ([@yannbf](https://github.com/yannbf))
+- Use ipv4 loopback address [#252](https://github.com/storybookjs/test-runner/pull/252) ([@IanVS](https://github.com/IanVS))
+- Fix safe json stringify code [#239](https://github.com/storybookjs/test-runner/pull/239) ([@hansottowirtz](https://github.com/hansottowirtz))
+
+#### Authors: 3
+
+- Hans Otto Wirtz ([@hansottowirtz](https://github.com/hansottowirtz))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.3 (Fri Jan 20 2023)
+
+#### 🐛 Bug Fix
+
+- feat: add shard cli option [#246](https://github.com/storybookjs/test-runner/pull/246) ([@yannbf](https://github.com/yannbf))
+- feat: add shard cli option [#243](https://github.com/storybookjs/test-runner/pull/243) ([@Niznikr](https://github.com/Niznikr) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Robert Niznik ([@Niznikr](https://github.com/Niznikr))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.2 (Tue Dec 20 2022)
+
+#### 🐛 Bug Fix
+
+- Fix target url in error feedback [#234](https://github.com/storybookjs/test-runner/pull/234) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.1 (Mon Nov 21 2022)
+
+#### 🐛 Bug Fix
+
+- Release 0.9.1 [#223](https://github.com/storybookjs/test-runner/pull/223) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman))
+- Fix missing dependencies [#209](https://github.com/storybookjs/test-runner/pull/209) ([@bryanjtc](https://github.com/bryanjtc))
+- Make setup-page globally available for index.json mode compatibility [#217](https://github.com/storybookjs/test-runner/pull/217) ([@yannbf](https://github.com/yannbf))
+- Upgrade nightly to next instead of future [#213](https://github.com/storybookjs/test-runner/pull/213) ([@shilman](https://github.com/shilman))
+
+#### Authors: 3
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.0 (Wed Oct 12 2022)
+
+#### 🚀 Enhancement
+
+- feat: add cli option --ci [#204](https://github.com/storybookjs/test-runner/pull/204) ([@italoteix](https://github.com/italoteix))
+
+#### 🐛 Bug Fix
+
+- Upgrade preset-env to latest [#202](https://github.com/storybookjs/test-runner/pull/202) ([@shilman](https://github.com/shilman))
+- Fix nightly check for failures [#197](https://github.com/storybookjs/test-runner/pull/197) ([@yannbf](https://github.com/yannbf))
+- Improve error logging and ensure non-zero exit [#201](https://github.com/storybookjs/test-runner/pull/201) ([@IanVS](https://github.com/IanVS))
+
+#### 📝 Documentation
+
+- Docs: update coverage section now that the addon supports Vite [#205](https://github.com/storybookjs/test-runner/pull/205) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Ítalo Teixeira ([@italoteix](https://github.com/italoteix))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.8.0 (Fri Oct 07 2022)
+
+#### 🚀 Enhancement
+
+- Add isTestRunner utility [#198](https://github.com/storybookjs/test-runner/pull/198) ([@yannbf](https://github.com/yannbf) [@IanVS](https://github.com/IanVS))
+
+#### 🐛 Bug Fix
+
+- Fix StorybookTestRunnerError – length on undefined [#194](https://github.com/storybookjs/test-runner/pull/194) ([@ericclemmons](https://github.com/ericclemmons))
+
+#### Authors: 3
+
+- Eric Clemmons ([@ericclemmons](https://github.com/ericclemmons))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.7.2 (Fri Sep 16 2022)
 
 #### 🐛 Bug Fix
