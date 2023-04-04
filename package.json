@@ -122,7 +122,6 @@
     "jest-watch-typeahead": "^2.0.0",
     "node-fetch": "^2",
     "playwright": "^1.14.0",
-    "regenerator-runtime": "^0.13.9",
     "tempy": "^1.0.1",
     "ts-dedent": "^2.0.0"
   },
