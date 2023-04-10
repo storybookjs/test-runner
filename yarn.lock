@@ -2704,7 +2704,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/preview-api@7.0.2":
+"@storybook/preview-api@7.0.2", "@storybook/preview-api@^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@storybook/preview-api/-/preview-api-7.0.2.tgz#42acf645a454526397f8d5d5ae8488b92c9ea544"
   integrity sha512-QAlJM/r92+dQe/kB7MTTR9b/1mt9UJjxNjazGdEWipA/nw23kOF3o/hBcvKwBYkit4zGYsX70H+vuzW8hCo/lA==
@@ -2794,7 +2794,7 @@
     memoizerific "^1.11.3"
     qs "^6.10.0"
 
-"@storybook/store@7.0.1", "@storybook/store@next":
+"@storybook/store@7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@storybook/store/-/store-7.0.1.tgz#2a3655322e62de27c6e454f870a0121635e91737"
   integrity sha512-3iEBOAv79GtXu/UU6tyjD0XaQbEXrvKvWeLdyzvv93tBrwSxl1/b7RuIxnJNszlMhNAVtTpv7F8Qp3GfBVKr/w==
