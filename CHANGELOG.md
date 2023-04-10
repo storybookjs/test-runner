@@ -1,3 +1,46 @@
+# v0.10.0 (Mon Apr 03 2023)
+
+#### 🚀 Enhancement
+
+- New prerelease structure / upgrade to SB7 [#210](https://github.com/storybookjs/test-runner/pull/210) ([@shilman](https://github.com/shilman))
+
+#### 🐛 Bug Fix
+
+- Bump @storybook/csf to 0.1.0 [#288](https://github.com/storybookjs/test-runner/pull/288) ([@kasperpeulen](https://github.com/kasperpeulen))
+- support Storybook 7.0.0 [#283](https://github.com/storybookjs/test-runner/pull/283) ([@yannbf](https://github.com/yannbf))
+- Update getStorybookMain to throw an error if stories are not found in main.js [#278](https://github.com/storybookjs/test-runner/pull/278) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Extend hooks api with `prepare` and `getHttpHeaders` properties [#245](https://github.com/storybookjs/test-runner/pull/245) ([@yannbf](https://github.com/yannbf))
+- Use preview api instead of store [#273](https://github.com/storybookjs/test-runner/pull/273) ([@kasperpeulen](https://github.com/kasperpeulen))
+- Support other test-runner config extensions [#259](https://github.com/storybookjs/test-runner/pull/259) ([@yannbf](https://github.com/yannbf))
+- Use ipv4 loopback address [#252](https://github.com/storybookjs/test-runner/pull/252) ([@IanVS](https://github.com/IanVS))
+- Fix safe json stringify code [#239](https://github.com/storybookjs/test-runner/pull/239) ([@hansottowirtz](https://github.com/hansottowirtz))
+- feat: add shard cli option [#243](https://github.com/storybookjs/test-runner/pull/243) ([@Niznikr](https://github.com/Niznikr) [@yannbf](https://github.com/yannbf))
+- Updating deps to handle TS 4.9 [#237](https://github.com/storybookjs/test-runner/pull/237) ([@kasperpeulen](https://github.com/kasperpeulen))
+- Fix target url in error feedback [#233](https://github.com/storybookjs/test-runner/pull/233) ([@yannbf](https://github.com/yannbf))
+- Remove unused development packages [#227](https://github.com/storybookjs/test-runner/pull/227) ([@yannbf](https://github.com/yannbf))
+- Make setup-page globally available for index.json mode compatibility [#217](https://github.com/storybookjs/test-runner/pull/217) ([@yannbf](https://github.com/yannbf))
+- Upgrade CSF to next [#212](https://github.com/storybookjs/test-runner/pull/212) ([@shilman](https://github.com/shilman))
+- Fix missing dependencies [#209](https://github.com/storybookjs/test-runner/pull/209) ([@bryanjtc](https://github.com/bryanjtc))
+
+#### 📝 Documentation
+
+- Document index.json mode for Svelte CSF [#263](https://github.com/storybookjs/test-runner/pull/263) ([@JReinhold](https://github.com/JReinhold))
+- Docs: add recipe for browser name [#221](https://github.com/storybookjs/test-runner/pull/221) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 9
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Hans Otto Wirtz ([@hansottowirtz](https://github.com/hansottowirtz))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Kasper Peulen ([@kasperpeulen](https://github.com/kasperpeulen))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Robert Niznik ([@Niznikr](https://github.com/Niznikr))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.9.4 (Wed Feb 01 2023)
 
 #### 🐛 Bug Fix
