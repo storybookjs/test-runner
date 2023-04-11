@@ -4,22 +4,22 @@
 import { JestOptions } from './util/getCliOptions';
 import fs from 'fs';
 
-const { execSync } = require('child_process');
-const fetch = require('node-fetch');
-const canBindToHost = require('can-bind-to-host').default;
-const dedent = require('ts-dedent').default;
-const path = require('path');
-const tempy = require('tempy');
-const { getCliOptions } = require('./util/getCliOptions');
-const { getStorybookMetadata } = require('./util/getStorybookMetadata');
-const { getTestRunnerConfig } = require('./util/getTestRunnerConfig');
-const { transformPlaywrightJson } = require('./playwright/transformPlaywrightJson');
+import { execSync } from 'child_process';
+import fetch from 'node-fetch';
+import canBindToHost from 'can-bind-to-host';
+import dedent from 'ts-dedent';
+import path from 'path';
+import tempy from 'tempy';
+import { getCliOptions } from './util/getCliOptions';
+import { getStorybookMetadata } from './util/getStorybookMetadata';
+import { getTestRunnerConfig } from './util/getTestRunnerConfig';
+import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
-const glob_og = require('glob');
+import glob_og from 'glob';
 
 const glob = function (pattern: string, options?: any): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    glob_og(pattern, options, (err: Error, files: string[]) =>
+    glob_og(pattern, options, (err: any, files: string[]) =>
       err === null ? resolve(files) : reject(err)
     );
   });
@@ -31,7 +31,7 @@ process.env.NODE_ENV = 'test';
 process.env.STORYBOOK_TEST_RUNNER = 'true';
 process.env.PUBLIC_URL = '';
 
-let getHttpHeaders = (_url: string | URL) => Promise.resolve({});
+let getHttpHeaders = (_url: string) => Promise.resolve({});
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -165,7 +165,7 @@ async function checkStorybook(url: any) {
   }
 }
 
-async function getIndexJson(url: string | URL) {
+async function getIndexJson(url: string) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
   const headers = await getHttpHeaders(url);
@@ -204,7 +204,7 @@ async function getIndexJson(url: string | URL) {
   `);
 }
 
-async function getIndexTempDir(url: any) {
+async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
