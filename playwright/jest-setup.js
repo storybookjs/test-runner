@@ -1,4 +1,4 @@
-const { getTestRunnerConfig, setPreRender, setPostRender, setupPage } = require('../dist/cjs');
+const { getTestRunnerConfig, setPreRender, setPostRender, setupPage } = require('../dist');
 
 const testRunnerConfig = getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
 if (testRunnerConfig) {

@@ -42,7 +42,6 @@ export const setPostRender = (postRender: TestHook) => {
 };
 
 export const getStoryContext = async (page: Page, context: TestContext): Promise<StoryContext> => {
-  // @ts-ignore
   return page.evaluate(({ storyId }) => globalThis.__getContext(storyId), {
     storyId: context.id,
   });

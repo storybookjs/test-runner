@@ -85,7 +85,7 @@ export const transformPlaywrightJson = (index: Record<string, any>) => {
     const stories = entries.filter((s) => s.type !== 'docs');
     if (stories.length) {
       const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
-      const program = t.program([makeDescribe(stories[0].title, storyTests)]);
+      const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
 
       const { code } = generate(program, {});
 
