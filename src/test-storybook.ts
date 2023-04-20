@@ -132,8 +132,8 @@ async function executeJestPlaywright(args: JestOptions) {
   const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
   const [userDefinedJestConfig] = (
     await Promise.all([
-      glob(path.join(configDir, 'test-runner-jest*')),
-      glob(path.join('test-runner-jest*')),
+      glob(path.join(configDir, 'test-runner-jest*'), { windowsPathsNoEscape: true }),
+      glob(path.join('test-runner-jest*'), { windowsPathsNoEscape: true }),
     ])
   ).reduce((a, b) => a.concat(b), []);
 
