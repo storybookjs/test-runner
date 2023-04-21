@@ -1,5 +1,8 @@
 const { getJestConfig } = require('@storybook/test-runner');
 
+/**
+ * @type {import('@jest/types').Config.InitialOptions}
+ */
 module.exports = {
   // The default configuration comes from @storybook/test-runner
   ...getJestConfig(),
