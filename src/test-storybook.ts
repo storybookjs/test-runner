@@ -15,15 +15,7 @@ import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
-import glob_og from 'glob';
-
-const glob = function (pattern: string, options?: any): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    glob_og(pattern, options, (err: any, files: string[]) =>
-      err === null ? resolve(files) : reject(err)
-    );
-  });
-};
+import { glob } from 'glob';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
