@@ -409,7 +409,7 @@ test:
       shard: [1, 2, 3, 4]
   steps:
     - name: Testing storybook
-      uses: yarn test-storybook --coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+      run: yarn test-storybook --coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }}
     - name: Renaming coverage file
       uses: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
 report-coverage:
