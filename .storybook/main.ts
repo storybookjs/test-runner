@@ -1,5 +1,5 @@
 let stories = [
-  '../stories/docs/**/*.stories.mdx',
+  '../stories/docs/**/*.mdx',
   // default title prefix
   {
     titlePrefix: 'Atoms',
@@ -13,15 +13,9 @@ let stories = [
   // general glob
   '../stories/pages/**/*.stories.@(js|jsx|ts|tsx)',
 ];
-
-if (process.env.STRESS_TEST) {
-  stories.push('../stories/stress-test/*.stories.@(js|jsx|ts|tsx)');
-}
-
 if (process.env.TEST_FAILURES) {
   stories = ['../stories/expected-failures/*.stories.@(js|jsx|ts|tsx)'];
 }
-
 const addons = [
   process.env.WITHOUT_DOCS
     ? {
@@ -33,8 +27,8 @@ const addons = [
     : '@storybook/addon-essentials',
   '@storybook/addon-interactions',
   '@storybook/addon-coverage',
+  '@storybook/addon-mdx-gfm',
 ];
-
 module.exports = {
   stories,
   addons,
@@ -48,5 +42,8 @@ module.exports = {
   framework: {
     name: '@storybook/react-webpack5',
     options: {},
+  },
+  docs: {
+    autodocs: true,
   },
 };

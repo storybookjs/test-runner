@@ -15,12 +15,12 @@ import path from 'path';
 const getJestPlaywrightConfig = () => {
   const presetBasePath = path.dirname(
     require.resolve('jest-playwright-preset', {
-      paths: [path.join(__dirname, '../../node_modules')],
+      paths: [path.join(__dirname, '../node_modules')],
     })
   );
   const expectPlaywrightPath = path.dirname(
     require.resolve('expect-playwright', {
-      paths: [path.join(__dirname, '../../node_modules')],
+      paths: [path.join(__dirname, '../node_modules')],
     })
   );
   return {
@@ -46,7 +46,25 @@ export const getJestConfig = () => {
     STORYBOOK_JUNIT,
   } = process.env;
 
-  const reporters = STORYBOOK_JUNIT ? ['default', 'jest-junit'] : ['default'];
+  const jestJunitPath = path.dirname(
+    require.resolve('jest-junit', {
+      paths: [path.join(__dirname, '../node_modules')],
+    })
+  );
+
+  const jestSerializerHtmlPath = path.dirname(
+    require.resolve('jest-serializer-html', {
+      paths: [path.join(__dirname, '../node_modules')],
+    })
+  );
+
+  const swcJestPath = path.dirname(
+    require.resolve('@swc/jest', {
+      paths: [path.join(__dirname, '../node_modules')],
+    })
+  );
+
+  const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
   let config = {
     rootDir: process.cwd(),
@@ -55,9 +73,9 @@ export const getJestConfig = () => {
     testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
     transform: {
       '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
-      '^.+\\.[jt]sx?$': 'babel-jest',
+      '^.+\\.[jt]sx?$': swcJestPath,
     },
-    snapshotSerializers: ['jest-serializer-html'],
+    snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {
         browsers: TEST_BROWSERS.split(',')

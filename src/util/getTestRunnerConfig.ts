@@ -5,7 +5,9 @@ import { TestRunnerConfig } from '../playwright/hooks';
 let testRunnerConfig: TestRunnerConfig;
 let loaded = false;
 
-export const getTestRunnerConfig = (configDir: string): TestRunnerConfig | undefined => {
+export const getTestRunnerConfig = (
+  configDir: string = process.env.STORYBOOK_CONFIG_DIR
+): TestRunnerConfig | undefined => {
   // testRunnerConfig can be undefined
   if (loaded) {
     return testRunnerConfig;

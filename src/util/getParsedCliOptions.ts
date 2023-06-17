@@ -1,6 +1,12 @@
-export const getParsedCliOptions = () => {
-  const { program } = require('commander');
+import type { CliOptions } from './getCliOptions';
+import { program } from 'commander';
 
+type ParsedCliOptions = {
+  options: CliOptions['runnerOptions'];
+  extraArgs: CliOptions['jestOptions'];
+};
+
+export const getParsedCliOptions = (): ParsedCliOptions => {
   program
     .option(
       '-i, --index-json',
@@ -27,7 +33,7 @@ export const getParsedCliOptions = () => {
     .option(
       '--url <url>',
       'Define the URL to run tests in. Useful for custom Storybook URLs',
-      'http://localhost:6006'
+      'http://127.0.0.1:6006'
     )
     .option(
       '--maxWorkers <amount>',
