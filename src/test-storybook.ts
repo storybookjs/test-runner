@@ -50,12 +50,7 @@ const cleanup = () => {
   }
 };
 
-let isWatchMode = false;
-async function reportCoverage(jestOptions) {
-  if (isWatchMode || process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
-    return;
-  }
-
+async function reportCoverage() {
   const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
   const coverageFolder = path.resolve(process.cwd(), 'coverage/storybook');
 
@@ -85,7 +80,9 @@ async function reportCoverage(jestOptions) {
 
 const onProcessEnd = () => {
   cleanup();
-  reportCoverage();
+  if (process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
+    reportCoverage();
+  }
 };
 
 process.on('SIGINT', onProcessEnd);
@@ -250,7 +247,7 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
-  isWatchMode = jestOptions.watch || jestOptions.watchAll;
+  const isWatchMode = jestOptions.includes('--watch') || jestOptions.includes('--watchAll');
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
   await checkStorybook(rawTargetURL);
@@ -259,7 +256,7 @@ const main = async () => {
 
   process.env.TARGET_URL = targetURL;
 
-  if (runnerOptions.coverage) {
+  if (!isWatchMode && runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
   }
 
@@ -271,7 +268,7 @@ const main = async () => {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
   }
 
-  if (jestOptions.shard) {
+  if (jestOptions.includes('--shard')) {
     process.env.JEST_SHARD = 'true';
   }
 
