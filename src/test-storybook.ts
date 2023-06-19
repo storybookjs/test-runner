@@ -15,15 +15,7 @@ import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
-import glob_og from 'glob';
-
-const glob = function (pattern: string, options?: any): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    glob_og(pattern, options, (err: any, files: string[]) =>
-      err === null ? resolve(files) : reject(err)
-    );
-  });
-};
+import { glob } from 'glob';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -58,12 +50,7 @@ const cleanup = () => {
   }
 };
 
-let isWatchMode = false;
 async function reportCoverage() {
-  if (isWatchMode || process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
-    return;
-  }
-
   const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
   const coverageFolder = path.resolve(process.cwd(), 'coverage/storybook');
 
@@ -84,14 +71,18 @@ async function reportCoverage() {
   // --skip-full in case we only want to show not fully covered code
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
-  execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
-    stdio: 'inherit',
-  });
+  if (process.env.JEST_SHARD !== 'true') {
+    execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
+      stdio: 'inherit',
+    });
+  }
 }
 
 const onProcessEnd = () => {
   cleanup();
-  reportCoverage();
+  if (process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
+    reportCoverage();
+  }
 };
 
 process.on('SIGINT', onProcessEnd);
@@ -132,8 +123,8 @@ async function executeJestPlaywright(args: JestOptions) {
   const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
   const [userDefinedJestConfig] = (
     await Promise.all([
-      glob(path.join(configDir, 'test-runner-jest*')),
-      glob(path.join('test-runner-jest*')),
+      glob(path.join(configDir, 'test-runner-jest*'), { windowsPathsNoEscape: true }),
+      glob(path.join('test-runner-jest*'), { windowsPathsNoEscape: true }),
     ])
   ).reduce((a, b) => a.concat(b), []);
 
@@ -256,7 +247,7 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
-  isWatchMode = jestOptions.watch || jestOptions.watchAll;
+  const isWatchMode = jestOptions.includes('--watch') || jestOptions.includes('--watchAll');
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
   await checkStorybook(rawTargetURL);
@@ -265,7 +256,7 @@ const main = async () => {
 
   process.env.TARGET_URL = targetURL;
 
-  if (runnerOptions.coverage) {
+  if (!isWatchMode && runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
   }
 
@@ -275,6 +266,10 @@ const main = async () => {
 
   if (process.env.REFERENCE_URL) {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
+  }
+
+  if (jestOptions.includes('--shard')) {
+    process.env.JEST_SHARD = 'true';
   }
 
   // Use TEST_BROWSERS if set, otherwise get from --browser option
