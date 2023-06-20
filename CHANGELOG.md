@@ -1,3 +1,30 @@
+# v0.11.0 (Tue Jun 20 2023)
+
+#### 🚀 Enhancement
+
+- Release 0.11.0 [#318](https://github.com/storybookjs/test-runner/pull/318) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen) [@unshame](https://github.com/unshame) [@valentinpalkovic](https://github.com/valentinpalkovic) [@vanessayuenn](https://github.com/vanessayuenn))
+- Bundle with tsup and replace babel-jest [#250](https://github.com/storybookjs/test-runner/pull/250) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen))
+
+#### 🐛 Bug Fix
+
+- Change dependencies from `future` npm tag to `next` [#315](https://github.com/storybookjs/test-runner/pull/315) ([@yannbf](https://github.com/yannbf))
+- fix: nyc command with shard option [#257](https://github.com/storybookjs/test-runner/pull/257) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- Improve ejected config types [#297](https://github.com/storybookjs/test-runner/pull/297) ([@yannbf](https://github.com/yannbf))
+- fix: Remove last reference to regenerator-runtime [#303](https://github.com/storybookjs/test-runner/pull/303) ([@bryanjtc](https://github.com/bryanjtc))
+- fix(test-storybook): Fix test-runner-jest.config.js file not being found in STORYBOOK_CONFIG_DIR on Windows [#296](https://github.com/storybookjs/test-runner/pull/296) ([@unshame](https://github.com/unshame))
+- Upgrade glob to v10 [#299](https://github.com/storybookjs/test-runner/pull/299) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 6
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- UnShame ([@unshame](https://github.com/unshame))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Vanessa Yuen ([@vanessayuenn](https://github.com/vanessayuenn))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.10.0 (Mon Apr 03 2023)
 
 #### 🚀 Enhancement
