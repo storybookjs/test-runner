@@ -6,6 +6,7 @@ Storybook test runner turns all of your stories into executable tests.
 
 - [Features](#features)
 - [How it works](#how-it-works)
+- [Storybook compatibility](#storybook-compatibility)
 - [Getting started](#getting-started)
 - [CLI Options](#cli-options)
 - [Ejecting configuration](#ejecting-configuration)
@@ -23,6 +24,7 @@ Storybook test runner turns all of your stories into executable tests.
     - [Manually configuring istanbul](#manually-configuring-istanbul)
   - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
+  - [4 - Run tests with --shard flag](#4---run-tests-with---shard-flag)
 - [Experimental test hook API](#experimental-test-hook-api)
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
@@ -69,6 +71,15 @@ The test runner is simple in design – it just visits each story from a running
 If there are any failures, the test runner will provide an output with the error, alongside with a link to the failing story, so you can see the error yourself and debug it directly in the browser:
 
 ![](.github/assets/click-to-debug.gif)
+
+## Storybook compatibility
+
+Use the following table to use the correct version of this package, based on the version of Storybook you're using:
+
+| Test runner version | Storybook version |
+| ------------------- | ----------------- |
+| ^0.10.0             | ^7.0.0            |
+| ~0.9.4              | ^6.4.0            |
 
 ## Getting started
 
@@ -405,6 +416,62 @@ Here's an example on how to achieve that:
 
 > **Note**
 > If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issues when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
+
+### 4 - Run tests with --shard flag
+
+The test-runner collects all coverage in one file `coverage/storybook/coverage-storybook.json`. To split the coverage file you should rename it using the `shard-index`. To report the coverage you should merge the coverage files with the nyc merge command.
+
+Github CI example:
+
+```yml
+test:
+  name: Running Test-storybook (${{ matrix.shard }})
+  strategy:
+    matrix:
+      shard: [1, 2, 3, 4]
+  steps:
+    - name: Testing storybook
+      run: yarn test-storybook --coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+    - name: Renaming coverage file
+      uses: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+report-coverage:
+  name: Reporting storybook coverage
+  steps:
+    - name: Merging coverage
+      uses: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+    - name: Report coverage
+      uses: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
+Circle CI example:
+
+```yml
+test:
+  parallelism: 4
+  steps:
+    - run:
+        command: yarn test-storybook --coverage --shard=$(expr $CIRCLE_NODE_INDEX + 1)/$CIRCLE_NODE_TOTAL
+        command: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${CIRCLE_NODE_INDEX + 1}.json
+report-coverage:
+  steps:
+    - run:
+        command: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+        command: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
+Gitlab CI example:
+
+```yml
+test:
+  parallel: 4
+  script:
+    - yarn test-storybook --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL
+    - mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${CI_NODE_INDEX}.json
+report-coverage:
+  script:
+    - yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+    - yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
 
 ## Experimental test hook API
 
