@@ -172,6 +172,7 @@ The Storybook test runner comes with Jest installed as an internal dependency. Y
 | ------------------- | ------------------ |
 | ^0.6.2              | ^26.6.3 or ^27.0.0 |
 | ^0.7.0              | ^28.0.0            |
+| ^0.11.0-next.0      | ^29.0.0            |
 
 > If you're already using a compatible version of Jest, the test runner will use it, instead of installing a duplicate version in your node_modules folder.
 
