@@ -1,6 +1,5 @@
-const { setupPage } = require('../dist/cjs/setup-page');
+const { setupPage } = require('../dist/setup-page');
 
-require('regenerator-runtime/runtime');
 const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvironment').default;
 
 class CustomEnvironment extends PlaywrightEnvironment {
