@@ -150,6 +150,7 @@ Usage: test-storybook [options]
 | `--junit`                         | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
+| `--checkConsole`                  | Checks the browser console output for errors<br/>`test-storybook --checkConsole`                                                                                              |
 
 ## Ejecting configuration
 

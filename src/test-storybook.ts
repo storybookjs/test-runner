@@ -297,6 +297,10 @@ const main = async () => {
   const { storiesPaths, lazyCompilation } = getStorybookMetadata();
   process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
+  if (runnerOptions.checkConsole) {
+    process.env.TEST_CHECK_CONSOLE = 'true';
+  }
+
   if (lazyCompilation && isLocalStorybookIp) {
     log(
       `You're running Storybook with lazy compilation enabled, and will likely cause issues with the test runner locally. Consider disabling 'lazyCompilation' in ${runnerOptions.configDir}/main.js when running 'test-storybook' locally.`

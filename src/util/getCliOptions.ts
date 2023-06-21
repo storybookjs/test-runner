@@ -14,6 +14,7 @@ export type CliOptions = {
     coverage?: boolean;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
+    checkConsole?: boolean;
   };
   jestOptions: JestOptions;
 };
@@ -28,6 +29,7 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'url',
   'coverage',
   'junit',
+  'checkConsole',
 ];
 
 function copyOption<ObjType extends object, KeyType extends keyof ObjType>(

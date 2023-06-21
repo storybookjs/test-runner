@@ -10,4 +10,13 @@ describe('getCliOptions', () => {
     const opts = getCliOptions();
     expect(opts.runnerOptions).toMatchObject(customConfig);
   });
+
+  it('returns checkConsole option if passed', () => {
+    const customConfig = { checkConsole: true };
+    jest
+      .spyOn(cliHelper, 'getParsedCliOptions')
+      .mockReturnValue({ options: customConfig, extraArgs: [] });
+    const opts = getCliOptions();
+    expect(opts.runnerOptions).toMatchObject(customConfig);
+  });
 });
