@@ -433,14 +433,14 @@ test:
     - name: Testing storybook
       run: yarn test-storybook --coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }}
     - name: Renaming coverage file
-      uses: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+      run: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
 report-coverage:
   name: Reporting storybook coverage
   steps:
     - name: Merging coverage
-      uses: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+      run: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
     - name: Report coverage
-      uses: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+      run: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
 ```
 
 Circle CI example:
