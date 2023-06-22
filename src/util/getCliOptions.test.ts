@@ -10,4 +10,11 @@ describe('getCliOptions', () => {
     const opts = getCliOptions();
     expect(opts.runnerOptions).toMatchObject(customConfig);
   });
+
+  it('returns extra args if passed', () => {
+    const extraArgs = ['TestName', 'AnotherTestName'];
+    jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValue({ options: {}, extraArgs });
+    const opts = getCliOptions();
+    expect(opts.jestOptions).toEqual(extraArgs);
+  });
 });
