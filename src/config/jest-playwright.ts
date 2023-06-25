@@ -26,11 +26,11 @@ const getJestPlaywrightConfig = (): Config.InitialOptions => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: '@storybook/test-runner/playwright/global-setup',
-    globalTeardown: '@storybook/test-runner/playwright/global-teardown',
-    testEnvironment: '@storybook/test-runner/playwright/custom-environment',
+    globalSetup: '@storybook/test-runner/playwright/global-setup.js',
+    globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
+    testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
     setupFilesAfterEnv: [
-      '@storybook/test-runner/playwright/jest-setup',
+      '@storybook/test-runner/playwright/jest-setup.js',
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
