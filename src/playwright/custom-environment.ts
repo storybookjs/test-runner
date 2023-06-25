@@ -1,6 +1,9 @@
-const { setupPage } = require('../dist/setup-page');
+import { setupPage } from '../setup-page';
 
-const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvironment').default;
+const PlaywrightEnvironmentModule = require.resolve(
+  'jest-playwright-preset/lib/PlaywrightEnvironment'
+);
+const PlaywrightEnvironment = require(PlaywrightEnvironmentModule).default;
 
 class CustomEnvironment extends PlaywrightEnvironment {
   async setup() {
@@ -12,7 +15,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
     await super.teardown();
   }
 
-  async handleTestEvent(event) {
+  async handleTestEvent(event: any) {
     await super.handleTestEvent(event);
   }
 }

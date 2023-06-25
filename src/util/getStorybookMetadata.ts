@@ -4,10 +4,10 @@ import { getStorybookMain } from './getStorybookMain';
 
 export const getStorybookMetadata = () => {
   const workingDir = resolve();
-  const configDir = process.env.STORYBOOK_CONFIG_DIR;
+  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
 
   const main = getStorybookMain(configDir);
-  const normalizedStoriesEntries = normalizeStories(main.stories, {
+  const normalizedStoriesEntries = normalizeStories(main?.stories || [], {
     configDir,
     workingDir,
   }).map((specifier) => ({

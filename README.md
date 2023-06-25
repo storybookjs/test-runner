@@ -557,7 +557,7 @@ Here's a slightly different recipe for image snapshot testing:
 
 ```js
 // .storybook/test-runner.js
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { toMatchImageSnapshot } = require('@storybook/test-runner');
 
 const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
 
@@ -618,8 +618,7 @@ You can use it for multiple use cases, and here's an example that combines the s
 
 ```js
 // .storybook/test-runner.js
-const { getStoryContext } = require('@storybook/test-runner');
-const { injectAxe, checkA11y, configureAxe } = require('axe-playwright');
+const { getStoryContext, injectAxe, checkA11y, configureAxe } = require('@storybook/test-runner');
 
 module.exports = {
   async preRender(page, context) {

@@ -1,5 +1,5 @@
 import type { Page, BrowserContext } from 'playwright';
-import readPackageUp from 'read-pkg-up';
+import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
 import { PrepareContext } from './playwright/hooks';
 import { getTestRunnerConfig } from './util';
 
@@ -54,7 +54,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
 
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
-  const { packageJson } = await readPackageUp();
+  const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
 
   const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
@@ -72,7 +72,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   if (testRunnerConfig?.prepare) {
     await testRunnerConfig.prepare({ page, browserContext, testRunnerConfig });
   } else {
-    await defaultPrepare({ page, browserContext, testRunnerConfig });
+    if (testRunnerConfig) await defaultPrepare({ page, browserContext, testRunnerConfig });
   }
 
   // if we ever want to log something from the browser to node

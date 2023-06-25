@@ -76,7 +76,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
 
   try {
     program.parse();
-  } catch (err) {
+  } catch (err: any) {
     switch (err.code) {
       case 'commander.unknownOption': {
         program.outputHelp();

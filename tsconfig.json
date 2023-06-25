@@ -15,8 +15,9 @@
     "skipLibCheck": true,
     "target": "es2020",
     "types": ["jest", "node"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strict": true,
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "playwright/test-runner-jest.config.js"],
   "exclude": ["src/**/*.test.ts"]
 }

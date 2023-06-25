@@ -1,4 +1,5 @@
 import path from 'path';
+import type { Config } from '@jest/types';
 
 /**
  * IMPORTANT NOTE:
@@ -12,7 +13,7 @@ import path from 'path';
  * This function does the same thing as `preset: 'jest-playwright-preset` but makes sure that the
  * necessary moving parts are all required within the correct path.
  * */
-const getJestPlaywrightConfig = () => {
+const getJestPlaywrightConfig = (): Config.InitialOptions => {
   const presetBasePath = path.dirname(
     require.resolve('jest-playwright-preset', {
       paths: [path.join(__dirname, '../node_modules')],
@@ -25,18 +26,18 @@ const getJestPlaywrightConfig = () => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: '@storybook/test-runner/playwright/global-setup.js',
-    globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
-    testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
+    globalSetup: '@storybook/test-runner/playwright/global-setup',
+    globalTeardown: '@storybook/test-runner/playwright/global-teardown',
+    testEnvironment: '@storybook/test-runner/playwright/custom-environment',
     setupFilesAfterEnv: [
-      '@storybook/test-runner/playwright/jest-setup.js',
+      '@storybook/test-runner/playwright/jest-setup',
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
   };
 };
 
-export const getJestConfig = () => {
+export const getJestConfig = (): Config.InitialOptions => {
   const {
     TEST_ROOT,
     TEST_MATCH,
@@ -66,11 +67,11 @@ export const getJestConfig = () => {
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
-  let config = {
+  let config: Config.InitialOptions = {
     rootDir: process.cwd(),
     roots: TEST_ROOT ? [TEST_ROOT] : undefined,
     reporters,
-    testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
+    testMatch: STORYBOOK_STORIES_PATTERN ? STORYBOOK_STORIES_PATTERN.split(';') : [],
     transform: {
       '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
       '^.+\\.[jt]sx?$': swcJestPath,
@@ -78,7 +79,7 @@ export const getJestConfig = () => {
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {
-        browsers: TEST_BROWSERS.split(',')
+        browsers: TEST_BROWSERS?.split(',')
           .map((p) => p.trim().toLowerCase())
           .filter(Boolean),
         collectCoverage: STORYBOOK_COLLECT_COVERAGE === 'true',

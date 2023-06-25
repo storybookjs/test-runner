@@ -1,8 +1,8 @@
-const { transformSync: swcTransform } = require('@swc/core');
-const { transformPlaywright } = require('../dist/playwright/transformPlaywright');
+import { transformSync as swcTransform } from '@swc/core';
+import { transformPlaywright } from './transformPlaywright';
 
 module.exports = {
-  process(src, filename) {
+  process(src: string, filename: string) {
     const csfTest = transformPlaywright(src, filename);
 
     const result = swcTransform(csfTest, {

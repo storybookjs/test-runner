@@ -206,7 +206,7 @@ async function getIndexTempDir(url: string) {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
       fs.writeFileSync(tmpFile, test as string);
     });
-  } catch (err) {
+  } catch (err: any) {
     error(err);
     process.exit(1);
   }
