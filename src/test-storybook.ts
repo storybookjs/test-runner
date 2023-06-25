@@ -33,8 +33,8 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message: string) => console.log(`[test-storybook] ${message}`);
-const error = (err: { message: any; stack: any }) => {
-  if (err instanceof Error) {
+const error = (err: Error) => {
+  if (err) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
   } else {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err}`);
@@ -137,7 +137,7 @@ async function executeJestPlaywright(args: JestOptions) {
   await jest.run(argv);
 }
 
-async function checkStorybook(url: any) {
+async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'HEAD', headers });
@@ -206,8 +206,11 @@ async function getIndexTempDir(url: string) {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
       fs.writeFileSync(tmpFile, test as string);
     });
-  } catch (err: any) {
-    error(err);
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    const errorObject = new Error(errorMessage);
+    errorObject.stack = err instanceof Error ? err.stack : undefined;
+    error(errorObject);
     process.exit(1);
   }
   return tmpDir;

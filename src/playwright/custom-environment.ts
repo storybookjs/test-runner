@@ -1,4 +1,5 @@
 import { setupPage } from '../setup-page';
+import { type Event } from 'jest-circus';
 
 const PlaywrightEnvironmentModule = require.resolve(
   'jest-playwright-preset/lib/PlaywrightEnvironment'
@@ -15,7 +16,7 @@ class CustomEnvironment extends PlaywrightEnvironment {
     await super.teardown();
   }
 
-  async handleTestEvent(event: any) {
+  async handleTestEvent(event: Event) {
     await super.handleTestEvent(event);
   }
 }

@@ -5,13 +5,17 @@ import { ComponentTitle, StoryId, StoryName, toId } from '@storybook/csf';
 import { testPrefixer } from './transformPlaywright';
 
 const makeTest = (entry: V4Entry): t.Statement => {
-  const result: any = testPrefixer({
+  const result = testPrefixer({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
     id: t.stringLiteral(entry.id),
     // FIXME
     storyExport: t.identifier(entry.id),
   });
+  // Check if result is an array and has at least two elements
+  if (!Array.isArray(result) || result.length < 2) {
+    throw new Error('Invalid result');
+  }
   const stmt = result[1] as t.ExpressionStatement;
   return t.expressionStatement(
     t.callExpression(t.identifier('it'), [t.stringLiteral('test'), stmt.expression])
