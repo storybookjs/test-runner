@@ -1,4 +1,4 @@
-import { setupPage, PlaywrightEnvironmentModule, type Event } from '@storybook/test-runner';
+import { setupPage, PlaywrightEnvironmentModule, type Event } from '../index';
 
 const PlaywrightEnvironment = require(PlaywrightEnvironmentModule).default;
 

@@ -1,4 +1,4 @@
-const { getJestConfig } = require('@storybook/test-runner');
+const { getJestConfig } = require('../index');
 
 /**
  * @type {import('@storybook/test-runner').JestConfig}

@@ -1,4 +1,4 @@
-const { globalTeardown: playwrightGlobalTeardown } = require('jest-playwright-preset');
+const { playwrightGlobalTeardown } = require('../index');
 
 module.exports = async function globalTeardown(globalConfig) {
   // Your global teardown

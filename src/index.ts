@@ -34,4 +34,7 @@ export { transformSync as swcTransform } from '@swc/core';
 
 export { type Event } from 'jest-circus';
 
-export { globalTeardown as playwrightGlobalTeardown } from 'jest-playwright-preset';
+export {
+  globalTeardown as playwrightGlobalTeardown,
+  globalSetup as playwrightGlobalSetup,
+} from 'jest-playwright-preset';

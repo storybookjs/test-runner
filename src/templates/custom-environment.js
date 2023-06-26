@@ -1,4 +1,4 @@
-const { setupPage, PlaywrightEnvironmentModule } = require('@storybook/test-runner');
+const { setupPage, PlaywrightEnvironmentModule } = require('../index');
 
 const PlaywrightEnvironment = require(PlaywrightEnvironmentModule).default;
 

@@ -1,4 +1,4 @@
-import { transformPlaywright, swcTransform } from '@storybook/test-runner';
+import { transformPlaywright, swcTransform } from '../index';
 
 module.exports = {
   process(src: string, filename: string) {

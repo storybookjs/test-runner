@@ -1,4 +1,4 @@
-import { getJestConfig, type JestConfig } from '@storybook/test-runner';
+import { getJestConfig, type JestConfig } from '../index';
 
 module.exports = {
   // The default configuration comes from @storybook/test-runner

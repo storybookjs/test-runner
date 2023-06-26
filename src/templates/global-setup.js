@@ -1,4 +1,4 @@
-const { globalSetup: playwrightGlobalSetup } = require('jest-playwright-preset');
+import { playwrightGlobalSetup } from '../index';
 
 module.exports = async function globalSetup(globalConfig) {
   return playwrightGlobalSetup(globalConfig);
