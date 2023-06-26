@@ -14,10 +14,9 @@ import { getCliOptions } from './util/getCliOptions';
 import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
-
+import findUp from 'find-up';
 import { glob } from 'glob';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
-import packageDirectory from 'pkg-dir';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -220,33 +219,39 @@ async function getIndexTempDir(url: string) {
 
 async function installPackage() {
   let packageManager;
-  const rootDir = await packageDirectory(__dirname);
 
-  if (!rootDir) {
-    throw new Error('Cannot determine project root directory');
-  }
-  if (fs.existsSync(path.join(rootDir, 'yarn.lock'))) {
-    packageManager = 'yarn';
-  } else if (fs.existsSync(path.join(rootDir, 'pnpm-lock.yaml'))) {
-    packageManager = 'pnpm';
-  } else if (fs.existsSync(path.join(rootDir, 'package-lock.json'))) {
-    packageManager = 'npm';
-  } else {
+  // Look for lock files in the current working directory or any of its parent directories
+  const lockFilePath = await findUp(['yarn.lock', 'pnpm-lock.yaml', 'package-lock.json']);
+  if (!lockFilePath) {
     console.error(
-      'Cannot determine package manager. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json exists in the project root.'
+      'Cannot determine lock file. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json exists in the project root or any of its parent directories.'
     );
+    return;
+  }
+  const rootDir = path.dirname(lockFilePath);
+  if (fs.existsSync(`${rootDir}/yarn.lock`)) {
+    packageManager = 'yarn';
+  } else if (fs.existsSync(`${rootDir}/pnpm-lock.yaml`)) {
+    packageManager = 'pnpm';
+  } else if (fs.existsSync(`${rootDir}/package-lock.json`)) {
+    packageManager = 'npm';
+  }
+
+  if (packageManager) {
+    console.log(`Installing packages using ${packageManager}...`);
+  } else {
+    console.error('Could not determine package manager.');
     return;
   }
 
   const command = `${packageManager} install`;
 
-  exec(command, (error, stdout, stderr) => {
+  exec(command, { cwd: rootDir }, (error, stdout) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return;
     }
     console.log(`stdout: ${stdout}`);
-    console.error(`stderr: ${stderr}`);
   });
 }
 
