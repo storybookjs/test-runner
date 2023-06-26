@@ -90,7 +90,7 @@ const onProcessEnd = () => {
 process.on('SIGINT', onProcessEnd);
 process.on('exit', onProcessEnd);
 
-function sanitizeURL(url: string) {
+export function sanitizeURL(url: string) {
   let finalURL = url;
   // prepend URL protocol if not there
   if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
@@ -139,7 +139,7 @@ async function executeJestPlaywright(args: JestOptions) {
   await jest.run(argv);
 }
 
-async function checkStorybook(url: string) {
+export async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'HEAD', headers });
@@ -158,7 +158,7 @@ async function checkStorybook(url: string) {
   }
 }
 
-async function getIndexJson(url: string) {
+export async function getIndexJson(url: string) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
   const headers = await getHttpHeaders(url);
@@ -197,7 +197,7 @@ async function getIndexJson(url: string) {
   `);
 }
 
-async function getIndexTempDir(url: string) {
+export async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
@@ -218,7 +218,7 @@ async function getIndexTempDir(url: string) {
   return tmpDir;
 }
 
-async function installPackage() {
+export async function installPackage() {
   let packageManager;
 
   // Look for lock files in the current working directory or any of its parent directories
