@@ -1,4 +1,9 @@
-import { V3StoriesIndex, transformPlaywrightJson } from './transformPlaywrightJson';
+import {
+  UnsupportedVersion,
+  V3StoriesIndex,
+  makeTest,
+  transformPlaywrightJson,
+} from './transformPlaywrightJson';
 import { type V4Index } from './transformPlaywrightJson';
 
 describe('Playwright Json', () => {
@@ -591,6 +596,15 @@ describe('Playwright Json', () => {
         });",
         }
       `);
+    });
+  });
+
+  describe('unsupported index', () => {
+    it('throws an error for unsupported versions', () => {
+      const unsupportedVersion: UnsupportedVersion = { v: 1 };
+      expect(() => transformPlaywrightJson(unsupportedVersion)).toThrowError(
+        `Unsupported version ${unsupportedVersion.v}`
+      );
     });
   });
 });

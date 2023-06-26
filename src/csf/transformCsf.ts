@@ -23,7 +23,7 @@ interface TransformOptions {
   makeTitle?: (userTitle: string) => string;
 }
 
-const prefixFunction = (
+export const prefixFunction = (
   key: string,
   title: string,
   input: t.Expression,
@@ -41,7 +41,13 @@ const prefixFunction = (
   if (testPrefixer) {
     const prefixResult = makeArray(testPrefixer(context));
     const stmt = prefixResult[1] as t.ExpressionStatement;
-    result = stmt.expression;
+    if (stmt) {
+      result = stmt.expression;
+    }
+  }
+
+  if (!result) {
+    result = t.nullLiteral();
   }
 
   return result;
@@ -118,7 +124,6 @@ export const transformCsf = (
       if (tests.length) {
         return makeDescribe(key, tests);
       }
-      return null;
     })
     .filter(Boolean) as babel.types.Statement[];
 
@@ -129,7 +134,7 @@ export const transformCsf = (
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
     const describe = makeDescribe(
-      csf.meta?.title ?? '',
+      csf.meta?.title as string,
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
     ) as babel.types.Node;

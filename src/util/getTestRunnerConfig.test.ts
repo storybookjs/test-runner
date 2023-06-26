@@ -1,3 +1,4 @@
+import { serverRequire } from '@storybook/core-common';
 import { TestRunnerConfig } from '../playwright/hooks';
 import { getTestRunnerConfig, loaded } from './getTestRunnerConfig';
 import { join, resolve } from 'path';
@@ -61,5 +62,15 @@ describe('getTestRunnerConfig', () => {
 
     expect(result1).toEqual(testRunnerConfig);
     expect(result2).toEqual(testRunnerConfig);
+  });
+
+  it('should load the test runner config with default configDir', () => {
+    process.env.STORYBOOK_CONFIG_DIR = '.storybook';
+    const result = getTestRunnerConfig();
+    expect(result).toEqual(testRunnerConfig);
+  });
+
+  afterEach(() => {
+    delete process.env.STORYBOOK_CONFIG_DIR;
   });
 });

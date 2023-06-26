@@ -79,7 +79,7 @@ const makeTitleFactory = (filename: string) => {
   const filePath = './' + relative(workingDir, filename);
 
   return (userTitle: string) =>
-    userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) || '';
+    userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;
 };
 
 export const transformPlaywright = (src: string, filename: string) => {

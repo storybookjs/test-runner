@@ -4,7 +4,7 @@ import { ComponentTitle, StoryId, StoryName, toId } from '@storybook/csf';
 
 import { testPrefixer } from './transformPlaywright';
 
-const makeTest = (entry: V4Entry): t.Statement => {
+export const makeTest = (entry: V4Entry): t.Statement => {
   const result = testPrefixer({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
@@ -12,11 +12,8 @@ const makeTest = (entry: V4Entry): t.Statement => {
     // FIXME
     storyExport: t.identifier(entry.id),
   });
-  // Check if result is an array and has at least two elements
-  if (!Array.isArray(result) || result.length < 2) {
-    throw new Error('Invalid result');
-  }
-  const stmt = result[1] as t.ExpressionStatement;
+
+  const stmt = (result as Array<t.ExpressionStatement>)[1] as t.ExpressionStatement;
   return t.expressionStatement(
     t.callExpression(t.identifier('it'), [t.stringLiteral('test'), stmt.expression])
   );
@@ -57,7 +54,7 @@ export type V3StoriesIndex = {
   v: 3;
   stories: Record<StoryId, V3Story>;
 };
-type UnsupportedVersion = Omit<V4Entry, 'v'> & { v: number };
+export type UnsupportedVersion = { v: number };
 const isV3DocsOnly = (stories: V3Story[]) => stories.length === 1 && stories[0].name === 'Page';
 
 function v3TitleMapToV4TitleMap(

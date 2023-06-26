@@ -12,7 +12,7 @@ export type CliOptions = {
     coverage?: boolean;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
-  };
+  } & Record<string, unknown>;
   jestOptions: JestOptions;
 };
 
@@ -57,7 +57,7 @@ export const getCliOptions = (): CliOptions => {
       } else if (allOptions[key as StorybookRunnerCommand] === false) {
         acc.jestOptions.push(`--no-${key}`);
       } else {
-        acc.jestOptions.push(`--${key}`, allOptions[key as StorybookRunnerCommand] as string);
+        acc.jestOptions.push(`--${key}="${allOptions[key as StorybookRunnerCommand]}"`);
       }
     }
 
