@@ -17,6 +17,7 @@
     "types": ["jest", "node"],
     "moduleResolution": "node",
     "strict": true,
+    "noEmit": true,
   },
   "include": ["src/**/*.ts", "playwright/test-runner-jest.config.js"],
   "exclude": ["src/**/*.test.ts"]

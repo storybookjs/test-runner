@@ -3,10 +3,10 @@ import { serverRequire } from '@storybook/core-common';
 import { TestRunnerConfig } from '../playwright/hooks';
 
 let testRunnerConfig: TestRunnerConfig;
-let loaded = false;
+export let loaded = false;
 
 export const getTestRunnerConfig = (
-  configDir: string = process.env.STORYBOOK_CONFIG_DIR || ''
+  configDir = process.env.STORYBOOK_CONFIG_DIR || ''
 ): TestRunnerConfig | undefined => {
   // testRunnerConfig can be undefined
   if (loaded) {
