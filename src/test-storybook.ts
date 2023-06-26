@@ -17,6 +17,7 @@ import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 import { glob } from 'glob';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
+import { packageDirectory } from 'pkg-dir';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -217,17 +218,22 @@ async function getIndexTempDir(url: string) {
   return tmpDir;
 }
 
-function installPackage() {
+async function installPackage() {
   let packageManager;
-  if (fs.existsSync('yarn.lock')) {
+  const rootDir = await packageDirectory();
+
+  if (!rootDir) {
+    throw new Error('Cannot determine project root directory');
+  }
+  if (fs.existsSync(path.join(rootDir, 'yarn.lock'))) {
     packageManager = 'yarn';
-  } else if (fs.existsSync('pnpm-lock.yaml')) {
+  } else if (fs.existsSync(path.join(rootDir, 'pnpm-lock.yaml'))) {
     packageManager = 'pnpm';
-  } else if (fs.existsSync('package-lock.json')) {
+  } else if (fs.existsSync(path.join(rootDir, 'package-lock.json'))) {
     packageManager = 'npm';
   } else {
     console.error(
-      'Cannot determine package manager. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json exists.'
+      'Cannot determine package manager. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json exists in the project root.'
     );
     return;
   }
@@ -256,7 +262,7 @@ async function checkAndInstallTsNode() {
     packageJson.devDependencies['ts-node'] = '^10.5.0';
     fsExtra.writeJsonSync(path, packageJson, { spaces: 2 });
     console.log('ts-node added to dependencies');
-    installPackage();
+    await installPackage();
   } else {
     console.log('ts-node already installed');
   }
