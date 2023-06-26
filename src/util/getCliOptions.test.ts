@@ -18,9 +18,10 @@ describe('getCliOptions', () => {
   it('returns default options if no options are passed', () => {
     jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValue({ options: {}, extraArgs: [] });
     const opts = getCliOptions();
+    const jestOptions = process.argv.includes('--coverage') ? ['--coverage'] : [];
     expect(opts).toEqual({
       runnerOptions: {},
-      jestOptions: process.argv.splice(0, 2),
+      jestOptions,
     });
   });
 
