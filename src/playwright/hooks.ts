@@ -1,5 +1,6 @@
 import type { BrowserContext, Page } from 'playwright';
 import type { StoryContext } from '@storybook/csf';
+import { transformPlaywright } from './transformPlaywright';
 
 export type TestContext = {
   id: string;
@@ -46,3 +47,5 @@ export const getStoryContext = async (page: Page, context: TestContext): Promise
     storyId: context.id,
   });
 };
+
+export { transformPlaywright };

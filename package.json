@@ -25,11 +25,10 @@
   "files": [
     "dist",
     "README.md",
-    "playwright",
     "*.d.ts"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && ts-node ./scripts/copy-templates.ts",
     "build:watch": "tsup --watch",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
@@ -61,6 +60,7 @@
     "@storybook/react": "^7.0.0",
     "@storybook/react-webpack5": "^7.0.0",
     "@storybook/testing-library": "^0.1.0",
+    "@types/fs-extra": "^11.0.1",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.4.1",
     "auto": "^10.3.0",
@@ -126,7 +126,8 @@
     "playwright": "^1.14.0",
     "read-pkg-up": "^7.0.1",
     "tempy": "^1.0.1",
-    "ts-dedent": "^2.0.0"
+    "ts-dedent": "^2.0.0",
+    "ts-node": "^10.5.0"
   },
   "auto": {
     "prereleaseBranches": [

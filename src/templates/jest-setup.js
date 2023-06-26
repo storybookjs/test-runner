@@ -1,4 +1,9 @@
-import { getTestRunnerConfig, setPreRender, setPostRender, setupPage } from '../index';
+import {
+  getTestRunnerConfig,
+  setPreRender,
+  setPostRender,
+  setupPage,
+} from '@storybook/test-runner';
 
 const testRunnerConfig = getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
 if (testRunnerConfig) {

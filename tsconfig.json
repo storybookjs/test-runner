@@ -18,7 +18,10 @@
     "moduleResolution": "node",
     "strict": true,
     "noEmit": true,
+    "paths": {
+      "@storybook/test-runner": ["src/index.ts"],
+    }
   },
-  "include": ["src/**/*.ts", "playwright/test-runner-jest.config.js"],
+  "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

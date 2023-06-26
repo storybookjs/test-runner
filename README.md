@@ -144,7 +144,7 @@ Usage: test-storybook [options]
 | `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
 | `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
 | `-u`, `--updateSnapshot`          | Use this flag to re-record every snapshot that fails during this test run <br/>`test-storybook -u`                                                                            |
-| `--eject`                         | Creates a local configuration file to override defaults of the test-runner <br/>`test-storybook --eject`                                                                      |
+| `--eject`                         | Creates local configuration files to override defaults of the test-runner <br/>`test-storybook --eject`                                                                       |
 | `--json`                          | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
 | `--outputFile`                    | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
 | `--junit`                         | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
@@ -153,10 +153,10 @@ Usage: test-storybook [options]
 
 ## Ejecting configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
+The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create local `test-runner-jest.config.js`, `custom-environment.js`, `global-setup.js`, `global-teardown.js`, `jest-setup.js` files in the root folder of your project. This file will be used by the test runner.
 
 > **Note**
-> The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
+> The local created files can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
 
 The configuration file will accept options for two runners:
 

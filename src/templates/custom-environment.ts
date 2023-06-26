@@ -1,9 +1,5 @@
-import { setupPage } from '../setup-page';
-import { type Event } from 'jest-circus';
+import { setupPage, PlaywrightEnvironmentModule, type Event } from '@storybook/test-runner';
 
-const PlaywrightEnvironmentModule = require.resolve(
-  'jest-playwright-preset/lib/PlaywrightEnvironment'
-);
 const PlaywrightEnvironment = require(PlaywrightEnvironmentModule).default;
 
 class CustomEnvironment extends PlaywrightEnvironment {

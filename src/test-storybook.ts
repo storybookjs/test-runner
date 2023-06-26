@@ -217,21 +217,38 @@ async function getIndexTempDir(url: string) {
 }
 
 function ejectConfiguration() {
-  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
-  const destination = path.resolve('test-runner-jest.config.js');
-  const fileAlreadyExists = fs.existsSync(destination);
-
-  if (fileAlreadyExists) {
-    throw new Error(dedent`Found existing file at:
-    
-    ${destination}
-    
-    Please delete it and rerun this command.
-    \n`);
+  let typescriptInstalled = false;
+  try {
+    require.resolve('typescript');
+    typescriptInstalled = true;
+  } catch (error) {
+    // TypeScript is not installed, so we don't need to copy the TypeScript equivalent files
+    return;
   }
 
-  fs.copyFileSync(origin, destination);
-  log('Configuration file successfully copied as test-runner-jest.config.js');
+  const files = [
+    'test-runner-jest.config',
+    'custom-environment',
+    'global-setup',
+    'global-teardown',
+    'jest-setup',
+  ];
+
+  const extension = typescriptInstalled ? 'ts' : 'js';
+
+  files.forEach((file) => {
+    const origin = path.resolve(__dirname, `./templateFiles/${file}.${extension}`);
+    const destination = path.resolve(`${file}.${extension}`);
+
+    if (fs.existsSync(destination)) {
+      throw new Error(dedent`Found existing file at:
+      ${destination}
+      Please delete it and rerun this command.\n`);
+    }
+
+    fs.copyFileSync(origin, destination);
+    log(`Configuration file successfully copied as ${file}.${extension}`);
+  });
 }
 
 const main = async () => {

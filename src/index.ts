@@ -12,8 +12,9 @@ export {
 } from 'jest-image-snapshot';
 
 type JestConfig = Config.InitialOptions;
+type GlobalConfig = Config.GlobalConfig;
 
-export { type JestConfig };
+export { type JestConfig, type GlobalConfig };
 
 export {
   injectAxe,
@@ -24,3 +25,13 @@ export {
   checkA11y,
   DefaultTerminalReporter,
 } from 'axe-playwright';
+
+export const PlaywrightEnvironmentModule = require.resolve(
+  'jest-playwright-preset/lib/PlaywrightEnvironment'
+);
+
+export { transformSync as swcTransform } from '@swc/core';
+
+export { type Event } from 'jest-circus';
+
+export { globalTeardown as playwrightGlobalTeardown } from 'jest-playwright-preset';

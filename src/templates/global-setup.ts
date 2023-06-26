@@ -1,4 +1,3 @@
-// global-setup.js
 import { globalSetup as playwrightGlobalSetup } from 'jest-playwright-preset';
 import { type Config as JestConfig } from '@jest/types';
 

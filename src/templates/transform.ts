@@ -1,5 +1,4 @@
-import { transformSync as swcTransform } from '@swc/core';
-import { transformPlaywright } from './transformPlaywright';
+import { transformPlaywright, swcTransform } from '@storybook/test-runner';
 
 module.exports = {
   process(src: string, filename: string) {
