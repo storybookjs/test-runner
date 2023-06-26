@@ -125,7 +125,7 @@
     "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^2.0.0",
     "node-fetch": "^2",
-    "pkg-dir": "^7.0.0",
+    "pkg-dir": "^5.0.0",
     "playwright": "^1.14.0",
     "read-pkg-up": "^7.0.1",
     "tempy": "^1.0.1",
