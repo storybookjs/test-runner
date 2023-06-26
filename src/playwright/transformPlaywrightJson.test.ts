@@ -1,9 +1,10 @@
-import { transformPlaywrightJson } from './transformPlaywrightJson';
+import { V3StoriesIndex, transformPlaywrightJson } from './transformPlaywrightJson';
+import { type V4Index } from './transformPlaywrightJson';
 
 describe('Playwright Json', () => {
   describe('v4 indexes', () => {
     it('should generate a test for each story', () => {
-      const input = {
+      const input: V4Index = {
         v: 4,
         entries: {
           'example-header--logged-in': {
@@ -199,7 +200,7 @@ describe('Playwright Json', () => {
     });
 
     it('should skip docs entries', () => {
-      const input = {
+      const input: V4Index = {
         v: 4,
         entries: {
           'example-introduction--page': {
@@ -282,7 +283,7 @@ describe('Playwright Json', () => {
 
   describe('v3 indexes', () => {
     it('should generate a test for each story', () => {
-      const input = {
+      const input: V3StoriesIndex = {
         v: 3,
         stories: {
           'example-header--logged-in': {
@@ -499,7 +500,7 @@ describe('Playwright Json', () => {
     });
 
     it('should skip docs-only stories', () => {
-      const input = {
+      const input: V3StoriesIndex = {
         v: 3,
         stories: {
           'example-introduction--page': {

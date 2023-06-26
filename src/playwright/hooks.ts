@@ -14,7 +14,7 @@ export type PrepareContext = {
 };
 
 export type TestHook = (page: Page, context: TestContext) => Promise<void>;
-export type HttpHeaderSetter = (url: string) => Promise<Record<string, any>>;
+export type HttpHeaderSetter = (url: string) => Promise<Record<string, string>>;
 export type PrepareSetter = (context: PrepareContext) => Promise<void>;
 
 export interface TestRunnerConfig {

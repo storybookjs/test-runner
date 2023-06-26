@@ -204,7 +204,7 @@ async function getIndexTempDir(url: string) {
     tmpDir = tempy.directory();
     Object.entries(titleIdToTest).forEach(([titleId, test]) => {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
-      fs.writeFileSync(tmpFile, test as string);
+      fs.writeFileSync(tmpFile, test);
     });
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);

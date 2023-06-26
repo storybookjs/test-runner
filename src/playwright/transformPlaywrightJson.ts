@@ -31,48 +31,63 @@ const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
-type V4Entry = { type?: 'story' | 'docs'; id: StoryId; name: StoryName; title: ComponentTitle };
-type V4Index = {
+export type V4Entry = {
+  type?: 'story' | 'docs';
+  id: StoryId;
+  name: StoryName;
+  title: ComponentTitle;
+  importPath?: string;
+};
+export type V4Index = {
   v: 4;
   entries: Record<StoryId, V4Entry>;
 };
 
-type V3Story = Omit<V4Entry, 'type'> & { parameters?: Record<string, any> };
-type V3StoriesIndex = {
+type StoryParameters = {
+  __id: StoryId;
+  docsOnly?: boolean;
+  fileName?: string;
+};
+
+export type V3Story = Omit<V4Entry, 'type'> & { parameters?: StoryParameters } & {
+  kind: string;
+  story: string;
+};
+export type V3StoriesIndex = {
   v: 3;
   stories: Record<StoryId, V3Story>;
 };
+type UnsupportedVersion = Omit<V4Entry, 'v'> & { v: number };
 const isV3DocsOnly = (stories: V3Story[]) => stories.length === 1 && stories[0].name === 'Page';
 
-function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
+function v3TitleMapToV4TitleMap(
+  titleIdToStories: Record<string, V3Story[]>
+): Record<string, V4Entry[]> {
   return Object.fromEntries(
     Object.entries(titleIdToStories).map(([id, stories]) => [
       id,
-      stories.map(
-        ({ parameters, ...story }) =>
-          ({
-            type: isV3DocsOnly(stories) ? 'docs' : 'story',
-            ...story,
-          } as V4Entry)
-      ),
+      stories.map(({ parameters, ...story }) => ({
+        type: isV3DocsOnly(stories) ? 'docs' : 'story',
+        ...story,
+      })),
     ])
   );
 }
 
 function groupByTitleId<T extends { title: ComponentTitle }>(entries: T[]) {
-  return entries.reduce((acc, entry) => {
+  return entries.reduce<Record<string, T[]>>((acc, entry) => {
     const titleId = toId(entry.title);
     acc[titleId] = acc[titleId] || [];
     acc[titleId].push(entry);
     return acc;
-  }, {} as { [key: string]: T[] });
+  }, {});
 }
 
 /**
  * Generate one test file per component so that Jest can
  * run them in parallel.
  */
-export const transformPlaywrightJson = (index: Record<string, any>) => {
+export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | UnsupportedVersion) => {
   let titleIdToEntries: Record<string, V4Entry[]>;
   if (index.v === 3) {
     const titleIdToStories = groupByTitleId<V3Story>(
@@ -85,18 +100,21 @@ export const transformPlaywrightJson = (index: Record<string, any>) => {
     throw new Error(`Unsupported version ${index.v}`);
   }
 
-  const titleIdToTest = Object.entries(titleIdToEntries).reduce((acc, [titleId, entries]) => {
-    const stories = entries.filter((s) => s.type !== 'docs');
-    if (stories.length) {
-      const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
-      const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
+  const titleIdToTest = Object.entries(titleIdToEntries).reduce<Record<string, string>>(
+    (acc, [titleId, entries]) => {
+      const stories = entries.filter((s) => s.type !== 'docs');
+      if (stories.length) {
+        const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
+        const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
 
-      const { code } = generate(program, {});
+        const { code } = generate(program, {});
 
-      acc[titleId] = code;
-    }
-    return acc;
-  }, {} as { [key: string]: string });
+        acc[titleId] = code;
+      }
+      return acc;
+    },
+    {}
+  );
 
   return titleIdToTest;
 };

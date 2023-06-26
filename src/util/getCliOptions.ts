@@ -1,9 +1,7 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
 import type { BrowserType } from 'jest-playwright-preset';
 
-export type JestOptions = {
-  [key: string]: any;
-};
+export type JestOptions = string[];
 
 export type CliOptions = {
   runnerOptions: {
@@ -67,7 +65,7 @@ export const getCliOptions = (): CliOptions => {
   }, defaultOptions);
 
   if (extraArgs.length) {
-    finalOptions.jestOptions.push(...[extraArgs]);
+    finalOptions.jestOptions.push(...extraArgs);
   }
 
   return finalOptions;
