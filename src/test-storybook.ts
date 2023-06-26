@@ -3,8 +3,8 @@
 
 import { JestOptions } from './util/getCliOptions';
 import fs from 'fs';
-
-import { execSync } from 'child_process';
+import fsExtra from 'fs-extra';
+import { execSync, exec } from 'child_process';
 import fetch from 'node-fetch';
 import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
@@ -16,6 +16,7 @@ import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 import { glob } from 'glob';
+import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -216,11 +217,57 @@ async function getIndexTempDir(url: string) {
   return tmpDir;
 }
 
-function ejectConfiguration() {
+function installPackage() {
+  let packageManager;
+  if (fs.existsSync('yarn.lock')) {
+    packageManager = 'yarn';
+  } else if (fs.existsSync('pnpm-lock.yaml')) {
+    packageManager = 'pnpm';
+  } else if (fs.existsSync('package-lock.json')) {
+    packageManager = 'npm';
+  } else {
+    console.error(
+      'Cannot determine package manager. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json exists.'
+    );
+    return;
+  }
+
+  const command = `${packageManager} install`;
+
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
+}
+
+async function checkAndInstallTsNode() {
+  const { packageJson, path } = (await readPackageUp()) as NormalizedReadResult;
+
+  if (
+    (!packageJson.dependencies || !packageJson.dependencies['ts-node']) &&
+    (!packageJson.devDependencies || !packageJson.devDependencies['ts-node'])
+  ) {
+    console.log('ts-node not found in dependencies or devDependencies, installing...');
+    packageJson.devDependencies = packageJson.devDependencies || {};
+    packageJson.devDependencies['ts-node'] = '^10.5.0';
+    fsExtra.writeJsonSync(path, packageJson, { spaces: 2 });
+    console.log('ts-node added to dependencies');
+    installPackage();
+  } else {
+    console.log('ts-node already installed');
+  }
+}
+
+async function ejectConfiguration() {
   let typescriptInstalled = false;
   try {
     require.resolve('typescript');
     typescriptInstalled = true;
+    await checkAndInstallTsNode();
   } catch (error) {
     // TypeScript is not installed, so we don't need to copy the TypeScript equivalent files
     return;
@@ -255,7 +302,7 @@ const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
 
   if (runnerOptions.eject) {
-    ejectConfiguration();
+    await ejectConfiguration();
     process.exit(0);
   }
 
