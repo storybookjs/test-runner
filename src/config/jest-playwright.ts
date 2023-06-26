@@ -26,11 +26,11 @@ const getJestPlaywrightConfig = (): Config.InitialOptions => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: '@storybook/test-runner/dist/templates/global-setup.js',
-    globalTeardown: '@storybook/test-runner/dist/templates/global-teardown.js',
-    testEnvironment: '@storybook/test-runner/dist/templates/custom-environment.js',
+    globalSetup: '@storybook/test-runner/dist/templates/global-setup',
+    globalTeardown: '@storybook/test-runner/dist/templates/global-teardown',
+    testEnvironment: '@storybook/test-runner/dist/templates/custom-environment',
     setupFilesAfterEnv: [
-      '@storybook/test-runner/dist/templates/jest-setup.js',
+      '@storybook/test-runner/dist/templates/jest-setup',
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
@@ -73,7 +73,7 @@ export const getJestConfig = (): Config.InitialOptions => {
     reporters,
     testMatch: STORYBOOK_STORIES_PATTERN ? STORYBOOK_STORIES_PATTERN.split(';') : [],
     transform: {
-      '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/dist/playwright/transform',
+      '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
       '^.+\\.[jt]sx?$': swcJestPath,
     },
     snapshotSerializers: [jestSerializerHtmlPath],

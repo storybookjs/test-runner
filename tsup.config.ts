@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup';
+import tsPaths from 'esbuild-ts-paths';
 
 export default defineConfig([
   {
@@ -9,7 +10,6 @@ export default defineConfig([
     dts: true,
     minify: false,
     treeshake: false,
-    bundle: false,
     esbuildOptions(options, context) {
       options.platform = 'node';
     },

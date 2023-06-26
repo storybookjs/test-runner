@@ -13,12 +13,12 @@ module.exports = {
     '^.+\\.stories\\.[jt]sx?$': './dist/templates/transform',
     '^.+\\.[jt]sx?$': '@swc/jest',
   },
-  globalSetup: './dist/templates/global-setup.js',
-  globalTeardown: './dist/templates/global-teardown.js',
-  testEnvironment: './dist/templates/custom-environment.js',
-  setupFilesAfterEnv: ['./dist/templates/jest-setup.js'],
+  globalSetup: './dist/templates/global-setup',
+  globalTeardown: './dist/templates/global-teardown',
+  testEnvironment: './dist/templates/custom-environment',
+  setupFilesAfterEnv: ['./dist/templates/jest-setup'],
   // use local build when the package is referred
   moduleNameMapper: {
-    '@storybook/test-runner': '<rootDir>/dist/index.js',
+    '@storybook/test-runner': '<rootDir>/dist/index',
   },
 };
