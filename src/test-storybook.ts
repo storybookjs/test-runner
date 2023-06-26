@@ -220,7 +220,7 @@ async function getIndexTempDir(url: string) {
 
 async function installPackage() {
   let packageManager;
-  const rootDir = await packageDirectory();
+  const rootDir = await packageDirectory(__dirname);
 
   if (!rootDir) {
     throw new Error('Cannot determine project root directory');
