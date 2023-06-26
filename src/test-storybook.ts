@@ -17,6 +17,7 @@ import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 import findUp from 'find-up';
 import { glob } from 'glob';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
+import util from 'util';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -246,16 +247,16 @@ async function installPackage() {
 
   const command = `${packageManager} install`;
 
-  exec(command, { cwd: rootDir }, (error, stdout) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return;
-    }
+  try {
+    const { stdout, stderr } = await util.promisify(exec)(command, { cwd: rootDir });
     console.log(`stdout: ${stdout}`);
-  });
+    console.error(`stderr: ${stderr}`);
+  } catch (error) {
+    console.error(`exec error: ${error}`);
+  }
 }
 
-async function checkAndInstallTsNode() {
+export async function checkAndInstallTsNode() {
   const { packageJson, path } = (await readPackageUp()) as NormalizedReadResult;
 
   if (
@@ -273,7 +274,7 @@ async function checkAndInstallTsNode() {
   }
 }
 
-async function ejectConfiguration() {
+export async function ejectConfiguration() {
   let typescriptInstalled = false;
   try {
     require.resolve('typescript');
