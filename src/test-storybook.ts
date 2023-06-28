@@ -80,7 +80,7 @@ async function reportCoverage() {
 
 const onProcessEnd = () => {
   cleanup();
-  if (process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
+  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true' && process.env.JEST_SHARD !== 'true') {
     reportCoverage();
   }
 };
