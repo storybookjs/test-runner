@@ -1,6 +1,6 @@
 {
   "name": "@storybook/test-runner",
-  "version": "0.10.0",
+  "version": "0.12.0",
   "description": "Test runner for Storybook stories",
   "keywords": [
     "storybook-addons",
@@ -27,6 +27,18 @@
     "README.md",
     "*.d.ts"
   ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
   "scripts": {
     "build": "tsup && ts-node ./scripts/copy-templates.ts",
     "build:watch": "tsup --watch",
@@ -80,7 +92,7 @@
     "storybook": "^7.0.0",
     "ts-jest": "^28.0.8",
     "ts-node": "^10.5.0",
-    "tsup": "^6.5.0",
+    "tsup": "^7.1.0",
     "typescript": "~4.9.4",
     "wait-on": "^6.0.0"
   },
