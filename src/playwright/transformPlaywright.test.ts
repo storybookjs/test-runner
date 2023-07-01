@@ -57,7 +57,7 @@ describe('Playwright', () => {
                   title: "Example/foo/bar",
                   name: "A"
                 };
-                page.on('pageerror', err => {
+                const pageErrorListener = err => {
                   page.evaluate(({
                     id,
                     err
@@ -65,16 +65,25 @@ describe('Playwright', () => {
                     id: "example-foo-bar--a",
                     err: err.message
                   });
-                });
+                };
+                page.on('pageerror', pageErrorListener);
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-foo-bar--a"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-foo-bar--a"
+                  });
+                } catch (error) {
+                  console.error('Error occurred during page.evaluate:', error);
+                  result = {
+                    error: error.message
+                  };
+                }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
                 }
@@ -87,6 +96,7 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', pageErrorListener);
                 return result;
               };
               try {
@@ -127,7 +137,7 @@ describe('Playwright', () => {
                   title: "Example/foo/bar",
                   name: "A"
                 };
-                page.on('pageerror', err => {
+                const pageErrorListener = err => {
                   page.evaluate(({
                     id,
                     err
@@ -135,16 +145,25 @@ describe('Playwright', () => {
                     id: "example-foo-bar--a",
                     err: err.message
                   });
-                });
+                };
+                page.on('pageerror', pageErrorListener);
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-foo-bar--a"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-foo-bar--a"
+                  });
+                } catch (error) {
+                  console.error('Error occurred during page.evaluate:', error);
+                  result = {
+                    error: error.message
+                  };
+                }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
                 }
@@ -157,6 +176,7 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', pageErrorListener);
                 return result;
               };
               try {
@@ -198,7 +218,7 @@ describe('Playwright', () => {
                   title: "Example/Header",
                   name: "A"
                 };
-                page.on('pageerror', err => {
+                const pageErrorListener = err => {
                   page.evaluate(({
                     id,
                     err
@@ -206,16 +226,25 @@ describe('Playwright', () => {
                     id: "example-header--a",
                     err: err.message
                   });
-                });
+                };
+                page.on('pageerror', pageErrorListener);
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-header--a"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-header--a"
+                  });
+                } catch (error) {
+                  console.error('Error occurred during page.evaluate:', error);
+                  result = {
+                    error: error.message
+                  };
+                }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
                 }
@@ -228,6 +257,7 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', pageErrorListener);
                 return result;
               };
               try {
