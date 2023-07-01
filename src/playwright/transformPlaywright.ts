@@ -20,17 +20,25 @@ export const testPrefixer = template(
       const testFn = async() => {
         const context = { id: %%id%%, title: %%title%%, name: %%name%% };
 
-        page.on('pageerror', (err) => {
+        const pageErrorListener = (err) => {
           page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
-        });
+        };
+  
+        page.on('pageerror', pageErrorListener);
 
         if(globalThis.__sbPreRender) {
           await globalThis.__sbPreRender(page, context);
         }
 
-        const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
-          id: %%id%%,
-        });
+        let result;
+        try {
+          result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
+            id: %%id%%,
+          });
+        } catch (error) {
+          console.error('Error occurred during page.evaluate:', error);
+          result = { error: error.message };
+        }
   
         if(globalThis.__sbPostRender) {
           await globalThis.__sbPostRender(page, context);
@@ -44,6 +52,8 @@ export const testPrefixer = template(
 
           await jestPlaywright.saveCoverage(page);
         }
+
+        page.off('pageerror', pageErrorListener);
 
         return result;
       };
