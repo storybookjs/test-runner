@@ -1,10 +1,5 @@
 const { getTestRunnerConfig, setPreRender, setPostRender, setupPage } = require('../dist');
 
-afterEach(async () => {
-  await jestPlaywright.resetPage();
-  await globalThis.__sbSetupPage(globalThis.page);
-});
-
 const testRunnerConfig = getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
 if (testRunnerConfig) {
   if (testRunnerConfig.setup) {
