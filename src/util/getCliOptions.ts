@@ -1,7 +1,7 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
 import type { BrowserType } from 'jest-playwright-preset';
 
-export type JestOptions = any[];
+export type JestOptions = string[];
 
 export type CliOptions = {
   runnerOptions: {
