@@ -71,7 +71,7 @@ async function reportCoverage() {
   // --skip-full in case we only want to show not fully covered code
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
-  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true' && process.env.JEST_SHARD !== 'true') {
+  if (process.env.JEST_SHARD !== 'true') {
     execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
       stdio: 'inherit',
     });
@@ -80,7 +80,7 @@ async function reportCoverage() {
 
 const onProcessEnd = () => {
   cleanup();
-  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true' && process.env.JEST_SHARD !== 'true') {
+  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true') {
     reportCoverage();
   }
 };
