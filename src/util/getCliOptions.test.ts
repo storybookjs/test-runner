@@ -6,14 +6,14 @@ describe('getCliOptions', () => {
     const customConfig = { configDir: 'custom', indexJson: true };
     jest
       .spyOn(cliHelper, 'getParsedCliOptions')
-      .mockReturnValue({ options: customConfig, extraArgs: [] });
+      .mockReturnValueOnce({ options: customConfig, extraArgs: [] });
     const opts = getCliOptions();
     expect(opts.runnerOptions).toMatchObject(customConfig);
   });
 
   it('returns extra args if passed', () => {
     const extraArgs = ['TestName', 'AnotherTestName'];
-    jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValue({ options: {}, extraArgs });
+    jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValueOnce({ options: {}, extraArgs });
     const opts = getCliOptions();
     expect(opts.jestOptions).toEqual(extraArgs);
   });
