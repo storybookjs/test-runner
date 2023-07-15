@@ -46,7 +46,7 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 };
-                page.on('pageerror', pageErrorListener);
+                page.once('pageerror', pageErrorListener);
                 if (globalThis.__sbPreRender) {
                   await globalThis.__sbPreRender(page, context);
                 }
