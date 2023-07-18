@@ -33,7 +33,7 @@
     "build:watch": "tsup --watch",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
-    "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --no-manager-cache --quiet\"",
+    "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --quiet\"",
     "build-storybook": "storybook build",
     "release": "yarn build && auto shipit",
     "test-storybook": "node dist/test-storybook",
