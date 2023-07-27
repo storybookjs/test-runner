@@ -1,3 +1,25 @@
+# v0.12.0 (Thu Jul 27 2023)
+
+#### 🚀 Enhancement
+
+
+#### 🐛 Bug Fix
+
+- maintenance: remove no-manager-cache flag in example storybook [#331](https://github.com/storybookjs/test-runner/pull/331) ([@MH4GF](https://github.com/MH4GF))
+- Fix extra args not being passed to jest [#322](https://github.com/storybookjs/test-runner/pull/322) ([@zyulyaev](https://github.com/zyulyaev) [@yannbf](https://github.com/yannbf))
+- Fix empty coverage report [#324](https://github.com/storybookjs/test-runner/pull/324) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- docs: fix github actions example for shard usage [#320](https://github.com/storybookjs/test-runner/pull/320) ([@MH4GF](https://github.com/MH4GF))
+
+#### Authors: 5
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Hirotaka Miyagi ([@MH4GF](https://github.com/MH4GF))
+- Nikita Zyulyaev ([@zyulyaev](https://github.com/zyulyaev))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.11.0 (Tue Jun 20 2023)
 
 #### 🚀 Enhancement
