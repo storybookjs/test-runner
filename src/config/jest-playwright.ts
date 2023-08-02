@@ -66,11 +66,25 @@ export const getJestConfig = () => {
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
+  const testMatch = (STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';')) || [];
+  const testRoots = new Set(['<rootDir>']);
+
+  testMatch.forEach((match) => {
+    // if any of the stories pattern contains <rootDir>/.. it means the user might be referencing
+    // stories outside of the project they're executing the test-runner from, e.g. monorepo
+    if (match.startsWith('<rootDir>/..')) {
+      const rootDirLevels = match.split('/..').length - 1;
+      // so we add those directories as roots to make sure jest can find the files
+      const rootDir = ['<rootDir>'].concat(Array(rootDirLevels).fill('..')).join(path.sep);
+      testRoots.add(rootDir);
+    }
+  });
+
   let config = {
     rootDir: process.cwd(),
-    roots: TEST_ROOT ? [TEST_ROOT] : undefined,
+    roots: TEST_ROOT ? [TEST_ROOT] : [...testRoots],
     reporters,
-    testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
+    testMatch,
     transform: {
       '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
       '^.+\\.[jt]sx?$': swcJestPath,
