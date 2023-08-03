@@ -1,4 +1,5 @@
 import path from 'path';
+import { getProjectRoot } from '@storybook/core-common';
 
 /**
  * IMPORTANT NOTE:
@@ -25,11 +26,11 @@ const getJestPlaywrightConfig = () => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: '@storybook/test-runner/playwright/global-setup.js',
-    globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
-    testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
+    globalSetup: require.resolve('@storybook/test-runner/playwright/global-setup.js'),
+    globalTeardown: require.resolve('@storybook/test-runner/playwright/global-teardown.js'),
+    testEnvironment: require.resolve('@storybook/test-runner/playwright/custom-environment.js'),
     setupFilesAfterEnv: [
-      '@storybook/test-runner/playwright/jest-setup.js',
+      require.resolve('@storybook/test-runner/playwright/jest-setup.js'),
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
@@ -67,26 +68,14 @@ export const getJestConfig = () => {
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
   const testMatch = (STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';')) || [];
-  const testRoots = new Set(['<rootDir>']);
-
-  testMatch.forEach((match) => {
-    // if any of the stories pattern contains <rootDir>/.. it means the user might be referencing
-    // stories outside of the project they're executing the test-runner from, e.g. monorepo
-    if (match.startsWith('<rootDir>/..')) {
-      const rootDirLevels = match.split('/..').length - 1;
-      // so we add those directories as roots to make sure jest can find the files
-      const rootDir = ['<rootDir>'].concat(Array(rootDirLevels).fill('..')).join(path.sep);
-      testRoots.add(rootDir);
-    }
-  });
 
   let config = {
-    rootDir: process.cwd(),
-    roots: TEST_ROOT ? [TEST_ROOT] : [...testRoots],
+    rootDir: getProjectRoot(),
+    roots: TEST_ROOT ? [TEST_ROOT] : undefined,
     reporters,
     testMatch,
     transform: {
-      '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
+      '^.+\\.stories\\.[jt]sx?$': require.resolve('@storybook/test-runner/playwright/transform'),
       '^.+\\.[jt]sx?$': swcJestPath,
     },
     snapshotSerializers: [jestSerializerHtmlPath],
