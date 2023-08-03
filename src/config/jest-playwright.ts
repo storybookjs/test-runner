@@ -1,6 +1,8 @@
 import path from 'path';
 import { getProjectRoot } from '@storybook/core-common';
 
+const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH || '@storybook/test-runner';
+
 /**
  * IMPORTANT NOTE:
  * Depending on the user's project and package manager, it's possible that jest-playwright-preset
@@ -26,11 +28,11 @@ const getJestPlaywrightConfig = () => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: require.resolve('@storybook/test-runner/playwright/global-setup.js'),
-    globalTeardown: require.resolve('@storybook/test-runner/playwright/global-teardown.js'),
-    testEnvironment: require.resolve('@storybook/test-runner/playwright/custom-environment.js'),
+    globalSetup: require.resolve(TEST_RUNNER_PATH + '/playwright/global-setup.js'),
+    globalTeardown: require.resolve(TEST_RUNNER_PATH + '/playwright/global-teardown.js'),
+    testEnvironment: require.resolve(TEST_RUNNER_PATH + '/playwright/custom-environment.js'),
     setupFilesAfterEnv: [
-      require.resolve('@storybook/test-runner/playwright/jest-setup.js'),
+      require.resolve(TEST_RUNNER_PATH + '/playwright/jest-setup.js'),
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
@@ -75,7 +77,7 @@ export const getJestConfig = () => {
     reporters,
     testMatch,
     transform: {
-      '^.+\\.stories\\.[jt]sx?$': require.resolve('@storybook/test-runner/playwright/transform'),
+      '^.+\\.stories\\.[jt]sx?$': require.resolve(TEST_RUNNER_PATH + '/playwright/transform'),
       '^.+\\.[jt]sx?$': swcJestPath,
     },
     snapshotSerializers: [jestSerializerHtmlPath],
