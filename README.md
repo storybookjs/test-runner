@@ -137,6 +137,7 @@ Usage: test-storybook [options]
 | `--watch`                         | Watch files for changes and rerun tests related to changed files.<br/>`test-storybook --watch`                                                                                |
 | `--watchAll`                      | Watch files for changes and rerun all tests when something changes.<br/>`test-storybook --watchAll`                                                                           |
 | `--coverage`                      | Indicates that test coverage information should be collected and reported in the output <br/>`test-storybook --coverage`                                                      |
+| `--coverageDirectory`             | Directory where to write coverage report output <br/>`test-storybook --coverage --coverageDirectory coverage/ui/storybook`                                                    |
 | `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
 | `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
 | `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
