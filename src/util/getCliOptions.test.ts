@@ -17,6 +17,15 @@ describe('getCliOptions', () => {
     expect(opts.runnerOptions).toMatchObject(customConfig);
   });
 
+  it('returns failOnConsole option if passed', () => {
+    const customConfig = { failOnConsole: true };
+    jest
+      .spyOn(cliHelper, 'getParsedCliOptions')
+      .mockReturnValue({ options: customConfig, extraArgs: [] });
+    const opts = getCliOptions();
+    expect(opts.runnerOptions).toMatchObject(customConfig);
+  });
+
   it('returns extra args if passed', () => {
     const extraArgs = ['TestName', 'AnotherTestName'];
     // mock argv to avoid side effect from running tests e.g. jest --coverage,
