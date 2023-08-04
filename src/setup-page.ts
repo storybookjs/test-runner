@@ -216,6 +216,9 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
       // end of fast-safe-stringify code
       
       function composeMessage(args) {
+        if (args instanceof Error) {
+          return \`\${args.name}: \${args.message}\\n\${args.stack}\`;
+        }
         if (typeof args === 'undefined') return "undefined";
         if (typeof args === 'string') return args;
         return stringify(args, null, null, { depthLimit: 5, edgesLimit: 100 });
