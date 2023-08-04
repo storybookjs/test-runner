@@ -17,8 +17,8 @@ describe('getCliOptions', () => {
     expect(opts.runnerOptions).toMatchObject(customConfig);
   });
 
-  it('returns checkConsole option if passed', () => {
-    const customConfig = { checkConsole: true };
+  it('returns failOnConsole option if passed', () => {
+    const customConfig = { failOnConsole: true };
     jest
       .spyOn(cliHelper, 'getParsedCliOptions')
       .mockReturnValue({ options: customConfig, extraArgs: [] });

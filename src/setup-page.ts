@@ -51,7 +51,7 @@ const sanitizeURL = (url: string) => {
 
 export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
-  const checkConsole = process.env.TEST_CHECK_CONSOLE;
+  const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
@@ -315,7 +315,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         const spyOnConsole = (method, name) => {
           const originalFn = console[method];
           return function () {
-            if (\`${checkConsole}\`==='true' && method==='error') {
+            if (\`${failOnConsole}\`==='true' && method==='error') {
               hasErrors = true;
             }
             const message = [...arguments].map(composeMessage).join(', ');

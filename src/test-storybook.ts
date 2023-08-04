@@ -304,7 +304,7 @@ const main = async () => {
   const { storiesPaths, lazyCompilation } = getStorybookMetadata();
   process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
-  if (runnerOptions.checkConsole) {
+  if (runnerOptions.failOnConsole) {
     process.env.TEST_CHECK_CONSOLE = 'true';
   }
 

@@ -76,7 +76,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       '--shard <shardIndex/shardCount>',
       'Splits your test suite across different machines to run in CI.'
     )
-    .option('--checkConsole', 'Checks the browser console output for errors');
+    .option('--failOnConsole', 'Makes tests fail on browser console errors');
 
   program.exitOverride();
 
