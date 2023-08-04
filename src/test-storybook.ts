@@ -52,7 +52,10 @@ const cleanup = () => {
 
 async function reportCoverage() {
   const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
-  const coverageFolder = path.resolve(process.cwd(), 'coverage/storybook');
+  const coverageFolder = path.resolve(
+    process.cwd(),
+    process.env.STORYBOOK_COVERAGE_DIRECTORY ?? 'coverage/storybook'
+  );
 
   // in case something goes wrong and .nyc_output does not exist, bail
   if (!fs.existsSync(coverageFolderE2E)) {
@@ -80,7 +83,7 @@ async function reportCoverage() {
 
 const onProcessEnd = () => {
   cleanup();
-  if (process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
+  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true') {
     reportCoverage();
   }
 };
@@ -258,6 +261,10 @@ const main = async () => {
 
   if (!isWatchMode && runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
+  }
+
+  if (runnerOptions.coverageDirectory) {
+    process.env.STORYBOOK_COVERAGE_DIRECTORY = runnerOptions.coverageDirectory;
   }
 
   if (runnerOptions.junit) {
