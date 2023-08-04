@@ -1,3 +1,23 @@
+# v0.13.0 (Fri Aug 04 2023)
+
+#### 🚀 Enhancement
+
+- Add ability to fail on console errors [#321](https://github.com/storybookjs/test-runner/pull/321) ([@work933k](https://github.com/work933k) [@yannbf](https://github.com/yannbf))
+- Support importing stories from separate packages [#339](https://github.com/storybookjs/test-runner/pull/339) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Maintenance: Update storybook example to vite and typescript [#340](https://github.com/storybookjs/test-runner/pull/340) ([@yannbf](https://github.com/yannbf))
+- Add coverage directory option [#272](https://github.com/storybookjs/test-runner/pull/272) ([@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- [@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph)
+- [@work933k](https://github.com/work933k)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.12.0 (Thu Jul 27 2023)
 
 #### 🚀 Enhancement
