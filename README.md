@@ -6,6 +6,7 @@ Storybook test runner turns all of your stories into executable tests.
 
 - [Features](#features)
 - [How it works](#how-it-works)
+- [Storybook compatibility](#storybook-compatibility)
 - [Getting started](#getting-started)
 - [CLI Options](#cli-options)
 - [Ejecting configuration](#ejecting-configuration)
@@ -23,7 +24,10 @@ Storybook test runner turns all of your stories into executable tests.
     - [Manually configuring istanbul](#manually-configuring-istanbul)
   - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
+  - [4 - Run tests with --shard flag](#4---run-tests-with---shard-flag)
 - [Experimental test hook API](#experimental-test-hook-api)
+  - [prepare](#prepare)
+  - [getHttpHeaders](#gethttpheaders)
   - [DOM snapshot recipe](#dom-snapshot-recipe)
   - [Image snapshot recipe](#image-snapshot-recipe)
   - [Render lifecycle](#render-lifecycle)
@@ -67,6 +71,15 @@ The test runner is simple in design – it just visits each story from a running
 If there are any failures, the test runner will provide an output with the error, alongside with a link to the failing story, so you can see the error yourself and debug it directly in the browser:
 
 ![](.github/assets/click-to-debug.gif)
+
+## Storybook compatibility
+
+Use the following table to use the correct version of this package, based on the version of Storybook you're using:
+
+| Test runner version | Storybook version |
+| ------------------- | ----------------- |
+| ^0.10.0             | ^7.0.0            |
+| ~0.9.4              | ^6.4.0            |
 
 ## Getting started
 
@@ -405,6 +418,62 @@ Here's an example on how to achieve that:
 > **Note**
 > If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issues when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
 
+### 4 - Run tests with --shard flag
+
+The test-runner collects all coverage in one file `coverage/storybook/coverage-storybook.json`. To split the coverage file you should rename it using the `shard-index`. To report the coverage you should merge the coverage files with the nyc merge command.
+
+Github CI example:
+
+```yml
+test:
+  name: Running Test-storybook (${{ matrix.shard }})
+  strategy:
+    matrix:
+      shard: [1, 2, 3, 4]
+  steps:
+    - name: Testing storybook
+      run: yarn test-storybook --coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }}
+    - name: Renaming coverage file
+      run: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${matrix.shard}.json
+report-coverage:
+  name: Reporting storybook coverage
+  steps:
+    - name: Merging coverage
+      run: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+    - name: Report coverage
+      run: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
+Circle CI example:
+
+```yml
+test:
+  parallelism: 4
+  steps:
+    - run:
+        command: yarn test-storybook --coverage --shard=$(expr $CIRCLE_NODE_INDEX + 1)/$CIRCLE_NODE_TOTAL
+        command: mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${CIRCLE_NODE_INDEX + 1}.json
+report-coverage:
+  steps:
+    - run:
+        command: yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+        command: yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
+Gitlab CI example:
+
+```yml
+test:
+  parallel: 4
+  script:
+    - yarn test-storybook --coverage --shard=$CI_NODE_INDEX/$CI_NODE_TOTAL
+    - mv coverage/storybook/coverage-storybook.json coverage/storybook/coverage-storybook-${CI_NODE_INDEX}.json
+report-coverage:
+  script:
+    - yarn nyc merge coverage/storybook merged-output/merged-coverage.json
+    - yarn nyc report --reporter=text -t merged-output --report-dir merged-output
+```
+
 ## Experimental test hook API
 
 The test runner renders a story and executes its [play function](https://storybook.js.org/docs/react/writing-stories/play-function) if one exists. However, there are certain behaviors that are not possible to achieve via the play function, which executes in the browser. For example, if you want the test runner to take visual snapshots for you, this is something that is possible via Playwright/Jest, but must be executed in Node.
@@ -413,9 +482,42 @@ To enable use cases like visual or DOM snapshots, the test runner exports test h
 
 There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
 
-The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
+The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
+
+Apart from these hooks, there are additional properties you can set in `.storybook/test-runner.js`:
+
+#### prepare
+
+The test-runner has a default `prepare` function which gets the browser in the right environment before testing the stories. You can override this behavior, in case you might want to hack the behavior of the browser. For example, you might want to set a cookie, or add query parameters to the visiting URL, or do some authentication before reaching the Storybook URL. You can do that by overriding the `prepare` function.
+
+The `prepare` function receives an object containing:
+
+- `browserContext`: a [Playwright Browser Context](https://playwright.dev/docs/api/class-browsercontext) instance
+- `page`: a [Playwright Page](https://playwright.dev/docs/api/class-page) instance.
+- `testRunnerConfig`: the test runner configuration object, coming from the `.storybook/test-runner.js`.
+
+For reference, please use the [default `prepare`](https://github.com/storybookjs/test-runner/blob/next/src/setup-page.ts#L12) function as a starting point.
+
+> **Note**
+> If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
+
+#### getHttpHeaders
+
+The test-runner makes a few `fetch` calls to check the status of a Storybook instance, and to get the index of the Storybook's stories. Additionally, it visits a page using Playwright. In all of these scenarios, it's possible, depending on where your Storybook is hosted, that you might need to set some HTTP headers. For example, if your Storybook is hosted behind a basic authentication, you might need to set the `Authorization` header. You can do so by passing a `getHttpHeaders` function to your test-runner config. That function receives the `url` of the fetch calls and page visits, and should return an object with the headers to be set.
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  getHttpHeaders: async (url) => {
+    const token = url.includes('prod') ? 'XYZ' : 'ABC';
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  },
+};
+```
 
 > **Note**
 > These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.

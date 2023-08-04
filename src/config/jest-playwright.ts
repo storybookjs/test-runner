@@ -1,4 +1,7 @@
 import path from 'path';
+import { getProjectRoot } from '@storybook/core-common';
+
+const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH || '@storybook/test-runner';
 
 /**
  * IMPORTANT NOTE:
@@ -15,21 +18,21 @@ import path from 'path';
 const getJestPlaywrightConfig = () => {
   const presetBasePath = path.dirname(
     require.resolve('jest-playwright-preset', {
-      paths: [path.join(__dirname, '../../node_modules')],
+      paths: [path.join(__dirname, '../node_modules')],
     })
   );
   const expectPlaywrightPath = path.dirname(
     require.resolve('expect-playwright', {
-      paths: [path.join(__dirname, '../../node_modules')],
+      paths: [path.join(__dirname, '../node_modules')],
     })
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: '@storybook/test-runner/playwright/global-setup.js',
-    globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
-    testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
+    globalSetup: require.resolve(TEST_RUNNER_PATH + '/playwright/global-setup.js'),
+    globalTeardown: require.resolve(TEST_RUNNER_PATH + '/playwright/global-teardown.js'),
+    testEnvironment: require.resolve(TEST_RUNNER_PATH + '/playwright/custom-environment.js'),
     setupFilesAfterEnv: [
-      '@storybook/test-runner/playwright/jest-setup.js',
+      require.resolve(TEST_RUNNER_PATH + '/playwright/jest-setup.js'),
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
@@ -46,18 +49,38 @@ export const getJestConfig = () => {
     STORYBOOK_JUNIT,
   } = process.env;
 
-  const reporters = STORYBOOK_JUNIT ? ['default', 'jest-junit'] : ['default'];
+  const jestJunitPath = path.dirname(
+    require.resolve('jest-junit', {
+      paths: [path.join(__dirname, '../node_modules')],
+    })
+  );
+
+  const jestSerializerHtmlPath = path.dirname(
+    require.resolve('jest-serializer-html', {
+      paths: [path.join(__dirname, '../node_modules')],
+    })
+  );
+
+  const swcJestPath = path.dirname(
+    require.resolve('@swc/jest', {
+      paths: [path.join(__dirname, '../node_modules')],
+    })
+  );
+
+  const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
+
+  const testMatch = (STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';')) || [];
 
   let config = {
-    rootDir: process.cwd(),
+    rootDir: getProjectRoot(),
     roots: TEST_ROOT ? [TEST_ROOT] : undefined,
     reporters,
-    testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
+    testMatch,
     transform: {
-      '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
-      '^.+\\.[jt]sx?$': 'babel-jest',
+      '^.+\\.stories\\.[jt]sx?$': require.resolve(TEST_RUNNER_PATH + '/playwright/transform'),
+      '^.+\\.[jt]sx?$': swcJestPath,
     },
-    snapshotSerializers: ['jest-serializer-html'],
+    snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {
         browsers: TEST_BROWSERS.split(',')

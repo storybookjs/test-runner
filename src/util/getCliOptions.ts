@@ -1,7 +1,9 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
 import type { BrowserType } from 'jest-playwright-preset';
 
-type CliOptions = {
+export type JestOptions = string[];
+
+export type CliOptions = {
   runnerOptions: {
     indexJson?: boolean;
     url?: string;
@@ -12,7 +14,7 @@ type CliOptions = {
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
   };
-  jestOptions: string[];
+  jestOptions: JestOptions;
 };
 
 type StorybookRunnerCommand = keyof CliOptions['runnerOptions'];
@@ -28,7 +30,15 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'junit',
 ];
 
-export const getCliOptions = () => {
+function copyOption<ObjType extends object, KeyType extends keyof ObjType>(
+  obj: ObjType,
+  key: KeyType,
+  value: ObjType[KeyType]
+) {
+  obj[key] = value;
+}
+
+export const getCliOptions = (): CliOptions => {
   const { options: allOptions, extraArgs } = getParsedCliOptions();
 
   const defaultOptions: CliOptions = {
@@ -36,17 +46,16 @@ export const getCliOptions = () => {
     jestOptions: process.argv.splice(0, 2),
   };
 
-  const finalOptions = Object.keys(allOptions).reduce((acc, key: any) => {
+  const finalOptions = Object.keys(allOptions).reduce((acc, key: StorybookRunnerCommand) => {
     if (STORYBOOK_RUNNER_COMMANDS.includes(key)) {
-      //@ts-ignore
-      acc.runnerOptions[key] = allOptions[key];
+      copyOption(acc.runnerOptions, key, allOptions[key]);
     } else {
       if (allOptions[key] === true) {
         acc.jestOptions.push(`--${key}`);
       } else if (allOptions[key] === false) {
         acc.jestOptions.push(`--no-${key}`);
       } else {
-        acc.jestOptions.push(`--${key}`, allOptions[key]);
+        acc.jestOptions.push(`--${key}`, allOptions[key] as string);
       }
     }
 

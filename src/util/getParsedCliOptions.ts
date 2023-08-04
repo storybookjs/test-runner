@@ -1,6 +1,12 @@
-export const getParsedCliOptions = () => {
-  const { program } = require('commander');
+import type { CliOptions } from './getCliOptions';
+import { program } from 'commander';
 
+type ParsedCliOptions = {
+  options: CliOptions['runnerOptions'];
+  extraArgs: CliOptions['jestOptions'];
+};
+
+export const getParsedCliOptions = (): ParsedCliOptions => {
   program
     .option(
       '-i, --index-json',
