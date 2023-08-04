@@ -10,6 +10,11 @@ export default {
 
 const Template = (args) => <Page {...args} />;
 
+export const ComponentLogsErrors = () => {
+  console.error('Console error with a failure');
+  return <div>Hello world</div>;
+};
+
 export const ComponentThrowsErrors = () => {
   throw new Error('Component has a failure');
 };
