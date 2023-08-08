@@ -1,5 +1,5 @@
 import path from 'path';
-import { getProjectRoot } from '@storybook/core-common';
+import { globSync } from 'glob';
 
 const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH || '@storybook/test-runner';
 
@@ -71,9 +71,15 @@ export const getJestConfig = () => {
 
   const testMatch = (STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';')) || [];
 
+  const testRoots = new Set();
+
+  testMatch.forEach((testMatch) => {
+    globSync(path.dirname(testMatch) + '/').forEach((match) => testRoots.add(match));
+  });
+
   let config = {
-    rootDir: getProjectRoot(),
-    roots: TEST_ROOT ? [TEST_ROOT] : undefined,
+    rootDir: process.cwd(),
+    roots: TEST_ROOT ? [TEST_ROOT] : [...testRoots],
     reporters,
     testMatch,
     transform: {
