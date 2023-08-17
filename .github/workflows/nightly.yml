@@ -33,10 +33,6 @@ jobs:
         run: |
           npx storybook@next upgrade --prerelease --yes
 
-      # TODO: This should not be necessary once @storybook/csf is properly updated
-      - name: Fix local @storybook/csf version
-        run: |
-          yarn add @storybook/csf@0.0.2--canary.4566f4d.1
       - name: Run test runner
         uses: mathiasvr/command-output@v1
         id: tests
@@ -118,11 +114,6 @@ jobs:
       - name: Upgrade to storybook@next
         run: |
           npx storybook@next upgrade --prerelease --yes
-
-      # TODO: This should not be necessary once @storybook/csf is properly updated
-      - name: Fix local @storybook/csf version
-        run: |
-          yarn add @storybook/csf@0.0.2--canary.4566f4d.1
 
       - name: Run test runner and expect failure
         uses: mathiasvr/command-output@v1
