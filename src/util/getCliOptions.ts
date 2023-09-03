@@ -10,8 +10,10 @@ export type CliOptions = {
     configDir?: string;
     eject?: boolean;
     coverage?: boolean;
+    coverageDirectory?: string;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
+    failOnConsole?: boolean;
   } & Record<string, unknown>;
   jestOptions: JestOptions;
 };
@@ -25,7 +27,9 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'eject',
   'url',
   'coverage',
+  'coverageDirectory',
   'junit',
+  'failOnConsole',
 ];
 
 function copyOption<ObjType extends object, KeyType extends keyof ObjType>(

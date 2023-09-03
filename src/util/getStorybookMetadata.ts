@@ -1,10 +1,10 @@
-import { relative, resolve } from 'path';
-import { normalizeStories } from '@storybook/core-common';
+import { join } from 'path';
+import { normalizeStories, getProjectRoot } from '@storybook/core-common';
 import { getStorybookMain } from './getStorybookMain';
 import type { StoriesEntry } from '@storybook/types';
 
 export const getStorybookMetadata = () => {
-  const workingDir = resolve();
+  const workingDir = getProjectRoot();
   const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
 
   const main = getStorybookMain(configDir);
@@ -18,7 +18,7 @@ export const getStorybookMetadata = () => {
 
   const storiesPaths = normalizedStoriesEntries
     .map((entry) => entry.directory + '/' + entry.files)
-    .map((dir) => '<rootDir>/' + relative(workingDir, dir))
+    .map((dir) => join(workingDir, dir))
     .join(';');
 
   // @ts-ignore -- this is added in @storybook/core-common@6.5, which we don't depend on

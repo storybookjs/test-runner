@@ -14,6 +14,7 @@ describe('getParsedCliOptions', () => {
         options: {
           indexJson: undefined,
           configDir: '.storybook',
+          coverageDirectory: 'coverage/storybook',
           watch: false,
           browsers: ['chromium'],
           url: 'http://127.0.0.1:6006',
@@ -27,6 +28,7 @@ describe('getParsedCliOptions', () => {
         options: {
           indexJson: undefined,
           configDir: '.storybook',
+          coverageDirectory: 'coverage/storybook',
           watch: false,
           browsers: ['chromium'],
           url: 'http://127.0.0.1:6006',

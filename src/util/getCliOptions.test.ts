@@ -28,6 +28,15 @@ describe('getCliOptions', () => {
     });
   });
 
+  it('returns failOnConsole option if passed', () => {
+    const customConfig = { failOnConsole: true };
+    jest
+      .spyOn(cliHelper, 'getParsedCliOptions')
+      .mockReturnValue({ options: customConfig, extraArgs: [] });
+    const opts = getCliOptions();
+    expect(opts.runnerOptions).toMatchObject(customConfig);
+  });
+
   it('handles boolean options correctly', () => {
     const customConfig = { coverage: true, junit: false };
     jest
@@ -52,13 +61,7 @@ describe('getCliOptions', () => {
       extraArgs: ['--watch', '--coverage'],
     });
     const opts = getCliOptions();
-    expect(opts.jestOptions).toEqual([
-      '--version',
-      '--no-cache',
-      '--coverageDirectory="./test"',
-      '--watch',
-      '--coverage',
-    ]);
+    expect(opts.jestOptions).toEqual(['--version', '--no-cache', '--watch', '--coverage']);
   });
 
   it('returns extra args if passed', () => {

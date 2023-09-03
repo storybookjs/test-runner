@@ -58,6 +58,11 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       '--coverage',
       'Indicates that test coverage information should be collected and reported in the output'
     )
+    .option(
+      '--coverageDirectory <directory>',
+      'Directory where to write coverage report output',
+      'coverage/storybook'
+    )
     .option('--junit', 'Indicates that test information should be reported in a junit file')
     .option(
       '--eject',
@@ -70,7 +75,8 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
     .option(
       '--shard <shardIndex/shardCount>',
       'Splits your test suite across different machines to run in CI.'
-    );
+    )
+    .option('--failOnConsole', 'Makes tests fail on browser console errors');
 
   program.exitOverride();
 

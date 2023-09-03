@@ -51,6 +51,7 @@ const sanitizeURL = (url: string) => {
 
 export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
+  const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
@@ -215,6 +216,9 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
       // end of fast-safe-stringify code
       
       function composeMessage(args) {
+        if (args instanceof Error) {
+          return \`\${args.name}: \${args.message}\\n\${args.stack}\`;
+        }
         if (typeof args === 'undefined') return "undefined";
         if (typeof args === 'string') return args;
         return stringify(args, null, null, { depthLimit: 5, edgesLimit: 100 });
@@ -306,10 +310,14 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
 
         // collect logs to show upon test error
         let logs = [];
+        let hasErrors = false;
 
         const spyOnConsole = (method, name) => {
           const originalFn = console[method];
           return function () {
+            if (\`${failOnConsole}\`==='true' && method==='error') {
+              hasErrors = true;
+            }
             const message = [...arguments].map(composeMessage).join(', ');
             const prefix = \`\${bold(name)}: \`;
             logs.push(prefix + message);
@@ -332,7 +340,12 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         })
 
         return new Promise((resolve, reject) => {
-          channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
+          channel.on('${renderedEvent}', () => { 
+            if (hasErrors) {
+              return reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
+            }
+            return resolve(document.getElementById('root'));             
+          });
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
           channel.on('storyErrored', ({ description }) => reject(
             new StorybookTestRunnerError(storyId, description, logs))

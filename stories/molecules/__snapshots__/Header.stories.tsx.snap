@@ -2,7 +2,7 @@
 
 exports[`Molecules/Header LoggedIn smoke-test 2`] = `
 <header>
-  <div class="wrapper">
+  <div class="storybook-header">
     <div>
       <svg width="32"
            height="32"
@@ -50,7 +50,7 @@ exports[`Molecules/Header LoggedIn smoke-test 2`] = `
 
 exports[`Molecules/Header LoggedOut smoke-test 2`] = `
 <header>
-  <div class="wrapper">
+  <div class="storybook-header">
     <div>
       <svg width="32"
            height="32"
