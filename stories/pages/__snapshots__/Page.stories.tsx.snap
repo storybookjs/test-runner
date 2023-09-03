@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Pages/Page LoggedIn play-test 2`] = `
+exports[`Pages/page LoggedIn play-test 2`] = `
 <article>
   <header>
-    <div class="wrapper">
+    <div class="storybook-header">
       <div>
         <svg width="32"
              height="32"
@@ -47,7 +47,7 @@ exports[`Pages/Page LoggedIn play-test 2`] = `
       </div>
     </div>
   </header>
-  <section>
+  <section class="storybook-page">
     <h2>
       Pages in Storybook
     </h2>
@@ -117,10 +117,10 @@ exports[`Pages/Page LoggedIn play-test 2`] = `
 </article>
 `;
 
-exports[`Pages/Page LoggedOut smoke-test 2`] = `
+exports[`Pages/page LoggedOut smoke-test 2`] = `
 <article>
   <header>
-    <div class="wrapper">
+    <div class="storybook-header">
       <div>
         <svg width="32"
              height="32"
@@ -162,7 +162,7 @@ exports[`Pages/Page LoggedOut smoke-test 2`] = `
       </div>
     </div>
   </header>
-  <section>
+  <section class="storybook-page">
     <h2>
       Pages in Storybook
     </h2>

@@ -1,3 +1,72 @@
+# v0.13.0 (Fri Aug 04 2023)
+
+#### 🚀 Enhancement
+
+- Add ability to fail on console errors [#321](https://github.com/storybookjs/test-runner/pull/321) ([@work933k](https://github.com/work933k) [@yannbf](https://github.com/yannbf))
+- Support importing stories from separate packages [#339](https://github.com/storybookjs/test-runner/pull/339) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Maintenance: Update storybook example to vite and typescript [#340](https://github.com/storybookjs/test-runner/pull/340) ([@yannbf](https://github.com/yannbf))
+- Add coverage directory option [#272](https://github.com/storybookjs/test-runner/pull/272) ([@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- [@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph)
+- [@work933k](https://github.com/work933k)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.12.0 (Thu Jul 27 2023)
+
+#### 🚀 Enhancement
+
+
+#### 🐛 Bug Fix
+
+- maintenance: remove no-manager-cache flag in example storybook [#331](https://github.com/storybookjs/test-runner/pull/331) ([@MH4GF](https://github.com/MH4GF))
+- Fix extra args not being passed to jest [#322](https://github.com/storybookjs/test-runner/pull/322) ([@zyulyaev](https://github.com/zyulyaev) [@yannbf](https://github.com/yannbf))
+- Fix empty coverage report [#324](https://github.com/storybookjs/test-runner/pull/324) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- docs: fix github actions example for shard usage [#320](https://github.com/storybookjs/test-runner/pull/320) ([@MH4GF](https://github.com/MH4GF))
+
+#### Authors: 5
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Hirotaka Miyagi ([@MH4GF](https://github.com/MH4GF))
+- Nikita Zyulyaev ([@zyulyaev](https://github.com/zyulyaev))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.11.0 (Tue Jun 20 2023)
+
+#### 🚀 Enhancement
+
+- Release 0.11.0 [#318](https://github.com/storybookjs/test-runner/pull/318) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen) [@unshame](https://github.com/unshame) [@valentinpalkovic](https://github.com/valentinpalkovic) [@vanessayuenn](https://github.com/vanessayuenn))
+- Bundle with tsup and replace babel-jest [#250](https://github.com/storybookjs/test-runner/pull/250) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen))
+
+#### 🐛 Bug Fix
+
+- Change dependencies from `future` npm tag to `next` [#315](https://github.com/storybookjs/test-runner/pull/315) ([@yannbf](https://github.com/yannbf))
+- fix: nyc command with shard option [#257](https://github.com/storybookjs/test-runner/pull/257) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- Improve ejected config types [#297](https://github.com/storybookjs/test-runner/pull/297) ([@yannbf](https://github.com/yannbf))
+- fix: Remove last reference to regenerator-runtime [#303](https://github.com/storybookjs/test-runner/pull/303) ([@bryanjtc](https://github.com/bryanjtc))
+- fix(test-storybook): Fix test-runner-jest.config.js file not being found in STORYBOOK_CONFIG_DIR on Windows [#296](https://github.com/storybookjs/test-runner/pull/296) ([@unshame](https://github.com/unshame))
+- Upgrade glob to v10 [#299](https://github.com/storybookjs/test-runner/pull/299) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 6
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- UnShame ([@unshame](https://github.com/unshame))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Vanessa Yuen ([@vanessayuenn](https://github.com/vanessayuenn))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.10.0 (Mon Apr 03 2023)
 
 #### 🚀 Enhancement
