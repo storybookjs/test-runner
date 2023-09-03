@@ -21,11 +21,11 @@ jobs:
 
       - name: Run jest tests
         run: |
+          yarn build
           yarn test --coverage
 
       - name: Run test runner
         run: |
-          yarn build
           yarn test-storybook:ci-coverage
 
       - name: Generate code coverage
