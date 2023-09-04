@@ -32,6 +32,8 @@ jobs:
       - name: Upgrade to storybook@next
         run: |
           npx storybook@next upgrade --prerelease --yes
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Run test runner
         uses: mathiasvr/command-output@v1
@@ -114,6 +116,8 @@ jobs:
       - name: Upgrade to storybook@next
         run: |
           npx storybook@next upgrade --prerelease --yes
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Run test runner and expect failure
         uses: mathiasvr/command-output@v1
