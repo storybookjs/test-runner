@@ -14,10 +14,10 @@ jobs:
   assert_test_runner:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
 
@@ -36,7 +36,7 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Run test runner
-        uses: mathiasvr/command-output@v1
+        uses: mathiasvr/command-output@v2
         id: tests
         with:
           run: |
@@ -52,7 +52,7 @@ jobs:
       - name: Report incoming errors
         if: ${{ failure() }}
         id: slack
-        uses: slackapi/slack-github-action@v1.19.0
+        uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: '${{ secrets.SLACK_CHANNEL_ID }}'
           payload: |
@@ -98,10 +98,10 @@ jobs:
   assert_test_runner_failures:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
 
@@ -147,7 +147,7 @@ jobs:
       - name: Report if any test passes
         if: ${{ always() && env.FAILED == 'true' }}
         id: slack
-        uses: slackapi/slack-github-action@v1.19.0
+        uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: '${{ secrets.SLACK_CHANNEL_ID }}'
           payload: |
