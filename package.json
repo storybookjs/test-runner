@@ -57,7 +57,7 @@
     "@storybook/addon-coverage": "^0.0.7",
     "@storybook/addon-essentials": "^7.3.0",
     "@storybook/addon-interactions": "^7.3.0",
-    "@storybook/jest": "^0.1.0",
+    "@storybook/jest": "^0.2.2",
     "@storybook/react": "^7.3.0",
     "@storybook/react-vite": "^7.3.0",
     "@storybook/testing-library": "^0.2.0",
