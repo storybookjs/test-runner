@@ -27,7 +27,6 @@ const addons = [
     : '@storybook/addon-essentials',
   '@storybook/addon-interactions',
   '@storybook/addon-coverage',
-  '@storybook/addon-mdx-gfm',
 ];
 module.exports = {
   stories,
@@ -40,7 +39,7 @@ module.exports = {
     disableTelemetry: true,
   },
   framework: {
-    name: '@storybook/react-webpack5',
+    name: '@storybook/react-vite',
     options: {},
   },
   docs: {

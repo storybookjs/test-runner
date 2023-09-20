@@ -1,33 +1,36 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { expect } from '@storybook/jest';
-import { isTestRunner } from '../../.storybook/is-test-runner';
 import { within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/testing-library';
+
+import { isTestRunner } from '../../.storybook/is-test-runner';
 
 import { Button } from './Button';
 
-export default {
+const meta = {
   component: Button,
-  argTypes: {
-    onSubmit: { action: true },
+} satisfies Meta<typeof Button>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
+  args: {
+    primary: true,
+    label: 'Button',
   },
 };
 
-const Template = (args) => <Button {...args} />;
-
-export const Primary = Template.bind({});
-Primary.args = {
-  primary: true,
-  label: 'Button',
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  ...Primary.args,
-  primary: false,
-};
-Secondary.parameters = {
-  tests: {
-    disableSnapshots: true,
+export const Secondary: Story = {
+  args: {
+    ...Primary.args,
+    primary: false,
+  },
+  parameters: {
+    tests: {
+      disableSnapshots: true,
+    },
   },
 };
 
@@ -36,7 +39,9 @@ export const Demo = (args) => (
     Click
   </button>
 );
-
+Demo.argTypes = {
+  onSubmit: { action: true },
+};
 Demo.play = async ({ args, canvasElement }) => {
   await userEvent.click(within(canvasElement).getByRole('button'));
   await expect(args.onSubmit).toHaveBeenCalledWith(expect.stringMatching(/([A-Z])\w+/gi));
@@ -60,6 +65,7 @@ export const WaitFor = (args) => (
     Click
   </button>
 );
+WaitFor.argTypes = Demo.argTypes;
 WaitFor.play = async ({ args, canvasElement }) => {
   await userEvent.click(await within(canvasElement).findByText('Click'));
   await waitFor(async () => {
@@ -89,6 +95,7 @@ export const WithLoaders = (args, { loaded: { todo } }) => {
     </button>
   );
 };
+WithLoaders.argTypes = Demo.argTypes;
 WithLoaders.loaders = [
   async () => {
     // long fake timeout

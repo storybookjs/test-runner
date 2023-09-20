@@ -1,9 +1,7 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
 import type { BrowserType } from 'jest-playwright-preset';
 
-export type JestOptions = {
-  [key: string]: any;
-};
+export type JestOptions = string[];
 
 export type CliOptions = {
   runnerOptions: {
@@ -12,8 +10,10 @@ export type CliOptions = {
     configDir?: string;
     eject?: boolean;
     coverage?: boolean;
+    coverageDirectory?: string;
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
+    failOnConsole?: boolean;
   };
   jestOptions: JestOptions;
 };
@@ -27,7 +27,9 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'eject',
   'url',
   'coverage',
+  'coverageDirectory',
   'junit',
+  'failOnConsole',
 ];
 
 function copyOption<ObjType extends object, KeyType extends keyof ObjType>(
@@ -63,7 +65,7 @@ export const getCliOptions = (): CliOptions => {
   }, defaultOptions);
 
   if (extraArgs.length) {
-    finalOptions.jestOptions.push(...[extraArgs]);
+    finalOptions.jestOptions.push(...extraArgs);
   }
 
   return finalOptions;

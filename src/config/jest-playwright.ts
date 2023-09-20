@@ -1,4 +1,7 @@
 import path from 'path';
+import { getProjectRoot } from '@storybook/core-common';
+
+const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH || '@storybook/test-runner';
 
 /**
  * IMPORTANT NOTE:
@@ -25,11 +28,11 @@ const getJestPlaywrightConfig = () => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: '@storybook/test-runner/playwright/global-setup.js',
-    globalTeardown: '@storybook/test-runner/playwright/global-teardown.js',
-    testEnvironment: '@storybook/test-runner/playwright/custom-environment.js',
+    globalSetup: require.resolve(TEST_RUNNER_PATH + '/playwright/global-setup.js'),
+    globalTeardown: require.resolve(TEST_RUNNER_PATH + '/playwright/global-teardown.js'),
+    testEnvironment: require.resolve(TEST_RUNNER_PATH + '/playwright/custom-environment.js'),
     setupFilesAfterEnv: [
-      '@storybook/test-runner/playwright/jest-setup.js',
+      require.resolve(TEST_RUNNER_PATH + '/playwright/jest-setup.js'),
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
@@ -66,13 +69,15 @@ export const getJestConfig = () => {
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
+  const testMatch = (STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';')) || [];
+
   let config = {
-    rootDir: process.cwd(),
+    rootDir: getProjectRoot(),
     roots: TEST_ROOT ? [TEST_ROOT] : undefined,
     reporters,
-    testMatch: STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';'),
+    testMatch,
     transform: {
-      '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/playwright/transform',
+      '^.+\\.stories\\.[jt]sx?$': require.resolve(TEST_RUNNER_PATH + '/playwright/transform'),
       '^.+\\.[jt]sx?$': swcJestPath,
     },
     snapshotSerializers: [jestSerializerHtmlPath],

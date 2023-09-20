@@ -2,6 +2,20 @@ import * as storybookMain from './getStorybookMain';
 
 import { getStorybookMetadata } from './getStorybookMetadata';
 
+jest.mock('@storybook/core-common', () => ({
+  ...jest.requireActual('@storybook/core-common'),
+  getProjectRoot: jest.fn(() => '/foo/bar'),
+  normalizeStories: jest.fn(() => [
+    {
+      titlePrefix: 'Example',
+      files: '**/*.stories.@(mdx|tsx|ts|jsx|js)',
+      directory: './stories/basic',
+      importPathMatcher:
+        /^\.[\\/](?:stories\/basic(?:\/(?!\.)(?:(?:(?!(?:^|\/)\.).)*?)\/|\/|$)(?!\.)(?=.)[^/]*?\.stories\.(mdx|tsx|ts|jsx|js))$/,
+    },
+  ]),
+}));
+
 describe('getStorybookMetadata', () => {
   afterAll(() => {
     process.env.STORYBOOK_CONFIG_DIR = undefined;
@@ -32,7 +46,7 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
-      `"<rootDir>/stories/basic/**/*.@(mdx|stories.@(tsx|ts|jsx|js))"`
+      `"/foo/bar/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
     );
   });
 
@@ -44,7 +58,9 @@ describe('getStorybookMetadata', () => {
     jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
-    expect(storiesPaths).toMatchInlineSnapshot(`"<rootDir>/**/stories/*.stories.@(js|ts)"`);
+    expect(storiesPaths).toMatchInlineSnapshot(
+      `"/foo/bar/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
+    );
   });
 
   it('should return storiesPath from mixed CSF2 and CSF3 style config', () => {
@@ -62,7 +78,7 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     const { storiesPaths } = getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
-      `"<rootDir>/stories/basic/**/*.@(mdx|stories.@(tsx|ts|jsx|js));<rootDir>/stories/complex/*.stories.@(js|ts)"`
+      `"/foo/bar/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
     );
   });
 
