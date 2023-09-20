@@ -81,10 +81,8 @@ describe('Playwright', () => {
                     id: "example-foo-bar--a"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -161,10 +159,8 @@ describe('Playwright', () => {
                     id: "example-foo-bar--a"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -242,10 +238,8 @@ describe('Playwright', () => {
                     id: "example-header--a"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);

@@ -59,10 +59,8 @@ describe('Playwright Json', () => {
                     id: \\"example-header--logged-in\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -123,10 +121,8 @@ describe('Playwright Json', () => {
                     id: \\"example-header--logged-out\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -189,10 +185,8 @@ describe('Playwright Json', () => {
                     id: \\"example-page--logged-in\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -280,10 +274,8 @@ describe('Playwright Json', () => {
                     id: \\"example-page--logged-in\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -399,10 +391,8 @@ describe('Playwright Json', () => {
                     id: \\"example-header--logged-in\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -463,10 +453,8 @@ describe('Playwright Json', () => {
                     id: \\"example-header--logged-out\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -529,10 +517,8 @@ describe('Playwright Json', () => {
                     id: \\"example-page--logged-in\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
@@ -633,10 +619,8 @@ describe('Playwright Json', () => {
                     id: \\"example-page--logged-in\\"
                   });
                 } catch (error) {
-                  console.error('Error occurred during page.evaluate:', error);
-                  result = {
-                    error: error.message
-                  };
+                  throw error;
+                  result = null;
                 }
                 if (globalThis.__sbPostRender) {
                   await globalThis.__sbPostRender(page, context);
