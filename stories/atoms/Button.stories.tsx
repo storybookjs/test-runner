@@ -9,11 +9,32 @@ import { Button } from './Button';
 
 const meta = {
   component: Button,
+  // TODO: remove this
+  includeStories: ['Demo', 'Primary'],
 } satisfies Meta<typeof Button>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
+
+// TODO: move this below Primary, to get "Browser has been closed" error
+export const Demo = (args) => (
+  <button
+    type="button"
+    onClick={() => {
+      throw new Error('boom');
+    }}
+  >
+    Click
+  </button>
+);
+Demo.argTypes = {
+  onSubmit: { action: true },
+};
+Demo.play = async ({ args, canvasElement }) => {
+  await userEvent.click(within(canvasElement).getByRole('button'));
+  await expect(args.onSubmit).toHaveBeenCalledWith(expect.stringMatching(/([A-Z])\w+/gi));
+};
 
 export const Primary: Story = {
   args: {
@@ -32,19 +53,6 @@ export const Secondary: Story = {
       disableSnapshots: true,
     },
   },
-};
-
-export const Demo = (args) => (
-  <button type="button" onClick={() => args.onSubmit('clicked')}>
-    Click
-  </button>
-);
-Demo.argTypes = {
-  onSubmit: { action: true },
-};
-Demo.play = async ({ args, canvasElement }) => {
-  await userEvent.click(within(canvasElement).getByRole('button'));
-  await expect(args.onSubmit).toHaveBeenCalledWith(expect.stringMatching(/([A-Z])\w+/gi));
 };
 
 export const FindBy = (args) => {

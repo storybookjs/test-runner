@@ -21,6 +21,7 @@ export const testPrefixer = template(
         const context = { id: %%id%%, title: %%title%%, name: %%name%% };
 
         const pageErrorListener = (err) => {
+          console.log(\`👉 [STORYBOOK TEST RUNNER EVENT] \${context.id} page listener error!\`);
           page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
         };
   
@@ -36,6 +37,7 @@ export const testPrefixer = template(
             id: %%id%%,
           });
         } catch (error) {
+          console.log(\`👉 [STORYBOOK TEST RUNNER EVENT] \${context.id}: __test error!\`);
           throw error;
           result = null;
         }

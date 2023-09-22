@@ -340,22 +340,32 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         })
 
         return new Promise((resolve, reject) => {
-          channel.on('${renderedEvent}', () => { 
+          channel.on('${renderedEvent}', () => {
+            logToPage(\`👉 [STORYBOOK BROWSER EVENT] \${storyId}: storyRendered\`);
             if (hasErrors) {
               return reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
             }
             return resolve(document.getElementById('root'));             
           });
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
-          channel.on('storyErrored', ({ description }) => reject(
-            new StorybookTestRunnerError(storyId, description, logs))
-          );
-          channel.on('storyThrewException', (error) => reject(
-            new StorybookTestRunnerError(storyId, error.message, logs))
-          );
-          channel.on('playFunctionThrewException', (error) => reject(
-            new StorybookTestRunnerError(storyId, error.message, logs))
-          );
+          channel.on('storyErrored', ({ description }) => {
+            logToPage(\`👉 [STORYBOOK BROWSER EVENT] \${storyId}: storyErrored\`);
+            reject(
+              new StorybookTestRunnerError(storyId, description, logs)
+            )
+          });
+          channel.on('storyThrewException', (error) => {
+            logToPage(\`👉 [STORYBOOK BROWSER EVENT] \${storyId}: storyThrewException\`);
+            reject(
+              new StorybookTestRunnerError(storyId, error.message, logs)
+            )
+          });
+          channel.on('playFunctionThrewException', (error) => {
+            logToPage(\`👉 [STORYBOOK BROWSER EVENT] \${storyId}: playFunctionThrewException\`);
+            reject(
+              new StorybookTestRunnerError(storyId, error.message, logs)
+            )
+          });
           channel.on('storyMissing', (id) => id === storyId && reject(
             new StorybookTestRunnerError(storyId, 'The story was missing when trying to access it.', logs))
           );
