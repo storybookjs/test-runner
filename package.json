@@ -59,7 +59,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@auto-it/released": "^10.37.1",
+    "@auto-it/released": "^11.0.1",
     "@babel/cli": "^7.12.1",
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-react": "^7.18.6",
@@ -67,7 +67,7 @@
     "@storybook/addon-coverage": "^0.0.7",
     "@storybook/addon-essentials": "^7.3.0",
     "@storybook/addon-interactions": "^7.3.0",
-    "@storybook/jest": "^0.1.0",
+    "@storybook/jest": "^0.2.2",
     "@storybook/react": "^7.3.0",
     "@storybook/react-vite": "^7.3.0",
     "@storybook/testing-library": "^0.2.0",
@@ -75,7 +75,7 @@
     "@types/jest": "^27.0.3",
     "@types/node": "^16.4.1",
     "@vitejs/plugin-react": "^4.0.3",
-    "auto": "^10.3.0",
+    "auto": "^11.0.1",
     "babel-jest": "^28.1.3",
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.1.1",
@@ -136,6 +136,9 @@
     "read-pkg-up": "^7.0.1",
     "tempy": "^1.0.1",
     "ts-dedent": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   },
   "auto": {
     "prereleaseBranches": [
