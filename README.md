@@ -177,6 +177,25 @@ The Storybook test runner comes with Jest installed as an internal dependency. Y
 
 > If you're already using a compatible version of Jest, the test runner will use it, instead of installing a duplicate version in your node_modules folder.
 
+Here's an example of an ejected file used to extend the tests timeout from Jest:
+
+```ts
+// ./test-runner-jest.config.js
+const { getJestConfig } = require('@storybook/test-runner');
+
+/**
+ * @type {import('@jest/types').Config.InitialOptions}
+ */
+module.exports = {
+  // The default configuration comes from @storybook/test-runner
+  ...getJestConfig(),
+  /** Add your own overrides below
+   * @see https://jestjs.io/docs/configuration
+   */
+  testTimeout: 20000, // default timeout is 15s
+};
+```
+
 ## Test reporters
 
 The test runner uses default Jest reporters, but you can add additional reporters by ejecting the configuration as explained above and overriding (or merging with) the `reporters` property.
