@@ -29,14 +29,12 @@ jobs:
           echo "prev_sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
           echo "prev_sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
 
-      - name: Upgrade to storybook@future
+      - name: Upgrade to storybook@next
         run: |
-          npx storybook@future upgrade --prerelease --yes
+          npx storybook@next upgrade --prerelease --yes
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
-      # TODO: This should not be necessary once @storybook/csf is properly updated
-      - name: Fix local @storybook/csf version
-        run: |
-          yarn add @storybook/csf@0.0.2--canary.4566f4d.1
       - name: Run test runner
         uses: mathiasvr/command-output@v1
         id: tests
@@ -115,14 +113,11 @@ jobs:
           echo "prev_sb_version=$(yarn list @storybook/react --depth=0 2> /dev/null | grep @storybook/react | awk -F'@' '{print $3}')" >> $GITHUB_ENV
           echo "prev_sb_csf_version=$(yarn list @storybook/csf --depth=0 2> /dev/null | grep @storybook/csf | awk -F'@' '{print $3}')" >> $GITHUB_ENV
 
-      - name: Upgrade to storybook@future
+      - name: Upgrade to storybook@next
         run: |
-          npx storybook@future upgrade --prerelease --yes
-
-      # TODO: This should not be necessary once @storybook/csf is properly updated
-      - name: Fix local @storybook/csf version
-        run: |
-          yarn add @storybook/csf@0.0.2--canary.4566f4d.1
+          npx storybook@next upgrade --prerelease --yes
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
       - name: Run test runner and expect failure
         uses: mathiasvr/command-output@v1

@@ -1,3 +1,198 @@
+# v0.12.0 (Thu Jul 27 2023)
+
+#### 🚀 Enhancement
+
+
+#### 🐛 Bug Fix
+
+- maintenance: remove no-manager-cache flag in example storybook [#331](https://github.com/storybookjs/test-runner/pull/331) ([@MH4GF](https://github.com/MH4GF))
+- Fix extra args not being passed to jest [#322](https://github.com/storybookjs/test-runner/pull/322) ([@zyulyaev](https://github.com/zyulyaev) [@yannbf](https://github.com/yannbf))
+- Fix empty coverage report [#324](https://github.com/storybookjs/test-runner/pull/324) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- docs: fix github actions example for shard usage [#320](https://github.com/storybookjs/test-runner/pull/320) ([@MH4GF](https://github.com/MH4GF))
+
+#### Authors: 5
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Hirotaka Miyagi ([@MH4GF](https://github.com/MH4GF))
+- Nikita Zyulyaev ([@zyulyaev](https://github.com/zyulyaev))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.11.0 (Tue Jun 20 2023)
+
+#### 🚀 Enhancement
+
+- Release 0.11.0 [#318](https://github.com/storybookjs/test-runner/pull/318) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen) [@unshame](https://github.com/unshame) [@valentinpalkovic](https://github.com/valentinpalkovic) [@vanessayuenn](https://github.com/vanessayuenn))
+- Bundle with tsup and replace babel-jest [#250](https://github.com/storybookjs/test-runner/pull/250) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen))
+
+#### 🐛 Bug Fix
+
+- Change dependencies from `future` npm tag to `next` [#315](https://github.com/storybookjs/test-runner/pull/315) ([@yannbf](https://github.com/yannbf))
+- fix: nyc command with shard option [#257](https://github.com/storybookjs/test-runner/pull/257) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- Improve ejected config types [#297](https://github.com/storybookjs/test-runner/pull/297) ([@yannbf](https://github.com/yannbf))
+- fix: Remove last reference to regenerator-runtime [#303](https://github.com/storybookjs/test-runner/pull/303) ([@bryanjtc](https://github.com/bryanjtc))
+- fix(test-storybook): Fix test-runner-jest.config.js file not being found in STORYBOOK_CONFIG_DIR on Windows [#296](https://github.com/storybookjs/test-runner/pull/296) ([@unshame](https://github.com/unshame))
+- Upgrade glob to v10 [#299](https://github.com/storybookjs/test-runner/pull/299) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 6
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- UnShame ([@unshame](https://github.com/unshame))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Vanessa Yuen ([@vanessayuenn](https://github.com/vanessayuenn))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.10.0 (Mon Apr 03 2023)
+
+#### 🚀 Enhancement
+
+- New prerelease structure / upgrade to SB7 [#210](https://github.com/storybookjs/test-runner/pull/210) ([@shilman](https://github.com/shilman))
+
+#### 🐛 Bug Fix
+
+- Bump @storybook/csf to 0.1.0 [#288](https://github.com/storybookjs/test-runner/pull/288) ([@kasperpeulen](https://github.com/kasperpeulen))
+- support Storybook 7.0.0 [#283](https://github.com/storybookjs/test-runner/pull/283) ([@yannbf](https://github.com/yannbf))
+- Update getStorybookMain to throw an error if stories are not found in main.js [#278](https://github.com/storybookjs/test-runner/pull/278) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Extend hooks api with `prepare` and `getHttpHeaders` properties [#245](https://github.com/storybookjs/test-runner/pull/245) ([@yannbf](https://github.com/yannbf))
+- Use preview api instead of store [#273](https://github.com/storybookjs/test-runner/pull/273) ([@kasperpeulen](https://github.com/kasperpeulen))
+- Support other test-runner config extensions [#259](https://github.com/storybookjs/test-runner/pull/259) ([@yannbf](https://github.com/yannbf))
+- Use ipv4 loopback address [#252](https://github.com/storybookjs/test-runner/pull/252) ([@IanVS](https://github.com/IanVS))
+- Fix safe json stringify code [#239](https://github.com/storybookjs/test-runner/pull/239) ([@hansottowirtz](https://github.com/hansottowirtz))
+- feat: add shard cli option [#243](https://github.com/storybookjs/test-runner/pull/243) ([@Niznikr](https://github.com/Niznikr) [@yannbf](https://github.com/yannbf))
+- Updating deps to handle TS 4.9 [#237](https://github.com/storybookjs/test-runner/pull/237) ([@kasperpeulen](https://github.com/kasperpeulen))
+- Fix target url in error feedback [#233](https://github.com/storybookjs/test-runner/pull/233) ([@yannbf](https://github.com/yannbf))
+- Remove unused development packages [#227](https://github.com/storybookjs/test-runner/pull/227) ([@yannbf](https://github.com/yannbf))
+- Make setup-page globally available for index.json mode compatibility [#217](https://github.com/storybookjs/test-runner/pull/217) ([@yannbf](https://github.com/yannbf))
+- Upgrade CSF to next [#212](https://github.com/storybookjs/test-runner/pull/212) ([@shilman](https://github.com/shilman))
+- Fix missing dependencies [#209](https://github.com/storybookjs/test-runner/pull/209) ([@bryanjtc](https://github.com/bryanjtc))
+
+#### 📝 Documentation
+
+- Document index.json mode for Svelte CSF [#263](https://github.com/storybookjs/test-runner/pull/263) ([@JReinhold](https://github.com/JReinhold))
+- Docs: add recipe for browser name [#221](https://github.com/storybookjs/test-runner/pull/221) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 9
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Hans Otto Wirtz ([@hansottowirtz](https://github.com/hansottowirtz))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Kasper Peulen ([@kasperpeulen](https://github.com/kasperpeulen))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Robert Niznik ([@Niznikr](https://github.com/Niznikr))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.4 (Wed Feb 01 2023)
+
+#### 🐛 Bug Fix
+
+- Release 0.9.4 [#258](https://github.com/storybookjs/test-runner/pull/258) ([@yannbf](https://github.com/yannbf))
+- Support other test-runner config extensions [#259](https://github.com/storybookjs/test-runner/pull/259) ([@yannbf](https://github.com/yannbf))
+- Use ipv4 loopback address [#252](https://github.com/storybookjs/test-runner/pull/252) ([@IanVS](https://github.com/IanVS))
+- Fix safe json stringify code [#239](https://github.com/storybookjs/test-runner/pull/239) ([@hansottowirtz](https://github.com/hansottowirtz))
+
+#### Authors: 3
+
+- Hans Otto Wirtz ([@hansottowirtz](https://github.com/hansottowirtz))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.3 (Fri Jan 20 2023)
+
+#### 🐛 Bug Fix
+
+- feat: add shard cli option [#246](https://github.com/storybookjs/test-runner/pull/246) ([@yannbf](https://github.com/yannbf))
+- feat: add shard cli option [#243](https://github.com/storybookjs/test-runner/pull/243) ([@Niznikr](https://github.com/Niznikr) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Robert Niznik ([@Niznikr](https://github.com/Niznikr))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.2 (Tue Dec 20 2022)
+
+#### 🐛 Bug Fix
+
+- Fix target url in error feedback [#234](https://github.com/storybookjs/test-runner/pull/234) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.1 (Mon Nov 21 2022)
+
+#### 🐛 Bug Fix
+
+- Release 0.9.1 [#223](https://github.com/storybookjs/test-runner/pull/223) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman))
+- Fix missing dependencies [#209](https://github.com/storybookjs/test-runner/pull/209) ([@bryanjtc](https://github.com/bryanjtc))
+- Make setup-page globally available for index.json mode compatibility [#217](https://github.com/storybookjs/test-runner/pull/217) ([@yannbf](https://github.com/yannbf))
+- Upgrade nightly to next instead of future [#213](https://github.com/storybookjs/test-runner/pull/213) ([@shilman](https://github.com/shilman))
+
+#### Authors: 3
+
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.9.0 (Wed Oct 12 2022)
+
+#### 🚀 Enhancement
+
+- feat: add cli option --ci [#204](https://github.com/storybookjs/test-runner/pull/204) ([@italoteix](https://github.com/italoteix))
+
+#### 🐛 Bug Fix
+
+- Upgrade preset-env to latest [#202](https://github.com/storybookjs/test-runner/pull/202) ([@shilman](https://github.com/shilman))
+- Fix nightly check for failures [#197](https://github.com/storybookjs/test-runner/pull/197) ([@yannbf](https://github.com/yannbf))
+- Improve error logging and ensure non-zero exit [#201](https://github.com/storybookjs/test-runner/pull/201) ([@IanVS](https://github.com/IanVS))
+
+#### 📝 Documentation
+
+- Docs: update coverage section now that the addon supports Vite [#205](https://github.com/storybookjs/test-runner/pull/205) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Ítalo Teixeira ([@italoteix](https://github.com/italoteix))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.8.0 (Fri Oct 07 2022)
+
+#### 🚀 Enhancement
+
+- Add isTestRunner utility [#198](https://github.com/storybookjs/test-runner/pull/198) ([@yannbf](https://github.com/yannbf) [@IanVS](https://github.com/IanVS))
+
+#### 🐛 Bug Fix
+
+- Fix StorybookTestRunnerError – length on undefined [#194](https://github.com/storybookjs/test-runner/pull/194) ([@ericclemmons](https://github.com/ericclemmons))
+
+#### Authors: 3
+
+- Eric Clemmons ([@ericclemmons](https://github.com/ericclemmons))
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.7.2 (Fri Sep 16 2022)
 
 #### 🐛 Bug Fix

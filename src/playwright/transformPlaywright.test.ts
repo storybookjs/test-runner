@@ -1,11 +1,22 @@
 import dedent from 'ts-dedent';
 import path from 'path';
-import * as coreCommon from '@storybook/core-common';
 import * as storybookMain from '../util/getStorybookMain';
 
 import { transformPlaywright } from './transformPlaywright';
 
-jest.mock('@storybook/core-common');
+jest.mock('@storybook/core-common', () => ({
+  ...jest.requireActual('@storybook/core-common'),
+  getProjectRoot: jest.fn(() => '/foo/bar'),
+  normalizeStories: jest.fn(() => [
+    {
+      titlePrefix: 'Example',
+      files: '**/*.stories.@(mdx|tsx|ts|jsx|js)',
+      directory: './stories/basic',
+      importPathMatcher:
+        /^\.[\\/](?:stories\/basic(?:\/(?!\.)(?:(?:(?!(?:^|\/)\.).)*?)\/|\/|$)(?!\.)(?=.)[^/]*?\.stories\.(mdx|tsx|ts|jsx|js))$/,
+    },
+  ]),
+}));
 
 expect.addSnapshotSerializer({
   print: (val: any) => val.trim(),
@@ -24,15 +35,6 @@ describe('Playwright', () => {
         },
       ],
     }));
-    jest.spyOn(coreCommon, 'normalizeStories').mockImplementation(() => [
-      {
-        titlePrefix: 'Example',
-        files: '**/*.stories.@(mdx|tsx|ts|jsx|js)',
-        directory: './stories/basic',
-        importPathMatcher:
-          /^\.[\\/](?:stories\/basic(?:\/(?!\.)(?:(?:(?!(?:^|\/)\.).)*?)\/|\/|$)(?!\.)(?=.)[^/]*?\.stories\.(mdx|tsx|ts|jsx|js))$/,
-      },
-    ]);
   });
 
   const filename = './stories/basic/Header.stories.js';
@@ -95,7 +97,7 @@ describe('Playwright', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -165,7 +167,7 @@ describe('Playwright', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;
@@ -236,7 +238,7 @@ describe('Playwright', () => {
                 if (err.toString().includes('Execution context was destroyed')) {
                   console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page);
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
                 } else {
                   throw err;

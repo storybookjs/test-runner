@@ -1,6 +1,12 @@
-export const getParsedCliOptions = () => {
-  const { program } = require('commander');
+import type { CliOptions } from './getCliOptions';
+import { program } from 'commander';
 
+type ParsedCliOptions = {
+  options: CliOptions['runnerOptions'];
+  extraArgs: CliOptions['jestOptions'];
+};
+
+export const getParsedCliOptions = (): ParsedCliOptions => {
   program
     .option(
       '-i, --index-json',
@@ -52,6 +58,11 @@ export const getParsedCliOptions = () => {
       '--coverage',
       'Indicates that test coverage information should be collected and reported in the output'
     )
+    .option(
+      '--coverageDirectory <directory>',
+      'Directory where to write coverage report output',
+      'coverage/storybook'
+    )
     .option('--junit', 'Indicates that test information should be reported in a junit file')
     .option(
       '--eject',
@@ -64,7 +75,8 @@ export const getParsedCliOptions = () => {
     .option(
       '--shard <shardIndex/shardCount>',
       'Splits your test suite across different machines to run in CI.'
-    );
+    )
+    .option('--failOnConsole', 'Makes tests fail on browser console errors');
 
   program.exitOverride();
 

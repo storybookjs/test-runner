@@ -1,5 +1,32 @@
-import type { Page } from 'playwright';
+import type { Page, BrowserContext } from 'playwright';
 import readPackageUp from 'read-pkg-up';
+import { PrepareContext } from './playwright/hooks';
+import { getTestRunnerConfig } from './util';
+
+/**
+ * This is a default prepare function which can be overridden by the user.
+ *
+ * In order to test stories, we need to prepare the environment first.
+ * This is done by accessing the /iframe.html page of the Storybook instance. The test-runner then injects a script which prepares the environment for testing, then visits the stories.
+ */
+const defaultPrepare = async ({ page, browserContext, testRunnerConfig }: PrepareContext) => {
+  const targetURL = process.env.TARGET_URL;
+  const iframeURL = new URL('iframe.html', targetURL).toString();
+
+  if (testRunnerConfig?.getHttpHeaders) {
+    const headers = await testRunnerConfig.getHttpHeaders(iframeURL);
+    await browserContext.setExtraHTTPHeaders(headers);
+  }
+
+  await page.goto(iframeURL, { waitUntil: 'load' }).catch((err) => {
+    if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
+      const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
+      throw new Error(errorMessage);
+    }
+
+    throw err;
+  });
+};
 
 const sanitizeURL = (url: string) => {
   let finalURL = url;
@@ -22,8 +49,9 @@ const sanitizeURL = (url: string) => {
   return finalURL;
 };
 
-export const setupPage = async (page: Page) => {
+export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
+  const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
   const viewMode = process.env.VIEW_MODE || 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
@@ -36,20 +64,17 @@ export const setupPage = async (page: Page) => {
     : 1000;
 
   if ('TARGET_URL' in process.env && !process.env.TARGET_URL) {
-    console.log(
-      `Received TARGET_URL but with a falsy value: ${process.env.TARGET_URL}, will fallback to ${targetURL} instead.`
+    console.warn(
+      `Received TARGET_URL but with a falsy value: ${process.env.TARGET_URL}. Please fix it.`
     );
   }
 
-  const iframeURL = new URL('iframe.html', process.env.TARGET_URL).toString();
-  await page.goto(iframeURL, { waitUntil: 'load' }).catch((err) => {
-    if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
-      const errorMessage = `Could not access the Storybook instance at ${targetURL}. Are you sure it's running?\n\n${err.message}`;
-      throw new Error(errorMessage);
-    }
-
-    throw err;
-  });
+  const testRunnerConfig = getTestRunnerConfig();
+  if (testRunnerConfig?.prepare) {
+    await testRunnerConfig.prepare({ page, browserContext, testRunnerConfig });
+  } else {
+    await defaultPrepare({ page, browserContext, testRunnerConfig });
+  }
 
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
@@ -191,6 +216,9 @@ export const setupPage = async (page: Page) => {
       // end of fast-safe-stringify code
       
       function composeMessage(args) {
+        if (args instanceof Error) {
+          return \`\${args.name}: \${args.message}\\n\${args.stack}\`;
+        }
         if (typeof args === 'undefined') return "undefined";
         if (typeof args === 'string') return args;
         return stringify(args, null, null, { depthLimit: 5, edgesLimit: 100 });
@@ -210,6 +238,7 @@ export const setupPage = async (page: Page) => {
             get: function () {
               return [originalUserAgent, extra].join(' ');
             },
+            configurable: true,
           });
         }
       };
@@ -282,10 +311,14 @@ export const setupPage = async (page: Page) => {
 
         // collect logs to show upon test error
         let logs = [];
+        let hasErrors = false;
 
         const spyOnConsole = (method, name) => {
           const originalFn = console[method];
           return function () {
+            if (\`${failOnConsole}\`==='true' && method==='error') {
+              hasErrors = true;
+            }
             const message = [...arguments].map(composeMessage).join(', ');
             const prefix = \`\${bold(name)}: \`;
             logs.push(prefix + message);
@@ -308,7 +341,12 @@ export const setupPage = async (page: Page) => {
         })
 
         return new Promise((resolve, reject) => {
-          channel.on('${renderedEvent}', () => resolve(document.getElementById('root')));
+          channel.on('${renderedEvent}', () => { 
+            if (hasErrors) {
+              return reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
+            }
+            return resolve(document.getElementById('root'));             
+          });
           channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
           channel.on('storyErrored', ({ description }) => reject(
             new StorybookTestRunnerError(storyId, description, logs))

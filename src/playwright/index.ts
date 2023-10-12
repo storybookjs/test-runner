@@ -1,14 +1,14 @@
-import { transform as babelTransform } from '@babel/core';
+import { transformSync as swcTransform } from '@swc/core';
 import { transformPlaywright } from './transformPlaywright';
 
 export const process = (src: string, filename: string, config: any) => {
   const csfTest = transformPlaywright(src, filename);
 
-  const result = babelTransform(csfTest, {
+  const result = swcTransform(csfTest, {
     filename,
-    babelrc: false,
-    configFile: false,
-    presets: ['@babel/preset-env', '@babel/preset-typescript', '@babel/preset-react'],
+    module: {
+      type: 'commonjs',
+    },
   });
   return result ? result.code : src;
 };

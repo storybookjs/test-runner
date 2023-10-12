@@ -1,32 +1,30 @@
 #!/usr/bin/env node
-//@ts-check
 'use strict';
 
-const { execSync } = require('child_process');
-const fetch = require('node-fetch');
-const canBindToHost = require('can-bind-to-host').default;
-const fs = require('fs');
-const dedent = require('ts-dedent').default;
-const path = require('path');
-const tempy = require('tempy');
-const { getCliOptions } = require('../dist/cjs/util/getCliOptions');
-const { getStorybookMetadata } = require('../dist/cjs/util/getStorybookMetadata');
-const { transformPlaywrightJson } = require('../dist/cjs/playwright/transformPlaywrightJson');
-const semver = require('semver');
+import { JestOptions } from './util/getCliOptions';
+import fs from 'fs';
 
-const glob_og = require('glob');
+import { execSync } from 'child_process';
+import fetch from 'node-fetch';
+import canBindToHost from 'can-bind-to-host';
+import dedent from 'ts-dedent';
+import path from 'path';
+import tempy from 'tempy';
+import { getCliOptions } from './util/getCliOptions';
+import { getStorybookMetadata } from './util/getStorybookMetadata';
+import { getTestRunnerConfig } from './util/getTestRunnerConfig';
+import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
+import semver from 'semver';
 
-const glob = function (pattern, options) {
-  return new Promise((resolve, reject) => {
-    glob_og(pattern, options, (err, files) => (err === null ? resolve(files) : reject(err)));
-  });
-};
+import { glob } from 'glob';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
 process.env.STORYBOOK_TEST_RUNNER = 'true';
 process.env.PUBLIC_URL = '';
+
+let getHttpHeaders = (_url: string) => Promise.resolve({});
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -35,8 +33,8 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const log = (message) => console.log(`[test-storybook] ${message}`);
-const error = (err) => {
+const log = (message: string) => console.log(`[test-storybook] ${message}`);
+const error = (err: { message: any; stack: any }) => {
   if (err instanceof Error) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
   } else {
@@ -45,7 +43,7 @@ const error = (err) => {
 };
 
 // Clean up tmp files globally in case of control-c
-let indexTmpDir;
+let indexTmpDir: fs.PathLike;
 const cleanup = () => {
   if (indexTmpDir) {
     log(`Cleaning up ${indexTmpDir}`);
@@ -53,123 +51,8 @@ const cleanup = () => {
   }
 };
 
-let isWatchMode = false;
-async function reportCoverage() {
-  if (isWatchMode || process.env.STORYBOOK_COLLECT_COVERAGE !== 'true') {
-    return;
-  }
-
-  const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
-  const coverageFolder = path.resolve(process.cwd(), 'coverage/storybook');
-
-  // in case something goes wrong and .nyc_output does not exist, bail
-  if (!fs.existsSync(coverageFolderE2E)) {
-    return;
-  }
-
-  // if there's no coverage folder, create one
-  if (!fs.existsSync(coverageFolder)) {
-    fs.mkdirSync(coverageFolder, { recursive: true });
-  }
-
-  // move the coverage files from .nyc_output folder (coming from jest-playwright) to coverage, then delete .nyc_output
-  fs.renameSync(`${coverageFolderE2E}/coverage.json`, `${coverageFolder}/coverage-storybook.json`);
-  fs.rmSync(coverageFolderE2E, { recursive: true });
-
-  // --skip-full in case we only want to show not fully covered code
-  // --check-coverage if we want to break if coverage reaches certain threshold
-  // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
-  const command = getPackageManagerCommand().exec;
-  execSync(
-    `${command} nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`,
-    {
-      stdio: 'inherit',
-    }
-  );
-}
-
-const onProcessEnd = () => {
-  cleanup();
-  reportCoverage();
-};
-
-process.on('SIGINT', onProcessEnd);
-process.on('exit', onProcessEnd);
-
-function sanitizeURL(url) {
-  let finalURL = url;
-  // prepend URL protocol if not there
-  if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
-    finalURL = 'http://' + finalURL;
-  }
-
-  // remove iframe.html if present
-  finalURL = finalURL.replace(/iframe.html\s*$/, '');
-
-  // remove index.html if present
-  finalURL = finalURL.replace(/index.html\s*$/, '');
-
-  // add forward slash at the end if not there
-  if (finalURL.slice(-1) !== '/') {
-    finalURL = finalURL + '/';
-  }
-
-  return finalURL;
-}
-
-async function executeJestPlaywright(args) {
-  // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
-  const jestPath = path.dirname(
-    require.resolve('jest', {
-      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
-    })
-  );
-  const jest = require(jestPath);
-  let argv = args.slice(2);
-
-  // jest configs could either come in the root dir, or inside of the Storybook config dir
-  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
-  const [userDefinedJestConfig] = (
-    await Promise.all([
-      glob(path.join(configDir, 'test-runner-jest*')),
-      glob(path.join('test-runner-jest*')),
-    ])
-  ).reduce((a, b) => a.concat(b), []);
-
-  const jestConfigPath =
-    userDefinedJestConfig ||
-    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
-
-  argv.push('--config', jestConfigPath);
-
-  await jest.run(argv);
-}
-
-async function checkStorybook(url) {
-  try {
-    const res = await fetch(url, { method: 'HEAD' });
-    if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
-  } catch (e) {
-    console.error(
-      dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
-      
-      If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
-      
-      yarn test-storybook --url http://127.0.0.1:9009
-      
-      More info at https://github.com/storybookjs/test-runner#getting-started`
-    );
-    process.exit(1);
-  }
-}
-
-// Copied from github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L29-35
-function detectPackageManager(dir = '') {
-  return fs.existsSync(path.join(dir, 'pnpm-lock.yaml'))
-    ? 'pnpm'
-    : fs.existsSync(path.join(dir, 'yarn.lock'))
-    ? 'yarn'
-    : 'npm';
+function detectPackageManager() {
+  return '';
 }
 
 // Copied from github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L48-106
@@ -193,20 +76,135 @@ function getPackageManagerCommand(packageManager = detectPackageManager()) {
         exec: useBerry ? 'yarn exec' : 'yarn',
       };
     },
-  };
+  } as const;
 
-  return commands[packageManager]();
+  return commands[packageManager as keyof typeof commands]();
 }
 
 // Copied from https://github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L113-L117
 function getPackageManagerVersion(packageManager = detectPackageManager()) {
   return execSync(`${packageManager} --version`).toString('utf-8').trim();
 }
-async function getIndexJson(url) {
+
+async function reportCoverage() {
+  const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
+  const coverageFolder = path.resolve(
+    process.cwd(),
+    process.env.STORYBOOK_COVERAGE_DIRECTORY ?? 'coverage/storybook'
+  );
+
+  // in case something goes wrong and .nyc_output does not exist, bail
+  if (!fs.existsSync(coverageFolderE2E)) {
+    return;
+  }
+
+  // if there's no coverage folder, create one
+  if (!fs.existsSync(coverageFolder)) {
+    fs.mkdirSync(coverageFolder, { recursive: true });
+  }
+
+  // move the coverage files from .nyc_output folder (coming from jest-playwright) to coverage, then delete .nyc_output
+  fs.renameSync(`${coverageFolderE2E}/coverage.json`, `${coverageFolder}/coverage-storybook.json`);
+  fs.rmSync(coverageFolderE2E, { recursive: true });
+
+  // --skip-full in case we only want to show not fully covered code
+  // --check-coverage if we want to break if coverage reaches certain threshold
+  // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
+  if (process.env.JEST_SHARD !== 'true') {
+    execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
+      stdio: 'inherit',
+    });
+  }
+}
+
+const onProcessEnd = () => {
+  cleanup();
+  if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true') {
+    reportCoverage();
+  }
+};
+
+process.on('SIGINT', onProcessEnd);
+process.on('exit', onProcessEnd);
+
+function sanitizeURL(url: string) {
+  let finalURL = url;
+  // prepend URL protocol if not there
+  if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
+    finalURL = 'http://' + finalURL;
+  }
+
+  // remove iframe.html if present
+  finalURL = finalURL.replace(/iframe.html\s*$/, '');
+
+  // remove index.html if present
+  finalURL = finalURL.replace(/index.html\s*$/, '');
+
+  // add forward slash at the end if not there
+  if (finalURL.slice(-1) !== '/') {
+    finalURL = finalURL + '/';
+  }
+
+  return finalURL;
+}
+
+async function executeJestPlaywright(args: JestOptions) {
+  // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
+  const jestPath = path.dirname(
+    require.resolve('jest', {
+      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
+    })
+  );
+  const jest = require(jestPath);
+  let argv = args.slice(2);
+
+  // jest configs could either come in the root dir, or inside of the Storybook config dir
+  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
+  const [userDefinedJestConfig] = (
+    await Promise.all([
+      glob(path.join(configDir, 'test-runner-jest*'), { windowsPathsNoEscape: true }),
+      glob(path.join('test-runner-jest*'), { windowsPathsNoEscape: true }),
+    ])
+  ).reduce((a, b) => a.concat(b), []);
+
+  const jestConfigPath =
+    userDefinedJestConfig ||
+    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
+
+  argv.push('--config', jestConfigPath);
+
+  await jest.run(argv);
+}
+
+async function checkStorybook(url: any) {
+  try {
+    const headers = await getHttpHeaders(url);
+    const res = await fetch(url, { method: 'HEAD', headers });
+    if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
+  } catch (e) {
+    console.error(
+      dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
+      
+      If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
+      
+      yarn test-storybook --url http://127.0.0.1:9009
+      
+      More info at https://github.com/storybookjs/test-runner#getting-started`
+    );
+    process.exit(1);
+  }
+}
+
+async function getIndexJson(url: string) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
+  const headers = await getHttpHeaders(url);
+  const fetchOptions = { headers };
 
-  const [indexRes, storiesRes] = await Promise.all([fetch(indexJsonUrl), fetch(storiesJsonUrl)]);
+  const [indexRes, storiesRes] = await Promise.all([
+    fetch(indexJsonUrl, fetchOptions),
+    fetch(storiesJsonUrl, fetchOptions),
+  ]);
 
   if (indexRes.ok) {
     try {
@@ -236,8 +234,8 @@ async function getIndexJson(url) {
   `);
 }
 
-async function getIndexTempDir(url) {
-  let tmpDir;
+async function getIndexTempDir(url: string) {
+  let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
     const titleIdToTest = transformPlaywrightJson(indexJson);
@@ -245,7 +243,7 @@ async function getIndexTempDir(url) {
     tmpDir = tempy.directory();
     Object.entries(titleIdToTest).forEach(([titleId, test]) => {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
-      fs.writeFileSync(tmpFile, test);
+      fs.writeFileSync(tmpFile, test as string);
     });
   } catch (err) {
     error(err);
@@ -280,8 +278,15 @@ const main = async () => {
     process.exit(0);
   }
 
+  process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
+
+  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || {};
+  if (testRunnerConfig.getHttpHeaders) {
+    getHttpHeaders = testRunnerConfig.getHttpHeaders;
+  }
+
   // set this flag to skip reporting coverage in watch mode
-  isWatchMode = jestOptions.watch || jestOptions.watchAll;
+  const isWatchMode = jestOptions.includes('--watch') || jestOptions.includes('--watchAll');
 
   const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
   await checkStorybook(rawTargetURL);
@@ -290,8 +295,12 @@ const main = async () => {
 
   process.env.TARGET_URL = targetURL;
 
-  if (runnerOptions.coverage) {
+  if (!isWatchMode && runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
+  }
+
+  if (runnerOptions.coverageDirectory) {
+    process.env.STORYBOOK_COVERAGE_DIRECTORY = runnerOptions.coverageDirectory;
   }
 
   if (runnerOptions.junit) {
@@ -302,9 +311,15 @@ const main = async () => {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
   }
 
+  if (jestOptions.includes('--shard')) {
+    process.env.JEST_SHARD = 'true';
+  }
+
   // Use TEST_BROWSERS if set, otherwise get from --browser option
   if (!process.env.TEST_BROWSERS && runnerOptions.browsers) {
-    process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
+    if (Array.isArray(runnerOptions.browsers))
+      process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
+    else process.env.TEST_BROWSERS = runnerOptions.browsers;
   }
   const { hostname } = new URL(targetURL);
 
@@ -322,10 +337,12 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
-
   const { storiesPaths, lazyCompilation } = getStorybookMetadata();
   process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+
+  if (runnerOptions.failOnConsole) {
+    process.env.TEST_CHECK_CONSOLE = 'true';
+  }
 
   if (lazyCompilation && isLocalStorybookIp) {
     log(
