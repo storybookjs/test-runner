@@ -3561,15 +3561,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-coverage@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "@storybook/addon-coverage@npm:0.0.7"
+"@storybook/addon-coverage@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "@storybook/addon-coverage@npm:0.0.9"
   dependencies:
     "@types/babel__core": ^7.1.19
     "@types/istanbul-lib-coverage": ^2.0.4
     babel-plugin-istanbul: ^6.1.1
     vite-plugin-istanbul: ^3.0.1
-  checksum: 5425141d05dc7412ef7b245531ded39f2d4d5520d1f6e18339e140b0ea1be562a51cdfbf3eba16cdbb61b1395686be2ace22f287171579fa52dce60e4587215d
+  checksum: 32b3780c5e98589e45842dc2227db258f8d3988dfc9c63cd5822a382b97c7e7fb47be9003ad9171699375802563af1ff708d729a22e5623d36a51d9b27963dd7
   languageName: node
   linkType: hard
 
@@ -4375,7 +4375,7 @@ __metadata:
     "@babel/template": ^7.22.5
     "@babel/types": ^7.22.5
     "@jest/types": ^28.1.3
-    "@storybook/addon-coverage": ^0.0.7
+    "@storybook/addon-coverage": ^0.0.9
     "@storybook/addon-essentials": ^7.3.0
     "@storybook/addon-interactions": ^7.3.0
     "@storybook/core-common": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
@@ -4398,6 +4398,7 @@ __metadata:
     can-bind-to-host: ^1.1.1
     commander: ^9.0.0
     concurrently: ^7.0.0
+    detect-package-manager: ^3.0.1
     expect-playwright: ^0.8.0
     glob: ^10.2.2
     husky: ^8.0.0
@@ -6921,6 +6922,15 @@ __metadata:
   dependencies:
     execa: ^5.1.1
   checksum: e72b910182d5ad479198d4235be206ac64a479257b32201bb06f3c842cc34c65ea851d46f72cc1d4bf535bcc6c4b44b5b86bb29fe1192b8c9c07b46883672f28
+  languageName: node
+  linkType: hard
+
+"detect-package-manager@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "detect-package-manager@npm:3.0.1"
+  dependencies:
+    execa: ^5.1.1
+  checksum: 3a203ba269183baea9969b89f18dd93a9bb451a51280b39ea2ee392f44bada0f79b676425fcd1e7fca6b8c8f03a048a5cc1d3b39bb9c0ebd0300337ae00a0b14
   languageName: node
   linkType: hard
 
