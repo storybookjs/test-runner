@@ -578,6 +578,7 @@ Here's a slightly different recipe for image snapshot testing:
 
 ```js
 // .storybook/test-runner.js
+const { waitForPageReady } = require('@storybook/test-runner');
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
@@ -587,6 +588,9 @@ module.exports = {
     expect.extend({ toMatchImageSnapshot });
   },
   async postRender(page, context) {
+    // use the test-runner utility to wait for fonts to load, etc.
+    await waitForPageReady(page);
+
     // If you want to take screenshot of multiple browsers, use
     // page.context().browser().browserType().name() to get the browser name to prefix the file name
     const image = await page.screenshot();

@@ -1,5 +1,5 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { getStoryContext } from '../dist/playwright/hooks';
+import { getStoryContext, waitForPageReady } from '../dist/playwright/hooks';
 import type { TestRunnerConfig } from '../dist';
 
 const snapshotsDir = process.env.SNAPSHOTS_DIR || '__snapshots__';
@@ -21,6 +21,8 @@ const config: TestRunnerConfig = {
     if (skipSnapshots) {
       return;
     }
+
+    await waitForPageReady(page);
 
     // Visual snapshot tests
     const image = await page.screenshot({ fullPage: true });
