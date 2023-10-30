@@ -25,15 +25,22 @@ Storybook test runner turns all of your stories into executable tests.
   - [2 - Run tests with --coverage flag](#2---run-tests-with---coverage-flag)
   - [3 - Merging code coverage with coverage from other tools](#3---merging-code-coverage-with-coverage-from-other-tools)
   - [4 - Run tests with --shard flag](#4---run-tests-with---shard-flag)
-- [Experimental test hook API](#experimental-test-hook-api)
+- [Test hooks API](#test-hooks-api)
+  - [setup](#setup)
+  - [preRender](#prerender)
+  - [postRender](#postrender)
+  - [Render lifecycle](#render-lifecycle)
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
-  - [DOM snapshot recipe](#dom-snapshot-recipe)
-  - [Image snapshot recipe](#image-snapshot-recipe)
-  - [Render lifecycle](#render-lifecycle)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
+    - [waitForPageReady](#waitforpageready)
     - [StorybookTestRunner user agent](#storybooktestrunner-user-agent)
+- [Recipes](#recipes)
+  - [Preconfiguring viewport size](#preconfiguring-viewport-size)
+  - [Accessibility testing](#accessibility-testing)
+  - [DOM snapshot (HTML)](#dom-snapshot-html)
+  - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -494,7 +501,7 @@ report-coverage:
     - yarn nyc report --reporter=text -t merged-output --report-dir merged-output
 ```
 
-## Experimental test hook API
+## Test hooks API
 
 The test runner renders a story and executes its [play function](https://storybook.js.org/docs/react/writing-stories/play-function) if one exists. However, there are certain behaviors that are not possible to achieve via the play function, which executes in the browser. For example, if you want the test runner to take visual snapshots for you, this is something that is possible via Playwright/Jest, but must be executed in Node.
 
@@ -502,9 +509,82 @@ To enable use cases like visual or DOM snapshots, the test runner exports test h
 
 There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
 
-The render functions are async functions that receive a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`. They are globally settable by `@storybook/test-runner`'s `setPreRender` and `setPostRender` APIs.
-
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
+
+> **Note**
+> The `preRender` and `postRender` functions will be executed for all stories.
+
+#### setup
+
+Async function that executes once before all the tests run. Useful for setting node-related configuration, such as extending Jest global `expect` for accessibility matchers.
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  async setup() {
+    // execute whatever you like, in Node, once before all tests run
+  },
+};
+```
+
+#### preRender
+
+Async function that receives a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`.
+Executes within a test before the story is rendered. Useful for configuring the Page before the story renders, such as setting up the viewport size.
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  async preRender(page, context) {
+    // execute whatever you like, before the story renders
+  },
+};
+```
+
+#### postRender
+
+Async function that receives a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`.
+Executes within a test after a story is rendered. Useful for asserting things after the story is rendered, such as DOM and image snapshotting.
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  async postRender(page, context) {
+    // execute whatever you like, after the story renders
+  },
+};
+```
+
+> **Note**
+> Although you have access to Playwright's Page object, in some of these hooks, we encourage you to test as much as possible within the story's play function.
+
+#### Render lifecycle
+
+To visualize the test lifecycle with these hooks, consider a simplified version of the test code automatically generated for each story in your Storybook:
+
+```js
+// executed once, before the tests
+await setup();
+
+it('button--basic', async () => {
+  // filled in with data for the current story
+  const context = { id: 'button--basic', title: 'Button', name: 'Basic' };
+
+  // playwright page https://playwright.dev/docs/pages
+  await page.goto(STORYBOOK_URL);
+
+  // pre-render hook
+  if (preRender) await preRender(page, context);
+
+  // render the story and run its play function (if applicable)
+  await page.execute('render', context);
+
+  // post-render hook
+  if (postRender) await postRender(page, context);
+});
+```
+
+These hooks are very useful for a variety of use cases, which are described in the [recipes](#recipes) section further below.
 
 Apart from these hooks, there are additional properties you can set in `.storybook/test-runner.js`:
 
@@ -539,12 +619,175 @@ module.exports = {
 };
 ```
 
-> **Note**
-> These test hooks are experimental and may be subject to breaking changes. We encourage you to test as much as possible within the story's play function.
+### Utility functions
 
-### DOM snapshot recipe
+For more specific use cases, the test runner provides utility functions that could be useful to you.
 
-The `postRender` function provides a [Playwright page](https://playwright.dev/docs/api/class-page) instance, of which you can use for DOM snapshot testing:
+#### getStoryContext
+
+While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
+
+Suppose your story looks like this:
+
+```js
+// ./Button.stories.ts
+
+export const Primary = {
+  parameters: {
+    theme: 'dark',
+  },
+};
+```
+
+You can access its context in a test hook like so:
+
+```js
+// .storybook/test-runner.js
+const { getStoryContext } = require('@storybook/test-runner');
+
+module.exports = {
+  async postRender(page, context) {
+    // Get entire context of a story, including parameters, args, argTypes, etc.
+    const storyContext = await getStoryContext(page, context);
+    if (storyContext.parameters.theme === 'dark') {
+      // do something
+    } else {
+      // do something else
+    }
+  },
+};
+```
+
+It's useful for skipping or enhancing use cases like [image snapshot testing](#image-snapshot), [accessibility testing](#accessibility-testing) and more.
+
+#### waitForPageReady
+
+The `waitForPageReady` utility is useful when you're executing [image snapshot testing](#image-snapshot) with the test-runner. It encapsulates a few assertions to make sure the browser has finished downloading assets.
+
+```js
+// .storybook/test-runner.js
+const { waitForPageReady } = require('@storybook/test-runner');
+
+module.exports = {
+  async postRender(page, context) {
+    // use the test-runner utility to wait for fonts to load, etc.
+    await waitForPageReady(page);
+
+    // by now, we know that the page is fully loaded
+  },
+};
+```
+
+#### StorybookTestRunner user agent
+
+The test-runner adds a `StorybookTestRunner` entry to the browser's user agent. You can use it to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
+
+```js
+// At the render level, useful for dynamically rendering something based on the test-runner
+export const MyStory = {
+  render: () => {
+    const isTestRunner = window.navigator.userAgent.match(/StorybookTestRunner/);
+    return (
+      <div>
+        <p>Is this story running in the test runner?</p>
+        <p>{isTestRunner ? 'Yes' : 'No'}</p>
+      </div>
+    );
+  },
+};
+```
+
+Given that this check is happening in the browser, it is only applicable in the following scenarios:
+
+- inside of a render/template function of a story
+- inside of a play function
+- inside of preview.js
+- inside any other code that is executed in the browser
+
+## Recipes
+
+Below you will find recipes that use both the hooks and the utility functions to achieve different things with the test-runner.
+
+### Preconfiguring viewport size
+
+You can use [Playwright's Page viewport utility](https://playwright.dev/docs/api/class-page#page-set-viewport-size) to programatically change the viewport size of your test. If you use [@storybook/addon-viewports](https://storybook.js.org/addons/@storybook/addon-viewport), you can reuse its parameters and make sure that the tests match in configuration.
+
+```js
+// .storybook/test-runner.js
+const { getStoryContext } = require('@storybook/test-runner');
+const { MINIMAL_VIEWPORTS } = require('@storybook/addon-viewport');
+
+const DEFAULT_VIEWPORT_SIZE = { width: 1280, height: 720 };
+
+module.exports = {
+  async preRender(page, story) {
+    const context = await getStoryContext(page, story);
+    const viewportName = context.parameters?.viewport?.defaultViewport;
+    const viewportParameter = MINIMAL_VIEWPORTS[viewportName];
+
+    if (viewportParameter) {
+      const viewportSize = Object.entries(viewportParameter.styles).reduce(
+        (acc, [screen, size]) => ({
+          ...acc,
+          // make sure your viewport config in Storybook only uses numbers, not percentages
+          [screen]: parseInt(size),
+        }),
+        {}
+      );
+
+      page.setViewportSize(viewportSize);
+    } else {
+      page.setViewportSize(DEFAULT_VIEWPORT_SIZE);
+    }
+  },
+};
+```
+
+### Accessibility testing
+
+You can install `axe-playwright` and use it in tandem with the test-runner to test the accessibility of your components.
+If you use [`@storybook/addon-a11y`](https://storybook.js.org/addons/@storybook/addon-a11y), you can reuse its parameters and make sure that the tests match in configuration, both in the accessibility addon panel and the test-runner.
+
+```js
+// .storybook/test-runner.js
+const { getStoryContext } = require('@storybook/test-runner');
+const { injectAxe, checkA11y, configureAxe } = require('axe-playwright');
+
+module.exports = {
+  async preRender(page, context) {
+    // Inject Axe utilities in the page before the story renders
+    await injectAxe(page);
+  },
+  async postRender(page, context) {
+    // Get entire context of a story, including parameters, args, argTypes, etc.
+    const storyContext = await getStoryContext(page, context);
+
+    // Do not test a11y for stories that disable a11y
+    if (storyContext.parameters?.a11y?.disable) {
+      return;
+    }
+
+    // Apply story-level a11y rules
+    await configureAxe(page, {
+      rules: storyContext.parameters?.a11y?.config?.rules,
+    });
+
+    // from Storybook 7.0 onwards, the selector should be #storybook-root
+    await checkA11y(page, '#root', {
+      detailedReport: true,
+      detailedReportOptions: {
+        html: true,
+      },
+      // pass axe options defined in @storybook/addon-a11y
+      axeOptions: storyContext.parameters?.a11y?.options,
+    });
+  },
+};
+```
+
+### DOM snapshot (HTML)
+
+You can use [Playwright's built in APIs](https://playwright.dev/docs/test-snapshots) for DOM snapshot testing:
 
 ```js
 // .storybook/test-runner.js
@@ -561,6 +804,7 @@ module.exports = {
 When running with `--stories-json`, tests get generated in a temporary folder and snapshots get stored alongside. You will need to `--eject` and configure a custom [`snapshotResolver`](https://jestjs.io/docs/configuration#snapshotresolver-string) to store them elsewhere, e.g. in your working directory:
 
 ```js
+// ./test-runner-jest.config.js
 const path = require('path');
 
 module.exports = {
@@ -572,7 +816,7 @@ module.exports = {
 };
 ```
 
-### Image snapshot recipe
+### Image snapshot
 
 Here's a slightly different recipe for image snapshot testing:
 
@@ -603,102 +847,6 @@ module.exports = {
 ```
 
 There is also an exported `TestRunnerConfig` type available for TypeScript users.
-
-### Render lifecycle
-
-To visualize the test lifecycle, consider a simplified version of the test code automatically generated for each story in your Storybook:
-
-```js
-it('button--basic', async () => {
-  // filled in with data for the current story
-  const context = { id: 'button--basic', title: 'Button', name: 'Basic' };
-
-  // playwright page https://playwright.dev/docs/pages
-  await page.goto(STORYBOOK_URL);
-
-  // pre-render hook
-  if (preRender) await preRender(page, context);
-
-  // render the story and run its play function (if applicable)
-  await page.execute('render', context);
-
-  // post-render hook
-  if (postRender) await postRender(page, context);
-});
-```
-
-### Utility functions
-
-For more specific use cases, the test runner provides utility functions that could be useful to you.
-
-#### getStoryContext
-
-While running tests using the hooks, you might want to get information from a story, such as the parameters passed to it, or its args. The test runner now provides a `getStoryContext` utility function that fetches the story context for the current story:
-
-```js
-await getStoryContext(page, context);
-```
-
-You can use it for multiple use cases, and here's an example that combines the story context and accessibility testing:
-
-```js
-// .storybook/test-runner.js
-const { getStoryContext } = require('@storybook/test-runner');
-const { injectAxe, checkA11y, configureAxe } = require('axe-playwright');
-
-module.exports = {
-  async preRender(page, context) {
-    await injectAxe(page);
-  },
-  async postRender(page, context) {
-    // Get entire context of a story, including parameters, args, argTypes, etc.
-    const storyContext = await getStoryContext(page, context);
-
-    // Do not test a11y for stories that disable a11y
-    if (storyContext.parameters?.a11y?.disable) {
-      return;
-    }
-
-    // Apply story-level a11y rules
-    await configureAxe(page, {
-      rules: storyContext.parameters?.a11y?.config?.rules,
-    });
-
-    // from Storybook 7.0 onwards, the selector should be #storybook-root
-    await checkA11y(page, '#root', {
-      detailedReport: true,
-      detailedReportOptions: {
-        html: true,
-      },
-      // pass axe options defined in @storybook/addon-a11y
-      axeOptions: storyContext.parameters?.a11y?.options,
-    });
-  },
-};
-```
-
-#### StorybookTestRunner user agent
-
-The test-runner adds a `StorybookTestRunner` entry to the browser's user agent. You can use it to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
-
-```js
-export const MyStory = () => {
-  const isTestRunner = window.navigator.userAgent.match(/StorybookTestRunner/);
-  return (
-    <div>
-      <p>Is this story running in the test runner?</p>
-      <p>{isTestRunner ? 'Yes' : 'No'}</p>
-    </div>
-  );
-};
-```
-
-Given that this check is happening in the browser, it is only applicable in the following scenarios:
-
-- inside of a render/template function of a story
-- inside of a play function
-- inside of preview.js
-- inside any other code that is executed in the browser
 
 ## Troubleshooting
 
