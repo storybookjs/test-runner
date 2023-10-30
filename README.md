@@ -683,14 +683,17 @@ module.exports = {
 The test-runner adds a `StorybookTestRunner` entry to the browser's user agent. You can use it to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
 
 ```js
-export const MyStory = () => {
-  const isTestRunner = window.navigator.userAgent.match(/StorybookTestRunner/);
-  return (
-    <div>
-      <p>Is this story running in the test runner?</p>
-      <p>{isTestRunner ? 'Yes' : 'No'}</p>
-    </div>
-  );
+// At the render level, useful for dynamically rendering something based on the test-runner
+export const MyStory = {
+  render: () => {
+    const isTestRunner = window.navigator.userAgent.match(/StorybookTestRunner/);
+    return (
+      <div>
+        <p>Is this story running in the test runner?</p>
+        <p>{isTestRunner ? 'Yes' : 'No'}</p>
+      </div>
+    );
+  },
 };
 ```
 
