@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 'use strict';
 
-import { JestOptions } from './util/getCliOptions';
 import fs from 'fs';
-
 import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
 import path from 'path';
 import tempy from 'tempy';
+import semver from 'semver';
+import { detect as detectPackageManager, PM } from 'detect-package-manager';
+
+import { JestOptions } from './util/getCliOptions';
 import { getCliOptions } from './util/getCliOptions';
 import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
@@ -50,6 +52,40 @@ const cleanup = () => {
   }
 };
 
+// Inspired by github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L48-106
+async function getExecutorCommand() {
+  const commands = {
+    npm: () => 'npx',
+    pnpm: () => {
+      const pnpmVersion = getPackageManagerVersion('pnpm');
+      const useExec = semver.gte(pnpmVersion, '6.13.0');
+
+      return useExec ? 'pnpm exec' : 'pnpx';
+    },
+    yarn: () => {
+      const yarnVersion = getPackageManagerVersion('yarn');
+      const useBerry = semver.gte(yarnVersion, '2.0.0');
+      return useBerry ? 'yarn exec' : 'yarn';
+    },
+  };
+
+  try {
+    let packageManager = await detectPackageManager();
+    if (packageManager === 'bun') {
+      packageManager = 'npm';
+    }
+
+    return commands[packageManager]();
+  } catch (err) {
+    return commands.npm();
+  }
+}
+
+// Copied from https://github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L113-L117
+function getPackageManagerVersion(packageManager: 'npm' | 'pnpm' | 'yarn') {
+  return execSync(`${packageManager} --version`).toString('utf-8').trim();
+}
+
 async function reportCoverage() {
   const coverageFolderE2E = path.resolve(process.cwd(), '.nyc_output');
   const coverageFolder = path.resolve(
@@ -75,9 +111,13 @@ async function reportCoverage() {
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
   if (process.env.JEST_SHARD !== 'true') {
-    execSync(`npx nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`, {
-      stdio: 'inherit',
-    });
+    const executorCommand = await getExecutorCommand();
+    execSync(
+      `${executorCommand} nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`,
+      {
+        stdio: 'inherit',
+      }
+    );
   }
 }
 
