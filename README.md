@@ -806,6 +806,20 @@ When running with `--stories-json`, tests get generated in a temporary folder an
 
 ```js
 // ./test-runner-jest.config.js
+const { getJestConfig } = require('@storybook/test-runner');
+
+/**
+ * @type {import('@jest/types').Config.InitialOptions}
+ */
+module.exports = {
+  // The default configuration comes from @storybook/test-runner
+  ...getJestConfig(),
+  snapshotResolver: './snapshot-resolver.js',
+};
+```
+
+```js
+// ./snapshot-resolver.js
 const path = require('path');
 
 module.exports = {
