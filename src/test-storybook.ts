@@ -335,6 +335,8 @@ const main = async () => {
     );
   }
 
+  process.env.TEST_ROOT = process.cwd();
+
   if (runnerOptions.indexJson || shouldRunIndexJson) {
     indexTmpDir = await getIndexTempDir(targetURL);
     process.env.TEST_ROOT = indexTmpDir;
