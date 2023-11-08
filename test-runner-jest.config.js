@@ -6,11 +6,13 @@ process.env.STORYBOOK_TEST_RUNNER_PATH = path.resolve(__dirname);
 
 const { getJestConfig } = require('./dist');
 
+const testRunnerConfig = getJestConfig();
+
 module.exports = {
-  ...getJestConfig(),
+  ...testRunnerConfig,
   cacheDirectory: 'node_modules/.cache/storybook/test-runner',
   transform: {
-    '^.+\\.stories\\.[jt]sx?$': './playwright/transform',
+    '^.+\\.(story|stories)\\.[jt]sx?$': './playwright/transform',
     '^.+\\.[jt]sx?$': '@swc/jest',
   },
   globalSetup: './playwright/global-setup.js',

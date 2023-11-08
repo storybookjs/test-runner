@@ -11,3 +11,11 @@ yarn-error.log
 coverage
 test-results.json
 **/junit.xml
+
+
+/**/.yarn/*
+!/**/.yarn/releases
+!/**/.yarn/plugins
+!/**/.yarn/sdks
+!/**/.yarn/versions
+/**/.pnp.*

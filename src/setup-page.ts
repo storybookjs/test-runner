@@ -238,6 +238,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
             get: function () {
               return [originalUserAgent, extra].join(' ');
             },
+            configurable: true,
           });
         }
       };
