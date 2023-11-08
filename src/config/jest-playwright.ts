@@ -78,7 +78,7 @@ export const getJestConfig = (): Config.InitialOptions => {
     reporters,
     testMatch,
     transform: {
-      '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
+      '^.+\\.(story|stories)\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
       '^.+\\.[jt]sx?$': swcJestPath,
     },
     snapshotSerializers: [jestSerializerHtmlPath],

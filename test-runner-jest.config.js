@@ -6,14 +6,16 @@ process.env.STORYBOOK_TEST_RUNNER_PATH = path.resolve(__dirname);
 
 const { getJestConfig } = require('./dist');
 
+const testRunnerConfig = getJestConfig();
+
 /**
  * @type {import('@jest/types').Config.InitialOptions}
  */
 module.exports = {
-  ...getJestConfig(),
+  ...testRunnerConfig,
   cacheDirectory: 'node_modules/.cache/storybook/test-runner',
   transform: {
-    '^.+\\.stories\\.[jt]sx?$': './dist/templates/transform',
+    '^.+\\.(story|stories)\\.[jt]sx?$': './dist/templates/transform',
     '^.+\\.[jt]sx?$': '@swc/jest',
   },
   globalSetup: './dist/templates/global-setup',

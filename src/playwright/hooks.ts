@@ -48,4 +48,11 @@ export const getStoryContext = async (page: Page, context: TestContext): Promise
   });
 };
 
+export const waitForPageReady = async (page: Page) => {
+  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('load');
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => document.fonts.ready);
+};
+
 export { transformPlaywright };
