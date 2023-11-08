@@ -10,7 +10,7 @@ describe('getJestConfig', () => {
       reporters: ['default'],
       testMatch: [],
       transform: {
-        '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
+        '^.+\\.(story|stories)\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
         '^.+\\.[jt]sx?$': path.resolve('../test-runner/node_modules/@swc/jest'),
       },
       snapshotSerializers: [path.resolve('../test-runner/node_modules/jest-serializer-html')],
@@ -77,7 +77,7 @@ describe('getJestConfig', () => {
       roots: undefined,
       testMatch: ['**/*.test.js'],
       transform: {
-        '^.+\\.stories\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
+        '^.+\\.(story|stories)\\.[jt]sx?$': '@storybook/test-runner/dist/templates/transform',
         '^.+\\.[jt]sx?$': path.dirname(require.resolve('@swc/jest')),
       },
       snapshotSerializers: [path.dirname(require.resolve('jest-serializer-html'))],

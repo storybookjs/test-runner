@@ -1,36 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`prefixFunction returns null literal if testPrefixer returns undefined 1`] = `
-Object {
+{
   "async": true,
-  "body": Object {
-    "body": Array [
-      Object {
-        "declarations": Array [
-          Object {
-            "id": Object {
+  "body": {
+    "body": [
+      {
+        "declarations": [
+          {
+            "id": {
               "loc": undefined,
               "name": "testFn",
               "type": "Identifier",
             },
-            "init": Object {
+            "init": {
               "async": true,
-              "body": Object {
-                "body": Array [
-                  Object {
-                    "declarations": Array [
-                      Object {
-                        "id": Object {
+              "body": {
+                "body": [
+                  {
+                    "declarations": [
+                      {
+                        "id": {
                           "loc": undefined,
                           "name": "context",
                           "type": "Identifier",
                         },
-                        "init": Object {
+                        "init": {
                           "loc": undefined,
-                          "properties": Array [
-                            Object {
+                          "properties": [
+                            {
                               "computed": false,
-                              "key": Object {
+                              "key": {
                                 "loc": undefined,
                                 "name": "id",
                                 "type": "Identifier",
@@ -38,14 +38,14 @@ Object {
                               "loc": undefined,
                               "shorthand": false,
                               "type": "ObjectProperty",
-                              "value": Object {
+                              "value": {
                                 "type": "StringLiteral",
                                 "value": "title--key",
                               },
                             },
-                            Object {
+                            {
                               "computed": false,
-                              "key": Object {
+                              "key": {
                                 "loc": undefined,
                                 "name": "title",
                                 "type": "Identifier",
@@ -53,14 +53,14 @@ Object {
                               "loc": undefined,
                               "shorthand": false,
                               "type": "ObjectProperty",
-                              "value": Object {
+                              "value": {
                                 "type": "StringLiteral",
                                 "value": "title",
                               },
                             },
-                            Object {
+                            {
                               "computed": false,
-                              "key": Object {
+                              "key": {
                                 "loc": undefined,
                                 "name": "name",
                                 "type": "Identifier",
@@ -68,7 +68,7 @@ Object {
                               "loc": undefined,
                               "shorthand": false,
                               "type": "ObjectProperty",
-                              "value": Object {
+                              "value": {
                                 "type": "StringLiteral",
                                 "value": "Key",
                               },
@@ -84,11 +84,11 @@ Object {
                     "loc": undefined,
                     "type": "VariableDeclaration",
                   },
-                  Object {
-                    "expression": Object {
-                      "arguments": Array [
-                        Object {
-                          "extra": Object {
+                  {
+                    "expression": {
+                      "arguments": [
+                        {
+                          "extra": {
                             "raw": "'pageerror'",
                             "rawValue": "pageerror",
                           },
@@ -96,29 +96,29 @@ Object {
                           "type": "StringLiteral",
                           "value": "pageerror",
                         },
-                        Object {
+                        {
                           "async": false,
-                          "body": Object {
-                            "body": Array [
-                              Object {
-                                "expression": Object {
-                                  "arguments": Array [
-                                    Object {
+                          "body": {
+                            "body": [
+                              {
+                                "expression": {
+                                  "arguments": [
+                                    {
                                       "async": false,
-                                      "body": Object {
-                                        "arguments": Array [
-                                          Object {
+                                      "body": {
+                                        "arguments": [
+                                          {
                                             "loc": undefined,
                                             "name": "id",
                                             "type": "Identifier",
                                           },
-                                          Object {
+                                          {
                                             "loc": undefined,
                                             "name": "err",
                                             "type": "Identifier",
                                           },
                                         ],
-                                        "callee": Object {
+                                        "callee": {
                                           "loc": undefined,
                                           "name": "__throwError",
                                           "type": "Identifier",
@@ -128,16 +128,16 @@ Object {
                                       },
                                       "generator": false,
                                       "loc": undefined,
-                                      "params": Array [
-                                        Object {
+                                      "params": [
+                                        {
                                           "loc": undefined,
-                                          "properties": Array [
-                                            Object {
+                                          "properties": [
+                                            {
                                               "computed": false,
-                                              "extra": Object {
+                                              "extra": {
                                                 "shorthand": true,
                                               },
-                                              "key": Object {
+                                              "key": {
                                                 "loc": undefined,
                                                 "name": "id",
                                                 "type": "Identifier",
@@ -145,19 +145,19 @@ Object {
                                               "loc": undefined,
                                               "shorthand": true,
                                               "type": "ObjectProperty",
-                                              "value": Object {
-                                                "extra": Object {},
+                                              "value": {
+                                                "extra": {},
                                                 "loc": undefined,
                                                 "name": "id",
                                                 "type": "Identifier",
                                               },
                                             },
-                                            Object {
+                                            {
                                               "computed": false,
-                                              "extra": Object {
+                                              "extra": {
                                                 "shorthand": true,
                                               },
-                                              "key": Object {
+                                              "key": {
                                                 "loc": undefined,
                                                 "name": "err",
                                                 "type": "Identifier",
@@ -165,8 +165,8 @@ Object {
                                               "loc": undefined,
                                               "shorthand": true,
                                               "type": "ObjectProperty",
-                                              "value": Object {
-                                                "extra": Object {},
+                                              "value": {
+                                                "extra": {},
                                                 "loc": undefined,
                                                 "name": "err",
                                                 "type": "Identifier",
@@ -178,12 +178,12 @@ Object {
                                       ],
                                       "type": "ArrowFunctionExpression",
                                     },
-                                    Object {
+                                    {
                                       "loc": undefined,
-                                      "properties": Array [
-                                        Object {
+                                      "properties": [
+                                        {
                                           "computed": false,
-                                          "key": Object {
+                                          "key": {
                                             "loc": undefined,
                                             "name": "id",
                                             "type": "Identifier",
@@ -191,14 +191,14 @@ Object {
                                           "loc": undefined,
                                           "shorthand": false,
                                           "type": "ObjectProperty",
-                                          "value": Object {
+                                          "value": {
                                             "type": "StringLiteral",
                                             "value": "title--key",
                                           },
                                         },
-                                        Object {
+                                        {
                                           "computed": false,
-                                          "key": Object {
+                                          "key": {
                                             "loc": undefined,
                                             "name": "err",
                                             "type": "Identifier",
@@ -206,15 +206,15 @@ Object {
                                           "loc": undefined,
                                           "shorthand": false,
                                           "type": "ObjectProperty",
-                                          "value": Object {
+                                          "value": {
                                             "computed": false,
                                             "loc": undefined,
-                                            "object": Object {
+                                            "object": {
                                               "loc": undefined,
                                               "name": "err",
                                               "type": "Identifier",
                                             },
-                                            "property": Object {
+                                            "property": {
                                               "loc": undefined,
                                               "name": "message",
                                               "type": "Identifier",
@@ -226,15 +226,15 @@ Object {
                                       "type": "ObjectExpression",
                                     },
                                   ],
-                                  "callee": Object {
+                                  "callee": {
                                     "computed": false,
                                     "loc": undefined,
-                                    "object": Object {
+                                    "object": {
                                       "loc": undefined,
                                       "name": "page",
                                       "type": "Identifier",
                                     },
-                                    "property": Object {
+                                    "property": {
                                       "loc": undefined,
                                       "name": "evaluate",
                                       "type": "Identifier",
@@ -248,14 +248,14 @@ Object {
                                 "type": "ExpressionStatement",
                               },
                             ],
-                            "directives": Array [],
+                            "directives": [],
                             "loc": undefined,
                             "type": "BlockStatement",
                           },
                           "generator": false,
                           "loc": undefined,
-                          "params": Array [
-                            Object {
+                          "params": [
+                            {
                               "loc": undefined,
                               "name": "err",
                               "type": "Identifier",
@@ -264,15 +264,15 @@ Object {
                           "type": "ArrowFunctionExpression",
                         },
                       ],
-                      "callee": Object {
+                      "callee": {
                         "computed": false,
                         "loc": undefined,
-                        "object": Object {
+                        "object": {
                           "loc": undefined,
                           "name": "page",
                           "type": "Identifier",
                         },
-                        "property": Object {
+                        "property": {
                           "loc": undefined,
                           "name": "on",
                           "type": "Identifier",
@@ -285,34 +285,34 @@ Object {
                     "loc": undefined,
                     "type": "ExpressionStatement",
                   },
-                  Object {
+                  {
                     "alternate": null,
-                    "consequent": Object {
-                      "body": Array [
-                        Object {
-                          "expression": Object {
-                            "argument": Object {
-                              "arguments": Array [
-                                Object {
+                    "consequent": {
+                      "body": [
+                        {
+                          "expression": {
+                            "argument": {
+                              "arguments": [
+                                {
                                   "loc": undefined,
                                   "name": "page",
                                   "type": "Identifier",
                                 },
-                                Object {
+                                {
                                   "loc": undefined,
                                   "name": "context",
                                   "type": "Identifier",
                                 },
                               ],
-                              "callee": Object {
+                              "callee": {
                                 "computed": false,
                                 "loc": undefined,
-                                "object": Object {
+                                "object": {
                                   "loc": undefined,
                                   "name": "globalThis",
                                   "type": "Identifier",
                                 },
-                                "property": Object {
+                                "property": {
                                   "loc": undefined,
                                   "name": "__sbPreRender",
                                   "type": "Identifier",
@@ -329,20 +329,20 @@ Object {
                           "type": "ExpressionStatement",
                         },
                       ],
-                      "directives": Array [],
+                      "directives": [],
                       "loc": undefined,
                       "type": "BlockStatement",
                     },
                     "loc": undefined,
-                    "test": Object {
+                    "test": {
                       "computed": false,
                       "loc": undefined,
-                      "object": Object {
+                      "object": {
                         "loc": undefined,
                         "name": "globalThis",
                         "type": "Identifier",
                       },
-                      "property": Object {
+                      "property": {
                         "loc": undefined,
                         "name": "__sbPreRender",
                         "type": "Identifier",
@@ -351,33 +351,33 @@ Object {
                     },
                     "type": "IfStatement",
                   },
-                  Object {
-                    "declarations": Array [
-                      Object {
-                        "id": Object {
+                  {
+                    "declarations": [
+                      {
+                        "id": {
                           "loc": undefined,
                           "name": "result",
                           "type": "Identifier",
                         },
-                        "init": Object {
-                          "argument": Object {
-                            "arguments": Array [
-                              Object {
+                        "init": {
+                          "argument": {
+                            "arguments": [
+                              {
                                 "async": false,
-                                "body": Object {
-                                  "arguments": Array [
-                                    Object {
+                                "body": {
+                                  "arguments": [
+                                    {
                                       "loc": undefined,
                                       "name": "id",
                                       "type": "Identifier",
                                     },
-                                    Object {
+                                    {
                                       "loc": undefined,
                                       "name": "hasPlayFn",
                                       "type": "Identifier",
                                     },
                                   ],
-                                  "callee": Object {
+                                  "callee": {
                                     "loc": undefined,
                                     "name": "__test",
                                     "type": "Identifier",
@@ -387,16 +387,16 @@ Object {
                                 },
                                 "generator": false,
                                 "loc": undefined,
-                                "params": Array [
-                                  Object {
+                                "params": [
+                                  {
                                     "loc": undefined,
-                                    "properties": Array [
-                                      Object {
+                                    "properties": [
+                                      {
                                         "computed": false,
-                                        "extra": Object {
+                                        "extra": {
                                           "shorthand": true,
                                         },
-                                        "key": Object {
+                                        "key": {
                                           "loc": undefined,
                                           "name": "id",
                                           "type": "Identifier",
@@ -404,19 +404,19 @@ Object {
                                         "loc": undefined,
                                         "shorthand": true,
                                         "type": "ObjectProperty",
-                                        "value": Object {
-                                          "extra": Object {},
+                                        "value": {
+                                          "extra": {},
                                           "loc": undefined,
                                           "name": "id",
                                           "type": "Identifier",
                                         },
                                       },
-                                      Object {
+                                      {
                                         "computed": false,
-                                        "extra": Object {
+                                        "extra": {
                                           "shorthand": true,
                                         },
-                                        "key": Object {
+                                        "key": {
                                           "loc": undefined,
                                           "name": "hasPlayFn",
                                           "type": "Identifier",
@@ -424,8 +424,8 @@ Object {
                                         "loc": undefined,
                                         "shorthand": true,
                                         "type": "ObjectProperty",
-                                        "value": Object {
-                                          "extra": Object {},
+                                        "value": {
+                                          "extra": {},
                                           "loc": undefined,
                                           "name": "hasPlayFn",
                                           "type": "Identifier",
@@ -437,15 +437,15 @@ Object {
                                 ],
                                 "type": "ArrowFunctionExpression",
                               },
-                              Object {
-                                "extra": Object {
+                              {
+                                "extra": {
                                   "trailingComma": 618,
                                 },
                                 "loc": undefined,
-                                "properties": Array [
-                                  Object {
+                                "properties": [
+                                  {
                                     "computed": false,
-                                    "key": Object {
+                                    "key": {
                                       "loc": undefined,
                                       "name": "id",
                                       "type": "Identifier",
@@ -453,7 +453,7 @@ Object {
                                     "loc": undefined,
                                     "shorthand": false,
                                     "type": "ObjectProperty",
-                                    "value": Object {
+                                    "value": {
                                       "type": "StringLiteral",
                                       "value": "title--key",
                                     },
@@ -462,15 +462,15 @@ Object {
                                 "type": "ObjectExpression",
                               },
                             ],
-                            "callee": Object {
+                            "callee": {
                               "computed": false,
                               "loc": undefined,
-                              "object": Object {
+                              "object": {
                                 "loc": undefined,
                                 "name": "page",
                                 "type": "Identifier",
                               },
-                              "property": Object {
+                              "property": {
                                 "loc": undefined,
                                 "name": "evaluate",
                                 "type": "Identifier",
@@ -491,34 +491,34 @@ Object {
                     "loc": undefined,
                     "type": "VariableDeclaration",
                   },
-                  Object {
+                  {
                     "alternate": null,
-                    "consequent": Object {
-                      "body": Array [
-                        Object {
-                          "expression": Object {
-                            "argument": Object {
-                              "arguments": Array [
-                                Object {
+                    "consequent": {
+                      "body": [
+                        {
+                          "expression": {
+                            "argument": {
+                              "arguments": [
+                                {
                                   "loc": undefined,
                                   "name": "page",
                                   "type": "Identifier",
                                 },
-                                Object {
+                                {
                                   "loc": undefined,
                                   "name": "context",
                                   "type": "Identifier",
                                 },
                               ],
-                              "callee": Object {
+                              "callee": {
                                 "computed": false,
                                 "loc": undefined,
-                                "object": Object {
+                                "object": {
                                   "loc": undefined,
                                   "name": "globalThis",
                                   "type": "Identifier",
                                 },
-                                "property": Object {
+                                "property": {
                                   "loc": undefined,
                                   "name": "__sbPostRender",
                                   "type": "Identifier",
@@ -535,20 +535,20 @@ Object {
                           "type": "ExpressionStatement",
                         },
                       ],
-                      "directives": Array [],
+                      "directives": [],
                       "loc": undefined,
                       "type": "BlockStatement",
                     },
                     "loc": undefined,
-                    "test": Object {
+                    "test": {
                       "computed": false,
                       "loc": undefined,
-                      "object": Object {
+                      "object": {
                         "loc": undefined,
                         "name": "globalThis",
                         "type": "Identifier",
                       },
-                      "property": Object {
+                      "property": {
                         "loc": undefined,
                         "name": "__sbPostRender",
                         "type": "Identifier",
@@ -557,26 +557,26 @@ Object {
                     },
                     "type": "IfStatement",
                   },
-                  Object {
+                  {
                     "alternate": null,
-                    "consequent": Object {
-                      "body": Array [
-                        Object {
-                          "declarations": Array [
-                            Object {
-                              "id": Object {
+                    "consequent": {
+                      "body": [
+                        {
+                          "declarations": [
+                            {
+                              "id": {
                                 "loc": undefined,
                                 "name": "isCoverageSetupCorrectly",
                                 "type": "Identifier",
                               },
-                              "init": Object {
-                                "argument": Object {
-                                  "arguments": Array [
-                                    Object {
+                              "init": {
+                                "argument": {
+                                  "arguments": [
+                                    {
                                       "async": false,
-                                      "body": Object {
-                                        "left": Object {
-                                          "extra": Object {
+                                      "body": {
+                                        "left": {
+                                          "extra": {
                                             "raw": "'__coverage__'",
                                             "rawValue": "__coverage__",
                                           },
@@ -586,7 +586,7 @@ Object {
                                         },
                                         "loc": undefined,
                                         "operator": "in",
-                                        "right": Object {
+                                        "right": {
                                           "loc": undefined,
                                           "name": "window",
                                           "type": "Identifier",
@@ -595,19 +595,19 @@ Object {
                                       },
                                       "generator": false,
                                       "loc": undefined,
-                                      "params": Array [],
+                                      "params": [],
                                       "type": "ArrowFunctionExpression",
                                     },
                                   ],
-                                  "callee": Object {
+                                  "callee": {
                                     "computed": false,
                                     "loc": undefined,
-                                    "object": Object {
+                                    "object": {
                                       "loc": undefined,
                                       "name": "page",
                                       "type": "Identifier",
                                     },
-                                    "property": Object {
+                                    "property": {
                                       "loc": undefined,
                                       "name": "evaluate",
                                       "type": "Identifier",
@@ -628,22 +628,22 @@ Object {
                           "loc": undefined,
                           "type": "VariableDeclaration",
                         },
-                        Object {
+                        {
                           "alternate": null,
-                          "consequent": Object {
-                            "body": Array [
-                              Object {
-                                "argument": Object {
-                                  "arguments": Array [
-                                    Object {
-                                      "expressions": Array [],
+                          "consequent": {
+                            "body": [
+                              {
+                                "argument": {
+                                  "arguments": [
+                                    {
+                                      "expressions": [],
                                       "loc": undefined,
-                                      "quasis": Array [
-                                        Object {
+                                      "quasis": [
+                                        {
                                           "loc": undefined,
                                           "tail": true,
                                           "type": "TemplateElement",
-                                          "value": Object {
+                                          "value": {
                                             "cooked": "[Test runner] An error occurred when evaluating code coverage:
 The code in this story is not instrumented, which means the coverage setup is likely not correct.
 More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
@@ -656,7 +656,7 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                                       "type": "TemplateLiteral",
                                     },
                                   ],
-                                  "callee": Object {
+                                  "callee": {
                                     "loc": undefined,
                                     "name": "Error",
                                     "type": "Identifier",
@@ -668,13 +668,13 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                                 "type": "ThrowStatement",
                               },
                             ],
-                            "directives": Array [],
+                            "directives": [],
                             "loc": undefined,
                             "type": "BlockStatement",
                           },
                           "loc": undefined,
-                          "test": Object {
-                            "argument": Object {
+                          "test": {
+                            "argument": {
                               "loc": undefined,
                               "name": "isCoverageSetupCorrectly",
                               "type": "Identifier",
@@ -686,25 +686,25 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                           },
                           "type": "IfStatement",
                         },
-                        Object {
-                          "expression": Object {
-                            "argument": Object {
-                              "arguments": Array [
-                                Object {
+                        {
+                          "expression": {
+                            "argument": {
+                              "arguments": [
+                                {
                                   "loc": undefined,
                                   "name": "page",
                                   "type": "Identifier",
                                 },
                               ],
-                              "callee": Object {
+                              "callee": {
                                 "computed": false,
                                 "loc": undefined,
-                                "object": Object {
+                                "object": {
                                   "loc": undefined,
                                   "name": "jestPlaywright",
                                   "type": "Identifier",
                                 },
-                                "property": Object {
+                                "property": {
                                   "loc": undefined,
                                   "name": "saveCoverage",
                                   "type": "Identifier",
@@ -721,20 +721,20 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                           "type": "ExpressionStatement",
                         },
                       ],
-                      "directives": Array [],
+                      "directives": [],
                       "loc": undefined,
                       "type": "BlockStatement",
                     },
                     "loc": undefined,
-                    "test": Object {
+                    "test": {
                       "computed": false,
                       "loc": undefined,
-                      "object": Object {
+                      "object": {
                         "loc": undefined,
                         "name": "globalThis",
                         "type": "Identifier",
                       },
-                      "property": Object {
+                      "property": {
                         "loc": undefined,
                         "name": "__sbCollectCoverage",
                         "type": "Identifier",
@@ -743,8 +743,8 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                     },
                     "type": "IfStatement",
                   },
-                  Object {
-                    "argument": Object {
+                  {
+                    "argument": {
                       "loc": undefined,
                       "name": "result",
                       "type": "Identifier",
@@ -753,13 +753,13 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                     "type": "ReturnStatement",
                   },
                 ],
-                "directives": Array [],
+                "directives": [],
                 "loc": undefined,
                 "type": "BlockStatement",
               },
               "generator": false,
               "loc": undefined,
-              "params": Array [],
+              "params": [],
               "type": "ArrowFunctionExpression",
             },
             "loc": undefined,
@@ -770,14 +770,14 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
         "loc": undefined,
         "type": "VariableDeclaration",
       },
-      Object {
-        "block": Object {
-          "body": Array [
-            Object {
-              "expression": Object {
-                "argument": Object {
-                  "arguments": Array [],
-                  "callee": Object {
+      {
+        "block": {
+          "body": [
+            {
+              "expression": {
+                "argument": {
+                  "arguments": [],
+                  "callee": {
                     "loc": undefined,
                     "name": "testFn",
                     "type": "Identifier",
@@ -792,19 +792,19 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
               "type": "ExpressionStatement",
             },
           ],
-          "directives": Array [],
+          "directives": [],
           "loc": undefined,
           "type": "BlockStatement",
         },
         "finalizer": null,
-        "handler": Object {
-          "body": Object {
-            "body": Array [
-              Object {
-                "alternate": Object {
-                  "body": Array [
-                    Object {
-                      "argument": Object {
+        "handler": {
+          "body": {
+            "body": [
+              {
+                "alternate": {
+                  "body": [
+                    {
+                      "argument": {
                         "loc": undefined,
                         "name": "err",
                         "type": "Identifier",
@@ -813,68 +813,68 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "type": "ThrowStatement",
                     },
                   ],
-                  "directives": Array [],
+                  "directives": [],
                   "loc": undefined,
                   "type": "BlockStatement",
                 },
-                "consequent": Object {
-                  "body": Array [
-                    Object {
-                      "expression": Object {
-                        "arguments": Array [
-                          Object {
-                            "expressions": Array [
-                              Object {
+                "consequent": {
+                  "body": [
+                    {
+                      "expression": {
+                        "arguments": [
+                          {
+                            "expressions": [
+                              {
                                 "type": "StringLiteral",
                                 "value": "title",
                               },
-                              Object {
+                              {
                                 "type": "StringLiteral",
                                 "value": "Key",
                               },
                             ],
                             "loc": undefined,
-                            "quasis": Array [
-                              Object {
+                            "quasis": [
+                              {
                                 "loc": undefined,
                                 "tail": false,
                                 "type": "TemplateElement",
-                                "value": Object {
-                                  "cooked": "An error occurred in the following story, most likely because of a navigation: \\"",
-                                  "raw": "An error occurred in the following story, most likely because of a navigation: \\"",
+                                "value": {
+                                  "cooked": "An error occurred in the following story, most likely because of a navigation: "",
+                                  "raw": "An error occurred in the following story, most likely because of a navigation: "",
                                 },
                               },
-                              Object {
+                              {
                                 "loc": undefined,
                                 "tail": false,
                                 "type": "TemplateElement",
-                                "value": Object {
+                                "value": {
                                   "cooked": "/",
                                   "raw": "/",
                                 },
                               },
-                              Object {
+                              {
                                 "loc": undefined,
                                 "tail": true,
                                 "type": "TemplateElement",
-                                "value": Object {
-                                  "cooked": "\\". Retrying...",
-                                  "raw": "\\". Retrying...",
+                                "value": {
+                                  "cooked": "". Retrying...",
+                                  "raw": "". Retrying...",
                                 },
                               },
                             ],
                             "type": "TemplateLiteral",
                           },
                         ],
-                        "callee": Object {
+                        "callee": {
                           "computed": false,
                           "loc": undefined,
-                          "object": Object {
+                          "object": {
                             "loc": undefined,
                             "name": "console",
                             "type": "Identifier",
                           },
-                          "property": Object {
+                          "property": {
                             "loc": undefined,
                             "name": "log",
                             "type": "Identifier",
@@ -887,19 +887,19 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "loc": undefined,
                       "type": "ExpressionStatement",
                     },
-                    Object {
-                      "expression": Object {
-                        "argument": Object {
-                          "arguments": Array [],
-                          "callee": Object {
+                    {
+                      "expression": {
+                        "argument": {
+                          "arguments": [],
+                          "callee": {
                             "computed": false,
                             "loc": undefined,
-                            "object": Object {
+                            "object": {
                               "loc": undefined,
                               "name": "jestPlaywright",
                               "type": "Identifier",
                             },
-                            "property": Object {
+                            "property": {
                               "loc": undefined,
                               "name": "resetPage",
                               "type": "Identifier",
@@ -915,34 +915,34 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "loc": undefined,
                       "type": "ExpressionStatement",
                     },
-                    Object {
-                      "expression": Object {
-                        "argument": Object {
-                          "arguments": Array [
-                            Object {
+                    {
+                      "expression": {
+                        "argument": {
+                          "arguments": [
+                            {
                               "computed": false,
                               "loc": undefined,
-                              "object": Object {
+                              "object": {
                                 "loc": undefined,
                                 "name": "globalThis",
                                 "type": "Identifier",
                               },
-                              "property": Object {
+                              "property": {
                                 "loc": undefined,
                                 "name": "page",
                                 "type": "Identifier",
                               },
                               "type": "MemberExpression",
                             },
-                            Object {
+                            {
                               "computed": false,
                               "loc": undefined,
-                              "object": Object {
+                              "object": {
                                 "loc": undefined,
                                 "name": "globalThis",
                                 "type": "Identifier",
                               },
-                              "property": Object {
+                              "property": {
                                 "loc": undefined,
                                 "name": "context",
                                 "type": "Identifier",
@@ -950,15 +950,15 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                               "type": "MemberExpression",
                             },
                           ],
-                          "callee": Object {
+                          "callee": {
                             "computed": false,
                             "loc": undefined,
-                            "object": Object {
+                            "object": {
                               "loc": undefined,
                               "name": "globalThis",
                               "type": "Identifier",
                             },
-                            "property": Object {
+                            "property": {
                               "loc": undefined,
                               "name": "__sbSetupPage",
                               "type": "Identifier",
@@ -974,11 +974,11 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "loc": undefined,
                       "type": "ExpressionStatement",
                     },
-                    Object {
-                      "expression": Object {
-                        "argument": Object {
-                          "arguments": Array [],
-                          "callee": Object {
+                    {
+                      "expression": {
+                        "argument": {
+                          "arguments": [],
+                          "callee": {
                             "loc": undefined,
                             "name": "testFn",
                             "type": "Identifier",
@@ -993,15 +993,15 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "type": "ExpressionStatement",
                     },
                   ],
-                  "directives": Array [],
+                  "directives": [],
                   "loc": undefined,
                   "type": "BlockStatement",
                 },
                 "loc": undefined,
-                "test": Object {
-                  "arguments": Array [
-                    Object {
-                      "extra": Object {
+                "test": {
+                  "arguments": [
+                    {
+                      "extra": {
                         "raw": "'Execution context was destroyed'",
                         "rawValue": "Execution context was destroyed",
                       },
@@ -1010,20 +1010,20 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "value": "Execution context was destroyed",
                     },
                   ],
-                  "callee": Object {
+                  "callee": {
                     "computed": false,
                     "loc": undefined,
-                    "object": Object {
-                      "arguments": Array [],
-                      "callee": Object {
+                    "object": {
+                      "arguments": [],
+                      "callee": {
                         "computed": false,
                         "loc": undefined,
-                        "object": Object {
+                        "object": {
                           "loc": undefined,
                           "name": "err",
                           "type": "Identifier",
                         },
-                        "property": Object {
+                        "property": {
                           "loc": undefined,
                           "name": "toString",
                           "type": "Identifier",
@@ -1033,7 +1033,7 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                       "loc": undefined,
                       "type": "CallExpression",
                     },
-                    "property": Object {
+                    "property": {
                       "loc": undefined,
                       "name": "includes",
                       "type": "Identifier",
@@ -1046,12 +1046,12 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
                 "type": "IfStatement",
               },
             ],
-            "directives": Array [],
+            "directives": [],
             "loc": undefined,
             "type": "BlockStatement",
           },
           "loc": undefined,
-          "param": Object {
+          "param": {
             "loc": undefined,
             "name": "err",
             "type": "Identifier",
@@ -1062,13 +1062,13 @@ More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage",
         "type": "TryStatement",
       },
     ],
-    "directives": Array [],
+    "directives": [],
     "loc": undefined,
     "type": "BlockStatement",
   },
   "generator": false,
   "loc": undefined,
-  "params": Array [],
+  "params": [],
   "type": "ArrowFunctionExpression",
 }
 `;
@@ -1091,21 +1091,21 @@ exports[`transformCsf calls the beforeEachPrefixer function once 1`] = `
     
 
 if (!require.main) {
-  describe(\\"Button\\", () => {
-    describe(\\"Primary\\", () => {
-      it(\\"smoke-test\\", async () => {
+  describe("Button", () => {
+    describe("Primary", () => {
+      it("smoke-test", async () => {
         const testFn = async () => {
           const context = {
-            id: \\"button--primary\\",
-            title: \\"Button\\",
-            name: \\"Primary\\"
+            id: "button--primary",
+            title: "Button",
+            name: "Primary"
           };
           page.on('pageerror', err => {
             page.evaluate(({
               id,
               err
             }) => __throwError(id, err), {
-              id: \\"button--primary\\",
+              id: "button--primary",
               err: err.message
             });
           });
@@ -1116,7 +1116,7 @@ if (!require.main) {
             id,
             hasPlayFn
           }) => __test(id, hasPlayFn), {
-            id: \\"button--primary\\"
+            id: "button--primary"
           });
           if (globalThis.__sbPostRender) {
             await globalThis.__sbPostRender(page, context);
@@ -1136,7 +1136,7 @@ if (!require.main) {
           await testFn();
         } catch (err) {
           if (err.toString().includes('Execution context was destroyed')) {
-            console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Button\\"}/\${\\"Primary\\"}\\". Retrying...\`);
+            console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
             await jestPlaywright.resetPage();
             await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
             await testFn();
@@ -1168,21 +1168,21 @@ exports[`transformCsf calls the testPrefixer function for each test 1`] = `
     
 
 if (!require.main) {
-  describe(\\"Button\\", () => {
-    describe(\\"Primary\\", () => {
-      it(\\"smoke-test\\", async () => {
+  describe("Button", () => {
+    describe("Primary", () => {
+      it("smoke-test", async () => {
         const testFn = async () => {
           const context = {
-            id: \\"button--primary\\",
-            title: \\"Button\\",
-            name: \\"Primary\\"
+            id: "button--primary",
+            title: "Button",
+            name: "Primary"
           };
           page.on('pageerror', err => {
             page.evaluate(({
               id,
               err
             }) => __throwError(id, err), {
-              id: \\"button--primary\\",
+              id: "button--primary",
               err: err.message
             });
           });
@@ -1193,7 +1193,7 @@ if (!require.main) {
             id,
             hasPlayFn
           }) => __test(id, hasPlayFn), {
-            id: \\"button--primary\\"
+            id: "button--primary"
           });
           if (globalThis.__sbPostRender) {
             await globalThis.__sbPostRender(page, context);
@@ -1213,7 +1213,7 @@ if (!require.main) {
           await testFn();
         } catch (err) {
           if (err.toString().includes('Execution context was destroyed')) {
-            console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Button\\"}/\${\\"Primary\\"}\\". Retrying...\`);
+            console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
             await jestPlaywright.resetPage();
             await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
             await testFn();
@@ -1230,21 +1230,21 @@ if (!require.main) {
 exports[`transformCsf clears the body if clearBody option is true 1`] = `
 "
 if (!require.main) {
-  describe(\\"Button\\", () => {
-    describe(\\"Primary\\", () => {
-      it(\\"smoke-test\\", async () => {
+  describe("Button", () => {
+    describe("Primary", () => {
+      it("smoke-test", async () => {
         const testFn = async () => {
           const context = {
-            id: \\"button--primary\\",
-            title: \\"Button\\",
-            name: \\"Primary\\"
+            id: "button--primary",
+            title: "Button",
+            name: "Primary"
           };
           page.on('pageerror', err => {
             page.evaluate(({
               id,
               err
             }) => __throwError(id, err), {
-              id: \\"button--primary\\",
+              id: "button--primary",
               err: err.message
             });
           });
@@ -1255,7 +1255,7 @@ if (!require.main) {
             id,
             hasPlayFn
           }) => __test(id, hasPlayFn), {
-            id: \\"button--primary\\"
+            id: "button--primary"
           });
           if (globalThis.__sbPostRender) {
             await globalThis.__sbPostRender(page, context);
@@ -1275,7 +1275,7 @@ if (!require.main) {
           await testFn();
         } catch (err) {
           if (err.toString().includes('Execution context was destroyed')) {
-            console.log(\`An error occurred in the following story, most likely because of a navigation: \\"\${\\"Button\\"}/\${\\"Primary\\"}\\". Retrying...\`);
+            console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
             await jestPlaywright.resetPage();
             await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
             await testFn();
@@ -1307,12 +1307,12 @@ exports[`transformCsf executes beforeEach code before each test 1`] = `
     
 
 if (!require.main) {
-  describe(\\"Button\\", () => {
+  describe("Button", () => {
     beforeEach(beforeEach(() => {
-      console.log(\\"beforeEach called\\");
+      console.log("beforeEach called");
     }));
-    describe(\\"Primary\\", () => {
-      it(\\"smoke-test\\", null);
+    describe("Primary", () => {
+      it("smoke-test", null);
     });
   });
 }"
