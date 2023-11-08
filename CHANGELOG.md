@@ -1,3 +1,42 @@
+# v0.14.0 (Wed Nov 08 2023)
+
+#### 🚀 Enhancement
+
+- Feature: Support .story files [#376](https://github.com/storybookjs/test-runner/pull/376) ([@yannbf](https://github.com/yannbf))
+- BREAKING: Upgrade Jest to v29 [#348](https://github.com/storybookjs/test-runner/pull/348) ([@yannbf](https://github.com/yannbf) [@legobeat](https://github.com/legobeat))
+- BREAKING: Bump minimum Node.js version to ^14.15.0 [#354](https://github.com/storybookjs/test-runner/pull/354) ([@legobeat](https://github.com/legobeat))
+- Add waitForPageReady utility [#361](https://github.com/storybookjs/test-runner/pull/361) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Documentation: restructure docs and include more recipes [#373](https://github.com/storybookjs/test-runner/pull/373) ([@yannbf](https://github.com/yannbf))
+- Run nyc with correct packager manager command [#364](https://github.com/storybookjs/test-runner/pull/364) ([@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph) [@yannbf](https://github.com/yannbf))
+- deps/devDeps: bump semver to latest [CVE-2022-25883] [#349](https://github.com/storybookjs/test-runner/pull/349) ([@legobeat](https://github.com/legobeat))
+- Make userAgent configurable [#342](https://github.com/storybookjs/test-runner/pull/342) ([@jaknas](https://github.com/jaknas))
+- devDeps: Bump auto from v10 to v11 [#346](https://github.com/storybookjs/test-runner/pull/346) ([@legobeat](https://github.com/legobeat))
+- CI: Fix yarn 2 issue [#352](https://github.com/storybookjs/test-runner/pull/352) ([@yannbf](https://github.com/yannbf))
+- chore: set `engines.node` to `>=12.0.0` [#351](https://github.com/storybookjs/test-runner/pull/351) ([@legobeat](https://github.com/legobeat))
+- Maintenance: Update to yarn berry [#344](https://github.com/storybookjs/test-runner/pull/344) ([@yannbf](https://github.com/yannbf))
+- Maintenance: Remove csf upgrade in nightly check [#343](https://github.com/storybookjs/test-runner/pull/343) ([@yannbf](https://github.com/yannbf))
+
+#### 🏠 Internal
+
+- chore: disable yarn telemetry by default [#350](https://github.com/storybookjs/test-runner/pull/350) ([@legobeat](https://github.com/legobeat))
+- chore: dedupe dependency versions in `yarn.lock` [#347](https://github.com/storybookjs/test-runner/pull/347) ([@legobeat](https://github.com/legobeat))
+
+#### 📝 Documentation
+
+- Docs: Expand ejected config docs with an example [#363](https://github.com/storybookjs/test-runner/pull/363) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- [@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph)
+- [@legobeat](https://github.com/legobeat)
+- Jakub Naskręski ([@jaknas](https://github.com/jaknas))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.13.0 (Fri Aug 04 2023)
 
 #### 🚀 Enhancement
