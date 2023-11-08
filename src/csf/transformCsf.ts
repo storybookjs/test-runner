@@ -23,7 +23,7 @@ interface TransformOptions {
   makeTitle?: (userTitle: string) => string;
 }
 
-const prefixFunction = (
+export const prefixFunction = (
   key: string,
   title: string,
   input: t.Expression,
