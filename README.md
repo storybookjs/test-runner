@@ -191,12 +191,14 @@ Here's an example of an ejected file used to extend the tests timeout from Jest:
 // ./test-runner-jest.config.js
 const { getJestConfig } = require('@storybook/test-runner');
 
+const testRunnerConfig = getJestConfig();
+
 /**
  * @type {import('@jest/types').Config.InitialOptions}
  */
 module.exports = {
   // The default configuration comes from @storybook/test-runner
-  ...getJestConfig(),
+  ...testRunnerConfig,
   /** Add your own overrides below
    * @see https://jestjs.io/docs/configuration
    */
@@ -808,12 +810,14 @@ When running with `--stories-json`, tests get generated in a temporary folder an
 // ./test-runner-jest.config.js
 const { getJestConfig } = require('@storybook/test-runner');
 
+const testRunnerConfig = getJestConfig();
+
 /**
  * @type {import('@jest/types').Config.InitialOptions}
  */
 module.exports = {
   // The default configuration comes from @storybook/test-runner
-  ...getJestConfig(),
+  ...testRunnerConfig,
   snapshotResolver: './snapshot-resolver.js',
 };
 ```
