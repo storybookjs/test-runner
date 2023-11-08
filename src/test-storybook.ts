@@ -35,7 +35,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message: string) => console.log(`[test-storybook] ${message}`);
-const error = (err: { message: any; stack: any }) => {
+const error = (err: Error) => {
   if (err instanceof Error) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
   } else {
@@ -250,7 +250,10 @@ async function getIndexTempDir(url: string) {
       fs.writeFileSync(tmpFile, test as string);
     });
   } catch (err) {
-    error(err);
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    const errorObject = new Error(errorMessage);
+    errorObject.stack = err instanceof Error ? err.stack : undefined;
+    error(errorObject);
     process.exit(1);
   }
   return tmpDir;

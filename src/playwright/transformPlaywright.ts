@@ -71,7 +71,8 @@ const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
   const filePath = './' + relative(workingDir, filename);
 
-  return (userTitle: string) => userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle);
+  return (userTitle: string) =>
+    userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;
 };
 
 export const transformPlaywright = (src: string, filename: string) => {

@@ -37,9 +37,20 @@ const prefixFunction = (
     id: t.stringLiteral(toId(title, name)),
   };
 
-  const result = makeArray(testPrefixer(context));
-  const stmt = result[1] as t.ExpressionStatement;
-  return stmt.expression;
+  let result = input;
+  if (testPrefixer) {
+    const prefixResult = makeArray(testPrefixer(context));
+    const stmt = prefixResult[1] as t.ExpressionStatement;
+    if (stmt) {
+      result = stmt.expression;
+    }
+  }
+
+  if (!result) {
+    result = t.nullLiteral();
+  }
+
+  return result;
 };
 
 const makePlayTest = (
@@ -91,11 +102,11 @@ export const transformCsf = (
     makeTitle,
   }: TransformOptions = {}
 ) => {
-  const csf = loadCsf(code, { makeTitle });
+  const csf = loadCsf(code, { makeTitle: makeTitle || ((userTitle: string) => userTitle) });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
-  const title = csf.meta.title;
+  const title = csf.meta?.title;
 
   const storyPlays = storyExports.reduce((acc, key) => {
     const annotations = csf._storyAnnotations[key];
@@ -107,14 +118,16 @@ export const transformCsf = (
   const playTests = storyExports
     .map((key: string) => {
       let tests: t.Statement[] = [];
-      tests = [...tests, ...makePlayTest(key, title, storyPlays[key], testPrefixer)];
+      if (title) {
+        tests = [...tests, ...makePlayTest(key, title, storyPlays[key], testPrefixer)];
+      }
 
       if (tests.length) {
         return makeDescribe(key, tests);
       }
       return null;
     })
-    .filter(Boolean);
+    .filter(Boolean) as babel.types.Statement[];
 
   const allTests = playTests;
 
@@ -123,7 +136,7 @@ export const transformCsf = (
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
     const describe = makeDescribe(
-      csf.meta.title,
+      csf.meta?.title as string,
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
     ) as babel.types.Node;
@@ -135,7 +148,7 @@ export const transformCsf = (
       }
     `;
   } else if (insertTestIfEmpty) {
-    result = `describe('${csf.meta.title}', () => { it('no-op', () => {}) });`;
+    result = `describe('${csf.meta?.title}', () => { it('no-op', () => {}) });`;
   }
   return result;
 };

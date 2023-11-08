@@ -1,5 +1,5 @@
 import type { CliOptions } from './getCliOptions';
-import { program } from 'commander';
+import { CommanderError, program } from 'commander';
 
 type ParsedCliOptions = {
   options: CliOptions['runnerOptions'];
@@ -82,23 +82,27 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
 
   try {
     program.parse();
-  } catch (err) {
-    switch (err.code) {
-      case 'commander.unknownOption': {
-        program.outputHelp();
-        console.warn(
-          `\nIf you'd like this option to be supported, please open an issue at https://github.com/storybookjs/test-runner/issues/new\n`
-        );
-        process.exit(1);
-      }
+  } catch (err: unknown) {
+    if (err instanceof CommanderError) {
+      switch (err.code) {
+        case 'commander.unknownOption': {
+          program.outputHelp();
+          console.warn(
+            `\nIf you'd like this option to be supported, please open an issue at https://github.com/storybookjs/test-runner/issues/new\n`
+          );
+          process.exit(1);
+        }
 
-      case 'commander.helpDisplayed': {
-        process.exit(0);
-      }
+        case 'commander.helpDisplayed': {
+          process.exit(0);
+        }
 
-      default: {
-        throw err;
+        default: {
+          throw err;
+        }
       }
+    } else {
+      throw err;
     }
   }
 

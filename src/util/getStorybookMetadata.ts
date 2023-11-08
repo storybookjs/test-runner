@@ -1,13 +1,14 @@
 import { join } from 'path';
 import { normalizeStories, getProjectRoot } from '@storybook/core-common';
 import { getStorybookMain } from './getStorybookMain';
+import { StoriesEntry } from '@storybook/types';
 
 export const getStorybookMetadata = () => {
   const workingDir = getProjectRoot();
-  const configDir = process.env.STORYBOOK_CONFIG_DIR;
+  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
 
   const main = getStorybookMain(configDir);
-  const normalizedStoriesEntries = normalizeStories(main.stories, {
+  const normalizedStoriesEntries = normalizeStories(main?.stories as StoriesEntry[], {
     configDir,
     workingDir,
   }).map((specifier) => ({
