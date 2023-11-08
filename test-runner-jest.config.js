@@ -10,7 +10,7 @@ module.exports = {
   ...getJestConfig(),
   cacheDirectory: 'node_modules/.cache/storybook/test-runner',
   transform: {
-    '^.+\\.stories\\.[jt]sx?$': './playwright/transform',
+    '^.+\\.(story|stories)\\.[jt]sx?$': './playwright/transform',
     '^.+\\.[jt]sx?$': '@swc/jest',
   },
   globalSetup: './playwright/global-setup.js',
