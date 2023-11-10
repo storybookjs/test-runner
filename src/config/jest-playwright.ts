@@ -1,8 +1,9 @@
 import path from 'path';
 import type { Config } from '@jest/types';
 import { getProjectRoot } from '@storybook/core-common';
+import type { Config } from '@jest/types';
 
-const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH || '@storybook/test-runner';
+const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
 
 /**
  * IMPORTANT NOTE:
@@ -29,11 +30,11 @@ const getJestPlaywrightConfig = (): Config.InitialOptions => {
   );
   return {
     runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: require.resolve(TEST_RUNNER_PATH + '/dist/templates/global-setup'),
-    globalTeardown: require.resolve(TEST_RUNNER_PATH + '/dist/templates/global-teardown'),
-    testEnvironment: require.resolve(TEST_RUNNER_PATH + '/dist/templates/custom-environment'),
+    globalSetup: require.resolve(`${TEST_RUNNER_PATH}/dist/templates/global-setup`),
+    globalTeardown: require.resolve(`${TEST_RUNNER_PATH}/dist/templates/global-teardown`),
+    testEnvironment: require.resolve(`${TEST_RUNNER_PATH}/dist/templates/custom-environment`),
     setupFilesAfterEnv: [
-      require.resolve(TEST_RUNNER_PATH + '/dist/templates/jest-setup'),
+      require.resolve(`${TEST_RUNNER_PATH}/dist/templates/jest-setup`),
       expectPlaywrightPath,
       path.join(presetBasePath, 'lib', 'extends.js'),
     ],
@@ -70,9 +71,9 @@ export const getJestConfig = (): Config.InitialOptions => {
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
-  const testMatch = (STORYBOOK_STORIES_PATTERN && STORYBOOK_STORIES_PATTERN.split(';')) || [];
+  const testMatch = STORYBOOK_STORIES_PATTERN?.split(';') ?? [];
 
-  let config: Config.InitialOptions = {
+  const config: Config.InitialOptions = {
     rootDir: getProjectRoot(),
     roots: TEST_ROOT ? [TEST_ROOT] : undefined,
     reporters,

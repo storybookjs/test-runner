@@ -1,7 +1,6 @@
-import { type TestHook } from './playwright/hooks';
+import { TestHook } from './playwright/hooks';
 import { type setupPage } from './setup-page';
 import type { StoryContext, StoryIdentifiers } from '@storybook/csf';
-
 declare global {
   var __sbPreRender: TestHook;
   var __sbPostRender: TestHook;

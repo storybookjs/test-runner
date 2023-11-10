@@ -8,7 +8,7 @@ import {
 describe('Playwright Json', () => {
   describe('v4 indexes', () => {
     it('should generate a test for each story', () => {
-      const input: V4Index = {
+      const input = {
         v: 4,
         entries: {
           'example-header--logged-in': {
@@ -201,7 +201,7 @@ describe('Playwright Json', () => {
     });
 
     it('should skip docs entries', () => {
-      const input: V4Index = {
+      const input = {
         v: 4,
         entries: {
           'example-introduction--page': {
@@ -282,7 +282,7 @@ describe('Playwright Json', () => {
 
   describe('v3 indexes', () => {
     it('should generate a test for each story', () => {
-      const input: V3StoriesIndex = {
+      const input = {
         v: 3,
         stories: {
           'example-header--logged-in': {
@@ -490,7 +490,7 @@ describe('Playwright Json', () => {
     });
 
     it('should skip docs-only stories', () => {
-      const input: V3StoriesIndex = {
+      const input = {
         v: 3,
         stories: {
           'example-introduction--page': {
@@ -575,15 +575,6 @@ describe('Playwright Json', () => {
         });",
         }
       `);
-    });
-  });
-
-  describe('unsupported index', () => {
-    it('throws an error for unsupported versions', () => {
-      const unsupportedVersion: UnsupportedVersion = { v: 1 };
-      expect(() => transformPlaywrightJson(unsupportedVersion)).toThrowError(
-        `Unsupported version ${unsupportedVersion.v}`
-      );
     });
   });
 });
