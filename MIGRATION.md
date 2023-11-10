@@ -21,9 +21,9 @@ Follow the [migration steps to test-runner here](./MIGRATION.test-runner.md).
 
 ## Option 2 - Portable stories
 
-Portable stories are utilities from Storybook that assist in converting stories from a story file into renderable elements that can be reused in your Node tests with JSDOM with tools like [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/). This is the closest you will get from storyshots, but with the caveat that you will face similar challenges, given that the tests still run in Node.
+Portable stories are utilities from Storybook that assist in converting stories from a story file into renderable elements that can be reused in your Node tests with JSDOM with tools like [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/). This is the closest you will get from storyshots, but with the caveat that you will face similar challenges, given that the tests still run in Node. If you use storyshots extensively with complex mocking mechanisms and snapshot serializers, this migration will be the simplest option. 
 
-If your project uses React, React Native (without the [react-native-web addon](https://storybook.js.org/addons/%2540storybook/addon-react-native-web)) or Vue3, and you use storyshots extensively with complex mocking mechanisms and snapshot serializers, this migration will be the most seamless to you.
+This option is currently only available for React, React Native (without the [react-native-web addon](https://storybook.js.org/addons/%2540storybook/addon-react-native-web)) or Vue3. However, we plan to support more renderers in the future. 
 
 Follow the [migration steps to portable stories here](./MIGRATION.portable-stories.md).
 
