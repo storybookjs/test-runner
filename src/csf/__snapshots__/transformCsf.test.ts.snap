@@ -1086,7 +1086,6 @@ exports[`transformCsf calls the beforeEachPrefixer function once 1`] = `
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     
 
@@ -1163,7 +1162,6 @@ exports[`transformCsf calls the testPrefixer function for each test 1`] = `
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     
 
@@ -1302,7 +1300,6 @@ exports[`transformCsf executes beforeEach code before each test 1`] = `
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     
 

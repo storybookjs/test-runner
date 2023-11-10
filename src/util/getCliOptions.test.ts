@@ -57,11 +57,17 @@ describe('getCliOptions', () => {
 
   it('handles extra arguments correctly', () => {
     jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValue({
-      options: { version: true, cache: false, coverageDirectory: './test' },
+      options: { version: true, cache: false, env: 'node' },
       extraArgs: ['--watch', '--coverage'],
     });
     const opts = getCliOptions();
-    expect(opts.jestOptions).toEqual(['--version', '--no-cache', '--watch', '--coverage']);
+    expect(opts.jestOptions).toEqual([
+      '--version',
+      '--no-cache',
+      '--env="node"',
+      '--watch',
+      '--coverage',
+    ]);
   });
 
   it('returns extra args if passed', () => {

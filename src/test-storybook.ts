@@ -39,7 +39,7 @@ process.on('unhandledRejection', (err) => {
 
 const log = (message: string) => console.log(`[test-storybook] ${message}`);
 const error = (err: Error) => {
-  if (err) {
+  if (err instanceof Error) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
   } else {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err}`);

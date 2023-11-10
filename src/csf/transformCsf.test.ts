@@ -30,7 +30,6 @@ describe('transformCsf', () => {
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     `;
 
@@ -52,7 +51,6 @@ describe('transformCsf', () => {
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     `;
     const result = transformCsf(csfCode, { testPrefixer, beforeEachPrefixer: undefined });
@@ -73,7 +71,6 @@ describe('transformCsf', () => {
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     `;
 
@@ -95,7 +92,6 @@ describe('transformCsf', () => {
           },
         },
       };
-
       export const Primary = () => '<button>Primary</button>';
     `;
     const beforeEachPrefixer = () => {
