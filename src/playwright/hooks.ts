@@ -31,6 +31,14 @@ export interface TestRunnerConfig {
    * If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
    */
   prepare?: PrepareSetter;
+  /**
+   * Tags to include, exclude, or skip. These tags are defined as annotations in your story or meta.
+   */
+  tags: {
+    include: string[];
+    exclude: string[];
+    skip: string[];
+  };
 }
 
 export const setPreRender = (preRender: TestHook) => {

@@ -3537,7 +3537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-essentials@npm:^7.3.0":
+"@storybook/addon-essentials@npm:^7.5.3":
   version: 7.5.3
   resolution: "@storybook/addon-essentials@npm:7.5.3"
   dependencies:
@@ -3573,7 +3573,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-interactions@npm:^7.3.0":
+"@storybook/addon-interactions@npm:^7.5.3":
   version: 7.5.3
   resolution: "@storybook/addon-interactions@npm:7.5.3"
   dependencies:
@@ -4198,7 +4198,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-vite@npm:^7.3.0":
+"@storybook/react-vite@npm:^7.5.3":
   version: 7.5.3
   resolution: "@storybook/react-vite@npm:7.5.3"
   dependencies:
@@ -4217,7 +4217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:7.5.3, @storybook/react@npm:^7.3.0":
+"@storybook/react@npm:7.5.3, @storybook/react@npm:^7.5.3":
   version: 7.5.3
   resolution: "@storybook/react@npm:7.5.3"
   dependencies:
@@ -4298,15 +4298,15 @@ __metadata:
     "@babel/types": ^7.22.5
     "@jest/types": ^29.6.3
     "@storybook/addon-coverage": ^0.0.9
-    "@storybook/addon-essentials": ^7.3.0
-    "@storybook/addon-interactions": ^7.3.0
+    "@storybook/addon-essentials": ^7.5.3
+    "@storybook/addon-interactions": ^7.5.3
     "@storybook/core-common": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
     "@storybook/csf": ^0.1.1
     "@storybook/csf-tools": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
     "@storybook/jest": ^0.2.2
     "@storybook/preview-api": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
-    "@storybook/react": ^7.3.0
-    "@storybook/react-vite": ^7.3.0
+    "@storybook/react": ^7.5.3
+    "@storybook/react-vite": ^7.5.3
     "@storybook/testing-library": ^0.2.0
     "@swc/core": ^1.3.18
     "@swc/jest": ^0.2.23
@@ -4342,7 +4342,7 @@ __metadata:
     read-pkg-up: ^7.0.1
     rimraf: ^3.0.2
     semver: ^7.5.4
-    storybook: ^7.3.0
+    storybook: ^7.5.3
     tempy: ^1.0.1
     ts-dedent: ^2.0.0
     ts-jest: ^29.0.0
@@ -9043,13 +9043,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isexe@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "isexe@npm:3.1.1"
-  checksum: 7fe1931ee4e88eb5aa524cd3ceb8c882537bc3a81b02e438b240e47012eef49c86904d0f0e593ea7c3a9996d18d0f1f3be8d3eaa92333977b0c3a9d353d5563e
-  languageName: node
-  linkType: hard
-
 "isobject@npm:^3.0.1":
   version: 3.0.1
   resolution: "isobject@npm:3.0.1"
@@ -9148,12 +9141,12 @@ __metadata:
   linkType: hard
 
 "istanbul-reports@npm:^3.0.2, istanbul-reports@npm:^3.1.3":
-  version: 3.1.6
-  resolution: "istanbul-reports@npm:3.1.6"
+  version: 3.1.5
+  resolution: "istanbul-reports@npm:3.1.5"
   dependencies:
     html-escaper: ^2.0.0
     istanbul-lib-report: ^3.0.0
-  checksum: 44c4c0582f287f02341e9720997f9e82c071627e1e862895745d5f52ec72c9b9f38e1d12370015d2a71dcead794f34c7732aaef3fab80a24bc617a21c3d911d6
+  checksum: 7867228f83ed39477b188ea07e7ccb9b4f5320b6f73d1db93a0981b7414fa4ef72d3f80c4692c442f90fc250d9406e71d8d7ab65bb615cb334e6292b73192b89
   languageName: node
   linkType: hard
 
@@ -12739,7 +12732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:^7.3.0":
+"storybook@npm:^7.5.3":
   version: 7.5.3
   resolution: "storybook@npm:7.5.3"
   dependencies:
@@ -12785,7 +12778,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
+"string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^1.0.2 || 2 || 3 || 4, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
   dependencies:
@@ -13763,13 +13756,13 @@ __metadata:
   linkType: hard
 
 "v8-to-istanbul@npm:^9.0.1":
-  version: 9.1.3
-  resolution: "v8-to-istanbul@npm:9.1.3"
+  version: 9.1.0
+  resolution: "v8-to-istanbul@npm:9.1.0"
   dependencies:
     "@jridgewell/trace-mapping": ^0.3.12
     "@types/istanbul-lib-coverage": ^2.0.1
     convert-source-map: ^2.0.0
-  checksum: 5d592ab3d186b386065dace8e01c543a922a904b3cfac39667de172455a6b3d0e8e1401574fecb8a12092ad0809b5a8fd15f1cc14d0666139a1bb77cd6ac2cf8
+  checksum: 2069d59ee46cf8d83b4adfd8a5c1a90834caffa9f675e4360f1157ffc8578ef0f763c8f32d128334424159bb6b01f3876acd39cd13297b2769405a9da241f8d1
   languageName: node
   linkType: hard
 
@@ -14033,9 +14026,7 @@ __metadata:
   version: 4.0.0
   resolution: "which@npm:4.0.0"
   dependencies:
-    isexe: ^3.1.1
-  bin:
-    node-which: bin/which.js
+    string-width: ^1.0.2 || 2 || 3 || 4
   checksum: f17e84c042592c21e23c8195108cff18c64050b9efb8459589116999ea9da6dd1509e6a1bac3aeebefd137be00fabbb61b5c2bc0aa0f8526f32b58ee2f545651
   languageName: node
   linkType: hard
