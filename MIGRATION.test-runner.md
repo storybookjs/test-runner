@@ -6,6 +6,7 @@
   - [Table of Contents](#table-of-contents)
   - [Pre-requisites](#pre-requisites)
   - [What is the Storybook Test Runner?](#what-is-the-storybook-test-runner)
+  - [Storyshots x Test Runner Comparison table](#storyshots-x-test-runner-comparison-table)
   - [Migration Steps](#migration-steps)
     - [Replacing `@storybook/addon-storyshots` with `@storybook/test-runner`:](#replacing-storybookaddon-storyshots-with-storybooktest-runner)
     - [Migrating storyshots features](#migrating-storyshots-features)
@@ -34,6 +35,26 @@ Before you begin the migration process, ensure that you have:
 The [Storybook test-runner](https://storybook.js.org/docs/react/writing-tests/test-runner) turns all of your stories into executable tests, powered by [Jest](https://jestjs.io/)and [Playwright](https://playwright.dev/). It's powerful and provides multi-browser testing, and you can achieve many things with it such as smoke testing, DOM snapshot testing, Accessibility testing, Visual Regression testing and more.
 
 Check [this video](https://www.youtube.com/watch?v%253DwEa6W8uUGSA) for a quick look on the test-runner.
+
+## Storyshots x Test Runner Comparison table
+
+|                            | Storyshots                         | Test runner                                                                                                   |
+| -------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Coverage reports           | ✅                                 | ✅                                                                                                            |
+| Access parameters in tests | ✅                                 | ✅                                                                                                            |
+| DOM snapshots testing      | ✅                                 | ✅                                                                                                            |
+| Visual snapshot testing    | ✅ with puppeteer                  | ✅                                                                                                            |
+| A11y tests                 | ✅                                 | ✅                                                                                                            |
+| Extra customization        | ✅ via `initStoryshots`            | ✅ via `--eject`                                                                                              |
+| Run subset of tests        | ✅ storyKindRegex + storyNameRegex | ✅ via story tags                                                                                             |
+| Skip story via parameter   | ✅ via parameters                  | ✅ via story tags                                                                                             |
+| Custom test function       | ✅                                 | ✅                                                                                                            |
+| Interaction testing        | ❌                                 | ✅                                                                                                            |
+| Real Browser               | ❌                                 | ✅                                                                                                            |
+| Cross browser testing      | ❌                                 | ✅                                                                                                            |
+| Parallel Testing           | ❌                                 | ✅                                                                                                            |
+| storyStoreV7 compatibility | ❌                                 | ✅                                                                                                            |
+| React Native support       | ✅                                 | ✅ via [@storybook/addon-react-native-web](https://storybook.js.org/addons/@storybook/addon-react-native-web) |
 
 ## Migration Steps
 
