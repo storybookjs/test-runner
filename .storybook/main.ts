@@ -34,7 +34,7 @@ const config: StorybookConfig = {
   stories,
   addons,
   features: {
-    storyStoreV7: process.env.STORY_STORE_V7 === 'false' ? false : true,
+    storyStoreV7: process.env.STORY_STORE_V7 !== 'false',
     buildStoriesJson: true,
   },
   core: {
