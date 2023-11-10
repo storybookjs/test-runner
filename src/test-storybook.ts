@@ -132,7 +132,7 @@ const onProcessEnd = () => {
 process.on('SIGINT', onProcessEnd);
 process.on('exit', onProcessEnd);
 
-export function sanitizeURL(url: string) {
+function sanitizeURL(url: string) {
   let finalURL = url;
   // prepend URL protocol if not there
   if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
@@ -200,7 +200,7 @@ async function checkStorybook(url: string) {
   }
 }
 
-export async function getIndexJson(url: string) {
+async function getIndexJson(url: string) {
   const indexJsonUrl = new URL('index.json', url).toString();
   const storiesJsonUrl = new URL('stories.json', url).toString();
   const headers = await getHttpHeaders(url);
@@ -239,7 +239,7 @@ export async function getIndexJson(url: string) {
   `);
 }
 
-export async function getIndexTempDir(url: string) {
+async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);

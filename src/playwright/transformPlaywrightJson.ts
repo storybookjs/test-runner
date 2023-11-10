@@ -47,9 +47,7 @@ export type V3StoriesIndex = {
 export type UnsupportedVersion = { v: number };
 const isV3DocsOnly = (stories: V3Story[]) => stories.length === 1 && stories[0].name === 'Page';
 
-function v3TitleMapToV4TitleMap(
-  titleIdToStories: Record<string, V3Story[]>
-): Record<string, V4Entry[]> {
+function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
   return Object.fromEntries(
     Object.entries(titleIdToStories).map(([id, stories]) => [
       id,

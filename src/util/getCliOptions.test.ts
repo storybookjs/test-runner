@@ -6,7 +6,6 @@ describe('getCliOptions', () => {
 
   afterEach(() => {
     process.argv = originalArgv;
-    jest.restoreAllMocks();
   });
 
   it('returns custom options if passed', () => {

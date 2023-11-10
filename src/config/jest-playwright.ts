@@ -1,5 +1,4 @@
 import path from 'path';
-import type { Config } from '@jest/types';
 import { getProjectRoot } from '@storybook/core-common';
 import type { Config } from '@jest/types';
 

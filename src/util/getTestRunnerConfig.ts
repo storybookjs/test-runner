@@ -3,7 +3,7 @@ import { serverRequire } from '@storybook/core-common';
 import { TestRunnerConfig } from '../playwright/hooks';
 
 let testRunnerConfig: TestRunnerConfig;
-export let loaded = false;
+let loaded = false;
 
 export const getTestRunnerConfig = (
   configDir = process.env.STORYBOOK_CONFIG_DIR ?? ''
