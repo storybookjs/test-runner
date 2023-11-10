@@ -5,7 +5,7 @@ import { StoriesEntry } from '@storybook/types';
 
 export const getStorybookMetadata = () => {
   const workingDir = getProjectRoot();
-  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
+  const configDir = process.env.STORYBOOK_CONFIG_DIR ?? '';
 
   const main = getStorybookMain(configDir);
   const normalizedStoriesEntries = normalizeStories(main?.stories as StoriesEntry[], {
@@ -17,7 +17,7 @@ export const getStorybookMetadata = () => {
   }));
 
   const storiesPaths = normalizedStoriesEntries
-    .map((entry) => entry.directory + '/' + entry.files)
+    .map((entry) => `${entry.directory}/${entry.files}`)
     .map((dir) => join(workingDir, dir))
     .join(';');
 

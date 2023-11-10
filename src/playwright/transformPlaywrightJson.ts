@@ -4,7 +4,7 @@ import { ComponentTitle, StoryId, StoryName, toId } from '@storybook/csf';
 
 import { testPrefixer } from './transformPlaywright';
 
-export const makeTest = (entry: V4Entry): t.Statement => {
+const makeTest = (entry: V4Entry): t.Statement => {
   const result = testPrefixer({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
@@ -12,8 +12,7 @@ export const makeTest = (entry: V4Entry): t.Statement => {
     // FIXME
     storyExport: t.identifier(entry.id),
   });
-
-  const stmt = (result as Array<t.ExpressionStatement>)[1] as t.ExpressionStatement;
+  const stmt = (result as Array<t.ExpressionStatement>)[1];
   return t.expressionStatement(
     t.callExpression(t.identifier('it'), [t.stringLiteral('test'), stmt.expression])
   );
@@ -28,13 +27,7 @@ const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
-export type V4Entry = {
-  type?: 'story' | 'docs';
-  id: StoryId;
-  name: StoryName;
-  title: ComponentTitle;
-  importPath?: string;
-};
+type V4Entry = { type?: 'story' | 'docs'; id: StoryId; name: StoryName; title: ComponentTitle };
 export type V4Index = {
   v: 4;
   entries: Record<StoryId, V4Entry>;
@@ -46,10 +39,7 @@ type StoryParameters = {
   fileName?: string;
 };
 
-export type V3Story = Omit<V4Entry, 'type'> & { parameters?: StoryParameters } & {
-  kind: string;
-  story: string;
-};
+type V3Story = Omit<V4Entry, 'type'> & { parameters?: StoryParameters };
 export type V3StoriesIndex = {
   v: 3;
   stories: Record<StoryId, V3Story>;
@@ -63,10 +53,13 @@ function v3TitleMapToV4TitleMap(
   return Object.fromEntries(
     Object.entries(titleIdToStories).map(([id, stories]) => [
       id,
-      stories.map(({ parameters, ...story }) => ({
-        type: isV3DocsOnly(stories) ? 'docs' : 'story',
-        ...story,
-      })),
+      stories.map(
+        ({ parameters, ...story }) =>
+          ({
+            type: isV3DocsOnly(stories) ? 'docs' : 'story',
+            ...story,
+          } satisfies V4Entry)
+      ),
     ])
   );
 }

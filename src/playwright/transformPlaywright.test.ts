@@ -19,8 +19,8 @@ jest.mock('@storybook/core-common', () => ({
 }));
 
 expect.addSnapshotSerializer({
-  print: (val: any) => val.trim(),
-  test: (val: any) => true,
+  print: (val: unknown) => (typeof val === 'string' ? val.trim() : String(val)),
+  test: () => true,
 });
 
 describe('Playwright', () => {

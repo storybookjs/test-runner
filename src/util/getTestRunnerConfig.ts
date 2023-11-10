@@ -6,7 +6,7 @@ let testRunnerConfig: TestRunnerConfig;
 export let loaded = false;
 
 export const getTestRunnerConfig = (
-  configDir = process.env.STORYBOOK_CONFIG_DIR || ''
+  configDir = process.env.STORYBOOK_CONFIG_DIR ?? ''
 ): TestRunnerConfig | undefined => {
   // testRunnerConfig can be undefined
   if (loaded) {

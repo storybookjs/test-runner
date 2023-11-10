@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-'use strict';
 
 import fs from 'fs';
 import fsExtra from 'fs-extra';
@@ -10,10 +9,9 @@ import dedent from 'ts-dedent';
 import path from 'path';
 import tempy from 'tempy';
 import semver from 'semver';
-import { detect as detectPackageManager, PM } from 'detect-package-manager';
+import { detect as detectPackageManager } from 'detect-package-manager';
 
-import { JestOptions } from './util/getCliOptions';
-import { getCliOptions } from './util/getCliOptions';
+import { JestOptions, getCliOptions } from './util/getCliOptions';
 import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
@@ -138,7 +136,7 @@ export function sanitizeURL(url: string) {
   let finalURL = url;
   // prepend URL protocol if not there
   if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
-    finalURL = 'http://' + finalURL;
+    finalURL = `http://${finalURL}`;
   }
 
   // remove iframe.html if present
@@ -148,8 +146,8 @@ export function sanitizeURL(url: string) {
   finalURL = finalURL.replace(/index.html\s*$/, '');
 
   // add forward slash at the end if not there
-  if (finalURL.slice(-1) !== '/') {
-    finalURL = finalURL + '/';
+  if (!finalURL.endsWith('/')) {
+    finalURL = `${finalURL}/`;
   }
 
   return finalURL;
@@ -163,10 +161,10 @@ async function executeJestPlaywright(args: JestOptions) {
     })
   );
   const jest = require(jestPath);
-  let argv = args.slice(2);
+  const argv = args.slice(2);
 
   // jest configs could either come in the root dir, or inside of the Storybook config dir
-  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
+  const configDir = process.env.STORYBOOK_CONFIG_DIR ?? '';
   const [userDefinedJestConfig] = (
     await Promise.all([
       glob(path.join(configDir, 'test-runner-jest*'), { windowsPathsNoEscape: true }),
@@ -183,7 +181,7 @@ async function executeJestPlaywright(args: JestOptions) {
   await jest.run(argv);
 }
 
-export async function checkStorybook(url: string) {
+async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'HEAD', headers });
@@ -248,10 +246,10 @@ export async function getIndexTempDir(url: string) {
     const titleIdToTest = transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
-    Object.entries(titleIdToTest).forEach(([titleId, test]) => {
+    for (const [titleId, test] of Object.entries(titleIdToTest)) {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
       fs.writeFileSync(tmpFile, test);
-    });
+    }
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : String(err);
     const errorObject = new Error(errorMessage);
@@ -364,7 +362,7 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || {};
+  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) ?? {};
   if (testRunnerConfig.getHttpHeaders) {
     getHttpHeaders = testRunnerConfig.getHttpHeaders;
   }
@@ -372,7 +370,7 @@ const main = async () => {
   // set this flag to skip reporting coverage in watch mode
   const isWatchMode = jestOptions.includes('--watch') || jestOptions.includes('--watchAll');
 
-  const rawTargetURL = process.env.TARGET_URL || runnerOptions.url || 'http://127.0.0.1:6006';
+  const rawTargetURL = process.env.TARGET_URL ?? runnerOptions.url ?? 'http://127.0.0.1:6006';
   await checkStorybook(rawTargetURL);
 
   const targetURL = sanitizeURL(rawTargetURL);

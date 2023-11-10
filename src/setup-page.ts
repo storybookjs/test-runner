@@ -32,7 +32,7 @@ const sanitizeURL = (url: string) => {
   let finalURL = url;
   // prepend URL protocol if not there
   if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
-    finalURL = 'http://' + finalURL;
+    finalURL = `http://${finalURL}`;
   }
 
   // remove iframe.html if present
@@ -42,8 +42,8 @@ const sanitizeURL = (url: string) => {
   finalURL = finalURL.replace(/index.html\s*$/, '');
 
   // add forward slash at the end if not there
-  if (finalURL.slice(-1) !== '/') {
-    finalURL = finalURL + '/';
+  if (!finalURL.endsWith('/')) {
+    finalURL = `${finalURL}/`;
   }
 
   return finalURL;
@@ -53,7 +53,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
-  const viewMode = process.env.VIEW_MODE || 'story';
+  const viewMode = process.env.VIEW_MODE ?? 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
   const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
@@ -72,9 +72,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const testRunnerConfig = getTestRunnerConfig();
   if (testRunnerConfig?.prepare) {
     await testRunnerConfig.prepare({ page, browserContext, testRunnerConfig });
-  } else {
-    if (testRunnerConfig) await defaultPrepare({ page, browserContext, testRunnerConfig });
-  }
+  } else if (testRunnerConfig) await defaultPrepare({ page, browserContext, testRunnerConfig });
 
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
@@ -247,7 +245,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         constructor(storyId, errorMessage, logs = []) {
           super(errorMessage);
           this.name = 'StorybookTestRunnerError';
-          const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
+          const storyUrl = \`${referenceURL ?? targetURL}?path=/story/\${storyId}\`;
           const finalStoryUrl = \`\${storyUrl}&addonPanel=storybook/interactions/panel\`;
           const separator = '\\n\\n--------------------------------------------------';
           const extraLogs = logs.length > 0 ? separator + "\\n\\nBrowser logs:\\n\\n"+ logs.join('\\n\\n') : '';

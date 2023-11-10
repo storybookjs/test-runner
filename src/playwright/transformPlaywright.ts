@@ -76,7 +76,7 @@ export const testPrefixer: TestPrefixer = (context) => {
 
 const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
-  const filePath = './' + relative(workingDir, filename);
+  const filePath = `./${relative(workingDir, filename)}`;
 
   return (userTitle: string) =>
     userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;

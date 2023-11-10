@@ -44,7 +44,7 @@ describe('getParsedCliOptions', () => {
     console.warn = jest.fn();
 
     const originalExit = process.exit;
-    process.exit = jest.fn() as any;
+    process.exit = jest.fn() as unknown as typeof process.exit;
 
     const argv = process.argv.slice();
     process.argv.push('--unknown-option');
