@@ -28,13 +28,31 @@ Before you begin the migration process, ensure that you have:
 - [ ] Familiarity with your current Storybook and its testing setup.
 
 > **Note**
-> If you are coming from a highly complex storyshots setup, which includes snapshot serializers, tons of mocking, etc. and end up hitting a few bumps in this migration, you might consider checking the [portable stories](./MIGRATION.portable-stories.md) migration.
+> If you're using a complex Storyshots setup that involves snapshot serialization, mocking, and other advanced features, and you are experiencing issues while migrating to the test-runner, you might want to consider taking a look at the [portable stories](./MIGRATION.portable-stories.md) migration guide.
 
 ## What is the Storybook Test Runner?
 
-The [Storybook test-runner](https://storybook.js.org/docs/react/writing-tests/test-runner) turns all of your stories into executable tests, powered by [Jest](https://jestjs.io/)and [Playwright](https://playwright.dev/). It's powerful and provides multi-browser testing, and you can achieve many things with it such as smoke testing, DOM snapshot testing, Accessibility testing, Visual Regression testing and more.
+The [Storybook test-runner](https://storybook.js.org/docs/react/writing-tests/test-runner) turns your stories into executable tests. Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/). It's powerful and provides multi-browser testing, and you can achieve many things with it, such as smoke testing, DOM snapshot testing, Accessibility testing, Visual Regression testing, and more.
 
-Check [this video](https://www.youtube.com/watch?v%253DwEa6W8uUGSA) for a quick look on the test-runner.
+## Storyshots x Test Runner Comparison table
+
+|                            | Storyshots                         | Test runner                                                                                                   |
+| -------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Coverage reports           | ✅                                 | ✅                                                                                                            |
+| Access parameters in tests | ✅                                 | ✅                                                                                                            |
+| DOM snapshots testing      | ✅                                 | ✅                                                                                                            |
+| Visual snapshot testing    | ✅ with puppeteer                  | ✅                                                                                                            |
+| A11y tests                 | ✅                                 | ✅                                                                                                            |
+| Extra customization        | ✅ via `initStoryshots`            | ✅ via `--eject`                                                                                              |
+| Run subset of tests        | ✅ storyKindRegex + storyNameRegex | ✅ via story tags                                                                                             |
+| Skip story via parameter   | ✅ via parameters                  | ✅ via story tags                                                                                             |
+| Custom test function       | ✅                                 | ✅                                                                                                            |
+| Interaction testing        | ❌                                 | ✅                                                                                                            |
+| Real Browser               | ❌                                 | ✅                                                                                                            |
+| Cross browser testing      | ❌                                 | ✅                                                                                                            |
+| Parallel Testing           | ❌                                 | ✅                                                                                                            |
+| storyStoreV7 compatibility | ❌                                 | ✅                                                                                                            |
+| React Native support       | ✅                                 | ✅ via [@storybook/addon-react-native-web](https://storybook.js.org/addons/@storybook/addon-react-native-web) |
 
 ## Storyshots x Test Runner Comparison table
 
@@ -60,14 +78,14 @@ Check [this video](https://www.youtube.com/watch?v%253DwEa6W8uUGSA) for a quick 
 
 ### Replacing `@storybook/addon-storyshots` with `@storybook/test-runner`:
 
-First, remove the `@storybook/addon-storyshots` dependency and add the `@storybook/test-runner`:
+Remove the `@storybook/addon-storyshots` dependency and add the `@storybook/test-runner`:
 
 ```sh
 yarn remove @storybook/addon-storyshots
 yarn add --save-dev @storybook/test-runner
 ```
 
-Then, update your `package.json` scripts to include a `test-storybook` command:
+Update your `package.json` and enable the test-runner.
 
 ```json
 {
@@ -77,41 +95,39 @@ Then, update your `package.json` scripts to include a `test-storybook` command:
 }
 ```
 
-Now, run test the setup by running Storybook and the test-runner in separate terminals:
+Start your Storybook with:
 
 ```sh
-# Terminal 1
 yarn storybook
 ```
 
+Finally, open a new terminal window and run the test-runner with:
+
 ```sh
-# Terminal 2
 yarn test-storybook
 ```
 
-Check the results to ensure that tests are running as expected.
+If all goes well, you should see a report of all your stories and their tests.
 
-### Migrating storyshots features
+### Migrating Storyshots features
 
-Storyshots was quite flexible and could be used for different purposes. Below you will find different recipes based on your needs. If you were not using storyshots that extensively, you can benefit from following the recipes and improve your testing experience within Storybook.
+The Storyshots addon offered a highly customizable testing solution, allowing users to extend testing coverage in various ways. However, the test-runner provides a similar experience but with a different API. Below, you will find additional examples of using the test-runner to achieve similar results as those you achieved with Storyshots. If you did not use the Storyshots addon extensively, we encourage you to read through the examples and improve your testing experience within Storybook.
 
 #### Smoke testing
 
-Storyshots provided a `renderOnly` utility to just render the story and not check the output at all, which is useful as a low-effort way of smoke testing your components and ensure they do not error.
-
-The test-runner does smoke testing by default, so if you used storyshots with `renderOnly`, you don't have to configure anything extra with the test-runner. The test-runner will also assert the [play function](https://storybook.js.org/docs/react/writing-stories/play-function) of your stories, providing you a better experience and more confidence.
+The Storyshots addon provided a `renderOnly` helper function that allowed you to render the story without checking the output. This helper function was helpful for smoke testing your components and ensuring they do not error. This functionality is now built into the test-runner by default and requires no additional configuration. Furthermore, the test-runner will also assert your interaction tests enabled through the [play function](https://storybook.js.org/docs/react/writing-stories/play-function), providing an extended testing experience.
 
 #### Accessibility testing
 
-If you used [`@storybook/addon-storyshots-puppeteer`](https://storybook.js.org/addons/@storybook/addon-storyshots-puppeteer)'s `axeTest` utility to test the accessibility of your components, you can use the following recipe to achieve a similar experience with the test-runner: https://github.com/storybookjs/test-runner#accessibility-testing
+If you have used `@storybook/addon-storyshots-puppeteer`'s `axeTest` utility to check the accessibility of your components, you can achieve a similar experience with the test-runner by following this example: https://github.com/storybookjs/test-runner#accessibility-testing
 
 #### Image snapshot testing
 
-If you used [`@storybook/addon-storyshots-puppeteer`](https://storybook.js.org/addons/@storybook/addon-storyshots-puppeteer)'s `imageSnapshot` utility to run visual regression tests of your components, you can use the following recipe to achieve a similar experience with the test-runner: https://github.com/storybookjs/test-runner#image-snapshot
+If you have used [`@storybook/addon-storyshots-puppeteer`](https://storybook.js.org/addons/@storybook/addon-storyshots-puppeteer)'s `imageSnapshot` utility to run visual regression tests of your components, you can achieve a similar experience with the test-runner by following this example: https://github.com/storybookjs/test-runner#image-snapshot
 
 #### DOM Snapshot testing
 
-If you used storyshots default functionality for DOM snapshot testing, you can use the following recipe to achieve a similar experience with the test-runner: https://github.com/storybookjs/test-runner#dom-snapshot-html
+If you have been using the default functionality of the Storyshots addon for DOM snapshot testing, you can achieve a similar experience by following this example: https://github.com/storybookjs/test-runner#dom-snapshot-html
 
 ### Troubleshooting
 
@@ -121,19 +137,19 @@ If tests that passed in storyshots fail in the test-runner, it could be because 
 
 #### Snapshot path differences
 
-Snapshot paths and names generated by `@storybook/test-runner` differ from those by `@storybook/addon-storyshots`. You'll need to configure the test-runner to align the naming convention.
+If you've enabled snapshot testing with the test-runner, the snapshot paths and names differ from those generated by the Storyshots addon. This is because the test-runner uses a different naming convention for snapshot files. Using a custom snapshot resolver, you can configure the test-runner to use the same naming convention as the Storyshots addon.
 
-To configure the test-runner, use its `--eject` command:
+Start by running the test-runner with the `--eject` flag to generate a custom configuration file that you can use to configure Jest:
 
 ```sh
 yarn test-storybook --eject
 ```
 
-This command will generate a `test-runner-jest.config.js` file which you can use to configure Jest.
-Update the file to use a custom snapshotResolver like so:
+Update the file and enable the `snapshotResolver` option to use a custom snapshot resolver:
 
-```ts
+```js
 // ./test-runner-jest.config.js
+
 import { getJestConfig } from '@storybook/test-runner';
 
 const defaultConfig = getJestConfig();
@@ -147,10 +163,11 @@ const config = {
 export default config;
 ```
 
-Now create a `snapshot-resolver.js` file to implement a custom snapshot resolver:
+Finally, create a `snapshot-resolver.js` file to implement a custom snapshot resolver:
 
-```ts
+```js
 // ./snapshot-resolver.js
+
 import path from 'path';
 
 export default {
@@ -159,7 +176,7 @@ export default {
     const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, '');
     const modifiedFileName = `${fileNameWithoutExtension}.storyshot`;
 
-    // make Jest generate snapshots in a path like __snapshots__/Button.storyshot
+    // Configure Jest to generate snapshot files using the following naming convention (__snapshots__/Button.storyshot)
     return path.join(path.dirname(testPath), '__snapshots__', modifiedFileName);
   },
   resolveTestPath: (snapshotFilePath, snapshotExtension) =>
@@ -170,21 +187,19 @@ export default {
 
 #### HTML Snapshots Formatting
 
-The test-runner uses `jest-serializer-html` for HTML snapshots which might have slightly different formatting than your existing snapshots.
+The test-runner uses [`jest-serializer-html`](https://github.com/algolia/jest-serializer-html) by default to serialize HTML snapshots. This may cause differences in formatting compared to your existing snapshots, even if you're using certain CSS-in-JS libraries like [Emotion](https://emotion.sh/docs/introduction) or Angular's `ng` attributes. However, you can configure the test-runner to use a custom snapshot serializer to solve this issue.
 
-Additionally, you might have elements that contain random or hashed properties which might cause your snapshot tests to fail every time they run. For instance, Emotion class names, or Angular ng attributes. You can circumvent this issue by configuring the test-runner to use a custom snapshot serializer.
-
-To configure the test-runner, use its `--eject` command:
+Start by running the test-runner with the `--eject` flag to generate a custom configuration file that you can use to provide additional configuration options.
 
 ```sh
 yarn test-storybook --eject
 ```
 
-This command will generate a `test-runner-jest.config.js` file which you can use to configure Jest.
-Update the file to use a custom snapshotSerializer like so:
+Update the file and enable the `snapshotSerializers` option to use a custom snapshot resolver:
 
-```ts
+```js
 // ./test-runner-jest.config.js
+
 import { getJestConfig } from '@storybook/test-runner';
 
 const defaultConfig = getJestConfig();
@@ -192,7 +207,7 @@ const defaultConfig = getJestConfig();
 const config = {
   ...defaultConfig,
   snapshotSerializers: [
-    // use your own serializer to preprocess the HTML before it's passed onto the test-runner
+    // Sets up the custom serializer to preprocess the HTML before it's passed onto the test-runner
     './snapshot-serializer.js',
     ...defaultConfig.snapshotSerializers,
   ],
@@ -201,19 +216,23 @@ const config = {
 export default config;
 ```
 
-Now create a `snapshot-serializer.js` file to implement a custom snapshot serializer:
+Finally, create a `snapshot-serializer.js` file to implement a custom snapshot serializer:
 
-```tsx
+```js
 // ./snapshot-serializer.js
-const jestSerializerHtml = require('jest-serializer-html'); // available as dependency of test-runner
+
+// The jest-serializer-html package is available as a dependency of the test-runner
+const jestSerializerHtml = require('jest-serializer-html');
 
 const DYNAMIC_ID_PATTERN = /"react-aria-\d+(\.\d+)?"/g;
 
 module.exports = {
-  // this will be called once expect(SomeHTMLElement).toMatchSnapshot() is called from the test-runner
+  /*
+   * The test-runner calls the serialize function when the test reaches the expect(SomeHTMLElement).toMatchSnapshot().
+   * It will replace all dynamic IDs with a static ID so that the snapshot is consistent.
+   * For instance, from <label id="react-aria970235672-:rl:" for="react-aria970235672-:rk:">Favorite color</label> to <label id="react-mocked_id" for="react-mocked_id">Favorite color</label>
+   */
   serialize(val) {
-    // from <label id="react-aria970235672-:rl:" for="react-aria970235672-:rk:">Favorite color</label>
-    // to   <label id="react-mocked_id" for="react-mocked_id">Favorite color</label>
     const withFixedIds = val.replace(DYNAMIC_ID_PATTERN, 'mocked_id');
     return jestSerializerHtml.print(withFixedIds);
   },
@@ -225,4 +244,4 @@ module.exports = {
 
 ### Provide feedback
 
-We are looking for feedback on your experience, and would really appreciate if you filled [this form](some-google-form-here) to help us shape our tooling in the right direction. Thank you so much!
+We are looking for feedback on your experience and would appreciate it if you filled [this form](some-google-form-here) to help us shape our tooling in the right direction. Thank you so much!
