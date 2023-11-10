@@ -41,26 +41,6 @@ The [Storybook test-runner](https://storybook.js.org/docs/react/writing-tests/te
 | Coverage reports           | ✅                                 | ✅                                                                                                            |
 | Access parameters in tests | ✅                                 | ✅                                                                                                            |
 | DOM snapshots testing      | ✅                                 | ✅                                                                                                            |
-| Visual snapshot testing    | ✅ with puppeteer                  | ✅                                                                                                            |
-| A11y tests                 | ✅                                 | ✅                                                                                                            |
-| Extra customization        | ✅ via `initStoryshots`            | ✅ via `--eject`                                                                                              |
-| Run subset of tests        | ✅ storyKindRegex + storyNameRegex | ✅ via story tags                                                                                             |
-| Skip story via parameter   | ✅ via parameters                  | ✅ via story tags                                                                                             |
-| Custom test function       | ✅                                 | ✅                                                                                                            |
-| Interaction testing        | ❌                                 | ✅                                                                                                            |
-| Real Browser               | ❌                                 | ✅                                                                                                            |
-| Cross browser testing      | ❌                                 | ✅                                                                                                            |
-| Parallel Testing           | ❌                                 | ✅                                                                                                            |
-| storyStoreV7 compatibility | ❌                                 | ✅                                                                                                            |
-| React Native support       | ✅                                 | ✅ via [@storybook/addon-react-native-web](https://storybook.js.org/addons/@storybook/addon-react-native-web) |
-
-## Storyshots x Test Runner Comparison table
-
-|                            | Storyshots                         | Test runner                                                                                                   |
-| -------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Coverage reports           | ✅                                 | ✅                                                                                                            |
-| Access parameters in tests | ✅                                 | ✅                                                                                                            |
-| DOM snapshots testing      | ✅                                 | ✅                                                                                                            |
 | Visual snapshot testing    | ✅ with puppeteer                  | ✅                                                                                                            |
 | A11y tests                 | ✅                                 | ✅                                                                                                            |
 | Extra customization        | ✅ via `initStoryshots`            | ✅ via `--eject`                                                                                              |
@@ -133,7 +113,7 @@ If you have been using the default functionality of the Storyshots addon for DOM
 
 #### Handling unexpected failing tests
 
-If tests that passed in storyshots fail in the test-runner, it could be because there are uncaught errors in the browser which were not detected correctly in storyshots. The test-runner treats them as failure. If this is the case, use this as an opportunity to review and fix these issues. If these errors are actually intentional (e.g. your story tests an error), then you can tell the test-runner to exclude or skip this particular story instead by using story tags. [Read more about that here](./README.md#filtering-tests-experimental).
+If tests that passed in storyshots fail in the test-runner, it could be because there are uncaught errors in the browser which were not detected correctly in storyshots. The test-runner treats them as failure. If this is the case, use this as an opportunity to review and fix these issues. If these errors are actually intentional (e.g. your story tests an error), then you can tell the test-runner to exclude or skip this particular story instead by using story tags. Read more about that [here](./README.md#filtering-tests-experimental).
 
 #### Snapshot path differences
 
