@@ -117,7 +117,7 @@ If you used storyshots default functionality for DOM snapshot testing, you can u
 
 #### Handling unexpected failing tests
 
-If tests that passed in storyshots fail in the test-runner, it could be because there are uncaught errors in the browser which were not detected correctly in storyshots. The test-runner treats them as failure. If this is the case, use this as an opportunity to review and fix these issues. If these errors are actually intentional (e.g. your story tests an error), then you can tell the test-runner to ignore this particular story instead by defining patterns to ignore via the `testPathIgnorePatterns` configuration. (TODO: Improve this once skipping stories is simpler in the test-runner)
+If tests that passed in storyshots fail in the test-runner, it could be because there are uncaught errors in the browser which were not detected correctly in storyshots. The test-runner treats them as failure. If this is the case, use this as an opportunity to review and fix these issues. If these errors are actually intentional (e.g. your story tests an error), then you can tell the test-runner to exclude or skip this particular story instead by using story tags. [Read more about that here](./README.md#filtering-tests-experimental).
 
 #### Snapshot path differences
 
