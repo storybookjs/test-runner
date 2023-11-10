@@ -14,7 +14,7 @@ export type CliOptions = {
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
     failOnConsole?: boolean;
-  };
+  } & Record<string, string | boolean>;
   jestOptions: JestOptions;
 };
 
@@ -49,20 +49,14 @@ export const getCliOptions = (): CliOptions => {
   };
 
   const finalOptions = Object.keys(allOptions).reduce((acc: CliOptions, key: string) => {
-    if (STORYBOOK_RUNNER_COMMANDS.includes(key as StorybookRunnerCommand)) {
-      copyOption(
-        acc.runnerOptions,
-        key as StorybookRunnerCommand,
-        allOptions[key as StorybookRunnerCommand]
-      );
+    if (STORYBOOK_RUNNER_COMMANDS.includes(key)) {
+      copyOption(acc.runnerOptions, key, allOptions[key]);
+    } else if (allOptions[key] === true) {
+      acc.jestOptions.push(`--${key}`);
+    } else if (allOptions[key] === false) {
+      acc.jestOptions.push(`--no-${key}`);
     } else {
-      if (allOptions[key as StorybookRunnerCommand] === true) {
-        acc.jestOptions.push(`--${key}`);
-      } else if (allOptions[key as StorybookRunnerCommand] === false) {
-        acc.jestOptions.push(`--no-${key}`);
-      } else {
-        acc.jestOptions.push(`--${key}="${allOptions[key as StorybookRunnerCommand]}"`);
-      }
+      acc.jestOptions.push(`--${key}="${allOptions[key]}"`);
     }
 
     return acc;

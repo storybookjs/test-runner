@@ -62,7 +62,7 @@ const makePlayTest = (
   return [
     t.expressionStatement(
       t.callExpression(t.identifier('it'), [
-        t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+        t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
         prefixFunction(key, title, metaOrStoryPlay as t.Expression, testPrefix),
       ])
     ),
@@ -100,9 +100,9 @@ export const transformCsf = (
     beforeEachPrefixer,
     insertTestIfEmpty,
     makeTitle,
-  }: TransformOptions = {}
+  }: TransformOptions
 ) => {
-  const csf = loadCsf(code, { makeTitle: makeTitle || ((userTitle: string) => userTitle) });
+  const csf = loadCsf(code, { makeTitle: makeTitle ?? ((userTitle: string) => userTitle) });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
@@ -125,7 +125,6 @@ export const transformCsf = (
       if (tests.length) {
         return makeDescribe(key, tests);
       }
-      return null;
     })
     .filter(Boolean) as babel.types.Statement[];
 

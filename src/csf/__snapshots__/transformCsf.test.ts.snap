@@ -1314,3 +1314,12 @@ if (!require.main) {
   });
 }"
 `;
+
+exports[`transformCsf returns empty result if there are no stories 1`] = `
+"
+      export default {
+        title: 'Button',
+      };
+    
+"
+`;

@@ -17,6 +17,18 @@ describe('transformCsf', () => {
     expect(result).toEqual(expectedCode);
   });
 
+  it('returns empty result if there are no stories', () => {
+    const csfCode = `
+      export default {
+        title: 'Button',
+      };
+    `;
+
+    const result = transformCsf(csfCode, {});
+
+    expect(result).toMatchSnapshot();
+  });
+
   it('calls the testPrefixer function for each test', () => {
     const csfCode = `
       export default {

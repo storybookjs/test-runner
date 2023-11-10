@@ -1,4 +1,9 @@
-import { transformPlaywrightJson } from './transformPlaywrightJson';
+import {
+  UnsupportedVersion,
+  V3StoriesIndex,
+  V4Index,
+  transformPlaywrightJson,
+} from './transformPlaywrightJson';
 
 describe('Playwright Json', () => {
   describe('v4 indexes', () => {
@@ -10,22 +15,19 @@ describe('Playwright Json', () => {
             id: 'example-header--logged-in',
             title: 'Example/Header',
             name: 'Logged In',
-            importPath: './stories/basic/Header.stories.js',
           },
           'example-header--logged-out': {
             id: 'example-header--logged-out',
             title: 'Example/Header',
             name: 'Logged Out',
-            importPath: './stories/basic/Header.stories.js',
           },
           'example-page--logged-in': {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
           },
         },
-      };
+      } satisfies V4Index;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
@@ -207,16 +209,14 @@ describe('Playwright Json', () => {
             id: 'example-introduction--page',
             title: 'Example/Introduction',
             name: 'Page',
-            importPath: './stories/basic/Introduction.stories.mdx',
           },
           'example-page--logged-in': {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
           },
         },
-      };
+      } satisfies V4Index;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
@@ -289,9 +289,6 @@ describe('Playwright Json', () => {
             id: 'example-header--logged-in',
             title: 'Example/Header',
             name: 'Logged In',
-            importPath: './stories/basic/Header.stories.js',
-            kind: 'Example/Header',
-            story: 'Logged In',
             parameters: {
               __id: 'example-header--logged-in',
               docsOnly: false,
@@ -302,9 +299,6 @@ describe('Playwright Json', () => {
             id: 'example-header--logged-out',
             title: 'Example/Header',
             name: 'Logged Out',
-            importPath: './stories/basic/Header.stories.js',
-            kind: 'Example/Header',
-            story: 'Logged Out',
             parameters: {
               __id: 'example-header--logged-out',
               docsOnly: false,
@@ -315,9 +309,6 @@ describe('Playwright Json', () => {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
-            kind: 'Example/Page',
-            story: 'Logged In',
             parameters: {
               __id: 'example-page--logged-in',
               docsOnly: false,
@@ -325,7 +316,7 @@ describe('Playwright Json', () => {
             },
           },
         },
-      };
+      } satisfies V3StoriesIndex;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
@@ -506,9 +497,6 @@ describe('Playwright Json', () => {
             id: 'example-introduction--page',
             title: 'Example/Introduction',
             name: 'Page',
-            importPath: './stories/basic/Introduction.stories.mdx',
-            kind: 'Example/Introduction',
-            story: 'Page',
             parameters: {
               __id: 'example-introduction--page',
               docsOnly: true,
@@ -519,9 +507,6 @@ describe('Playwright Json', () => {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
-            kind: 'Example/Page',
-            story: 'Logged In',
             parameters: {
               __id: 'example-page--logged-in',
               docsOnly: false,
@@ -529,7 +514,7 @@ describe('Playwright Json', () => {
             },
           },
         },
-      };
+      } satisfies V3StoriesIndex;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
@@ -591,5 +576,14 @@ describe('Playwright Json', () => {
         }
       `);
     });
+  });
+});
+
+describe('unsupported index', () => {
+  it('throws an error for unsupported versions', () => {
+    const unsupportedVersion = { v: 1 } satisfies UnsupportedVersion;
+    expect(() => transformPlaywrightJson(unsupportedVersion)).toThrowError(
+      `Unsupported version ${unsupportedVersion.v}`
+    );
   });
 });
