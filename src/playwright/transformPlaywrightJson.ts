@@ -63,12 +63,12 @@ function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
 }
 
 function groupByTitleId<T extends { title: ComponentTitle }>(entries: T[]) {
-  return entries.reduce((acc, entry) => {
+  return entries.reduce<Record<string, T[]>>((acc, entry) => {
     const titleId = toId(entry.title);
     acc[titleId] = acc[titleId] || [];
     acc[titleId].push(entry);
     return acc;
-  }, {} as { [key: string]: T[] });
+  }, {});
 }
 
 /**
@@ -88,18 +88,21 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
     throw new Error(`Unsupported version ${index.v}`);
   }
 
-  const titleIdToTest = Object.entries(titleIdToEntries).reduce((acc, [titleId, entries]) => {
-    const stories = entries.filter((s) => s.type !== 'docs');
-    if (stories.length) {
-      const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
-      const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
+  const titleIdToTest = Object.entries(titleIdToEntries).reduce<Record<string, string>>(
+    (acc, [titleId, entries]) => {
+      const stories = entries.filter((s) => s.type !== 'docs');
+      if (stories.length) {
+        const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
+        const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
 
-      const { code } = generate(program, {});
+        const { code } = generate(program, {});
 
-      acc[titleId] = code;
-    }
-    return acc;
-  }, {} as { [key: string]: string });
+        acc[titleId] = code;
+      }
+      return acc;
+    },
+    {}
+  );
 
   return titleIdToTest;
 };

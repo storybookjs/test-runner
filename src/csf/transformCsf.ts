@@ -58,7 +58,7 @@ const makePlayTest = (
   title: string,
   metaOrStoryPlay: t.Node,
   testPrefix?: TestPrefixer
-): t.Statement[] => {
+): t.ExpressionStatement[] => {
   return [
     t.expressionStatement(
       t.callExpression(t.identifier('it'), [
@@ -73,7 +73,7 @@ const makeDescribe = (
   key: string,
   tests: t.Statement[],
   beforeEachBlock?: t.ExpressionStatement
-): t.Statement | null => {
+): t.ExpressionStatement => {
   const blockStatements = beforeEachBlock ? [beforeEachBlock, ...tests] : tests;
   return t.expressionStatement(
     t.callExpression(t.identifier('describe'), [
@@ -108,13 +108,13 @@ export const transformCsf = (
   const storyExports = Object.keys(csf._stories);
   const title = csf.meta?.title;
 
-  const storyPlays = storyExports.reduce((acc, key) => {
+  const storyPlays = storyExports.reduce<Record<string, t.Node>>((acc, key) => {
     const annotations = csf._storyAnnotations[key];
     if (annotations?.play) {
       acc[key] = annotations.play;
     }
     return acc;
-  }, {} as Record<string, t.Node>);
+  }, {});
   const playTests = storyExports
     .map((key: string) => {
       let tests: t.Statement[] = [];
