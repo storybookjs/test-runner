@@ -121,6 +121,7 @@ export const transformCsf = (
       if (title) {
         tests = [...tests, ...makePlayTest(key, title, storyPlays[key], testPrefixer)];
       }
+
       if (tests.length) {
         return makeDescribe(key, tests);
       }
