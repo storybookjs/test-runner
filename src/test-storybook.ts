@@ -264,10 +264,15 @@ export async function installPackage() {
   let packageManager;
 
   // Look for lock files in the current working directory or any of its parent directories
-  const lockFilePath = await findUp(['yarn.lock', 'pnpm-lock.yaml', 'package-lock.json']);
+  const lockFilePath = await findUp([
+    'yarn.lock',
+    'pnpm-lock.yaml',
+    'package-lock.json',
+    'bun.lockb',
+  ]);
   if (!lockFilePath) {
     console.error(
-      'Cannot determine lock file. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json exists in the project root or any of its parent directories.'
+      'Cannot determine lock file. Make sure either yarn.lock, pnpm-lock.yaml, or package-lock.json, or bun.locb exists in the project root or any of its parent directories.'
     );
     return;
   }
@@ -278,6 +283,8 @@ export async function installPackage() {
     packageManager = 'pnpm';
   } else if (fs.existsSync(`${rootDir}/package-lock.json`)) {
     packageManager = 'npm';
+  } else if (fs.existsSync(`${rootDir}/bun.lockb`)) {
+    packageManager = 'bun';
   }
 
   if (packageManager) {
