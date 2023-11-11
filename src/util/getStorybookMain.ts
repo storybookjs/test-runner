@@ -3,16 +3,16 @@ import { serverRequire } from '@storybook/core-common';
 import type { StorybookConfig } from '@storybook/types';
 import dedent from 'ts-dedent';
 
-const storybookMainConfig = new Map<string, StorybookConfig>();
+export const storybookMainConfig = new Map<string, StorybookConfig>();
 
 export const getStorybookMain = (configDir: string) => {
-  if (storybookMainConfig.has(configDir)) {
-    return storybookMainConfig.get(configDir);
+  if (storybookMainConfig.has('configDir')) {
+    return storybookMainConfig.get('configDir');
   } else {
-    storybookMainConfig.set(configDir, serverRequire(join(resolve(configDir), 'main')));
+    storybookMainConfig.set('configDir', serverRequire(join(resolve(configDir), 'main')));
   }
 
-  const mainConfig = storybookMainConfig.get(configDir);
+  const mainConfig = storybookMainConfig.get('configDir');
 
   if (!mainConfig) {
     throw new Error(
