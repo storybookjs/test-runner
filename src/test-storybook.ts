@@ -301,12 +301,9 @@ export async function installPackage() {
 export async function checkAndInstallTsNode() {
   const { packageJson, path } = (await readPackageUp()) as NormalizedReadResult;
 
-  if (
-    (!packageJson.dependencies || !packageJson.dependencies['ts-node']) &&
-    (!packageJson.devDependencies || !packageJson.devDependencies['ts-node'])
-  ) {
+  if (!packageJson.dependencies?.['ts-node'] && !packageJson.devDependencies?.['ts-node']) {
     console.log('ts-node not found in dependencies or devDependencies, installing...');
-    packageJson.devDependencies = packageJson.devDependencies || {};
+    packageJson.devDependencies = packageJson.devDependencies ?? {};
     packageJson.devDependencies['ts-node'] = '^10.5.0';
     fsExtra.writeJsonSync(path, packageJson, { spaces: 2 });
     console.log('ts-node added to dependencies');
@@ -337,7 +334,7 @@ export async function ejectConfiguration() {
 
   const extension = typescriptInstalled ? 'ts' : 'js';
 
-  files.forEach((file) => {
+  for (const file of files) {
     const origin = path.resolve(__dirname, `./templateFiles/${file}.${extension}`);
     const destination = path.resolve(`${file}.${extension}`);
 
@@ -349,7 +346,7 @@ export async function ejectConfiguration() {
 
     fs.copyFileSync(origin, destination);
     log(`Configuration file successfully copied as ${file}.${extension}`);
-  });
+  }
 }
 
 const main = async () => {
