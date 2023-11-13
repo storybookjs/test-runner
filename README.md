@@ -775,8 +775,8 @@ module.exports = {
       rules: storyContext.parameters?.a11y?.config?.rules,
     });
 
-    // from Storybook 7.0 onwards, the selector should be #storybook-root
-    await checkA11y(page, '#root', {
+    // in Storybook 6.x, the selector is #root
+    await checkA11y(page, '#storybook-root', {
       detailedReport: true,
       detailedReportOptions: {
         html: true,
@@ -796,8 +796,8 @@ You can use [Playwright's built in APIs](https://playwright.dev/docs/test-snapsh
 // .storybook/test-runner.js
 module.exports = {
   async postRender(page, context) {
-    // the #root element wraps the story. From Storybook 7.0 onwards, the selector should be #storybook-root
-    const elementHandler = await page.$('#root');
+    // the #storybook-root element wraps the story. In Storybook 6.x, the selector is #root
+    const elementHandler = await page.$('#storybook-root');
     const innerHTML = await elementHandler.innerHTML();
     expect(innerHTML).toMatchSnapshot();
   },
@@ -825,6 +825,10 @@ module.exports = {
 ```js
 // ./snapshot-resolver.js
 const path = require('path');
+
+// 👉 process.env.TEST_ROOT will only be available in --index-json or --stories-json mode.
+// if you run this code without these flags, you will have to override it the test root, else it will break.
+// e.g. process.env.TEST_ROOT = process.cwd()
 
 module.exports = {
   resolveSnapshotPath: (testPath, snapshotExtension) =>
