@@ -1,3 +1,15 @@
+# v0.14.1 (Mon Nov 13 2023)
+
+#### 🐛 Bug Fix
+
+- Fix: Do not set test root outside index json mode [#387](https://github.com/storybookjs/test-runner/pull/387) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.14.0 (Wed Nov 08 2023)
 
 #### 🚀 Enhancement
