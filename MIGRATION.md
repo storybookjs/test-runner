@@ -7,8 +7,8 @@ Now that we are finally removing the old architecture in Storybook 8, Storyshots
 Below you will find serveral options to migrate:
 
 1. **Storybook test-runner** is Storybook's recommended open source testing tool.
-1. **Portable stories** is an alternative approach that might be an easier migration from Storyshots, and is also supported by the core team.
-1. **Chromatic** is a great option if you are looking for a fully hosted service, and built by Storybook maintainers.
+2. **Portable stories** is an alternative approach that might be an easier migration from Storyshots, and is also supported by the core team.
+3. **Chromatic** is a great option if you are looking for a fully hosted service, and built by Storybook maintainers.
 
 You can decide for yourself which path to choose, by following the guides below.
 

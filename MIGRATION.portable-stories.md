@@ -42,7 +42,7 @@ Alternatively, you may want to consider migrating to the [test-runner](./MIGRATI
 
 ## Getting started
 
-We recommend you turn off your current storyshots tests to start the migration process. To do this, rename the configuration file (i.e., `storybook.test.ts` or similar) to a different name. This will prevent the tests from being detected, as you'll be creating a new testing configuration file with the same name. By doing this, you'll be able to preserve your existing tests while transitioning to portable stories.
+We recommend you turn off your current storyshots tests to start the migration process. To do this, rename the configuration file (i.e., `storybook.test.ts` or similar) to `storybook.test.ts.old`. This will prevent the tests from being detected, as you'll be creating a new testing configuration file with the same name. By doing this, you'll be able to preserve your existing tests while transitioning to portable stories.
 
 ### 1 - Import project-level annotations from Storybook
 
@@ -59,6 +59,9 @@ import * as projectAnnotations from './.storybook/preview';
 // Apply the global annotations from the Storybook preview file
 setProjectAnnotations(projectAnnotations);
 ```
+
+> **Note**:
+> If you're using Vue3, you must install the [`@storybook/testing-vue3`](https://storybook.js.org/addons/@storybook/testing-vue3) package to use the `setProjectAnnotations` API in your setup file and the `composeStories` API in your existing tests.
 
 If you are using the new recommended format in your preview file, which is to have a single default export for all the configurations, you should adjust it accordingly:
 
@@ -361,7 +364,7 @@ After you confirm that the portable stories solution suits your needs, delete yo
 
 ### 4 - (Optional) Extend your testing coverage
 
-The examples above will give you the closest possible experience with the Storyshots addon. However, if you are using Storyshots for other use cases, such as accessibility testing, image snapshot testing, or different testing scenarios, you can extend them to suit your needs or extend your testing solution to use the [Storybook test-runner](https://github.com/storybookjs/test-runner), that provides out-of-the-box solutions for such use cases.
+The examples above will give you the closest possible experience with the Storyshots addon. However, if you are using Storyshots for other use cases, such as accessibility testing, image snapshot testing, or different testing scenarios, you can extend them to suit your needs or extend your testing solution to use the [Storybook test-runner](https://github.com/storybookjs/test-runner), that offers a similar experience, with minimal changes to your existing testing setup. You can read more about it in the test-runner [migration guide](./MIGRATION.test-runner.md).
 
 ### 5 - Provide feedback
 
