@@ -132,7 +132,7 @@ export const transformCsf = (
     return acc;
   }, {} as Record<string, { play?: t.Node; tags?: string[] }>);
 
-  const playTests = storyExports
+  const allTests = storyExports
     .filter((key) => {
       // If includeTags is passed, check if the story has any of them - else include by default
       const isIncluded =
@@ -165,9 +165,7 @@ export const transformCsf = (
     })
     .filter(Boolean);
 
-  const allTests = playTests;
-
-  let result = '';
+  let result = null;
 
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
@@ -184,7 +182,9 @@ export const transformCsf = (
       }
     `;
   } else if (insertTestIfEmpty) {
-    result = `describe('${csf.meta.title}', () => { it('no-op', () => {}) });`;
+    // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
+    // so we have to skip the describe to achieve a "excluded test" experience.
+    result = `describe.skip('${csf.meta.title}', () => { it('no-op', () => {}) });`;
   }
   return result;
 };

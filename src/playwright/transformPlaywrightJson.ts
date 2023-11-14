@@ -32,6 +32,26 @@ const makeTest = ({
 };
 
 const makeDescribe = (title: string, stmts: t.Statement[]) => {
+  // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
+  // so we have to skip the describe to achieve a "excluded test" experience.
+  // The code below recreates the following source:
+  // describe.skip(`${title}`, () => { it('no-op', () => {}) });
+  if (stmts.length === 0) {
+    const noOpIt = t.expressionStatement(
+      t.callExpression(t.identifier('it'), [
+        t.stringLiteral('no-op'),
+        t.arrowFunctionExpression([], t.blockStatement([])),
+      ])
+    );
+
+    return t.expressionStatement(
+      t.callExpression(t.memberExpression(t.identifier('describe'), t.identifier('skip')), [
+        t.stringLiteral(title),
+        t.arrowFunctionExpression([], t.blockStatement([noOpIt])),
+      ])
+    );
+  }
+
   return t.expressionStatement(
     t.callExpression(t.identifier('describe'), [
       t.stringLiteral(title),
