@@ -514,7 +514,7 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`describe('Example/foo/bar', () => { it('no-op', () => {}) });`);
+      ).toMatchInlineSnapshot(`describe.skip('Example/foo/bar', () => { it('no-op', () => {}) });`);
     });
   });
 

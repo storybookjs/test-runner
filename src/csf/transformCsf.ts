@@ -165,7 +165,7 @@ export const transformCsf = (
     })
     .filter(Boolean);
 
-  let result = null;
+  let result = '';
 
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
