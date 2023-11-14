@@ -92,18 +92,6 @@ const makeBeforeEach = (beforeEachPrefixer: FilePrefixer) => {
 const makeArray = (templateResult: TemplateResult) =>
   Array.isArray(templateResult) ? templateResult : [templateResult];
 
-// copied from csf-tools, as it's not exported
-function parseTags(prop: t.Node) {
-  if (!t.isArrayExpression(prop)) {
-    throw new Error('CSF: Expected tags array');
-  }
-
-  return prop.elements.map((e) => {
-    if (t.isStringLiteral(e)) return e.value;
-    throw new Error(`CSF: Expected tag to be string literal`);
-  }) as string[];
-}
-
 export const transformCsf = (
   code: string,
   {
@@ -128,7 +116,8 @@ export const transformCsf = (
     if (annotations?.play) {
       acc[key].play = annotations.play;
     }
-    acc[key].tags = annotations.tags ? parseTags(annotations.tags) : csf.meta.tags || [];
+
+    acc[key].tags = csf._stories[key].tags || csf.meta.tags || [];
     return acc;
   }, {} as Record<string, { play?: t.Node; tags?: string[] }>);
 
