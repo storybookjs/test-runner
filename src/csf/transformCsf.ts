@@ -66,7 +66,7 @@ const makePlayTest = ({
 }: {
   key: string;
   title: string;
-  metaOrStoryPlay: t.Node;
+  metaOrStoryPlay?: t.Node;
   testPrefix?: TestPrefixer;
   shouldSkip?: boolean;
 }): t.Statement[] => {
@@ -147,22 +147,17 @@ export const transformCsf = (
     .map((key: string) => {
       let tests: t.Statement[] = [];
       const shouldSkip = skipTags.some((tag) => storyAnnotations[key].tags?.includes(tag));
-      const playFunctions = storyAnnotations[key]?.play;
       if (title) {
         tests = [
           ...tests,
-          ...(playFunctions !== undefined
-            ? [
-                makePlayTest({
-                  key,
-                  title,
-                  metaOrStoryPlay: playFunctions,
-                  testPrefix: testPrefixer,
-                  shouldSkip,
-                }),
-              ]
-            : []),
-        ].flat();
+          ...makePlayTest({
+            key,
+            title,
+            metaOrStoryPlay: storyAnnotations[key]?.play,
+            testPrefix: testPrefixer,
+            shouldSkip,
+          }),
+        ];
       }
 
       if (tests.length) {
