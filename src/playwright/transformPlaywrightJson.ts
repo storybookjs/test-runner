@@ -3,8 +3,17 @@ import generate from '@babel/generator';
 import { ComponentTitle, StoryId, StoryName, toId } from '@storybook/csf';
 
 import { testPrefixer } from './transformPlaywright';
+import { getTagOptions } from '../util/getTagOptions';
 
-const makeTest = (entry: V4Entry): t.Statement => {
+const makeTest = ({
+  entry,
+  shouldSkip,
+  metaOrStoryPlay,
+}: {
+  entry: V4Entry;
+  shouldSkip: boolean;
+  metaOrStoryPlay: boolean;
+}): t.Statement => {
   const result = testPrefixer({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
@@ -14,11 +23,34 @@ const makeTest = (entry: V4Entry): t.Statement => {
   });
   const stmt = (result as Array<t.ExpressionStatement>)[1];
   return t.expressionStatement(
-    t.callExpression(t.identifier('it'), [t.stringLiteral('test'), stmt.expression])
+    t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
+      t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+      stmt.expression,
+    ])
   );
 };
 
 const makeDescribe = (title: string, stmts: t.Statement[]) => {
+  // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
+  // so we have to skip the describe to achieve a "excluded test" experience.
+  // The code below recreates the following source:
+  // describe.skip(`${title}`, () => { it('no-op', () => {}) });
+  if (stmts.length === 0) {
+    const noOpIt = t.expressionStatement(
+      t.callExpression(t.identifier('it'), [
+        t.stringLiteral('no-op'),
+        t.arrowFunctionExpression([], t.blockStatement([])),
+      ])
+    );
+
+    return t.expressionStatement(
+      t.callExpression(t.memberExpression(t.identifier('describe'), t.identifier('skip')), [
+        t.stringLiteral(title),
+        t.arrowFunctionExpression([], t.blockStatement([noOpIt])),
+      ])
+    );
+  }
+
   return t.expressionStatement(
     t.callExpression(t.identifier('describe'), [
       t.stringLiteral(title),
@@ -27,7 +59,13 @@ const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
-type V4Entry = { type?: 'story' | 'docs'; id: StoryId; name: StoryName; title: ComponentTitle };
+type V4Entry = {
+  type?: 'story' | 'docs';
+  id: StoryId;
+  name: StoryName;
+  title: ComponentTitle;
+  tags: string[];
+};
 export type V4Index = {
   v: 4;
   entries: Record<StoryId, V4Entry>;
@@ -83,16 +121,40 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
     );
     titleIdToEntries = v3TitleMapToV4TitleMap(titleIdToStories);
   } else if (index.v === 4) {
+    // TODO: Once Storybook 8.0 is released, we should only support v4 and higher
     titleIdToEntries = groupByTitleId<V4Entry>(Object.values((index as V4Index).entries));
   } else {
     throw new Error(`Unsupported version ${index.v}`);
   }
 
+  const { includeTags, excludeTags, skipTags } = getTagOptions();
+
   const titleIdToTest = Object.entries(titleIdToEntries).reduce<Record<string, string>>(
     (acc, [titleId, entries]) => {
       const stories = entries.filter((s) => s.type !== 'docs');
       if (stories.length) {
-        const storyTests = stories.map((story) => makeDescribe(story.name, [makeTest(story)]));
+        const storyTests = stories
+          .filter((story) => {
+            // If includeTags is passed, check if the story has any of them - else include by default
+            const isIncluded =
+              includeTags.length === 0 || includeTags.some((tag) => story.tags?.includes(tag));
+
+            // If excludeTags is passed, check if the story does not have any of them
+            const isNotExcluded = excludeTags.every((tag) => !story.tags?.includes(tag));
+
+            return isIncluded && isNotExcluded;
+          })
+          .map((story) => {
+            const shouldSkip = skipTags.some((tag) => story.tags?.includes(tag));
+
+            return makeDescribe(story.name, [
+              makeTest({
+                entry: story,
+                shouldSkip,
+                metaOrStoryPlay: story.tags?.includes('play-fn'),
+              }),
+            ]);
+          });
         const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
 
         const { code } = generate(program, {});

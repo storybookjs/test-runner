@@ -83,11 +83,13 @@ const makeTitleFactory = (filename: string) => {
 };
 
 export const transformPlaywright = (src: string, filename: string) => {
-  const result = transformCsf(src, {
+  const transformOptions = {
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
     makeTitle: makeTitleFactory(filename),
-  });
+  };
+
+  const result = transformCsf(src, transformOptions);
   return result;
 };

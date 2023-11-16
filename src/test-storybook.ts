@@ -16,6 +16,7 @@ import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 import { glob } from 'glob';
+import { TestRunnerConfig } from './playwright/hooks';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -181,7 +182,7 @@ async function executeJestPlaywright(args: JestOptions) {
 async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
-    const res = await fetch(url, { method: 'HEAD', headers });
+    const res = await fetch(url, { method: 'GET', headers });
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
@@ -304,6 +305,18 @@ const main = async () => {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
   }
 
+  if (runnerOptions.includeTags) {
+    process.env.STORYBOOK_INCLUDE_TAGS = runnerOptions.includeTags;
+  }
+
+  if (runnerOptions.excludeTags) {
+    process.env.STORYBOOK_EXCLUDE_TAGS = runnerOptions.excludeTags;
+  }
+
+  if (runnerOptions.skipTags) {
+    process.env.STORYBOOK_SKIP_TAGS = runnerOptions.skipTags;
+  }
+
   if (runnerOptions.coverageDirectory) {
     process.env.STORYBOOK_COVERAGE_DIRECTORY = runnerOptions.coverageDirectory;
   }
@@ -335,8 +348,6 @@ const main = async () => {
       'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
     );
   }
-
-  process.env.TEST_ROOT = process.cwd();
 
   if (runnerOptions.indexJson || shouldRunIndexJson) {
     indexTmpDir = await getIndexTempDir(targetURL);
