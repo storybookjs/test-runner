@@ -7,6 +7,11 @@ const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;
 const skipSnapshots = process.env.SKIP_SNAPSHOTS === 'true';
 
 const config: TestRunnerConfig = {
+  tags: {
+    exclude: ['exclude'],
+    include: [],
+    skip: ['skip'],
+  },
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },

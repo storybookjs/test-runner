@@ -12,6 +12,7 @@ Storybook test runner turns all of your stories into executable tests.
 - [Ejecting configuration](#ejecting-configuration)
   - [Jest-playwright options](#jest-playwright-options)
   - [Jest options](#jest-options)
+- [Filtering tests (experimental)](#filtering-tests-experimental)
 - [Test reporters](#test-reporters)
 - [Running against a deployed Storybook](#running-against-a-deployed-storybook)
   - [Index.json mode](#indexjson-mode)
@@ -32,6 +33,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Render lifecycle](#render-lifecycle)
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
+  - [tags](#tags)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
     - [waitForPageReady](#waitforpageready)
@@ -159,6 +161,9 @@ Usage: test-storybook [options]
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
+| `--includeTags`                   | Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                               |
+| `--excludeTags`                   | Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                                     |
+| `--skipTags`                      | Skip test stories that match the specified tags, comma separated<br/>`test-storybook --skipTags="design"`                                                                     |
 
 ## Ejecting configuration
 
@@ -181,7 +186,7 @@ The Storybook test runner comes with Jest installed as an internal dependency. Y
 | ------------------- | ------------------ |
 | ^0.6.2              | ^26.6.3 or ^27.0.0 |
 | ^0.7.0              | ^28.0.0            |
-| ^0.14.0-next.2      | ^29.0.0            |
+| ^0.14.0             | ^29.0.0            |
 
 > If you're already using a compatible version of Jest, the test runner will use it, instead of installing a duplicate version in your node_modules folder.
 
@@ -205,6 +210,33 @@ module.exports = {
   testTimeout: 20000, // default timeout is 15s
 };
 ```
+
+## Filtering tests (experimental)
+
+You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation.
+
+This annotation can be part of a story, therefore only applying to it, or the component meta (the default export), which applies to all stories in the file:
+
+```ts
+const meta = {
+  component: Button,
+  tags: ['design', 'test-only'],
+};
+export default meta;
+
+// will inherit tags from meta with value ['design', 'test-only']
+export const Primary = {};
+
+export const Secondary = {
+  // will override tags to be just ['skip']
+  tags: ['skip'],
+};
+```
+
+> **Note**
+> You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **have to be** defined inline, as an array of strings. This is a limitation due to Storybook's static analysis.
+
+Once your stories have your own custom tags, you can filter them via the [tags property](#tags) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
 
 ## Test reporters
 
@@ -307,7 +339,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
@@ -342,7 +374,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
@@ -621,6 +653,23 @@ module.exports = {
   },
 };
 ```
+
+#### tags
+
+The `tags` property contains three options: `include | exclude | skip`, each accepting an array of strings:
+
+```js
+// .storybook/test-runner.js
+module.exports = {
+  tags: {
+    include: [], // string array, e.g. ['test-only']
+    exclude: [], // string array, e.g. ['design', 'docs-only']
+    skip: [], // string array, e.g. ['design']
+  },
+};
+```
+
+`tags` are used for filtering your tests. Learn more [here](#filtering-tests-experimental).
 
 ### Utility functions
 
