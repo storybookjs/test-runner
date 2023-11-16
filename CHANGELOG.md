@@ -1,3 +1,24 @@
+# v0.15.0 (Thu Nov 16 2023)
+
+#### 🚀 Enhancement
+
+- Add support for test filtering via tags [#382](https://github.com/storybookjs/test-runner/pull/382) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- fix: switch `checkStorybook` to use `GET` method [#385](https://github.com/storybookjs/test-runner/pull/385) ([@stramel](https://github.com/stramel))
+- Chore: update wait-on and lockfile [#389](https://github.com/storybookjs/test-runner/pull/389) ([@yannbf](https://github.com/yannbf))
+- Add storyshots migration guides [#380](https://github.com/storybookjs/test-runner/pull/380) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman) [@jonniebigodes](https://github.com/jonniebigodes))
+
+#### Authors: 4
+
+- [@jonniebigodes](https://github.com/jonniebigodes)
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Michael Stramel ([@stramel](https://github.com/stramel))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.14.1 (Mon Nov 13 2023)
 
 #### 🐛 Bug Fix
