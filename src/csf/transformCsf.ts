@@ -128,7 +128,7 @@ export const transformCsf = (
       acc[key].play = annotations.play;
     }
 
-    acc[key].tags = csf._stories[key].tags || csf.meta.tags || [];
+    acc[key].tags = csf._stories[key].tags || csf.meta?.tags || [];
     return acc;
   }, {} as Record<string, { play?: t.Node; tags?: string[] }>);
 
@@ -137,27 +137,32 @@ export const transformCsf = (
       // If includeTags is passed, check if the story has any of them - else include by default
       const isIncluded =
         includeTags.length === 0 ||
-        includeTags.some((tag) => storyAnnotations[key].tags.includes(tag));
+        includeTags.some((tag) => storyAnnotations[key].tags?.includes(tag));
 
       // If excludeTags is passed, check if the story does not have any of them
-      const isNotExcluded = excludeTags.every((tag) => !storyAnnotations[key].tags.includes(tag));
+      const isNotExcluded = excludeTags.every((tag) => !storyAnnotations[key].tags?.includes(tag));
 
       return isIncluded && isNotExcluded;
     })
     .map((key: string) => {
       let tests: t.Statement[] = [];
-      const shouldSkip = skipTags.some((tag) => storyAnnotations[key].tags.includes(tag));
+      const shouldSkip = skipTags.some((tag) => storyAnnotations[key].tags?.includes(tag));
+      const playFunctions = storyAnnotations[key]?.play;
       if (title) {
         tests = [
           ...tests,
-          ...makePlayTest({
-            key,
-            title,
-            metaOrStoryPlay: storyAnnotations[key].play,
-            testPrefix: testPrefixer,
-            shouldSkip,
-          }),
-        ];
+          ...(playFunctions !== undefined
+            ? [
+                makePlayTest({
+                  key,
+                  title,
+                  metaOrStoryPlay: playFunctions,
+                  testPrefix: testPrefixer,
+                  shouldSkip,
+                }),
+              ]
+            : []),
+        ].flat();
       }
 
       if (tests.length) {
