@@ -1,3 +1,16 @@
+# v0.15.1 (Thu Nov 16 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Make tags optional in TestRunnerConfig [#391](https://github.com/storybookjs/test-runner/pull/391) ([@stramel](https://github.com/stramel))
+
+#### Authors: 2
+
+- Michael Stramel ([@stramel](https://github.com/stramel))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.15.0 (Thu Nov 16 2023)
 
 #### 🚀 Enhancement
