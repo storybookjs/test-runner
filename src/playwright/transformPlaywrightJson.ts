@@ -24,7 +24,7 @@ const makeTest = ({
   const stmt = (result as Array<t.ExpressionStatement>)[1];
   return t.expressionStatement(
     t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
-      t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+      t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
       stmt.expression,
     ])
   );
@@ -64,7 +64,7 @@ type V4Entry = {
   id: StoryId;
   name: StoryName;
   title: ComponentTitle;
-  tags: string[];
+  tags?: string[];
 };
 export type V4Index = {
   v: 4;
@@ -151,7 +151,7 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
               makeTest({
                 entry: story,
                 shouldSkip,
-                metaOrStoryPlay: story.tags?.includes('play-fn'),
+                metaOrStoryPlay: story.tags?.includes('play-fn') ?? false,
               }),
             ]);
           });
