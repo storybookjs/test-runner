@@ -30,7 +30,7 @@ const makeTest = ({
   );
 };
 
-const makeDescribe = (title: string, stmts: t.Statement[]) => {
+export const makeDescribe = (title: string, stmts: t.Statement[]) => {
   // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
   // so we have to skip the describe to achieve a "excluded test" experience.
   // The code below recreates the following source:

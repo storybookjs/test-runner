@@ -2,8 +2,10 @@ import {
   UnsupportedVersion,
   V3StoriesIndex,
   V4Index,
+  makeDescribe,
   transformPlaywrightJson,
 } from './transformPlaywrightJson';
+import * as t from '@babel/types';
 
 jest.mock('../util/getTestRunnerConfig');
 
@@ -753,5 +755,32 @@ describe('unsupported index', () => {
     expect(() => transformPlaywrightJson(unsupportedVersion)).toThrowError(
       `Unsupported version ${unsupportedVersion.v}`
     );
+  });
+});
+
+describe('makeDescribe', () => {
+  it('should generate a skipped describe block with a no-op test when stmts is empty', () => {
+    const title = 'Test Title';
+    const stmts: t.Statement[] = []; // Empty array
+
+    const result = makeDescribe(title, stmts);
+
+    // Create the expected AST manually for a skipped describe block with a no-op test
+    const noOpIt = t.expressionStatement(
+      t.callExpression(t.identifier('it'), [
+        t.stringLiteral('no-op'),
+        t.arrowFunctionExpression([], t.blockStatement([])),
+      ])
+    );
+
+    const expectedAST = t.expressionStatement(
+      t.callExpression(t.memberExpression(t.identifier('describe'), t.identifier('skip')), [
+        t.stringLiteral(title),
+        t.arrowFunctionExpression([], t.blockStatement([noOpIt])),
+      ])
+    );
+
+    // Compare the generated AST with the expected AST
+    expect(result).toEqual(expectedAST);
   });
 });
