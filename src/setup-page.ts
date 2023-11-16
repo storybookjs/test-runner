@@ -1,7 +1,7 @@
 import type { Page, BrowserContext } from 'playwright';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
 import { PrepareContext } from './playwright/hooks';
-import { getTestRunnerConfig } from './util';
+import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 
 /**
  * This is a default prepare function which can be overridden by the user.

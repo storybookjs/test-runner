@@ -1,3 +1,4 @@
+import { StorybookConfig } from '@storybook/types';
 import * as storybookMain from './getStorybookMain';
 
 import { getStorybookMetadata } from './getStorybookMetadata';
@@ -22,7 +23,7 @@ describe('getStorybookMetadata', () => {
   });
 
   it('should return configDir coming from environment variable', () => {
-    const mockedMain = {
+    const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: [],
     };
 
@@ -33,7 +34,7 @@ describe('getStorybookMetadata', () => {
   });
 
   it('should return storiesPath with default glob from CSF3 style config', () => {
-    const mockedMain = {
+    const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: [
         {
           directory: '../stories/basic',
@@ -51,7 +52,7 @@ describe('getStorybookMetadata', () => {
   });
 
   it('should return storiesPath with glob defined in CSF2 style config', () => {
-    const mockedMain = {
+    const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: ['../**/stories/*.stories.@(js|ts)'],
     };
 
@@ -64,7 +65,7 @@ describe('getStorybookMetadata', () => {
   });
 
   it('should return storiesPath from mixed CSF2 and CSF3 style config', () => {
-    const mockedMain = {
+    const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: [
         {
           directory: '../stories/basic',
@@ -83,14 +84,14 @@ describe('getStorybookMetadata', () => {
   });
 
   it('should return lazyCompilation=false when unset', () => {
-    const mockedMain = { stories: [] };
+    const mockedMain: Pick<StorybookConfig, 'stories'> = { stories: [] };
 
     jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
     expect(getStorybookMetadata().lazyCompilation).toBe(false);
   });
   it('should return lazyCompilation=true when set', () => {
-    const mockedMain = {
+    const mockedMain: Pick<StorybookConfig, 'stories' | 'core'> = {
       stories: [],
       core: { builder: { name: 'webpack5', options: { lazyCompilation: true } } },
     };

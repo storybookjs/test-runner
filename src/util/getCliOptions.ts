@@ -14,6 +14,9 @@ export type CliOptions = {
     junit?: boolean;
     browsers?: BrowserType | BrowserType[];
     failOnConsole?: boolean;
+    includeTags?: string;
+    excludeTags?: string;
+    skipTags?: string;
   };
   jestOptions: JestOptions;
 };
@@ -30,6 +33,9 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'coverageDirectory',
   'junit',
   'failOnConsole',
+  'includeTags',
+  'excludeTags',
+  'skipTags',
 ];
 
 function copyOption<ObjType extends object, KeyType extends keyof ObjType>(

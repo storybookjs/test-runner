@@ -76,7 +76,10 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       '--shard <shardIndex/shardCount>',
       'Splits your test suite across different machines to run in CI.'
     )
-    .option('--failOnConsole', 'Makes tests fail on browser console errors');
+    .option('--failOnConsole', 'Makes tests fail on browser console errors')
+    .option('--includeTags <tags...>', 'Only test stories that match the specified tags')
+    .option('--excludeTags <tags...>', 'Do not test stories that match the specified tags')
+    .option('--skipTags <tags...>', 'Skip test stories that match the specified tags');
 
   program.exitOverride();
 

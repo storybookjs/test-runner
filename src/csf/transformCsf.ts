@@ -4,6 +4,7 @@ import * as t from '@babel/types';
 import generate from '@babel/generator';
 import { toId, storyNameFromExport } from '@storybook/csf';
 import dedent from 'ts-dedent';
+import { getTagOptions } from '../util/getTagOptions';
 
 export interface TestContext {
   storyExport?: t.Identifier;
@@ -21,6 +22,9 @@ interface TransformOptions {
   testPrefixer?: TestPrefixer;
   insertTestIfEmpty?: boolean;
   makeTitle?: (userTitle: string) => string;
+  includeTags?: string[];
+  excludeTags?: string[];
+  skipTags?: string[];
 }
 
 export const prefixFunction = (
@@ -53,15 +57,22 @@ export const prefixFunction = (
   return result;
 };
 
-const makePlayTest = (
-  key: string,
-  title: string,
-  metaOrStoryPlay: t.Node,
-  testPrefix?: TestPrefixer
-): t.Statement[] => {
+const makePlayTest = ({
+  key,
+  metaOrStoryPlay,
+  title,
+  testPrefix,
+  shouldSkip,
+}: {
+  key: string;
+  title: string;
+  metaOrStoryPlay: t.Node;
+  testPrefix?: TestPrefixer;
+  shouldSkip?: boolean;
+}): t.Statement[] => {
   return [
     t.expressionStatement(
-      t.callExpression(t.identifier('it'), [
+      t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
         t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
         prefixFunction(key, title, metaOrStoryPlay as t.Expression, testPrefix),
       ])
@@ -102,24 +113,51 @@ export const transformCsf = (
     makeTitle,
   }: TransformOptions = {}
 ) => {
-  const csf = loadCsf(code, { makeTitle: makeTitle || ((userTitle: string) => userTitle) });
+  const { includeTags, excludeTags, skipTags } = getTagOptions();
+
+  const csf = loadCsf(code, { makeTitle });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
   const title = csf.meta?.title;
 
-  const storyPlays = storyExports.reduce((acc, key) => {
+  const storyAnnotations = storyExports.reduce((acc, key) => {
     const annotations = csf._storyAnnotations[key];
+    acc[key] = {};
     if (annotations?.play) {
-      acc[key] = annotations.play;
+      acc[key].play = annotations.play;
     }
+
+    acc[key].tags = csf._stories[key].tags || csf.meta.tags || [];
     return acc;
-  }, {} as Record<string, t.Node>);
-  const playTests = storyExports
+  }, {} as Record<string, { play?: t.Node; tags?: string[] }>);
+
+  const allTests = storyExports
+    .filter((key) => {
+      // If includeTags is passed, check if the story has any of them - else include by default
+      const isIncluded =
+        includeTags.length === 0 ||
+        includeTags.some((tag) => storyAnnotations[key].tags.includes(tag));
+
+      // If excludeTags is passed, check if the story does not have any of them
+      const isNotExcluded = excludeTags.every((tag) => !storyAnnotations[key].tags.includes(tag));
+
+      return isIncluded && isNotExcluded;
+    })
     .map((key: string) => {
       let tests: t.Statement[] = [];
+      const shouldSkip = skipTags.some((tag) => storyAnnotations[key].tags.includes(tag));
       if (title) {
-        tests = [...tests, ...makePlayTest(key, title, storyPlays[key], testPrefixer)];
+        tests = [
+          ...tests,
+          ...makePlayTest({
+            key,
+            title,
+            metaOrStoryPlay: storyAnnotations[key].play,
+            testPrefix: testPrefixer,
+            shouldSkip,
+          }),
+        ];
       }
 
       if (tests.length) {
@@ -128,8 +166,6 @@ export const transformCsf = (
       return null;
     })
     .filter(Boolean) as babel.types.Statement[];
-
-  const allTests = playTests;
 
   let result = '';
 
@@ -148,7 +184,9 @@ export const transformCsf = (
       }
     `;
   } else if (insertTestIfEmpty) {
-    result = `describe('${csf.meta?.title}', () => { it('no-op', () => {}) });`;
+    // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
+    // so we have to skip the describe to achieve a "excluded test" experience.
+    result = `describe.skip('${csf.meta?.title}', () => { it('no-op', () => {}) });`;
   }
   return result;
 };
