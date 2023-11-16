@@ -34,10 +34,10 @@ export interface TestRunnerConfig {
   /**
    * Tags to include, exclude, or skip. These tags are defined as annotations in your story or meta.
    */
-  tags: {
-    include: string[];
-    exclude: string[];
-    skip: string[];
+  tags?: {
+    include?: string[];
+    exclude?: string[];
+    skip?: string[];
   };
 }
 
