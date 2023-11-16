@@ -10,7 +10,7 @@ describe('transformCsf', () => {
         title: 'Button',
       };
     `;
-    const expectedCode = `describe('Button', () => { it('no-op', () => {}) });`;
+    const expectedCode = `describe.skip('Button', () => { it('no-op', () => {}) });`;
 
     const result = transformCsf(csfCode, { insertTestIfEmpty: true });
 

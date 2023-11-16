@@ -115,7 +115,7 @@ export const transformCsf = (
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
-  const csf = loadCsf(code, { makeTitle });
+  const csf = loadCsf(code, { makeTitle: makeTitle || ((userTitle: string) => userTitle) });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
