@@ -183,7 +183,7 @@ async function executeJestPlaywright(args: JestOptions) {
 async function checkStorybook(url: any) {
   try {
     const headers = await getHttpHeaders(url);
-    const res = await fetch(url, { method: 'HEAD', headers });
+    const res = await fetch(url, { method: 'GET', headers });
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
