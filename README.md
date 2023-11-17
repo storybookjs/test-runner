@@ -165,7 +165,7 @@ Usage: test-storybook [options]
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
 | `--includeTags`                   | (experimental) Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                |
 | `--excludeTags`                   | (experimental) Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                      |
-| `--skipTags`                      | (experimental) Skip test stories that match the specified tags, comma separated<br/>`test-storybook --skipTags="design"`                                                      |
+| `--skipTags`                      | (experimental) Do not test stories that match the specified tags and mark them as skipped in the CLI output, comma separated<br/>`test-storybook --skipTags="design"`         |
 
 ## Ejecting configuration
 
@@ -239,6 +239,8 @@ export const Secondary = {
 > You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **have to be** defined inline, as an array of strings. This is a limitation due to Storybook's static analysis.
 
 Once your stories have your own custom tags, you can filter them via the [tags property](#tags-experimental) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
+
+Both `--skipTags` and `--excludeTags` will prevent a story from being tested. The difference is that skipped tests will appear as "skipped" in the cli output, whereas excluded tests will not appear at all. Skipped tests can be useful to indicate tests that are temporarily disabled.
 
 ## Test reporters
 
