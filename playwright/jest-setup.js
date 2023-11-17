@@ -7,12 +7,12 @@ if (testRunnerConfig) {
     testRunnerConfig.setup();
   }
 
-  const preVisitFn = testRunnerConfig.preRender || testRunnerConfig.preVisit;
+  const preVisitFn = testRunnerConfig.preVisit || testRunnerConfig.preRender;
   if (preVisitFn) {
     setPreVisit(preVisitFn);
   }
 
-  const postVisitFn = testRunnerConfig.postRender || testRunnerConfig.postVisit;
+  const postVisitFn = testRunnerConfig.postVisit || testRunnerConfig.postRender;
   if (postVisitFn) {
     setPostVisit(postVisitFn);
   }
