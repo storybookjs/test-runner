@@ -24,16 +24,16 @@ export const testPrefixer = template(
           page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
         });
 
-        if(globalThis.__sbPreRender) {
-          await globalThis.__sbPreRender(page, context);
+        if(globalThis.__sbPreVisit) {
+          await globalThis.__sbPreVisit(page, context);
         }
 
         const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
           id: %%id%%,
         });
   
-        if(globalThis.__sbPostRender) {
-          await globalThis.__sbPostRender(page, context);
+        if(globalThis.__sbPostVisit) {
+          await globalThis.__sbPostVisit(page, context);
         }
 
         if(globalThis.__sbCollectCoverage) {

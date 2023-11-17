@@ -15,7 +15,7 @@ const config: TestRunnerConfig = {
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const { parameters } = await getStoryContext(page, context);
 

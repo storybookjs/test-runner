@@ -1,15 +1,20 @@
-const { getTestRunnerConfig, setPreRender, setPostRender, setupPage } = require('../dist');
+const { getTestRunnerConfig, setPreVisit, setPostVisit, setupPage } = require('../dist');
 
 const testRunnerConfig = getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
 if (testRunnerConfig) {
+  // hooks set up
   if (testRunnerConfig.setup) {
     testRunnerConfig.setup();
   }
-  if (testRunnerConfig.preRender) {
-    setPreRender(testRunnerConfig.preRender);
+
+  const preVisitFn = testRunnerConfig.preVisit || testRunnerConfig.preRender;
+  if (preVisitFn) {
+    setPreVisit(preVisitFn);
   }
-  if (testRunnerConfig.postRender) {
-    setPostRender(testRunnerConfig.postRender);
+
+  const postVisitFn = testRunnerConfig.postVisit || testRunnerConfig.postRender;
+  if (postVisitFn) {
+    setPostVisit(postVisitFn);
   }
 }
 
