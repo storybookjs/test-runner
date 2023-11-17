@@ -240,7 +240,7 @@ export const Secondary = {
 
 Once your stories have your own custom tags, you can filter them via the [tags property](#tags-experimental) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
 
-Both `--skipTags` and `--excludeTags` will prevent a story from being tested. The difference is that skipped tets will appear as "skipped" in the cli output, whereas excluded tests will not appear at all. Skipped tests can be useful to indicate tests that are temporarily disabled.
+Both `--skipTags` and `--excludeTags` will prevent a story from being tested. The difference is that skipped tests will appear as "skipped" in the cli output, whereas excluded tests will not appear at all. Skipped tests can be useful to indicate tests that are temporarily disabled.
 
 ## Test reporters
 
