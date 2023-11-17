@@ -33,7 +33,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [Render lifecycle](#render-lifecycle)
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
-  - [tags](#tags)
+  - [tags (experimental)](#tags-experimental)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
     - [waitForPageReady](#waitforpageready)
@@ -161,9 +161,9 @@ Usage: test-storybook [options]
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
-| `--includeTags`                   | Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                               |
-| `--excludeTags`                   | Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                                     |
-| `--skipTags`                      | Skip test stories that match the specified tags, comma separated<br/>`test-storybook --skipTags="design"`                                                                     |
+| `--includeTags`                   | (experimental) Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                |
+| `--excludeTags`                   | (experimental) Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                      |
+| `--skipTags`                      | (experimental) Skip test stories that match the specified tags, comma separated<br/>`test-storybook --skipTags="design"`                                                      |
 
 ## Ejecting configuration
 
@@ -236,7 +236,7 @@ export const Secondary = {
 > **Note**
 > You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **have to be** defined inline, as an array of strings. This is a limitation due to Storybook's static analysis.
 
-Once your stories have your own custom tags, you can filter them via the [tags property](#tags) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
+Once your stories have your own custom tags, you can filter them via the [tags property](#tags-experimental) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
 
 ## Test reporters
 
@@ -654,7 +654,7 @@ module.exports = {
 };
 ```
 
-#### tags
+#### tags (experimental)
 
 The `tags` property contains three options: `include | exclude | skip`, each accepting an array of strings:
 
