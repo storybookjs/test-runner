@@ -33,6 +33,7 @@ export interface TestRunnerConfig {
   prepare?: PrepareSetter;
   /**
    * Tags to include, exclude, or skip. These tags are defined as annotations in your story or meta.
+   * @see https://github.com/storybookjs/test-runner#filtering-tests-experimental
    */
   tags?: {
     include?: string[];
