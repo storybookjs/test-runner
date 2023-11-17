@@ -55,8 +55,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -64,8 +64,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -109,8 +109,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -118,8 +118,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-out"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -165,8 +165,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -174,8 +174,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -268,8 +268,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -277,8 +277,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-b"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -324,8 +324,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -333,8 +333,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-c"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -405,8 +405,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -414,8 +414,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -514,8 +514,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -523,8 +523,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -568,8 +568,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -577,8 +577,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-out"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -624,8 +624,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -633,8 +633,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -718,8 +718,8 @@ describe('Playwright Json', () => {
                     err: err.message
                   });
                 });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -727,8 +727,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);

@@ -28,8 +28,10 @@ Storybook test runner turns all of your stories into executable tests.
   - [4 - Run tests with --shard flag](#4---run-tests-with---shard-flag)
 - [Test hooks API](#test-hooks-api)
   - [setup](#setup)
-  - [preRender](#prerender)
-  - [postRender](#postrender)
+  - [preRender (deprecated)](#prerender-deprecated)
+  - [preVisit](#previsit)
+  - [postRender (deprecated)](#postrender-deprecated)
+  - [postVisit](#postvisit)
   - [Render lifecycle](#render-lifecycle)
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
@@ -542,12 +544,12 @@ The test runner renders a story and executes its [play function](https://storybo
 
 To enable use cases like visual or DOM snapshots, the test runner exports test hooks that can be overridden globally. These hooks give you access to the test lifecycle before and after the story is rendered.
 
-There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
+There are three hooks: `setup`, `preVisit`, and `postVisit`. `setup` executes once before all the tests run. `preVisit` and `postVisit` execute within a test before and after a story is rendered.
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
 
 > **Note**
-> The `preRender` and `postRender` functions will be executed for all stories.
+> The `preVisit` and `postVisit` functions will be executed for all stories.
 
 #### setup
 
@@ -562,7 +564,12 @@ module.exports = {
 };
 ```
 
-#### preRender
+#### preRender (deprecated)
+
+> **Note**
+> This hook is deprecated. It has been renamed to `preVisit`, please use it instead.
+
+#### preVisit
 
 Async function that receives a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`.
 Executes within a test before the story is rendered. Useful for configuring the Page before the story renders, such as setting up the viewport size.
@@ -570,13 +577,18 @@ Executes within a test before the story is rendered. Useful for configuring the 
 ```js
 // .storybook/test-runner.js
 module.exports = {
-  async preRender(page, context) {
+  async preVisit(page, context) {
     // execute whatever you like, before the story renders
   },
 };
 ```
 
-#### postRender
+#### postRender (deprecated)
+
+> **Note**
+> This hook is deprecated. It has been renamed to `postVisit`, please use it instead.
+
+#### postVisit
 
 Async function that receives a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`.
 Executes within a test after a story is rendered. Useful for asserting things after the story is rendered, such as DOM and image snapshotting.
@@ -584,7 +596,7 @@ Executes within a test after a story is rendered. Useful for asserting things af
 ```js
 // .storybook/test-runner.js
 module.exports = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // execute whatever you like, after the story renders
   },
 };
@@ -609,13 +621,13 @@ it('button--basic', async () => {
   await page.goto(STORYBOOK_URL);
 
   // pre-render hook
-  if (preRender) await preRender(page, context);
+  if (preVisit) await preVisit(page, context);
 
   // render the story and run its play function (if applicable)
   await page.execute('render', context);
 
   // post-render hook
-  if (postRender) await postRender(page, context);
+  if (postVisit) await postVisit(page, context);
 });
 ```
 
@@ -698,7 +710,7 @@ You can access its context in a test hook like so:
 const { getStoryContext } = require('@storybook/test-runner');
 
 module.exports = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const storyContext = await getStoryContext(page, context);
     if (storyContext.parameters.theme === 'dark') {
@@ -721,7 +733,7 @@ The `waitForPageReady` utility is useful when you're executing [image snapshot t
 const { waitForPageReady } = require('@storybook/test-runner');
 
 module.exports = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // use the test-runner utility to wait for fonts to load, etc.
     await waitForPageReady(page);
 
@@ -772,7 +784,7 @@ const { MINIMAL_VIEWPORTS } = require('@storybook/addon-viewport');
 const DEFAULT_VIEWPORT_SIZE = { width: 1280, height: 720 };
 
 module.exports = {
-  async preRender(page, story) {
+  async preVisit(page, story) {
     const context = await getStoryContext(page, story);
     const viewportName = context.parameters?.viewport?.defaultViewport;
     const viewportParameter = MINIMAL_VIEWPORTS[viewportName];
@@ -806,11 +818,11 @@ const { getStoryContext } = require('@storybook/test-runner');
 const { injectAxe, checkA11y, configureAxe } = require('axe-playwright');
 
 module.exports = {
-  async preRender(page, context) {
+  async preVisit(page, context) {
     // Inject Axe utilities in the page before the story renders
     await injectAxe(page);
   },
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const storyContext = await getStoryContext(page, context);
 
@@ -844,7 +856,7 @@ You can use [Playwright's built in APIs](https://playwright.dev/docs/test-snapsh
 ```js
 // .storybook/test-runner.js
 module.exports = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // the #storybook-root element wraps the story. In Storybook 6.x, the selector is #root
     const elementHandler = await page.$('#storybook-root');
     const innerHTML = await elementHandler.innerHTML();
@@ -903,7 +915,7 @@ module.exports = {
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // use the test-runner utility to wait for fonts to load, etc.
     await waitForPageReady(page);
 

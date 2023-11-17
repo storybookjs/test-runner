@@ -275,6 +275,17 @@ function ejectConfiguration() {
   log('Configuration file successfully copied as test-runner-jest.config.js');
 }
 
+function warnOnce(msg: string) {
+  let warned = false;
+  return () => {
+    if (!warned) {
+      // here we specify the ansi code for yellow as jest is stripping the default color from console.warn
+      console.warn('\x1b[33m%s\x1b[0m', msg);
+      warned = true;
+    }
+  };
+}
+
 const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
 
@@ -286,6 +297,19 @@ const main = async () => {
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
   const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || ({} as TestRunnerConfig);
+
+  // TODO: remove preRender and postRender hooks likely in 0.20.0
+  if (testRunnerConfig.preRender) {
+    warnOnce(
+      '[Test-runner] The "preRender" hook is deprecated and will be removed in later versions. Please use "preVisit" instead in your test-runner config file.'
+    )();
+  }
+  if (testRunnerConfig.postRender) {
+    warnOnce(
+      '[Test-runner] The "postRender" hook is deprecated and will be removed in later versions. Please use "postVisit" instead in your test-runner config file.'
+    )();
+  }
+
   if (testRunnerConfig.getHttpHeaders) {
     getHttpHeaders = testRunnerConfig.getHttpHeaders;
   }
