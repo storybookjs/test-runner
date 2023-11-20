@@ -19,10 +19,12 @@ export const testPrefixer = template(
     async () => {
       const testFn = async() => {
         const context = { id: %%id%%, title: %%title%%, name: %%name%% };
+        
+        const onPageError = (err) => {
+          globalThis.__sbThrowUncaughtPageError(err, context);
+        }
 
-        page.on('pageerror', (err) => {
-          page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
-        });
+        page.on('pageerror', onPageError);
 
         if(globalThis.__sbPreVisit) {
           await globalThis.__sbPreVisit(page, context);
@@ -37,13 +39,15 @@ export const testPrefixer = template(
         }
 
         if(globalThis.__sbCollectCoverage) {
-          const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+        const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
           if (!isCoverageSetupCorrectly) {
             throw new Error(\`${coverageErrorMessage}\`);
           }
 
           await jestPlaywright.saveCoverage(page);
         }
+
+        page.off('pageerror', onPageError);
 
         return result;
       };
