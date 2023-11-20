@@ -46,15 +46,10 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-in",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -76,6 +71,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -100,15 +96,10 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-out",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -130,6 +121,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -156,15 +148,10 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -186,6 +173,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -259,15 +247,10 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-b",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -289,6 +272,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -315,15 +299,10 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-c",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -345,6 +324,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -396,15 +376,10 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -426,6 +401,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -505,15 +481,10 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-in",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -535,6 +506,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -559,15 +531,10 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-out",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -589,6 +556,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -615,15 +583,10 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -645,6 +608,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -709,15 +673,10 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -739,6 +698,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
