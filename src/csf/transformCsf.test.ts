@@ -23,7 +23,7 @@ describe('transformCsf', () => {
       };
     `;
 
-    const result = transformCsf(csfCode, {});
+    const result = transformCsf(csfCode, { testPrefixer });
 
     expect(result).toMatchSnapshot();
   });
