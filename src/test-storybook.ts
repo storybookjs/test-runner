@@ -36,6 +36,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message: string) => console.log(`[test-storybook] ${message}`);
+const warn = (message: string) => console.warn('\x1b[33m%s\x1b[0m', `[test-storybook] ${message}`);
 const error = (err: { message: any; stack: any }) => {
   if (err instanceof Error) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
@@ -275,6 +276,17 @@ function ejectConfiguration() {
   log('Configuration file successfully copied as test-runner-jest.config.js');
 }
 
+function warnOnce(message: string) {
+  let warned = false;
+  return () => {
+    if (!warned) {
+      // here we specify the ansi code for yellow as jest is stripping the default color from console.warn
+      warn(message);
+      warned = true;
+    }
+  };
+}
+
 const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
 
@@ -286,6 +298,31 @@ const main = async () => {
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
   const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || ({} as TestRunnerConfig);
+
+  if (testRunnerConfig.preVisit && testRunnerConfig.preRender) {
+    throw new Error(
+      'You cannot use both preVisit and preRender hooks in your test-runner config file. Please use preVisit instead.'
+    );
+  }
+
+  if (testRunnerConfig.postVisit && testRunnerConfig.postRender) {
+    throw new Error(
+      'You cannot use both postVisit and postRender hooks in your test-runner config file. Please use postVisit instead.'
+    );
+  }
+
+  // TODO: remove preRender and postRender hooks likely in 0.20.0
+  if (testRunnerConfig.preRender) {
+    warnOnce(
+      'The "preRender" hook is deprecated and will be removed in later versions. Please use "preVisit" instead in your test-runner config file.'
+    )();
+  }
+  if (testRunnerConfig.postRender) {
+    warnOnce(
+      'The "postRender" hook is deprecated and will be removed in later versions. Please use "postVisit" instead in your test-runner config file.'
+    )();
+  }
+
   if (testRunnerConfig.getHttpHeaders) {
     getHttpHeaders = testRunnerConfig.getHttpHeaders;
   }

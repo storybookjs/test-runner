@@ -28,12 +28,14 @@ Storybook test runner turns all of your stories into executable tests.
   - [4 - Run tests with --shard flag](#4---run-tests-with---shard-flag)
 - [Test hooks API](#test-hooks-api)
   - [setup](#setup)
-  - [preRender](#prerender)
-  - [postRender](#postrender)
+  - [preRender (deprecated)](#prerender-deprecated)
+  - [preVisit](#previsit)
+  - [postRender (deprecated)](#postrender-deprecated)
+  - [postVisit](#postvisit)
   - [Render lifecycle](#render-lifecycle)
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
-  - [tags](#tags)
+  - [tags (experimental)](#tags-experimental)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
     - [waitForPageReady](#waitforpageready)
@@ -44,6 +46,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
+  - [React Native support](#react-native-support)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-no-tests-found-running-on-a-windows-ci)
@@ -161,9 +164,9 @@ Usage: test-storybook [options]
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
-| `--includeTags`                   | Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                               |
-| `--excludeTags`                   | Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                                     |
-| `--skipTags`                      | Skip test stories that match the specified tags, comma separated<br/>`test-storybook --skipTags="design"`                                                                     |
+| `--includeTags`                   | (experimental) Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                |
+| `--excludeTags`                   | (experimental) Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                      |
+| `--skipTags`                      | (experimental) Do not test stories that match the specified tags and mark them as skipped in the CLI output, comma separated<br/>`test-storybook --skipTags="design"`         |
 
 ## Ejecting configuration
 
@@ -202,7 +205,7 @@ const testRunnerConfig = getJestConfig();
  * @type {import('@jest/types').Config.InitialOptions}
  */
 module.exports = {
-  // The default configuration comes from @storybook/test-runner
+  // The default Jest configuration comes from @storybook/test-runner
   ...testRunnerConfig,
   /** Add your own overrides below
    * @see https://jestjs.io/docs/configuration
@@ -236,7 +239,9 @@ export const Secondary = {
 > **Note**
 > You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **have to be** defined inline, as an array of strings. This is a limitation due to Storybook's static analysis.
 
-Once your stories have your own custom tags, you can filter them via the [tags property](#tags) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
+Once your stories have your own custom tags, you can filter them via the [tags property](#tags-experimental) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
+
+Both `--skipTags` and `--excludeTags` will prevent a story from being tested. The difference is that skipped tests will appear as "skipped" in the cli output, whereas excluded tests will not appear at all. Skipped tests can be useful to indicate tests that are temporarily disabled.
 
 ## Test reporters
 
@@ -297,10 +302,13 @@ If your Storybook does not have a `stories.json` file, you can generate one, pro
 
 To enable `stories.json` in your Storybook, set the `buildStoriesJson` feature flag in `.storybook/main.js`:
 
-```js
-module.exports = {
+```ts
+// .storybook/main.ts
+const config = {
+  // ... rest of the config
   features: { buildStoriesJson: true },
 };
+export default config;
 ```
 
 Once you have a valid `stories.json` file, your Storybook will be compatible with the "index.json mode".
@@ -407,12 +415,13 @@ yarn add -D @storybook/addon-coverage
 
 And register it in your `.storybook/main.js` file:
 
-```js
-// .storybook/main.js
-module.exports = {
+```ts
+// .storybook/main.ts
+const config = {
   // ...rest of your code here
   addons: ['@storybook/addon-coverage'],
 };
+export default config;
 ```
 
 The addon has default options that might suffice for your project, and it accepts an [options object for project-specific configuration](https://github.com/storybookjs/addon-coverage#configuring-the-addon).
@@ -542,52 +551,71 @@ The test runner renders a story and executes its [play function](https://storybo
 
 To enable use cases like visual or DOM snapshots, the test runner exports test hooks that can be overridden globally. These hooks give you access to the test lifecycle before and after the story is rendered.
 
-There are three hooks: `setup`, `preRender`, and `postRender`. `setup` executes once before all the tests run. `preRender` and `postRender` execute within a test before and after a story is rendered.
+There are three hooks: `setup`, `preVisit`, and `postVisit`. `setup` executes once before all the tests run. `preVisit` and `postVisit` execute within a test before and after a story is rendered.
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
 
 > **Note**
-> The `preRender` and `postRender` functions will be executed for all stories.
+> The `preVisit` and `postVisit` functions will be executed for all stories.
 
 #### setup
 
 Async function that executes once before all the tests run. Useful for setting node-related configuration, such as extending Jest global `expect` for accessibility matchers.
 
-```js
-// .storybook/test-runner.js
-module.exports = {
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
   async setup() {
     // execute whatever you like, in Node, once before all tests run
   },
 };
+export default config;
 ```
 
-#### preRender
+#### preRender (deprecated)
+
+> **Note**
+> This hook is deprecated. It has been renamed to `preVisit`, please use it instead.
+
+#### preVisit
 
 Async function that receives a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`.
 Executes within a test before the story is rendered. Useful for configuring the Page before the story renders, such as setting up the viewport size.
 
-```js
-// .storybook/test-runner.js
-module.exports = {
-  async preRender(page, context) {
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  async preVisit(page, context) {
     // execute whatever you like, before the story renders
   },
 };
+export default config;
 ```
 
-#### postRender
+#### postRender (deprecated)
+
+> **Note**
+> This hook is deprecated. It has been renamed to `postVisit`, please use it instead.
+
+#### postVisit
 
 Async function that receives a [Playwright Page](https://playwright.dev/docs/pages) and a context object with the current story's `id`, `title`, and `name`.
 Executes within a test after a story is rendered. Useful for asserting things after the story is rendered, such as DOM and image snapshotting.
 
-```js
-// .storybook/test-runner.js
-module.exports = {
-  async postRender(page, context) {
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  async postVisit(page, context) {
     // execute whatever you like, after the story renders
   },
 };
+export default config;
 ```
 
 > **Note**
@@ -597,7 +625,7 @@ module.exports = {
 
 To visualize the test lifecycle with these hooks, consider a simplified version of the test code automatically generated for each story in your Storybook:
 
-```js
+```ts
 // executed once, before the tests
 await setup();
 
@@ -608,14 +636,14 @@ it('button--basic', async () => {
   // playwright page https://playwright.dev/docs/pages
   await page.goto(STORYBOOK_URL);
 
-  // pre-render hook
-  if (preRender) await preRender(page, context);
+  // pre-visit hook
+  if (preVisit) await preVisit(page, context);
 
-  // render the story and run its play function (if applicable)
+  // render the story and watch its play function (if applicable)
   await page.execute('render', context);
 
-  // post-render hook
-  if (postRender) await postRender(page, context);
+  // post-visit hook
+  if (postVisit) await postVisit(page, context);
 });
 ```
 
@@ -642,9 +670,11 @@ For reference, please use the [default `prepare`](https://github.com/storybookjs
 
 The test-runner makes a few `fetch` calls to check the status of a Storybook instance, and to get the index of the Storybook's stories. Additionally, it visits a page using Playwright. In all of these scenarios, it's possible, depending on where your Storybook is hosted, that you might need to set some HTTP headers. For example, if your Storybook is hosted behind a basic authentication, you might need to set the `Authorization` header. You can do so by passing a `getHttpHeaders` function to your test-runner config. That function receives the `url` of the fetch calls and page visits, and should return an object with the headers to be set.
 
-```js
-// .storybook/test-runner.js
-module.exports = {
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
   getHttpHeaders: async (url) => {
     const token = url.includes('prod') ? 'XYZ' : 'ABC';
     return {
@@ -652,21 +682,25 @@ module.exports = {
     };
   },
 };
+export default config;
 ```
 
-#### tags
+#### tags (experimental)
 
 The `tags` property contains three options: `include | exclude | skip`, each accepting an array of strings:
 
-```js
-// .storybook/test-runner.js
-module.exports = {
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
   tags: {
     include: [], // string array, e.g. ['test-only']
     exclude: [], // string array, e.g. ['design', 'docs-only']
     skip: [], // string array, e.g. ['design']
   },
 };
+export default config;
 ```
 
 `tags` are used for filtering your tests. Learn more [here](#filtering-tests-experimental).
@@ -681,7 +715,7 @@ While running tests using the hooks, you might want to get information from a st
 
 Suppose your story looks like this:
 
-```js
+```ts
 // ./Button.stories.ts
 
 export const Primary = {
@@ -693,11 +727,11 @@ export const Primary = {
 
 You can access its context in a test hook like so:
 
-```js
-// .storybook/test-runner.js
-const { getStoryContext } = require('@storybook/test-runner');
+```ts
+// .storybook/test-runner.ts
+import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
 
-module.exports = {
+const config: TestRunnerConfig = {
   async postRender(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const storyContext = await getStoryContext(page, context);
@@ -708,6 +742,7 @@ module.exports = {
     }
   },
 };
+export default config;
 ```
 
 It's useful for skipping or enhancing use cases like [image snapshot testing](#image-snapshot), [accessibility testing](#accessibility-testing) and more.
@@ -716,11 +751,11 @@ It's useful for skipping or enhancing use cases like [image snapshot testing](#i
 
 The `waitForPageReady` utility is useful when you're executing [image snapshot testing](#image-snapshot) with the test-runner. It encapsulates a few assertions to make sure the browser has finished downloading assets.
 
-```js
-// .storybook/test-runner.js
-const { waitForPageReady } = require('@storybook/test-runner');
+```ts
+// .storybook/test-runner.ts
+import { TestRunnerConfig, waitForPageReady } from '@storybook/test-runner';
 
-module.exports = {
+const config: TestRunnerConfig = {
   async postRender(page, context) {
     // use the test-runner utility to wait for fonts to load, etc.
     await waitForPageReady(page);
@@ -728,13 +763,14 @@ module.exports = {
     // by now, we know that the page is fully loaded
   },
 };
+export default config;
 ```
 
 #### StorybookTestRunner user agent
 
 The test-runner adds a `StorybookTestRunner` entry to the browser's user agent. You can use it to determine if a story is rendering in the context of the test runner. This might be useful if you want to disable certain features in your stories when running in the test runner, though it's likely an edge case.
 
-```js
+```ts
 // At the render level, useful for dynamically rendering something based on the test-runner
 export const MyStory = {
   render: () => {
@@ -764,15 +800,15 @@ Below you will find recipes that use both the hooks and the utility functions to
 
 You can use [Playwright's Page viewport utility](https://playwright.dev/docs/api/class-page#page-set-viewport-size) to programatically change the viewport size of your test. If you use [@storybook/addon-viewports](https://storybook.js.org/addons/@storybook/addon-viewport), you can reuse its parameters and make sure that the tests match in configuration.
 
-```js
-// .storybook/test-runner.js
-const { getStoryContext } = require('@storybook/test-runner');
-const { MINIMAL_VIEWPORTS } = require('@storybook/addon-viewport');
+```ts
+// .storybook/test-runner.ts
+import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
+import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 
 const DEFAULT_VIEWPORT_SIZE = { width: 1280, height: 720 };
 
-module.exports = {
-  async preRender(page, story) {
+const config: TestRunnerConfig = {
+  async preVisit(page, story) {
     const context = await getStoryContext(page, story);
     const viewportName = context.parameters?.viewport?.defaultViewport;
     const viewportParameter = MINIMAL_VIEWPORTS[viewportName];
@@ -793,6 +829,7 @@ module.exports = {
     }
   },
 };
+export default config;
 ```
 
 ### Accessibility testing
@@ -800,17 +837,17 @@ module.exports = {
 You can install `axe-playwright` and use it in tandem with the test-runner to test the accessibility of your components.
 If you use [`@storybook/addon-a11y`](https://storybook.js.org/addons/@storybook/addon-a11y), you can reuse its parameters and make sure that the tests match in configuration, both in the accessibility addon panel and the test-runner.
 
-```js
-// .storybook/test-runner.js
-const { getStoryContext } = require('@storybook/test-runner');
-const { injectAxe, checkA11y, configureAxe } = require('axe-playwright');
+```ts
+// .storybook/test-runner.ts
+import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
+import { injectAxe, checkA11y, configureAxe } from 'axe-playwright';
 
-module.exports = {
-  async preRender(page, context) {
+const config: TestRunnerConfig = {
+  async preVisit(page, context) {
     // Inject Axe utilities in the page before the story renders
     await injectAxe(page);
   },
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const storyContext = await getStoryContext(page, context);
 
@@ -835,27 +872,31 @@ module.exports = {
     });
   },
 };
+export default config;
 ```
 
 ### DOM snapshot (HTML)
 
 You can use [Playwright's built in APIs](https://playwright.dev/docs/test-snapshots) for DOM snapshot testing:
 
-```js
-// .storybook/test-runner.js
-module.exports = {
-  async postRender(page, context) {
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  async postVisit(page, context) {
     // the #storybook-root element wraps the story. In Storybook 6.x, the selector is #root
     const elementHandler = await page.$('#storybook-root');
     const innerHTML = await elementHandler.innerHTML();
     expect(innerHTML).toMatchSnapshot();
   },
 };
+export default config;
 ```
 
 When running with `--stories-json`, tests get generated in a temporary folder and snapshots get stored alongside. You will need to `--eject` and configure a custom [`snapshotResolver`](https://jestjs.io/docs/configuration#snapshotresolver-string) to store them elsewhere, e.g. in your working directory:
 
-```js
+```ts
 // ./test-runner-jest.config.js
 const { getJestConfig } = require('@storybook/test-runner');
 
@@ -865,13 +906,13 @@ const testRunnerConfig = getJestConfig();
  * @type {import('@jest/types').Config.InitialOptions}
  */
 module.exports = {
-  // The default configuration comes from @storybook/test-runner
+  // The default Jest configuration comes from @storybook/test-runner
   ...testRunnerConfig,
   snapshotResolver: './snapshot-resolver.js',
 };
 ```
 
-```js
+```ts
 // ./snapshot-resolver.js
 const path = require('path');
 
@@ -892,18 +933,18 @@ module.exports = {
 
 Here's a slightly different recipe for image snapshot testing:
 
-```js
-// .storybook/test-runner.js
-const { waitForPageReady } = require('@storybook/test-runner');
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+```ts
+// .storybook/test-runner.ts
+import { TestRunnerConfig, waitForPageReady } from '@storybook/test-runner';
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
 const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
 
-module.exports = {
+const config: TestRunnerConfig = {
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // use the test-runner utility to wait for fonts to load, etc.
     await waitForPageReady(page);
 
@@ -916,11 +957,14 @@ module.exports = {
     });
   },
 };
+export default config;
 ```
 
-There is also an exported `TestRunnerConfig` type available for TypeScript users.
-
 ## Troubleshooting
+
+#### React Native support
+
+The test-runner is web based and therefore won't work with `@storybook/react-native` directly. However, if you use the [React Native Web Storybook Addon](https://storybook.js.org/addons/%2540storybook/addon-react-native-web), you can run the test-runner against the web-based Storybook generated with that addon. In that case, things would work the same way.
 
 #### The error output in the CLI is too short
 

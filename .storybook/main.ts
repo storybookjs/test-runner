@@ -33,10 +33,6 @@ const addons = [
 const config: StorybookConfig = {
   stories,
   addons,
-  features: {
-    storyStoreV7: process.env.STORY_STORE_V7 === 'false' ? false : true,
-    buildStoriesJson: true,
-  },
   core: {
     disableTelemetry: true,
   },
