@@ -14,7 +14,7 @@ const makeTest = ({
   shouldSkip: boolean;
   metaOrStoryPlay: boolean;
 }): t.Statement => {
-  const result: any = testPrefixer({
+  const result = testPrefixer({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
     id: t.stringLiteral(entry.id),

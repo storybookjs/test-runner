@@ -5,10 +5,10 @@ import { StoriesEntry } from '@storybook/types';
 
 export const getStorybookMetadata = () => {
   const workingDir = getProjectRoot();
-  const configDir = process.env.STORYBOOK_CONFIG_DIR || '';
+  const configDir = process.env.STORYBOOK_CONFIG_DIR || '.storybook';
 
   const main = getStorybookMain(configDir);
-  const normalizedStoriesEntries = normalizeStories(main?.stories as StoriesEntry[], {
+  const normalizedStoriesEntries = normalizeStories(main.stories as StoriesEntry[], {
     configDir,
     workingDir,
   }).map((specifier) => ({
@@ -22,7 +22,7 @@ export const getStorybookMetadata = () => {
     .join(';');
 
   // @ts-ignore -- this is added in @storybook/core-common@6.5, which we don't depend on
-  const lazyCompilation = !!main?.core?.builder?.options?.lazyCompilation;
+  const lazyCompilation = !!main.core?.builder?.options?.lazyCompilation;
 
   return {
     configDir,

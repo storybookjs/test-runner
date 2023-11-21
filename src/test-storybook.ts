@@ -178,7 +178,7 @@ async function executeJestPlaywright(args: JestOptions) {
   await jest.run(argv);
 }
 
-async function checkStorybook(url: any) {
+async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'GET', headers });

@@ -48,11 +48,11 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
     );
   }
 
-  const testRunnerConfig = getTestRunnerConfig();
+  const testRunnerConfig = getTestRunnerConfig() || {};
   if (testRunnerConfig?.prepare) {
     await testRunnerConfig.prepare({ page, browserContext, testRunnerConfig });
   } else {
-    if (testRunnerConfig) await defaultPrepare({ page, browserContext, testRunnerConfig });
+    await defaultPrepare({ page, browserContext, testRunnerConfig });
   }
 
   // if we ever want to log something from the browser to node

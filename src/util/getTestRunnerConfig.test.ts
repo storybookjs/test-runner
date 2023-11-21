@@ -1,6 +1,5 @@
-import { serverRequire } from '@storybook/core-common';
 import { TestRunnerConfig } from '../playwright/hooks';
-import { getTestRunnerConfig, loaded } from './getTestRunnerConfig';
+import { getTestRunnerConfig } from './getTestRunnerConfig';
 import { join, resolve } from 'path';
 
 const testRunnerConfig: TestRunnerConfig = {
@@ -43,7 +42,6 @@ describe('getTestRunnerConfig', () => {
     );
 
     const result = getTestRunnerConfig(configDir);
-    console.log(result);
 
     expect(result).toEqual(testRunnerConfig);
     expect(require('@storybook/core-common').serverRequire).toHaveBeenCalledWith(

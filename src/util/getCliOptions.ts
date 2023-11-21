@@ -54,20 +54,19 @@ export const getCliOptions = (): CliOptions => {
     jestOptions: process.argv.splice(0, 2),
   };
 
-  const finalOptions = Object.keys(allOptions).reduce((acc: CliOptions, key: string) => {
-    if (STORYBOOK_RUNNER_COMMANDS.includes(key as StorybookRunnerCommand)) {
-      copyOption(
-        acc.runnerOptions,
-        key as StorybookRunnerCommand,
-        allOptions[key as StorybookRunnerCommand]
-      );
+  const finalOptions = Object.keys(allOptions).reduce((acc: CliOptions, _key: string) => {
+    let key = _key as StorybookRunnerCommand;
+    let optionValue = allOptions[key];
+
+    if (STORYBOOK_RUNNER_COMMANDS.includes(key)) {
+      copyOption(acc.runnerOptions, key, optionValue);
     } else {
-      if (allOptions[key as StorybookRunnerCommand] === true) {
+      if (optionValue === true) {
         acc.jestOptions.push(`--${key}`);
-      } else if (allOptions[key as StorybookRunnerCommand] === false) {
+      } else if (optionValue === false) {
         acc.jestOptions.push(`--no-${key}`);
       } else {
-        acc.jestOptions.push(`--${key}="${allOptions[key as StorybookRunnerCommand]}"`);
+        acc.jestOptions.push(`--${key}`, `${optionValue}`);
       }
     }
 

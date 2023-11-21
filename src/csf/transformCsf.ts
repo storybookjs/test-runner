@@ -4,6 +4,7 @@ import * as t from '@babel/types';
 import generate from '@babel/generator';
 import { toId, storyNameFromExport } from '@storybook/csf';
 import dedent from 'ts-dedent';
+
 import { getTagOptions } from '../util/getTagOptions';
 
 export interface TestContext {
@@ -16,10 +17,10 @@ type TemplateResult = t.Statement | t.Statement[];
 type FilePrefixer = () => TemplateResult;
 export type TestPrefixer = (context: TestContext) => TemplateResult;
 
-interface TransformOptions {
+export interface TransformOptions {
   clearBody?: boolean;
   beforeEachPrefixer?: FilePrefixer;
-  testPrefixer?: TestPrefixer;
+  testPrefixer: TestPrefixer;
   insertTestIfEmpty?: boolean;
   makeTitle?: (userTitle: string) => string;
   includeTags?: string[];
@@ -27,12 +28,7 @@ interface TransformOptions {
   skipTags?: string[];
 }
 
-export const prefixFunction = (
-  key: string,
-  title: string,
-  input: t.Expression,
-  testPrefixer?: TestPrefixer
-) => {
+export const prefixFunction = (key: string, title: string, testPrefixer: TestPrefixer) => {
   const name = storyNameFromExport(key);
   const context: TestContext = {
     storyExport: t.identifier(key),
@@ -41,20 +37,9 @@ export const prefixFunction = (
     id: t.stringLiteral(toId(title, name)),
   };
 
-  let result = input;
-  if (testPrefixer) {
-    const prefixResult = makeArray(testPrefixer(context));
-    const stmt = prefixResult[1] as t.ExpressionStatement;
-    if (stmt) {
-      result = stmt.expression;
-    }
-  }
-
-  if (!result) {
-    result = t.nullLiteral();
-  }
-
-  return result;
+  const result = makeArray(testPrefixer(context));
+  const stmt = result[1] as t.ExpressionStatement;
+  return stmt.expression;
 };
 
 const makePlayTest = ({
@@ -66,15 +51,15 @@ const makePlayTest = ({
 }: {
   key: string;
   title: string;
-  metaOrStoryPlay?: t.Node;
-  testPrefix?: TestPrefixer;
+  metaOrStoryPlay?: boolean;
+  testPrefix: TestPrefixer;
   shouldSkip?: boolean;
 }): t.Statement[] => {
   return [
     t.expressionStatement(
       t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
         t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
-        prefixFunction(key, title, metaOrStoryPlay as t.Expression, testPrefix),
+        prefixFunction(key, title, testPrefix),
       ])
     ),
   ];
@@ -111,7 +96,7 @@ export const transformCsf = (
     beforeEachPrefixer,
     insertTestIfEmpty,
     makeTitle,
-  }: TransformOptions = {}
+  }: TransformOptions
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
@@ -153,7 +138,7 @@ export const transformCsf = (
           ...makePlayTest({
             key,
             title,
-            metaOrStoryPlay: storyAnnotations[key]?.play,
+            metaOrStoryPlay: !!storyAnnotations[key]?.play,
             testPrefix: testPrefixer,
             shouldSkip,
           }),

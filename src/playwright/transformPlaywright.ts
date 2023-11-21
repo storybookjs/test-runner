@@ -69,7 +69,7 @@ export const testPrefixer = template(
   {
     plugins: ['jsx'],
   }
-) as any as TestPrefixer;
+) as unknown as TestPrefixer;
 
 const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();

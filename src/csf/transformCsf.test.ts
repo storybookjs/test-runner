@@ -1,7 +1,6 @@
-import { prefixFunction, transformCsf } from './transformCsf';
+import { TestPrefixer, TransformOptions, transformCsf } from './transformCsf';
 import { testPrefixer } from '../playwright/transformPlaywright';
 import template from '@babel/template';
-import * as t from '@babel/types';
 
 describe('transformCsf', () => {
   it('inserts a no-op test if there are no stories', () => {
@@ -12,7 +11,7 @@ describe('transformCsf', () => {
     `;
     const expectedCode = `describe.skip('Button', () => { it('no-op', () => {}) });`;
 
-    const result = transformCsf(csfCode, { insertTestIfEmpty: true });
+    const result = transformCsf(csfCode, { insertTestIfEmpty: true } as TransformOptions);
 
     expect(result).toEqual(expectedCode);
   });
@@ -99,35 +98,12 @@ describe('transformCsf', () => {
       const beforeEachBlock = template.statement`beforeEach(() => { ${logStatement()} })`;
       return beforeEachBlock();
     };
-    const result = transformCsf(code, { beforeEachPrefixer });
+    const testPrefixer = template(`
+      console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
+      async () => {}`) as unknown as TestPrefixer;
+
+    const result = transformCsf(code, { beforeEachPrefixer, testPrefixer } as TransformOptions);
 
     expect(result).toMatchSnapshot();
-  });
-});
-
-describe('prefixFunction', () => {
-  it('returns input expression if testPrefixer is not provided', () => {
-    const key = 'key';
-    const title = 'title';
-    const input = t.identifier('input');
-    const result = prefixFunction(key, title, input);
-    expect(result).toEqual(input);
-  });
-
-  it('returns null literal if testPrefixer returns undefined', () => {
-    const key = 'key';
-    const title = 'title';
-    const input = t.identifier('input');
-    const result = prefixFunction(key, title, input, testPrefixer);
-    expect(result).toMatchSnapshot();
-  });
-
-  it('returns expression from testPrefixer if it returns a valid expression', () => {
-    const key = 'key';
-    const title = 'title';
-    const input = t.identifier('input');
-    const testPrefixer = () => t.expressionStatement(t.identifier('prefix'));
-    const result = prefixFunction(key, title, input, testPrefixer);
-    expect(result).toEqual(t.identifier('input'));
   });
 });
