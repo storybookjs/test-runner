@@ -9,12 +9,12 @@ jobs:
     if: ${{ github.event.label.name == 'stress test' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js 16.x
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: .nvmrc
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
@@ -23,4 +23,4 @@ jobs:
         run: |
           yarn build
           yarn generate-dynamic-stories
-          STORY_STORE_V7=true STRESS_TEST=true yarn test-storybook:ci
+          STRESS_TEST=true yarn test-storybook:ci
