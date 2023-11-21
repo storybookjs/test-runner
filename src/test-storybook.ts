@@ -239,7 +239,7 @@ async function getIndexJson(url: string) {
 async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
-    const indexJson = await getIndexJson('url');
+    const indexJson = await getIndexJson(url);
     const titleIdToTest = transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
