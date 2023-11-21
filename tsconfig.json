@@ -15,7 +15,9 @@
     "skipLibCheck": true,
     "target": "es2020",
     "types": ["jest", "node"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmit": true,
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]

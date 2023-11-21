@@ -37,12 +37,8 @@ process.on('unhandledRejection', (err) => {
 
 const log = (message: string) => console.log(`[test-storybook] ${message}`);
 const warn = (message: string) => console.warn('\x1b[33m%s\x1b[0m', `[test-storybook] ${message}`);
-const error = (err: { message: any; stack: any }) => {
-  if (err instanceof Error) {
-    console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
-  } else {
-    console.error(`\x1b[31m[test-storybook]\x1b[0m ${err}`);
-  }
+const error = (err: Error) => {
+  console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
 };
 
 // Clean up tmp files globally in case of control-c
@@ -182,7 +178,7 @@ async function executeJestPlaywright(args: JestOptions) {
   await jest.run(argv);
 }
 
-async function checkStorybook(url: any) {
+async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'GET', headers });
@@ -252,7 +248,12 @@ async function getIndexTempDir(url: string) {
       fs.writeFileSync(tmpFile, test as string);
     });
   } catch (err) {
-    error(err);
+    if (err instanceof Error) {
+      error(err);
+    } else {
+      error(new Error(JSON.stringify(err)));
+    }
+
     process.exit(1);
   }
   return tmpDir;

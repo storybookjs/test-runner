@@ -3,7 +3,11 @@ import { defineConfig } from 'tsup';
 export default defineConfig([
   {
     clean: true,
-    entry: ['./src/**/!(*.{d,test}).{js,jsx,ts,tsx}'],
+    entry: [
+      './src/**/*.{js,jsx,ts,tsx}',
+      '!./src/**/*.d.{js,jsx,ts,tsx}',
+      '!./src/**/*test.{js,jsx,ts,tsx}',
+    ],
     format: ['cjs', 'esm'],
     splitting: false,
     dts: true,

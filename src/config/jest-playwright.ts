@@ -85,7 +85,7 @@ export const getJestConfig = () => {
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {
-        browsers: TEST_BROWSERS.split(',')
+        browsers: TEST_BROWSERS?.split(',')
           .map((p) => p.trim().toLowerCase())
           .filter(Boolean),
         collectCoverage: STORYBOOK_COLLECT_COVERAGE === 'true',

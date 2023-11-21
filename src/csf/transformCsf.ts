@@ -4,6 +4,7 @@ import * as t from '@babel/types';
 import generate from '@babel/generator';
 import { toId, storyNameFromExport } from '@storybook/csf';
 import dedent from 'ts-dedent';
+
 import { getTagOptions } from '../util/getTagOptions';
 
 export interface TestContext {
@@ -16,10 +17,10 @@ type TemplateResult = t.Statement | t.Statement[];
 type FilePrefixer = () => TemplateResult;
 export type TestPrefixer = (context: TestContext) => TemplateResult;
 
-interface TransformOptions {
+export interface TransformOptions {
   clearBody?: boolean;
   beforeEachPrefixer?: FilePrefixer;
-  testPrefixer?: TestPrefixer;
+  testPrefixer: TestPrefixer;
   insertTestIfEmpty?: boolean;
   makeTitle?: (userTitle: string) => string;
   includeTags?: string[];
@@ -27,12 +28,7 @@ interface TransformOptions {
   skipTags?: string[];
 }
 
-const prefixFunction = (
-  key: string,
-  title: string,
-  input: t.Expression,
-  testPrefixer?: TestPrefixer
-) => {
+export const prefixFunction = (key: string, title: string, testPrefixer: TestPrefixer) => {
   const name = storyNameFromExport(key);
   const context: TestContext = {
     storyExport: t.identifier(key),
@@ -55,15 +51,15 @@ const makePlayTest = ({
 }: {
   key: string;
   title: string;
-  metaOrStoryPlay: t.Node;
-  testPrefix?: TestPrefixer;
+  metaOrStoryPlay?: boolean;
+  testPrefix: TestPrefixer;
   shouldSkip?: boolean;
 }): t.Statement[] => {
   return [
     t.expressionStatement(
       t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
         t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
-        prefixFunction(key, title, metaOrStoryPlay as t.Expression, testPrefix),
+        prefixFunction(key, title, testPrefix),
       ])
     ),
   ];
@@ -100,15 +96,15 @@ export const transformCsf = (
     beforeEachPrefixer,
     insertTestIfEmpty,
     makeTitle,
-  }: TransformOptions = {}
+  }: TransformOptions
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
-  const csf = loadCsf(code, { makeTitle });
+  const csf = loadCsf(code, { makeTitle: makeTitle || ((userTitle: string) => userTitle) });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
-  const title = csf.meta.title;
+  const title = csf.meta?.title;
 
   const storyAnnotations = storyExports.reduce((acc, key) => {
     const annotations = csf._storyAnnotations[key];
@@ -117,7 +113,7 @@ export const transformCsf = (
       acc[key].play = annotations.play;
     }
 
-    acc[key].tags = csf._stories[key].tags || csf.meta.tags || [];
+    acc[key].tags = csf._stories[key].tags || csf.meta?.tags || [];
     return acc;
   }, {} as Record<string, { play?: t.Node; tags?: string[] }>);
 
@@ -126,40 +122,42 @@ export const transformCsf = (
       // If includeTags is passed, check if the story has any of them - else include by default
       const isIncluded =
         includeTags.length === 0 ||
-        includeTags.some((tag) => storyAnnotations[key].tags.includes(tag));
+        includeTags.some((tag) => storyAnnotations[key].tags?.includes(tag));
 
       // If excludeTags is passed, check if the story does not have any of them
-      const isNotExcluded = excludeTags.every((tag) => !storyAnnotations[key].tags.includes(tag));
+      const isNotExcluded = excludeTags.every((tag) => !storyAnnotations[key].tags?.includes(tag));
 
       return isIncluded && isNotExcluded;
     })
     .map((key: string) => {
       let tests: t.Statement[] = [];
-      const shouldSkip = skipTags.some((tag) => storyAnnotations[key].tags.includes(tag));
-      tests = [
-        ...tests,
-        ...makePlayTest({
-          key,
-          title,
-          metaOrStoryPlay: storyAnnotations[key].play,
-          testPrefix: testPrefixer,
-          shouldSkip,
-        }),
-      ];
+      const shouldSkip = skipTags.some((tag) => storyAnnotations[key].tags?.includes(tag));
+      if (title) {
+        tests = [
+          ...tests,
+          ...makePlayTest({
+            key,
+            title,
+            metaOrStoryPlay: !!storyAnnotations[key]?.play,
+            testPrefix: testPrefixer,
+            shouldSkip,
+          }),
+        ];
+      }
 
       if (tests.length) {
         return makeDescribe(key, tests);
       }
       return null;
     })
-    .filter(Boolean);
+    .filter(Boolean) as babel.types.Statement[];
 
   let result = '';
 
   if (!clearBody) result = `${result}${code}\n`;
   if (allTests.length) {
     const describe = makeDescribe(
-      csf.meta.title,
+      csf.meta?.title as string,
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
     ) as babel.types.Node;
@@ -173,7 +171,7 @@ export const transformCsf = (
   } else if (insertTestIfEmpty) {
     // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
     // so we have to skip the describe to achieve a "excluded test" experience.
-    result = `describe.skip('${csf.meta.title}', () => { it('no-op', () => {}) });`;
+    result = `describe.skip('${csf.meta?.title}', () => { it('no-op', () => {}) });`;
   }
   return result;
 };
