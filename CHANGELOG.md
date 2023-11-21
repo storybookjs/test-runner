@@ -1,3 +1,22 @@
+# v0.15.2 (Tue Nov 21 2023)
+
+#### 🐛 Bug Fix
+
+- Remove Node 14 from engines field [#353](https://github.com/storybookjs/test-runner/pull/353) ([@legobeat](https://github.com/legobeat) [@yannbf](https://github.com/yannbf))
+- Docs: Add react native remark to troubleshooting section [#398](https://github.com/storybookjs/test-runner/pull/398) ([@yannbf](https://github.com/yannbf))
+- Fix "Browser has been closed" crash on uncaught page errors [#397](https://github.com/storybookjs/test-runner/pull/397) ([@yannbf](https://github.com/yannbf))
+- Clarify difference between skipped and excluded tags [#396](https://github.com/storybookjs/test-runner/pull/396) ([@IanVS](https://github.com/IanVS) [@yannbf](https://github.com/yannbf))
+- Refactor: Rename "render" hooks to "visit" hooks [#394](https://github.com/storybookjs/test-runner/pull/394) ([@yannbf](https://github.com/yannbf))
+- Docs: Update tags documentation [#393](https://github.com/storybookjs/test-runner/pull/393) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- [@legobeat](https://github.com/legobeat)
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.15.1 (Thu Nov 16 2023)
 
 #### 🐛 Bug Fix
