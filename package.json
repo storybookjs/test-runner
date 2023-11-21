@@ -1,6 +1,6 @@
 {
   "name": "@storybook/test-runner",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "Test runner for Storybook stories",
   "keywords": [
     "storybook-addons",
