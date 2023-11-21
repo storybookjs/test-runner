@@ -46,6 +46,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
+  - [React Native support](#react-native-support)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
   - [The test runner reports "No tests found" running on a Windows CI](#the-test-runner-reports-no-tests-found-running-on-a-windows-ci)
@@ -960,6 +961,10 @@ export default config;
 ```
 
 ## Troubleshooting
+
+#### React Native support
+
+The test-runner is web based and therefore won't work with `@storybook/react-native` directly. However, if you use the [React Native Web Storybook Addon](https://storybook.js.org/addons/%2540storybook/addon-react-native-web), you can run the test-runner against the web-based Storybook generated with that addon. In that case, things would work the same way.
 
 #### The error output in the CLI is too short
 
