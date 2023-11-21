@@ -66,17 +66,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "A"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--a",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -84,8 +79,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--a"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -96,6 +91,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -120,17 +116,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--b",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -138,8 +129,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--b"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -150,6 +141,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -192,17 +184,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--b",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -210,8 +197,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--b"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -222,6 +209,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -264,17 +252,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "A"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--a",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -282,8 +265,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--a"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -294,6 +277,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -318,17 +302,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--b",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -336,8 +315,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--b"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -348,6 +327,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -399,17 +379,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--b",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -417,8 +392,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--b"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -429,6 +404,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -453,17 +429,12 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "C"
                   };
-                  page.on('pageerror', err => {
-                    page.evaluate(({
-                      id,
-                      err
-                    }) => __throwError(id, err), {
-                      id: "example-foo-bar--c",
-                      err: err.message
-                    });
-                  });
-                  if (globalThis.__sbPreRender) {
-                    await globalThis.__sbPreRender(page, context);
+                  const onPageError = err => {
+                    globalThis.__sbThrowUncaughtPageError(err, context);
+                  };
+                  page.on('pageerror', onPageError);
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
                   }
                   const result = await page.evaluate(({
                     id,
@@ -471,8 +442,8 @@ describe('Playwright', () => {
                   }) => __test(id, hasPlayFn), {
                     id: "example-foo-bar--c"
                   });
-                  if (globalThis.__sbPostRender) {
-                    await globalThis.__sbPostRender(page, context);
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
                   }
                   if (globalThis.__sbCollectCoverage) {
                     const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -483,6 +454,7 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
+                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -539,17 +511,12 @@ describe('Playwright', () => {
                   title: "Example/foo/bar",
                   name: "A"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-foo-bar--a",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -557,8 +524,8 @@ describe('Playwright', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-foo-bar--a"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -569,6 +536,7 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -609,17 +577,12 @@ describe('Playwright', () => {
                   title: "Example/foo/bar",
                   name: "A"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-foo-bar--a",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -627,8 +590,8 @@ describe('Playwright', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-foo-bar--a"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -639,6 +602,7 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -679,17 +643,12 @@ describe('Playwright', () => {
                   title: "Example/Header",
                   name: "A"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--a",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -697,8 +656,8 @@ describe('Playwright', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--a"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -709,6 +668,7 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {

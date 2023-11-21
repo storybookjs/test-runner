@@ -1,6 +1,6 @@
 const { getJestConfig } = require('@storybook/test-runner');
 
-// The default configuration comes from @storybook/test-runner
+// The default Jest configuration comes from @storybook/test-runner
 const testRunnerConfig = getJestConfig();
 
 /**

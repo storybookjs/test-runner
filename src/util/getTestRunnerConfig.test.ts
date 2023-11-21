@@ -42,7 +42,6 @@ describe('getTestRunnerConfig', () => {
     );
 
     const result = getTestRunnerConfig(configDir);
-    console.log(result);
 
     expect(result).toEqual(testRunnerConfig);
     expect(require('@storybook/core-common').serverRequire).toHaveBeenCalledWith(

@@ -20,31 +20,35 @@ export const testPrefixer: TestPrefixer = (context) => {
     async () => {
       const testFn = async() => {
         const context = { id: %%id%%, title: %%title%%, name: %%name%% };
+        
+        const onPageError = (err) => {
+          globalThis.__sbThrowUncaughtPageError(err, context);
+        }
 
-        page.on('pageerror', (err) => {
-          page.evaluate(({ id, err }) => __throwError(id, err), { id: %%id%%, err: err.message });
-        });
+        page.on('pageerror', onPageError);
 
-        if(globalThis.__sbPreRender) {
-          await globalThis.__sbPreRender(page, context);
+        if(globalThis.__sbPreVisit) {
+          await globalThis.__sbPreVisit(page, context);
         }
 
         const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
           id: %%id%%,
         });
   
-        if(globalThis.__sbPostRender) {
-          await globalThis.__sbPostRender(page, context);
+        if(globalThis.__sbPostVisit) {
+          await globalThis.__sbPostVisit(page, context);
         }
 
         if(globalThis.__sbCollectCoverage) {
-          const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+        const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
           if (!isCoverageSetupCorrectly) {
             throw new Error(\`${coverageErrorMessage}\`);
           }
 
           await jestPlaywright.saveCoverage(page);
         }
+
+        page.off('pageerror', onPageError);
 
         return result;
       };
@@ -66,12 +70,7 @@ export const testPrefixer: TestPrefixer = (context) => {
     {
       plugins: ['jsx'],
     }
-  )({
-    id: context.id,
-    title: context.title,
-    name: context.name,
-    storyExport: context.storyExport,
-  });
+  )({ ...context });
 };
 
 const makeTitleFactory = (filename: string) => {

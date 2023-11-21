@@ -20,6 +20,7 @@ describe('getJestConfig', () => {
         'jest-playwright': {
           browsers: undefined,
           collectCoverage: false,
+          exitOnPageError: false,
         },
       },
       watchPlugins: [

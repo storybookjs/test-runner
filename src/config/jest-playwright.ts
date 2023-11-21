@@ -90,6 +90,7 @@ export const getJestConfig = (): Config.InitialOptions => {
           .map((p) => p.trim().toLowerCase())
           .filter(Boolean),
         collectCoverage: STORYBOOK_COLLECT_COVERAGE === 'true',
+        exitOnPageError: false,
       },
     },
     watchPlugins: [

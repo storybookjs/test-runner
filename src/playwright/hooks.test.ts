@@ -1,8 +1,8 @@
 import { Page } from 'playwright-core';
 import {
   getStoryContext,
-  setPreRender,
-  setPostRender,
+  setPreVisit,
+  setPostVisit,
   TestRunnerConfig,
   waitForPageReady,
 } from './hooks';
@@ -10,19 +10,19 @@ import {
 type MockPage = Page & { evaluate: jest.Mock };
 
 describe('test-runner', () => {
-  describe('setPreRender', () => {
-    it('sets the preRender function', () => {
-      const preRender = jest.fn();
-      setPreRender(preRender);
-      expect(globalThis.__sbPreRender).toBe(preRender);
+  describe('setPreVisit', () => {
+    it('sets the preVisit function', () => {
+      const preVisit = jest.fn();
+      setPreVisit(preVisit);
+      expect(globalThis.__sbPreVisit).toBe(preVisit);
     });
   });
 
-  describe('setPostRender', () => {
-    it('sets the postRender function', () => {
-      const postRender = jest.fn();
-      setPostRender(postRender);
-      expect(globalThis.__sbPostRender).toBe(postRender);
+  describe('setPostVisit', () => {
+    it('sets the postVisit function', () => {
+      const postVisit = jest.fn();
+      setPostVisit(postVisit);
+      expect(globalThis.__sbPostVisit).toBe(postVisit);
     });
   });
 

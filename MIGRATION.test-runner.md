@@ -9,7 +9,7 @@
   - [Storyshots x Test Runner Comparison table](#storyshots-x-test-runner-comparison-table)
   - [Migration Steps](#migration-steps)
     - [Replacing `@storybook/addon-storyshots` with `@storybook/test-runner`:](#replacing-storybookaddon-storyshots-with-storybooktest-runner)
-    - [Migrating storyshots features](#migrating-storyshots-features)
+    - [Migrating Storyshots features](#migrating-storyshots-features)
       - [Smoke testing](#smoke-testing)
       - [Accessibility testing](#accessibility-testing)
       - [Image snapshot testing](#image-snapshot-testing)
@@ -135,7 +135,7 @@ import { getJestConfig } from '@storybook/test-runner';
 const defaultConfig = getJestConfig();
 
 const config = {
-  // The default configuration comes from @storybook/test-runner
+  // The default Jest configuration comes from @storybook/test-runner
   ...defaultConfig,
   snapshotResolver: './snapshot-resolver.js',
 };

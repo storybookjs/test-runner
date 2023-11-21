@@ -28,27 +28,6 @@ const defaultPrepare = async ({ page, browserContext, testRunnerConfig }: Prepar
   });
 };
 
-const sanitizeURL = (url: string) => {
-  let finalURL = url;
-  // prepend URL protocol if not there
-  if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
-    finalURL = `http://${finalURL}`;
-  }
-
-  // remove iframe.html if present
-  finalURL = finalURL.replace(/iframe.html\s*$/, '');
-
-  // remove index.html if present
-  finalURL = finalURL.replace(/index.html\s*$/, '');
-
-  // add forward slash at the end if not there
-  if (!finalURL.endsWith('/')) {
-    finalURL = `${finalURL}/`;
-  }
-
-  return finalURL;
-};
-
 export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
@@ -58,7 +37,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
 
-  const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
+  const referenceURL = process.env.REFERENCE_URL;
   const debugPrintLimit = process.env.DEBUG_PRINT_LIMIT
     ? Number(process.env.DEBUG_PRINT_LIMIT)
     : 1000;
@@ -69,10 +48,12 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
     );
   }
 
-  const testRunnerConfig = getTestRunnerConfig();
+  const testRunnerConfig = getTestRunnerConfig() || {};
   if (testRunnerConfig?.prepare) {
     await testRunnerConfig.prepare({ page, browserContext, testRunnerConfig });
-  } else if (testRunnerConfig) await defaultPrepare({ page, browserContext, testRunnerConfig });
+  } else {
+    await defaultPrepare({ page, browserContext, testRunnerConfig });
+  }
 
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
