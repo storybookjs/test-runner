@@ -12,7 +12,7 @@ jobs:
       - name: Prepare repository
         run: git fetch --unshallow --tags
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
