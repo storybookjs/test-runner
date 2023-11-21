@@ -18,6 +18,7 @@ import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 import { glob } from 'glob';
+import { TestRunnerConfig } from './playwright/hooks';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -35,6 +36,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const log = (message: string) => console.log(`[test-storybook] ${message}`);
+const warn = (message: string) => console.warn('\x1b[33m%s\x1b[0m', `[test-storybook] ${message}`);
 const error = (err: { message: any; stack: any }) => {
   if (err instanceof Error) {
     console.error(`\x1b[31m[test-storybook]\x1b[0m ${err.message} \n\n${err.stack}`);
@@ -183,7 +185,7 @@ async function executeJestPlaywright(args: JestOptions) {
 async function checkStorybook(url: any) {
   try {
     const headers = await getHttpHeaders(url);
-    const res = await fetch(url, { method: 'HEAD', headers });
+    const res = await fetch(url, { method: 'GET', headers });
     if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
   } catch (e) {
     console.error(
@@ -274,6 +276,17 @@ function ejectConfiguration() {
   log('Configuration file successfully copied as test-runner-jest.config.js');
 }
 
+function warnOnce(message: string) {
+  let warned = false;
+  return () => {
+    if (!warned) {
+      // here we specify the ansi code for yellow as jest is stripping the default color from console.warn
+      warn(message);
+      warned = true;
+    }
+  };
+}
+
 const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
 
@@ -284,7 +297,32 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || {};
+  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) || ({} as TestRunnerConfig);
+
+  if (testRunnerConfig.preVisit && testRunnerConfig.preRender) {
+    throw new Error(
+      'You cannot use both preVisit and preRender hooks in your test-runner config file. Please use preVisit instead.'
+    );
+  }
+
+  if (testRunnerConfig.postVisit && testRunnerConfig.postRender) {
+    throw new Error(
+      'You cannot use both postVisit and postRender hooks in your test-runner config file. Please use postVisit instead.'
+    );
+  }
+
+  // TODO: remove preRender and postRender hooks likely in 0.20.0
+  if (testRunnerConfig.preRender) {
+    warnOnce(
+      'The "preRender" hook is deprecated and will be removed in later versions. Please use "preVisit" instead in your test-runner config file.'
+    )();
+  }
+  if (testRunnerConfig.postRender) {
+    warnOnce(
+      'The "postRender" hook is deprecated and will be removed in later versions. Please use "postVisit" instead in your test-runner config file.'
+    )();
+  }
+
   if (testRunnerConfig.getHttpHeaders) {
     getHttpHeaders = testRunnerConfig.getHttpHeaders;
   }
@@ -301,6 +339,18 @@ const main = async () => {
 
   if (!isWatchMode && runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
+  }
+
+  if (runnerOptions.includeTags) {
+    process.env.STORYBOOK_INCLUDE_TAGS = runnerOptions.includeTags;
+  }
+
+  if (runnerOptions.excludeTags) {
+    process.env.STORYBOOK_EXCLUDE_TAGS = runnerOptions.excludeTags;
+  }
+
+  if (runnerOptions.skipTags) {
+    process.env.STORYBOOK_SKIP_TAGS = runnerOptions.skipTags;
   }
 
   if (runnerOptions.coverageDirectory) {
@@ -334,8 +384,6 @@ const main = async () => {
       'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
     );
   }
-
-  process.env.TEST_ROOT = process.cwd();
 
   if (runnerOptions.indexJson || shouldRunIndexJson) {
     indexTmpDir = await getIndexTempDir(targetURL);

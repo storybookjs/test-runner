@@ -1,7 +1,7 @@
 import type { Page, BrowserContext } from 'playwright';
 import readPackageUp from 'read-pkg-up';
 import { PrepareContext } from './playwright/hooks';
-import { getTestRunnerConfig } from './util';
+import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 
 /**
  * This is a default prepare function which can be overridden by the user.
@@ -28,27 +28,6 @@ const defaultPrepare = async ({ page, browserContext, testRunnerConfig }: Prepar
   });
 };
 
-const sanitizeURL = (url: string) => {
-  let finalURL = url;
-  // prepend URL protocol if not there
-  if (finalURL.indexOf('http://') === -1 && finalURL.indexOf('https://') === -1) {
-    finalURL = 'http://' + finalURL;
-  }
-
-  // remove iframe.html if present
-  finalURL = finalURL.replace(/iframe.html\s*$/, '');
-
-  // remove index.html if present
-  finalURL = finalURL.replace(/index.html\s*$/, '');
-
-  // add forward slash at the end if not there
-  if (finalURL.slice(-1) !== '/') {
-    finalURL = finalURL + '/';
-  }
-
-  return finalURL;
-};
-
 export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
@@ -58,7 +37,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const { packageJson } = await readPackageUp();
   const { version: testRunnerVersion } = packageJson;
 
-  const referenceURL = process.env.REFERENCE_URL && sanitizeURL(process.env.REFERENCE_URL);
+  const referenceURL = process.env.REFERENCE_URL;
   const debugPrintLimit = process.env.DEBUG_PRINT_LIMIT
     ? Number(process.env.DEBUG_PRINT_LIMIT)
     : 1000;

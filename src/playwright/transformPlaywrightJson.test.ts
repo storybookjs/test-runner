@@ -1,7 +1,15 @@
 import { transformPlaywrightJson } from './transformPlaywrightJson';
 
+jest.mock('../util/getTestRunnerConfig');
+
 describe('Playwright Json', () => {
   describe('v4 indexes', () => {
+    beforeEach(() => {
+      delete process.env.STORYBOOK_INCLUDE_TAGS;
+      delete process.env.STORYBOOK_EXCLUDE_TAGS;
+      delete process.env.STORYBOOK_SKIP_TAGS;
+    });
+
     it('should generate a test for each story', () => {
       const input = {
         v: 4,
@@ -11,6 +19,7 @@ describe('Playwright Json', () => {
             title: 'Example/Header',
             name: 'Logged In',
             importPath: './stories/basic/Header.stories.js',
+            tags: ['play-fn'],
           },
           'example-header--logged-out': {
             id: 'example-header--logged-out',
@@ -30,24 +39,19 @@ describe('Playwright Json', () => {
         {
           "example-header": "describe("Example/Header", () => {
           describe("Logged In", () => {
-            it("test", async () => {
+            it("play-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-header--logged-in",
                   title: "Example/Header",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-in",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -55,8 +59,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -67,6 +71,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -84,24 +89,19 @@ describe('Playwright Json', () => {
             });
           });
           describe("Logged Out", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-header--logged-out",
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-out",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -109,8 +109,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-out"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -121,6 +121,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -140,24 +141,19 @@ describe('Playwright Json', () => {
         });",
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-page--logged-in",
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -165,8 +161,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -177,6 +173,158 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Page"}/\${"Logged In"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+        });",
+        }
+      `);
+    });
+
+    it('should respect include, exclude and skip tags', () => {
+      process.env.STORYBOOK_INCLUDE_TAGS = 'play,design';
+      process.env.STORYBOOK_SKIP_TAGS = 'skip';
+      process.env.STORYBOOK_EXCLUDE_TAGS = 'exclude';
+      const input = {
+        v: 4,
+        entries: {
+          A: {
+            id: 'example-a',
+            title: 'Example/Header',
+            name: 'Logged In',
+            importPath: './stories/basic/Header.stories.js',
+            tags: ['play', 'exclude'],
+          },
+          B: {
+            id: 'example-b',
+            title: 'Example/Header',
+            name: 'Logged Out',
+            importPath: './stories/basic/Header.stories.js',
+            tags: ['play', 'skip'],
+          },
+          C: {
+            id: 'example-c',
+            title: 'Example/Page',
+            name: 'Logged In',
+            importPath: './stories/basic/Page.stories.js',
+            tags: ['design'],
+          },
+          D: {
+            id: 'example-d',
+            title: 'Example/Page',
+            name: 'Logged In',
+            importPath: './stories/basic/Page.stories.js',
+          },
+        },
+      };
+      // Should result in:
+      // - A being excluded
+      // - B being included, but skipped
+      // - C being included
+      // - D being excluded
+      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+        {
+          "example-header": "describe("Example/Header", () => {
+          describe("Logged Out", () => {
+            it.skip("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "example-b",
+                  title: "Example/Header",
+                  name: "Logged Out"
+                };
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                const result = await page.evaluate(({
+                  id,
+                  hasPlayFn
+                }) => __test(id, hasPlayFn), {
+                  id: "example-b"
+                });
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                page.off('pageerror', onPageError);
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"Logged Out"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+        });",
+          "example-page": "describe("Example/Page", () => {
+          describe("Logged In", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "example-c",
+                  title: "Example/Page",
+                  name: "Logged In"
+                };
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                const result = await page.evaluate(({
+                  id,
+                  hasPlayFn
+                }) => __test(id, hasPlayFn), {
+                  id: "example-c"
+                });
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -221,24 +369,19 @@ describe('Playwright Json', () => {
         {
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-page--logged-in",
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -246,8 +389,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -258,6 +401,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -330,24 +474,19 @@ describe('Playwright Json', () => {
         {
           "example-header": "describe("Example/Header", () => {
           describe("Logged In", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-header--logged-in",
                   title: "Example/Header",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-in",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -355,8 +494,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -367,6 +506,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -384,24 +524,19 @@ describe('Playwright Json', () => {
             });
           });
           describe("Logged Out", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-header--logged-out",
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-header--logged-out",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -409,8 +544,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-header--logged-out"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -421,6 +556,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -440,24 +576,19 @@ describe('Playwright Json', () => {
         });",
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-page--logged-in",
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -465,8 +596,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -477,6 +608,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -534,24 +666,19 @@ describe('Playwright Json', () => {
         {
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
-            it("test", async () => {
+            it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
                   id: "example-page--logged-in",
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                page.on('pageerror', err => {
-                  page.evaluate(({
-                    id,
-                    err
-                  }) => __throwError(id, err), {
-                    id: "example-page--logged-in",
-                    err: err.message
-                  });
-                });
-                if (globalThis.__sbPreRender) {
-                  await globalThis.__sbPreRender(page, context);
+                const onPageError = err => {
+                  globalThis.__sbThrowUncaughtPageError(err, context);
+                };
+                page.on('pageerror', onPageError);
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
                 }
                 const result = await page.evaluate(({
                   id,
@@ -559,8 +686,8 @@ describe('Playwright Json', () => {
                 }) => __test(id, hasPlayFn), {
                   id: "example-page--logged-in"
                 });
-                if (globalThis.__sbPostRender) {
-                  await globalThis.__sbPostRender(page, context);
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
                 if (globalThis.__sbCollectCoverage) {
                   const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
@@ -571,6 +698,7 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
+                page.off('pageerror', onPageError);
                 return result;
               };
               try {

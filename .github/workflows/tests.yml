@@ -23,6 +23,9 @@ jobs:
         run: |
           yarn test --coverage
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
       - name: Run test runner
         run: |
           yarn build
