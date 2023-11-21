@@ -8,6 +8,9 @@ const { getJestConfig } = require('./dist');
 
 const testRunnerConfig = getJestConfig();
 
+/**
+ * @type {import('@jest/types').Config.InitialOptions}
+ */
 module.exports = {
   ...testRunnerConfig,
   cacheDirectory: 'node_modules/.cache/storybook/test-runner',

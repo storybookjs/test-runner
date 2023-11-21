@@ -54,11 +54,11 @@ const makePlayTest = ({
   metaOrStoryPlay?: boolean;
   testPrefix: TestPrefixer;
   shouldSkip?: boolean;
-}): t.Statement[] => {
+}): t.ExpressionStatement[] => {
   return [
     t.expressionStatement(
       t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
-        t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+        t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
         prefixFunction(key, title, testPrefix),
       ])
     ),
@@ -69,7 +69,7 @@ const makeDescribe = (
   key: string,
   tests: t.Statement[],
   beforeEachBlock?: t.ExpressionStatement
-): t.Statement | null => {
+): t.ExpressionStatement => {
   const blockStatements = beforeEachBlock ? [beforeEachBlock, ...tests] : tests;
   return t.expressionStatement(
     t.callExpression(t.identifier('describe'), [
@@ -100,22 +100,25 @@ export const transformCsf = (
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
-  const csf = loadCsf(code, { makeTitle: makeTitle || ((userTitle: string) => userTitle) });
+  const csf = loadCsf(code, { makeTitle: makeTitle ?? ((userTitle: string) => userTitle) });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);
   const title = csf.meta?.title;
 
-  const storyAnnotations = storyExports.reduce((acc, key) => {
-    const annotations = csf._storyAnnotations[key];
-    acc[key] = {};
-    if (annotations?.play) {
-      acc[key].play = annotations.play;
-    }
+  const storyAnnotations = storyExports.reduce<Record<string, { play?: t.Node; tags?: string[] }>>(
+    (acc, key) => {
+      const annotations = csf._storyAnnotations[key];
+      acc[key] = {};
+      if (annotations?.play) {
+        acc[key].play = annotations.play;
+      }
 
-    acc[key].tags = csf._stories[key].tags || csf.meta?.tags || [];
-    return acc;
-  }, {} as Record<string, { play?: t.Node; tags?: string[] }>);
+      acc[key].tags = csf._stories[key].tags || csf.meta?.tags || [];
+      return acc;
+    },
+    {}
+  );
 
   const allTests = storyExports
     .filter((key) => {
@@ -148,7 +151,6 @@ export const transformCsf = (
       if (tests.length) {
         return makeDescribe(key, tests);
       }
-      return null;
     })
     .filter(Boolean) as babel.types.Statement[];
 

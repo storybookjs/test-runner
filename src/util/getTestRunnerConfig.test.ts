@@ -69,6 +69,6 @@ describe('getTestRunnerConfig', () => {
   });
 
   afterEach(() => {
-    delete process.env.STORYBOOK_CONFIG_DIR;
+    process.env.STORYBOOK_CONFIG_DIR = undefined;
   });
 });

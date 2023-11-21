@@ -39,7 +39,7 @@ const config: TestRunnerConfig = {
     });
 
     const elementHandler = (await page.$('#root')) || (await page.$('#storybook-root'));
-    const innerHTML = await elementHandler.innerHTML();
+    const innerHTML = await elementHandler?.innerHTML();
     // HTML snapshot tests
     expect(innerHTML).toMatchSnapshot();
   },

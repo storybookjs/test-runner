@@ -2,7 +2,7 @@ import { getCliOptions } from './getCliOptions';
 import * as cliHelper from './getParsedCliOptions';
 
 describe('getCliOptions', () => {
-  let originalArgv: string[] = process.argv;
+  const originalArgv: string[] = process.argv;
 
   afterEach(() => {
     process.argv = originalArgv;

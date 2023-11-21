@@ -3,7 +3,7 @@ import { serverRequire } from '@storybook/core-common';
 import type { StorybookConfig } from '@storybook/types';
 import dedent from 'ts-dedent';
 
-let storybookMainConfig = new Map<string, StorybookConfig>();
+export const storybookMainConfig = new Map<string, StorybookConfig>();
 
 export const getStorybookMain = (configDir = '.storybook') => {
   if (storybookMainConfig.has(configDir)) {

@@ -32,7 +32,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const targetURL = process.env.TARGET_URL;
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
-  const viewMode = process.env.VIEW_MODE || 'story';
+  const viewMode = process.env.VIEW_MODE ?? 'story';
   const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
   const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
@@ -226,7 +226,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
         constructor(storyId, errorMessage, logs = []) {
           super(errorMessage);
           this.name = 'StorybookTestRunnerError';
-          const storyUrl = \`${referenceURL || targetURL}?path=/story/\${storyId}\`;
+          const storyUrl = \`${referenceURL ?? targetURL}?path=/story/\${storyId}\`;
           const finalStoryUrl = \`\${storyUrl}&addonPanel=storybook/interactions/panel\`;
           const separator = '\\n\\n--------------------------------------------------';
           const extraLogs = logs.length > 0 ? separator + "\\n\\nBrowser logs:\\n\\n"+ logs.join('\\n\\n') : '';

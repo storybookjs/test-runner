@@ -17,7 +17,7 @@ export type CliOptions = {
     includeTags?: string;
     excludeTags?: string;
     skipTags?: string;
-  };
+  } & Record<string, string | boolean>;
   jestOptions: JestOptions;
 };
 

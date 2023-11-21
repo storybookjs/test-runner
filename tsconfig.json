@@ -18,7 +18,8 @@
     "moduleResolution": "node",
     "strict": true,
     "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts"]
+  "include": ["src/**/*.ts"]
 }

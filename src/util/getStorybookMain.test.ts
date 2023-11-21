@@ -1,4 +1,4 @@
-import { getStorybookMain, resetStorybookMainCache } from './getStorybookMain';
+import { getStorybookMain, resetStorybookMainCache, storybookMainConfig } from './getStorybookMain';
 import * as coreCommon from '@storybook/core-common';
 
 jest.mock('@storybook/core-common');
@@ -37,6 +37,21 @@ describe('getStorybookMain', () => {
     };
 
     jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => mockedMain);
+
+    const res = getStorybookMain('.storybook');
+    expect(res).toMatchObject(mockedMain);
+  });
+
+  it('should return the configDir value if it exists', () => {
+    const mockedMain = {
+      stories: [
+        {
+          directory: '../stories/basic',
+          titlePrefix: 'Example',
+        },
+      ],
+    };
+    storybookMainConfig.set('configDir', mockedMain);
 
     const res = getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);

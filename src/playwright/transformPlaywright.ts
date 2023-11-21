@@ -13,8 +13,9 @@ const coverageErrorMessage = dedent`
   More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage
 `;
 
-export const testPrefixer = template(
-  `
+export const testPrefixer: TestPrefixer = (context) => {
+  return template(
+    `
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => {
       const testFn = async() => {
@@ -66,14 +67,15 @@ export const testPrefixer = template(
       }
     }
   `,
-  {
-    plugins: ['jsx'],
-  }
-) as unknown as TestPrefixer;
+    {
+      plugins: ['jsx'],
+    }
+  )({ ...context });
+};
 
 const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
-  const filePath = './' + relative(workingDir, filename);
+  const filePath = `./${relative(workingDir, filename)}`;
 
   return (userTitle: string) =>
     userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;
