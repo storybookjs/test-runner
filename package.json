@@ -110,7 +110,7 @@
     "jest-circus": "^29.6.4",
     "jest-environment-node": "^29.6.4",
     "jest-junit": "^16.0.0",
-    "jest-playwright-preset": "^3.0.1",
+    "jest-playwright-preset": "^4.0.0",
     "jest-runner": "^29.6.4",
     "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^2.0.0",
