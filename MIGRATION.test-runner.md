@@ -224,4 +224,4 @@ module.exports = {
 
 ### Provide feedback
 
-We are looking for feedback on your experience and would appreciate it if you filled [this form](some-google-form-here) to help us shape our tooling in the right direction. Thank you so much!
+We are looking for feedback on your experience and would appreciate it if you filled [this form](https://forms.gle/jzcMr6cqmZZpH9Z5A) to help us shape our tooling in the right direction. Thank you so much!
