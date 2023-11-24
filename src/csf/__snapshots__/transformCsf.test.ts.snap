@@ -26,10 +26,6 @@ if (!require.main) {
             title: "Button",
             name: "Primary"
           };
-          const onPageError = err => {
-            globalThis.__sbThrowUncaughtPageError(err, context);
-          };
-          page.on('pageerror', onPageError);
           if (globalThis.__sbPreVisit) {
             await globalThis.__sbPreVisit(page, context);
           }
@@ -51,7 +47,6 @@ if (!require.main) {
             }
             await jestPlaywright.saveCoverage(page);
           }
-          page.off('pageerror', onPageError);
           return result;
         };
         try {
@@ -98,10 +93,6 @@ if (!require.main) {
             title: "Button",
             name: "Primary"
           };
-          const onPageError = err => {
-            globalThis.__sbThrowUncaughtPageError(err, context);
-          };
-          page.on('pageerror', onPageError);
           if (globalThis.__sbPreVisit) {
             await globalThis.__sbPreVisit(page, context);
           }
@@ -123,7 +114,6 @@ if (!require.main) {
             }
             await jestPlaywright.saveCoverage(page);
           }
-          page.off('pageerror', onPageError);
           return result;
         };
         try {
@@ -156,10 +146,6 @@ if (!require.main) {
             title: "Button",
             name: "Primary"
           };
-          const onPageError = err => {
-            globalThis.__sbThrowUncaughtPageError(err, context);
-          };
-          page.on('pageerror', onPageError);
           if (globalThis.__sbPreVisit) {
             await globalThis.__sbPreVisit(page, context);
           }
@@ -181,7 +167,6 @@ if (!require.main) {
             }
             await jestPlaywright.saveCoverage(page);
           }
-          page.off('pageerror', onPageError);
           return result;
         };
         try {

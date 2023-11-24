@@ -1,6 +1,5 @@
 import type { BrowserContext, Page } from 'playwright';
 import type { StoryContext } from '@storybook/csf';
-import dedent from 'ts-dedent';
 
 export type TestContext = {
   id: string;
@@ -80,19 +79,4 @@ export const waitForPageReady = async (page: Page) => {
   await page.waitForLoadState('load');
   await page.waitForLoadState('networkidle');
   await page.evaluate(() => document.fonts.ready);
-};
-
-export const throwUncaughtPageError = (err: Error, context: TestContext) => {
-  const storybookUrl = process.env.REFERENCE_URL || process.env.TARGET_URL;
-  const storyUrl = `${storybookUrl}?path=/story/${context.id}`;
-
-  const errorMessage = dedent`
-  An uncaught error occurred when visiting the following story.
-  Please access the link and check the logs in the browser:
-  ${storyUrl}
-  
-  Message:
-  ${err.stack || err.message}\n`;
-
-  throw new Error(errorMessage);
 };

@@ -6,13 +6,18 @@
  */
 
 // All of these variables will be replaced once this file is processed.
-const referenceURL: string | undefined = '{{referenceURL}}';
-const targetURL: string = '{{targetURL}}';
+const storybookUrl: string = '{{storybookUrl}}';
 const testRunnerVersion: string = '{{testRunnerVersion}}';
 const failOnConsole: string = '{{failOnConsole}}';
 const renderedEvent: string = '{{renderedEvent}}';
 const viewMode: string = '{{viewMode}}';
 const debugPrintLimit = parseInt('{{debugPrintLimit}}', 10);
+
+// Type definitions for globals
+declare global {
+  // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
+  var logToPage: (message: string) => void;
+}
 
 // Type definitions for function parameters and return types
 type Colorizer = (message: string) => string;
@@ -189,7 +194,7 @@ class StorybookTestRunnerError extends Error {
   constructor(storyId: string, errorMessage: string, logs: string[] = []) {
     super(errorMessage);
     this.name = 'StorybookTestRunnerError';
-    const storyUrl = `${referenceURL ?? targetURL}?path=/story/${storyId}`;
+    const storyUrl = `${storybookUrl}?path=/story/${storyId}`;
     const finalStoryUrl = `${storyUrl}&addonPanel=storybook/interactions/panel`;
     const separator = '\n\n--------------------------------------------------';
     const extraLogs =
@@ -294,33 +299,58 @@ async function __test(storyId: string): Promise<any> {
     spyOnConsole(method as ConsoleMethod, color(method));
   });
 
-  return new Promise((resolve, reject) => {
-    channel.on(renderedEvent, () => {
-      if (hasErrors) {
-        return reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
-      }
-      return resolve(document.getElementById('root'));
+  const cleanup = (_listeners: Record<string, Function>) => {
+    Object.entries(_listeners).forEach(([eventName, listener]) => {
+      channel.off(eventName, listener);
     });
-    channel.on('storyUnchanged', () => resolve(document.getElementById('root')));
-    channel.on('storyErrored', ({ description }: { description: string }) =>
-      reject(new StorybookTestRunnerError(storyId, description, logs))
-    );
-    channel.on('storyThrewException', (error: Error) =>
-      reject(new StorybookTestRunnerError(storyId, error.message, logs))
-    );
-    channel.on('playFunctionThrewException', (error: Error) =>
-      reject(new StorybookTestRunnerError(storyId, error.message, logs))
-    );
-    channel.on('storyMissing', (id: string) => {
-      if (id === storyId) {
-        reject(
-          new StorybookTestRunnerError(
-            storyId,
-            'The story was missing when trying to access it.',
-            logs
-          )
-        );
-      }
+  };
+
+  return new Promise((resolve, reject) => {
+    const listeners = {
+      [renderedEvent]: () => {
+        cleanup(listeners);
+        if (hasErrors) {
+          return reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
+        }
+        return resolve(document.getElementById('root'));
+      },
+
+      storyUnchanged: () => {
+        cleanup(listeners);
+        resolve(document.getElementById('root'));
+      },
+
+      storyErrored: ({ description }: { description: string }) => {
+        cleanup(listeners);
+        reject(new StorybookTestRunnerError(storyId, description, logs));
+      },
+
+      storyThrewException: (error: Error) => {
+        cleanup(listeners);
+        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+      },
+
+      playFunctionThrewException: (error: Error) => {
+        cleanup(listeners);
+        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+      },
+
+      storyMissing: (id: string) => {
+        cleanup(listeners);
+        if (id === storyId) {
+          reject(
+            new StorybookTestRunnerError(
+              storyId,
+              'The story was missing when trying to access it.',
+              logs
+            )
+          );
+        }
+      },
+    };
+
+    Object.entries(listeners).forEach(([eventName, listener]) => {
+      channel.on(eventName, listener);
     });
 
     channel.emit('setCurrentStory', { storyId, viewMode });
