@@ -20,12 +20,6 @@ export const testPrefixer: TestPrefixer = (context) => {
     async () => {
       const testFn = async() => {
         const context = { id: %%id%%, title: %%title%%, name: %%name%% };
-        
-        const onPageError = (err) => {
-          globalThis.__sbThrowUncaughtPageError(err, context);
-        }
-
-        page.on('pageerror', onPageError);
 
         if(globalThis.__sbPreVisit) {
           await globalThis.__sbPreVisit(page, context);
@@ -48,7 +42,6 @@ export const testPrefixer: TestPrefixer = (context) => {
           await jestPlaywright.saveCoverage(page);
         }
 
-        page.off('pageerror', onPageError);
 
         return result;
       };

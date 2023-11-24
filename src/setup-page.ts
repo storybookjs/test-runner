@@ -60,15 +60,16 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
 
+  const finalStorybookUrl = referenceURL ?? targetURL ?? '';
   const scriptLocation = require.resolve(path.join(__dirname, 'setup-page-script.mjs'));
-  // read the contents of setup-page-scripts.ts and replace the referenceUrl
+
+  // read the content of setup-page-script.mjs and replace the placeholders with the actual values
   const content = (await readFile(scriptLocation, 'utf-8'))
-    .replace('{{targetURL}}', targetURL ?? '')
-    .replace('{{referenceUrl}}', referenceURL ?? '')
-    .replace('{{failOnConsole}}', failOnConsole ?? 'false')
-    .replace('{{renderedEvent}}', renderedEvent)
-    .replace('{{testRunnerVersion}}', testRunnerVersion)
-    .replace('{{debugPrintLimit}}', debugPrintLimit.toString());
+    .replaceAll('{{storybookUrl}}', finalStorybookUrl)
+    .replaceAll('{{failOnConsole}}', failOnConsole ?? 'false')
+    .replaceAll('{{renderedEvent}}', renderedEvent)
+    .replaceAll('{{testRunnerVersion}}', testRunnerVersion)
+    .replaceAll('{{debugPrintLimit}}', debugPrintLimit.toString());
 
   await page.addScriptTag({ content });
 };
