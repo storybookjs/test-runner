@@ -1,6 +1,5 @@
 import type { BrowserContext, Page } from 'playwright';
 import type { StoryContext } from '@storybook/csf';
-import dedent from 'ts-dedent';
 
 export type TestContext = {
   id: string;
