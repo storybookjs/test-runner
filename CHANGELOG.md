@@ -1,3 +1,28 @@
+# v0.16.0 (Mon Nov 27 2023)
+
+#### 🚀 Enhancement
+
+- Introduce logLevel configuration [#406](https://github.com/storybookjs/test-runner/pull/406) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Filter duplicated error messages in browser logs [#405](https://github.com/storybookjs/test-runner/pull/405) ([@yannbf](https://github.com/yannbf))
+- Fix sync issues between tests [#404](https://github.com/storybookjs/test-runner/pull/404) ([@yannbf](https://github.com/yannbf))
+- Refactor: Extract the setup page scripts into a separate file [#403](https://github.com/storybookjs/test-runner/pull/403) ([@yannbf](https://github.com/yannbf))
+- Docs: Adds feedback form to migration documentation [#402](https://github.com/storybookjs/test-runner/pull/402) ([@jonniebigodes](https://github.com/jonniebigodes))
+- Bump `jest-playwright-preset` from `v3.0.1` to `v4.0.0` [#400](https://github.com/storybookjs/test-runner/pull/400) ([@kemuridama](https://github.com/kemuridama))
+- Improve type safety and code quality [#383](https://github.com/storybookjs/test-runner/pull/383) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- Refactor: Improve internal code [#378](https://github.com/storybookjs/test-runner/pull/378) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- [@jonniebigodes](https://github.com/jonniebigodes)
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Ryo Ochiai ([@kemuridama](https://github.com/kemuridama))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.15.2 (Tue Nov 21 2023)
 
 #### 🐛 Bug Fix
