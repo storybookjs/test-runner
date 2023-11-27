@@ -58,6 +58,11 @@ export interface TestRunnerConfig {
     exclude?: string[];
     skip?: string[];
   };
+  /**
+   * Defines the log level of the test runner. Browser logs are printed to the console when reporting errors.
+   * @default 'info'
+   */
+  logLevel?: 'info' | 'warn' | 'error' | 'verbose' | 'none';
 }
 
 export const setPreVisit = (preVisit: TestHook) => {

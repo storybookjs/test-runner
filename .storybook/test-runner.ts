@@ -7,6 +7,7 @@ const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;
 const skipSnapshots = process.env.SKIP_SNAPSHOTS === 'true';
 
 const config: TestRunnerConfig = {
+  logLevel: 'verbose',
   tags: {
     exclude: ['exclude'],
     include: [],
