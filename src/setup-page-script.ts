@@ -197,8 +197,10 @@ class StorybookTestRunnerError extends Error {
     const storyUrl = `${storybookUrl}?path=/story/${storyId}`;
     const finalStoryUrl = `${storyUrl}&addonPanel=storybook/interactions/panel`;
     const separator = '\n\n--------------------------------------------------';
+    // The original error message will also be collected in the logs, so we filter it to avoid duplication
+    const finalLogs = logs.filter((err) => !err.includes(errorMessage));
     const extraLogs =
-      logs.length > 0 ? separator + '\n\nBrowser logs:\n\n' + logs.join('\n\n') : '';
+      finalLogs.length > 0 ? separator + '\n\nBrowser logs:\n\n' + finalLogs.join('\n\n') : '';
 
     this.message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
       errorMessage,
