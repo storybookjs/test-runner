@@ -69,6 +69,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
     .replaceAll('{{failOnConsole}}', failOnConsole ?? 'false')
     .replaceAll('{{renderedEvent}}', renderedEvent)
     .replaceAll('{{testRunnerVersion}}', testRunnerVersion)
+    .replaceAll('{{logLevel}}', testRunnerConfig.logLevel ?? 'info')
     .replaceAll('{{debugPrintLimit}}', debugPrintLimit.toString());
 
   await page.addScriptTag({ content });

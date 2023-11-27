@@ -5,13 +5,27 @@
  * setup-page.ts will read the contents of this file and replace values that use {{x}} pattern, and they should be put right below:
  */
 
+type ConsoleMethod =
+  | 'log'
+  | 'info'
+  | 'warn'
+  | 'error'
+  | 'trace'
+  | 'debug'
+  | 'group'
+  | 'groupCollapsed'
+  | 'table'
+  | 'dir';
+type LogLevel = 'none' | 'info' | 'warn' | 'error' | 'verbose';
+
 // All of these variables will be replaced once this file is processed.
-const storybookUrl: string = '{{storybookUrl}}';
-const testRunnerVersion: string = '{{testRunnerVersion}}';
-const failOnConsole: string = '{{failOnConsole}}';
-const renderedEvent: string = '{{renderedEvent}}';
-const viewMode: string = '{{viewMode}}';
-const debugPrintLimit = parseInt('{{debugPrintLimit}}', 10);
+const TEST_RUNNER_STORYBOOK_URL: string = '{{storybookUrl}}';
+const TEST_RUNNER_VERSION: string = '{{testRunnerVersion}}';
+const TEST_RUNNER_FAIL_ON_CONSOLE: string = '{{failOnConsole}}';
+const TEST_RUNNER_RENDERED_EVENT: string = '{{renderedEvent}}';
+const TEST_RUNNER_VIEW_MODE: string = '{{viewMode}}';
+const TEST_RUNNER_LOG_LEVEL = '{{logLevel}}' as LogLevel;
+const TEST_RUNNER_DEBUG_PRINT_LIMIT = parseInt('{{debugPrintLimit}}', 10);
 
 // Type definitions for globals
 declare global {
@@ -194,7 +208,7 @@ class StorybookTestRunnerError extends Error {
   constructor(storyId: string, errorMessage: string, logs: string[] = []) {
     super(errorMessage);
     this.name = 'StorybookTestRunnerError';
-    const storyUrl = `${storybookUrl}?path=/story/${storyId}`;
+    const storyUrl = `${TEST_RUNNER_STORYBOOK_URL}?path=/story/${storyId}`;
     const finalStoryUrl = `${storyUrl}&addonPanel=storybook/interactions/panel`;
     const separator = '\n\n--------------------------------------------------';
     // The original error message will also be collected in the logs, so we filter it to avoid duplication
@@ -204,7 +218,7 @@ class StorybookTestRunnerError extends Error {
 
     this.message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
       errorMessage,
-      debugPrintLimit
+      TEST_RUNNER_DEBUG_PRINT_LIMIT
     )}\n${extraLogs}`;
   }
 }
@@ -266,35 +280,64 @@ async function __test(storyId: string): Promise<any> {
     );
   }
 
-  addToUserAgent(`(StorybookTestRunner@${testRunnerVersion})`);
+  addToUserAgent(`(StorybookTestRunner@${TEST_RUNNER_VERSION})`);
 
   // Collect logs to show upon test error
   let logs: string[] = [];
   let hasErrors = false;
 
-  type ConsoleMethod = 'log' | 'group' | 'warn' | 'error' | 'trace' | 'groupCollapsed';
+  const logLevelMapping: { [key in ConsoleMethod]: LogLevel[] } = {
+    log: ['info', 'verbose'],
+    warn: ['info', 'warn', 'verbose'],
+    error: ['info', 'warn', 'error', 'verbose'],
+    info: ['verbose'],
+    trace: ['verbose'],
+    debug: ['verbose'],
+    group: ['verbose'],
+    groupCollapsed: ['verbose'],
+    table: ['verbose'],
+    dir: ['verbose'],
+  };
 
   const spyOnConsole = (method: ConsoleMethod, name: string): void => {
     const originalFn = console[method].bind(console);
     console[method] = function () {
-      if (failOnConsole === 'true' && method === 'error') {
+      const shouldCollectError = TEST_RUNNER_FAIL_ON_CONSOLE === 'true' && method === 'error';
+      if (shouldCollectError) {
         hasErrors = true;
       }
-      const message = Array.from(arguments).map(composeMessage).join(', ');
-      const prefix = `${bold(name)}: `;
-      logs.push(prefix + message);
+
+      let message = Array.from(arguments).map(composeMessage).join(', ');
+      if (method === 'trace') {
+        const stackTrace = new Error().stack;
+        message += `\n${stackTrace}\n`;
+      }
+
+      if (logLevelMapping[method].includes(TEST_RUNNER_LOG_LEVEL) || shouldCollectError) {
+        const prefix = `${bold(name)}: `;
+        logs.push(prefix + message);
+      }
+
       originalFn(...arguments);
     };
   };
 
   // Console methods + color function for their prefix
   const spiedMethods: { [key: string]: Colorizer } = {
+    // info
     log: blue,
+    info: blue,
+    // warn
     warn: yellow,
+    // error
     error: red,
+    // verbose
+    dir: magenta,
     trace: magenta,
     group: magenta,
     groupCollapsed: magenta,
+    table: magenta,
+    debug: magenta,
   };
 
   Object.entries(spiedMethods).forEach(([method, color]) => {
@@ -309,12 +352,12 @@ async function __test(storyId: string): Promise<any> {
 
   return new Promise((resolve, reject) => {
     const listeners = {
-      [renderedEvent]: () => {
+      [TEST_RUNNER_RENDERED_EVENT]: () => {
         cleanup(listeners);
         if (hasErrors) {
-          return reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
+          reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
         }
-        return resolve(document.getElementById('root'));
+        resolve(document.getElementById('root'));
       },
 
       storyUnchanged: () => {
@@ -355,7 +398,7 @@ async function __test(storyId: string): Promise<any> {
       channel.on(eventName, listener);
     });
 
-    channel.emit('setCurrentStory', { storyId, viewMode });
+    channel.emit('setCurrentStory', { storyId, viewMode: TEST_RUNNER_VIEW_MODE });
   });
 }
 
