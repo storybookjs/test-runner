@@ -17,7 +17,7 @@ export type CliOptions = {
     includeTags?: string;
     excludeTags?: string;
     skipTags?: string;
-  };
+  } & Record<string, string | boolean>;
   jestOptions: JestOptions;
 };
 
@@ -54,16 +54,19 @@ export const getCliOptions = (): CliOptions => {
     jestOptions: process.argv.splice(0, 2),
   };
 
-  const finalOptions = Object.keys(allOptions).reduce((acc, key: StorybookRunnerCommand) => {
+  const finalOptions = Object.keys(allOptions).reduce((acc: CliOptions, _key: string) => {
+    let key = _key as StorybookRunnerCommand;
+    let optionValue = allOptions[key];
+
     if (STORYBOOK_RUNNER_COMMANDS.includes(key)) {
-      copyOption(acc.runnerOptions, key, allOptions[key]);
+      copyOption(acc.runnerOptions, key, optionValue);
     } else {
-      if (allOptions[key] === true) {
+      if (optionValue === true) {
         acc.jestOptions.push(`--${key}`);
-      } else if (allOptions[key] === false) {
+      } else if (optionValue === false) {
         acc.jestOptions.push(`--no-${key}`);
       } else {
-        acc.jestOptions.push(`--${key}`, allOptions[key] as string);
+        acc.jestOptions.push(`--${key}`, `${optionValue}`);
       }
     }
 

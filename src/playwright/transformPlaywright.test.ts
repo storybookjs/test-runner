@@ -21,8 +21,8 @@ jest.mock('@storybook/core-common', () => ({
 jest.mock('../util/getTestRunnerConfig');
 
 expect.addSnapshotSerializer({
-  print: (val: any) => val.trim(),
-  test: (val: any) => true,
+  print: (val: unknown) => (typeof val === 'string' ? val.trim() : String(val)),
+  test: () => true,
 });
 
 describe('Playwright', () => {
@@ -66,10 +66,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "A"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -91,7 +87,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -116,10 +111,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -141,7 +132,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -184,10 +174,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -209,7 +195,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -252,10 +237,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "A"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -277,7 +258,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -302,10 +282,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -327,7 +303,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -379,10 +354,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "B"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -404,7 +375,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -429,10 +399,6 @@ describe('Playwright', () => {
                     title: "Example/foo/bar",
                     name: "C"
                   };
-                  const onPageError = err => {
-                    globalThis.__sbThrowUncaughtPageError(err, context);
-                  };
-                  page.on('pageerror', onPageError);
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
@@ -454,7 +420,6 @@ describe('Playwright', () => {
                     }
                     await jestPlaywright.saveCoverage(page);
                   }
-                  page.off('pageerror', onPageError);
                   return result;
                 };
                 try {
@@ -511,10 +476,6 @@ describe('Playwright', () => {
                   title: "Example/foo/bar",
                   name: "A"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -536,7 +497,6 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -577,10 +537,6 @@ describe('Playwright', () => {
                   title: "Example/foo/bar",
                   name: "A"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -602,7 +558,6 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -643,10 +598,6 @@ describe('Playwright', () => {
                   title: "Example/Header",
                   name: "A"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -668,7 +619,6 @@ describe('Playwright', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {

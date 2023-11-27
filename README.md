@@ -36,6 +36,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [prepare](#prepare)
   - [getHttpHeaders](#gethttpheaders)
   - [tags (experimental)](#tags-experimental)
+  - [logLevel](#loglevel)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
     - [waitForPageReady](#waitforpageready)
@@ -704,6 +705,26 @@ export default config;
 ```
 
 `tags` are used for filtering your tests. Learn more [here](#filtering-tests-experimental).
+
+#### logLevel
+
+When tests fail and there were browser logs during the rendering of a story, the test-runner provides the logs alongside the error message. The `logLevel` property defines what kind of logs should be displayed:
+
+- **`info` (default):** Shows console logs, warnings, and errors.
+- **`warn`:** Shows only warnings and errors.
+- **`error`:** Displays only error messages.
+- **`verbose`:** Includes all console outputs, including debug information and stack traces.
+- **`none`:** Suppresses all log output.
+
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  logLevel: 'verbose',
+};
+export default config;
+```
 
 ### Utility functions
 

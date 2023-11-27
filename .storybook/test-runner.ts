@@ -7,6 +7,7 @@ const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;
 const skipSnapshots = process.env.SKIP_SNAPSHOTS === 'true';
 
 const config: TestRunnerConfig = {
+  logLevel: 'verbose',
   tags: {
     exclude: ['exclude'],
     include: [],
@@ -39,7 +40,7 @@ const config: TestRunnerConfig = {
     });
 
     const elementHandler = (await page.$('#root')) || (await page.$('#storybook-root'));
-    const innerHTML = await elementHandler.innerHTML();
+    const innerHTML = await elementHandler?.innerHTML();
     // HTML snapshot tests
     expect(innerHTML).toMatchSnapshot();
   },

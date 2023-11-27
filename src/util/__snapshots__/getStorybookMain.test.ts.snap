@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getStorybookMain no stories should throw an error if no stories are defined 1`] = `
-"Could not find stories in main.js in .storybook. 
+"Could not find stories in main.js in ".storybook".
 If you are using a mono-repository, please run the test-runner only against your sub-package, which contains a .storybook folder with "stories" defined in main.js.
 You can change the config directory by using --config-dir <path-to-dir>"
 `;
 
 exports[`getStorybookMain no stories should throw an error if stories list is empty 1`] = `
-"Could not find stories in main.js in .storybook. 
+"Could not find stories in main.js in ".storybook".
 If you are using a mono-repository, please run the test-runner only against your sub-package, which contains a .storybook folder with "stories" defined in main.js.
 You can change the config directory by using --config-dir <path-to-dir>"
 `;
 
-exports[`getStorybookMain should throw an error if no configuration is found 1`] = `"Could not load main.js in .storybook. Is the config directory correct? You can change it by using --config-dir <path-to-dir>"`;
+exports[`getStorybookMain should throw an error if no configuration is found 1`] = `"Could not load main.js in .storybook. Is the ".storybook" config directory correct? You can change it by using --config-dir <path-to-dir>"`;

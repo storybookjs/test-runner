@@ -14,24 +14,23 @@ const makeTest = ({
   shouldSkip: boolean;
   metaOrStoryPlay: boolean;
 }): t.Statement => {
-  const result: any = testPrefixer({
+  const result = testPrefixer({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
     id: t.stringLiteral(entry.id),
     // FIXME
     storyExport: t.identifier(entry.id),
   });
-
-  const stmt = result[1] as t.ExpressionStatement;
+  const stmt = (result as Array<t.ExpressionStatement>)[1];
   return t.expressionStatement(
     t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
-      t.stringLiteral(!!metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+      t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
       stmt.expression,
     ])
   );
 };
 
-const makeDescribe = (title: string, stmts: t.Statement[]) => {
+export const makeDescribe = (title: string, stmts: t.Statement[]) => {
   // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
   // so we have to skip the describe to achieve a "excluded test" experience.
   // The code below recreates the following source:
@@ -65,18 +64,25 @@ type V4Entry = {
   id: StoryId;
   name: StoryName;
   title: ComponentTitle;
-  tags: string[];
+  tags?: string[];
 };
-type V4Index = {
+export type V4Index = {
   v: 4;
   entries: Record<StoryId, V4Entry>;
 };
 
-type V3Story = Omit<V4Entry, 'type'> & { parameters?: Record<string, any> };
-type V3StoriesIndex = {
+type StoryParameters = {
+  __id: StoryId;
+  docsOnly?: boolean;
+  fileName?: string;
+};
+
+type V3Story = Omit<V4Entry, 'type'> & { parameters?: StoryParameters };
+export type V3StoriesIndex = {
   v: 3;
   stories: Record<StoryId, V3Story>;
 };
+export type UnsupportedVersion = { v: number };
 const isV3DocsOnly = (stories: V3Story[]) => stories.length === 1 && stories[0].name === 'Page';
 
 function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
@@ -88,26 +94,26 @@ function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
           ({
             type: isV3DocsOnly(stories) ? 'docs' : 'story',
             ...story,
-          } as V4Entry)
+          } satisfies V4Entry)
       ),
     ])
   );
 }
 
 function groupByTitleId<T extends { title: ComponentTitle }>(entries: T[]) {
-  return entries.reduce((acc, entry) => {
+  return entries.reduce<Record<string, T[]>>((acc, entry) => {
     const titleId = toId(entry.title);
     acc[titleId] = acc[titleId] || [];
     acc[titleId].push(entry);
     return acc;
-  }, {} as { [key: string]: T[] });
+  }, {});
 }
 
 /**
  * Generate one test file per component so that Jest can
  * run them in parallel.
  */
-export const transformPlaywrightJson = (index: Record<string, any>) => {
+export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | UnsupportedVersion) => {
   let titleIdToEntries: Record<string, V4Entry[]>;
   if (index.v === 3) {
     const titleIdToStories = groupByTitleId<V3Story>(
@@ -123,39 +129,42 @@ export const transformPlaywrightJson = (index: Record<string, any>) => {
 
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
-  const titleIdToTest = Object.entries(titleIdToEntries).reduce((acc, [titleId, entries]) => {
-    const stories = entries.filter((s) => s.type !== 'docs');
-    if (stories.length) {
-      const storyTests = stories
-        .filter((story) => {
-          // If includeTags is passed, check if the story has any of them - else include by default
-          const isIncluded =
-            includeTags.length === 0 || includeTags.some((tag) => story.tags?.includes(tag));
+  const titleIdToTest = Object.entries(titleIdToEntries).reduce<Record<string, string>>(
+    (acc, [titleId, entries]) => {
+      const stories = entries.filter((s) => s.type !== 'docs');
+      if (stories.length) {
+        const storyTests = stories
+          .filter((story) => {
+            // If includeTags is passed, check if the story has any of them - else include by default
+            const isIncluded =
+              includeTags.length === 0 || includeTags.some((tag) => story.tags?.includes(tag));
 
-          // If excludeTags is passed, check if the story does not have any of them
-          const isNotExcluded = excludeTags.every((tag) => !story.tags?.includes(tag));
+            // If excludeTags is passed, check if the story does not have any of them
+            const isNotExcluded = excludeTags.every((tag) => !story.tags?.includes(tag));
 
-          return isIncluded && isNotExcluded;
-        })
-        .map((story) => {
-          const shouldSkip = skipTags.some((tag) => story.tags?.includes(tag));
+            return isIncluded && isNotExcluded;
+          })
+          .map((story) => {
+            const shouldSkip = skipTags.some((tag) => story.tags?.includes(tag));
 
-          return makeDescribe(story.name, [
-            makeTest({
-              entry: story,
-              shouldSkip,
-              metaOrStoryPlay: story.tags?.includes('play-fn'),
-            }),
-          ]);
-        });
-      const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
+            return makeDescribe(story.name, [
+              makeTest({
+                entry: story,
+                shouldSkip,
+                metaOrStoryPlay: story.tags?.includes('play-fn') ?? false,
+              }),
+            ]);
+          });
+        const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
 
-      const { code } = generate(program, {});
+        const { code } = generate(program, {});
 
-      acc[titleId] = code;
-    }
-    return acc;
-  }, {} as { [key: string]: string });
+        acc[titleId] = code;
+      }
+      return acc;
+    },
+    {}
+  );
 
   return titleIdToTest;
 };

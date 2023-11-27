@@ -13,18 +13,13 @@ const coverageErrorMessage = dedent`
   More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage
 `;
 
-export const testPrefixer = template(
-  `
+export const testPrefixer: TestPrefixer = (context) => {
+  return template(
+    `
     console.log({ id: %%id%%, title: %%title%%, name: %%name%%, storyExport: %%storyExport%% });
     async () => {
       const testFn = async() => {
         const context = { id: %%id%%, title: %%title%%, name: %%name%% };
-        
-        const onPageError = (err) => {
-          globalThis.__sbThrowUncaughtPageError(err, context);
-        }
-
-        page.on('pageerror', onPageError);
 
         if(globalThis.__sbPreVisit) {
           await globalThis.__sbPreVisit(page, context);
@@ -47,7 +42,6 @@ export const testPrefixer = template(
           await jestPlaywright.saveCoverage(page);
         }
 
-        page.off('pageerror', onPageError);
 
         return result;
       };
@@ -66,16 +60,18 @@ export const testPrefixer = template(
       }
     }
   `,
-  {
-    plugins: ['jsx'],
-  }
-) as any as TestPrefixer;
+    {
+      plugins: ['jsx'],
+    }
+  )({ ...context });
+};
 
 const makeTitleFactory = (filename: string) => {
   const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
-  const filePath = './' + relative(workingDir, filename);
+  const filePath = `./${relative(workingDir, filename)}`;
 
-  return (userTitle: string) => userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle);
+  return (userTitle: string) =>
+    userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;
 };
 
 export const transformPlaywright = (src: string, filename: string) => {

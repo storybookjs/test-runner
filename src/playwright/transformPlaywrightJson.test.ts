@@ -1,4 +1,11 @@
-import { transformPlaywrightJson } from './transformPlaywrightJson';
+import {
+  UnsupportedVersion,
+  V3StoriesIndex,
+  V4Index,
+  makeDescribe,
+  transformPlaywrightJson,
+} from './transformPlaywrightJson';
+import * as t from '@babel/types';
 
 jest.mock('../util/getTestRunnerConfig');
 
@@ -18,23 +25,20 @@ describe('Playwright Json', () => {
             id: 'example-header--logged-in',
             title: 'Example/Header',
             name: 'Logged In',
-            importPath: './stories/basic/Header.stories.js',
             tags: ['play-fn'],
           },
           'example-header--logged-out': {
             id: 'example-header--logged-out',
             title: 'Example/Header',
             name: 'Logged Out',
-            importPath: './stories/basic/Header.stories.js',
           },
           'example-page--logged-in': {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
           },
         },
-      };
+      } satisfies V4Index;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
@@ -46,10 +50,6 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -71,7 +71,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -96,10 +95,6 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -121,7 +116,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -148,10 +142,6 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -173,7 +163,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -247,10 +236,6 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -272,7 +257,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -299,10 +283,6 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -324,7 +304,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -355,16 +334,14 @@ describe('Playwright Json', () => {
             id: 'example-introduction--page',
             title: 'Example/Introduction',
             name: 'Page',
-            importPath: './stories/basic/Introduction.stories.mdx',
           },
           'example-page--logged-in': {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
           },
         },
-      };
+      } satisfies V4Index;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
@@ -376,10 +353,6 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -401,7 +374,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -433,9 +405,6 @@ describe('Playwright Json', () => {
             id: 'example-header--logged-in',
             title: 'Example/Header',
             name: 'Logged In',
-            importPath: './stories/basic/Header.stories.js',
-            kind: 'Example/Header',
-            story: 'Logged In',
             parameters: {
               __id: 'example-header--logged-in',
               docsOnly: false,
@@ -446,9 +415,6 @@ describe('Playwright Json', () => {
             id: 'example-header--logged-out',
             title: 'Example/Header',
             name: 'Logged Out',
-            importPath: './stories/basic/Header.stories.js',
-            kind: 'Example/Header',
-            story: 'Logged Out',
             parameters: {
               __id: 'example-header--logged-out',
               docsOnly: false,
@@ -459,9 +425,6 @@ describe('Playwright Json', () => {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
-            kind: 'Example/Page',
-            story: 'Logged In',
             parameters: {
               __id: 'example-page--logged-in',
               docsOnly: false,
@@ -469,7 +432,7 @@ describe('Playwright Json', () => {
             },
           },
         },
-      };
+      } satisfies V3StoriesIndex;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
@@ -481,10 +444,6 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -506,7 +465,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -531,10 +489,6 @@ describe('Playwright Json', () => {
                   title: "Example/Header",
                   name: "Logged Out"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -556,7 +510,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -583,10 +536,6 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -608,7 +557,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -638,9 +586,6 @@ describe('Playwright Json', () => {
             id: 'example-introduction--page',
             title: 'Example/Introduction',
             name: 'Page',
-            importPath: './stories/basic/Introduction.stories.mdx',
-            kind: 'Example/Introduction',
-            story: 'Page',
             parameters: {
               __id: 'example-introduction--page',
               docsOnly: true,
@@ -651,9 +596,6 @@ describe('Playwright Json', () => {
             id: 'example-page--logged-in',
             title: 'Example/Page',
             name: 'Logged In',
-            importPath: './stories/basic/Page.stories.js',
-            kind: 'Example/Page',
-            story: 'Logged In',
             parameters: {
               __id: 'example-page--logged-in',
               docsOnly: false,
@@ -661,7 +603,7 @@ describe('Playwright Json', () => {
             },
           },
         },
-      };
+      } satisfies V3StoriesIndex;
       expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
@@ -673,10 +615,6 @@ describe('Playwright Json', () => {
                   title: "Example/Page",
                   name: "Logged In"
                 };
-                const onPageError = err => {
-                  globalThis.__sbThrowUncaughtPageError(err, context);
-                };
-                page.on('pageerror', onPageError);
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
@@ -698,7 +636,6 @@ describe('Playwright Json', () => {
                   }
                   await jestPlaywright.saveCoverage(page);
                 }
-                page.off('pageerror', onPageError);
                 return result;
               };
               try {
@@ -719,5 +656,41 @@ describe('Playwright Json', () => {
         }
       `);
     });
+  });
+});
+
+describe('unsupported index', () => {
+  it('throws an error for unsupported versions', () => {
+    const unsupportedVersion = { v: 1 } satisfies UnsupportedVersion;
+    expect(() => transformPlaywrightJson(unsupportedVersion)).toThrowError(
+      `Unsupported version ${unsupportedVersion.v}`
+    );
+  });
+});
+
+describe('makeDescribe', () => {
+  it('should generate a skipped describe block with a no-op test when stmts is empty', () => {
+    const title = 'Test Title';
+    const stmts: t.Statement[] = []; // Empty array
+
+    const result = makeDescribe(title, stmts);
+
+    // Create the expected AST manually for a skipped describe block with a no-op test
+    const noOpIt = t.expressionStatement(
+      t.callExpression(t.identifier('it'), [
+        t.stringLiteral('no-op'),
+        t.arrowFunctionExpression([], t.blockStatement([])),
+      ])
+    );
+
+    const expectedAST = t.expressionStatement(
+      t.callExpression(t.memberExpression(t.identifier('describe'), t.identifier('skip')), [
+        t.stringLiteral(title),
+        t.arrowFunctionExpression([], t.blockStatement([noOpIt])),
+      ])
+    );
+
+    // Compare the generated AST with the expected AST
+    expect(result).toEqual(expectedAST);
   });
 });
