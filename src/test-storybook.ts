@@ -10,7 +10,7 @@ import tempy from 'tempy';
 import semver from 'semver';
 import { detect as detectPackageManager } from 'detect-package-manager';
 
-import { JestOptions, getCliOptions } from './util/getCliOptions';
+import { PlaywrightOptions, getCliOptions } from './util/getCliOptions';
 import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
@@ -106,7 +106,7 @@ async function reportCoverage() {
   // --skip-full in case we only want to show not fully covered code
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
-  if (process.env.JEST_SHARD !== 'true') {
+  if (process.env.PLAYWRIGHT_SHARD !== 'true') {
     const executorCommand = await getExecutorCommand();
     execSync(
       `${executorCommand} nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`,
@@ -148,32 +148,26 @@ function sanitizeURL(url: string) {
   return finalURL;
 }
 
-async function executeJestPlaywright(args: JestOptions) {
-  // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
-  const jestPath = path.dirname(
-    require.resolve('jest', {
-      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
-    })
-  );
-  const jest = require(jestPath);
+async function executePlaywright(args: PlaywrightOptions) {
   const argv = args.slice(2);
 
-  // jest configs could either come in the root dir, or inside of the Storybook config dir
   const configDir = process.env.STORYBOOK_CONFIG_DIR ?? '';
-  const [userDefinedJestConfig] = (
+  const [userDefinedPlaywrightConfig] = (
     await Promise.all([
-      glob(path.join(configDir, 'test-runner-jest*'), { windowsPathsNoEscape: true }),
-      glob(path.join('test-runner-jest*'), { windowsPathsNoEscape: true }),
+      glob(path.join(configDir, 'test-runner-playwright*'), { windowsPathsNoEscape: true }),
+      glob(path.join('test-runner-playwright*'), { windowsPathsNoEscape: true }),
     ])
   ).reduce((a, b) => a.concat(b), []);
 
-  const jestConfigPath =
-    userDefinedJestConfig ||
-    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
+  const playwrightConfigPath =
+    userDefinedPlaywrightConfig ||
+    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-playwright.config.js'));
 
-  argv.push('--config', jestConfigPath);
+  argv.push('--config', playwrightConfigPath);
 
-  await jest.run(argv);
+  execSync(`npx playwright test --ui --config ${playwrightConfigPath}`, {
+    stdio: 'inherit',
+  });
 }
 
 async function checkStorybook(url: string) {
@@ -258,8 +252,8 @@ async function getIndexTempDir(url: string) {
 }
 
 function ejectConfiguration() {
-  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
-  const destination = path.resolve('test-runner-jest.config.js');
+  const origin = path.resolve(__dirname, '../playwright/test-runner-playwright.config.js');
+  const destination = path.resolve('test-runner-playwright.config.js');
   const fileAlreadyExists = fs.existsSync(destination);
 
   if (fileAlreadyExists) {
@@ -272,7 +266,7 @@ function ejectConfiguration() {
   }
 
   fs.copyFileSync(origin, destination);
-  log('Configuration file successfully copied as test-runner-jest.config.js');
+  log('Configuration file successfully copied as test-runner-playwright.config.js');
 }
 
 function warnOnce(message: string) {
@@ -287,7 +281,7 @@ function warnOnce(message: string) {
 }
 
 const main = async () => {
-  const { jestOptions, runnerOptions } = getCliOptions();
+  const { playwrightOptions, runnerOptions } = getCliOptions();
 
   if (runnerOptions.eject) {
     ejectConfiguration();
@@ -327,14 +321,29 @@ const main = async () => {
   }
 
   // set this flag to skip reporting coverage in watch mode
-  const isWatchMode = jestOptions.includes('--watch') || jestOptions.includes('--watchAll');
+  const isWatchMode =
+    playwrightOptions.includes('--watch') || playwrightOptions.includes('--watchAll');
 
   const rawTargetURL = process.env.TARGET_URL ?? runnerOptions.url ?? 'http://127.0.0.1:6006';
-  await checkStorybook(rawTargetURL);
 
   const targetURL = sanitizeURL(rawTargetURL);
 
   process.env.TARGET_URL = targetURL;
+
+  const { hostname } = new URL(targetURL);
+
+  const isLocalStorybookIp = await canBindToHost(hostname);
+  const shouldRunIndexJson = runnerOptions.indexJson !== false && !isLocalStorybookIp;
+  if (shouldRunIndexJson) {
+    log(
+      'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
+    );
+  }
+
+  if (runnerOptions.indexJson) {
+    // for --index-json, the URL must be running prior to this command
+    await checkStorybook(rawTargetURL);
+  }
 
   if (!isWatchMode && runnerOptions.coverage) {
     process.env.STORYBOOK_COLLECT_COVERAGE = 'true';
@@ -364,8 +373,8 @@ const main = async () => {
     process.env.REFERENCE_URL = sanitizeURL(process.env.REFERENCE_URL);
   }
 
-  if (jestOptions.includes('--shard')) {
-    process.env.JEST_SHARD = 'true';
+  if (playwrightOptions.includes('--shard')) {
+    process.env.PLAYWRIGHT_SHARD = 'true';
   }
 
   // Use TEST_BROWSERS if set, otherwise get from --browser option
@@ -373,15 +382,6 @@ const main = async () => {
     if (Array.isArray(runnerOptions.browsers))
       process.env.TEST_BROWSERS = runnerOptions.browsers.join(',');
     else process.env.TEST_BROWSERS = runnerOptions.browsers;
-  }
-  const { hostname } = new URL(targetURL);
-
-  const isLocalStorybookIp = await canBindToHost(hostname);
-  const shouldRunIndexJson = runnerOptions.indexJson !== false && !isLocalStorybookIp;
-  if (shouldRunIndexJson) {
-    log(
-      'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
-    );
   }
 
   if (runnerOptions.indexJson || shouldRunIndexJson) {
@@ -403,7 +403,7 @@ const main = async () => {
     );
   }
 
-  await executeJestPlaywright(jestOptions);
+  await executePlaywright(playwrightOptions);
 };
 
 main().catch((e) => {

@@ -20,10 +20,10 @@ describe('getCliOptions', () => {
   it('returns default options if no options are passed', () => {
     jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValue({ options: {}, extraArgs: [] });
     const opts = getCliOptions();
-    const jestOptions = opts.jestOptions.length > 0 ? ['--coverage'] : [];
+    const playwrightOptions = opts.playwrightOptions.length > 0 ? ['--coverage'] : [];
     expect(opts).toEqual({
       runnerOptions: {},
-      jestOptions,
+      playwrightOptions,
     });
   });
 
@@ -42,7 +42,10 @@ describe('getCliOptions', () => {
       .spyOn(cliHelper, 'getParsedCliOptions')
       .mockReturnValue({ options: customConfig, extraArgs: [] });
     const opts = getCliOptions();
-    expect(opts).toEqual({ jestOptions: [], runnerOptions: { coverage: true, junit: false } });
+    expect(opts).toEqual({
+      playwrightOptions: [],
+      runnerOptions: { coverage: true, junit: false },
+    });
   });
 
   it('handles string options correctly', () => {
@@ -51,7 +54,10 @@ describe('getCliOptions', () => {
       .spyOn(cliHelper, 'getParsedCliOptions')
       .mockReturnValue({ options: customConfig, extraArgs: [] });
     const opts = getCliOptions();
-    expect(opts).toEqual({ jestOptions: [], runnerOptions: { url: 'http://localhost:3000' } });
+    expect(opts).toEqual({
+      playwrightOptions: [],
+      runnerOptions: { url: 'http://localhost:3000' },
+    });
   });
 
   it('handles extra arguments correctly', () => {
@@ -60,7 +66,7 @@ describe('getCliOptions', () => {
       extraArgs: ['--watch', '--coverage'],
     });
     const opts = getCliOptions();
-    expect(opts.jestOptions).toEqual([
+    expect(opts.playwrightOptions).toEqual([
       '--version',
       '--no-cache',
       '--env',
@@ -77,6 +83,6 @@ describe('getCliOptions', () => {
     process.argv = [];
     jest.spyOn(cliHelper, 'getParsedCliOptions').mockReturnValueOnce({ options: {}, extraArgs });
     const opts = getCliOptions();
-    expect(opts.jestOptions).toEqual(extraArgs);
+    expect(opts.playwrightOptions).toEqual(extraArgs);
   });
 });

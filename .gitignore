@@ -11,6 +11,7 @@ yarn-error.log
 coverage
 test-results.json
 **/junit.xml
+playwright-cache-location.txt
 
 
 /**/.yarn/*

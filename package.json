@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "build:watch": "tsup --watch",
+    "build:watch": "concurrently \"tsup --watch\" \"nodemon\"",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --quiet\"",
@@ -72,6 +72,7 @@
     "husky": "^8.0.0",
     "jest-image-snapshot": "^6.2.0",
     "lint-staged": "^13.0.3",
+    "nodemon": "^3.0.1",
     "prettier": "^2.8.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -79,13 +80,21 @@
     "semver": "^7.5.4",
     "storybook": "^7.5.3",
     "ts-jest": "^29.0.0",
-    "tsup": "^6.5.0",
-    "typescript": "~4.9.4",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.2",
     "vite": "^4.4.5",
     "wait-on": "^7.2.0"
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx,css,md}": "prettier --write"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/playwright/csf-playwright-plugin.ts",
+      "src/util/*.ts"
+    ],
+    "exec": "node scripts/delete-playwright-cache.js",
+    "ext": "ts"
   },
   "publishConfig": {
     "access": "public"
@@ -96,6 +105,7 @@
     "@babel/template": "^7.22.5",
     "@babel/types": "^7.22.5",
     "@jest/types": "^29.6.3",
+    "@playwright/test": "^1.36.1",
     "@storybook/core-common": "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0",
     "@storybook/csf": "^0.1.1",
     "@storybook/csf-tools": "^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0",
@@ -104,7 +114,6 @@
     "@swc/jest": "^0.2.23",
     "can-bind-to-host": "^1.1.1",
     "commander": "^9.0.0",
-    "expect-playwright": "^0.8.0",
     "glob": "^10.2.2",
     "jest": "^29.6.4",
     "jest-circus": "^29.6.4",
@@ -115,13 +124,12 @@
     "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^2.0.0",
     "node-fetch": "^2",
-    "playwright": "^1.14.0",
     "read-pkg-up": "^7.0.1",
     "tempy": "^1.0.1",
     "ts-dedent": "^2.0.0"
   },
   "engines": {
-    "node": "^16.10.0 || ^18.0.0 || >=20.0.0"
+    "node": "^18.0.0 || >=20.0.0"
   },
   "auto": {
     "prereleaseBranches": [

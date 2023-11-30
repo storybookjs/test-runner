@@ -3,10 +3,11 @@ import { CommanderError, program } from 'commander';
 
 type ParsedCliOptions = {
   options: CliOptions['runnerOptions'];
-  extraArgs: CliOptions['jestOptions'];
+  extraArgs: CliOptions['playwrightOptions'];
 };
 
 export const getParsedCliOptions = (): ParsedCliOptions => {
+  // TODO: check all options which do not work/exist in Playwright
   program
     .option(
       '-i, --index-json',
