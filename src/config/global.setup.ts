@@ -1,3 +1,3 @@
 export default async () => {
-  console.log('Create and define files from index-json');
+  // here is where we potentially create and define files from index-json
 };

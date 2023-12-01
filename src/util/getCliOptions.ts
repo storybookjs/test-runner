@@ -45,6 +45,15 @@ function copyOption<ObjType extends object, KeyType extends keyof ObjType>(
   obj[key] = value;
 }
 
+const getBackwardCompatibleKey = (key: string) => {
+  const optionsMap = {
+    watch: 'ui',
+    watchAll: 'ui',
+  } as Record<string, string>;
+
+  return optionsMap[key] ?? key;
+};
+
 export const getCliOptions = (): CliOptions => {
   const { options: allOptions, extraArgs } = getParsedCliOptions();
 
@@ -60,12 +69,13 @@ export const getCliOptions = (): CliOptions => {
     if (STORYBOOK_RUNNER_COMMANDS.includes(key)) {
       copyOption(acc.runnerOptions, key, optionValue);
     } else {
+      let _key = getBackwardCompatibleKey(key);
       if (optionValue === true) {
-        acc.playwrightOptions.push(`--${key}`);
+        acc.playwrightOptions.push(`--${_key}`);
       } else if (optionValue === false) {
-        acc.playwrightOptions.push(`--no-${key}`);
+        acc.playwrightOptions.push(`--no-${_key}`);
       } else {
-        acc.playwrightOptions.push(`--${key}`, `${optionValue}`);
+        acc.playwrightOptions.push(`--${_key}`, `${optionValue}`);
       }
     }
 

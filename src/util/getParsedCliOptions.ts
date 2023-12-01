@@ -24,7 +24,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       'Directory where to load Storybook configurations from',
       '.storybook'
     )
-    .option('--watch', 'Watch files for changes and rerun tests related to changed files', false)
+    .option('--watch', 'Watch files for changes and rerun tests related to changed files')
     .option('--watchAll', 'Watch files for changes and rerun all tests when something changes')
     .option(
       '--browsers <browsers...>',
@@ -40,8 +40,8 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       '--maxWorkers <amount>',
       'Specifies the maximum number of workers the worker-pool will spawn for running tests'
     )
-    .option('--no-cache', 'Disable the cache')
-    .option('--clearCache', 'Deletes the Jest cache directory and then exits without running tests')
+    // .option('--no-cache', 'Disable the cache')
+    // .option('--clearCache', 'Deletes the Jest cache directory and then exits without running tests')
     .option('--verbose', 'Display individual test results with the test suite hierarchy')
     .option(
       '-u, --updateSnapshot',

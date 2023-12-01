@@ -165,9 +165,16 @@ async function executePlaywright(args: PlaywrightOptions) {
 
   argv.push('--config', playwrightConfigPath);
 
-  execSync(`npx playwright test --ui --config ${playwrightConfigPath}`, {
-    stdio: 'inherit',
-  });
+  const command = `npx playwright test ${argv.join(' ')}`;
+
+  try {
+    execSync(command, {
+      stdio: 'inherit',
+    });
+  } catch (err) {
+    // we exit ourselves otherwise we will print test failures as if it was a command error
+    process.exit(1);
+  }
 }
 
 async function checkStorybook(url: string) {
