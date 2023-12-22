@@ -753,7 +753,7 @@ You can access its context in a test hook like so:
 import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const storyContext = await getStoryContext(page, context);
     if (storyContext.parameters.theme === 'dark') {
@@ -777,7 +777,7 @@ The `waitForPageReady` utility is useful when you're executing [image snapshot t
 import { TestRunnerConfig, waitForPageReady } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // use the test-runner utility to wait for fonts to load, etc.
     await waitForPageReady(page);
 
