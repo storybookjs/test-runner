@@ -44,7 +44,7 @@ export const prefixFunction = ({
     storyExport: t.identifier(key),
     name: t.stringLiteral(name), // FIXME .name annotation
     title: t.stringLiteral(title),
-    id: t.stringLiteral(id ? toId(id, name) : toId(title, name)),
+    id: t.stringLiteral(toId(id ?? title, name)),
   };
 
   const result = makeArray(testPrefixer(context));
