@@ -155,7 +155,7 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
               }),
             ]);
           });
-        const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
+        const program = t.program([makeDescribe(stories[0].title, storyTests)]);
 
         const { code } = generate(program, {});
 
