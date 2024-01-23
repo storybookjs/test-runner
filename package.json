@@ -59,7 +59,6 @@
     "@storybook/react": "^7.5.3",
     "@storybook/react-vite": "^7.5.3",
     "@storybook/test": "^7.5.3",
-    "@storybook/testing-library": "^0.2.0",
     "@types/jest": "^29.0.0",
     "@types/node": "^16.4.1",
     "@vitejs/plugin-react": "^4.0.3",

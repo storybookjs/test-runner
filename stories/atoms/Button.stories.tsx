@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect } from '@storybook/test';
-import { within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/testing-library';
+import { within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/test';
 
 import { isTestRunner } from '../../.storybook/is-test-runner';
 
