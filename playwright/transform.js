@@ -1,5 +1,5 @@
 const { transformSync: swcTransform } = require('@swc/core');
-const { transformPlaywright } = require('../dist/playwright/transformPlaywright');
+const { transformPlaywright } = require('../dist');
 
 module.exports = {
   process(src, filename) {

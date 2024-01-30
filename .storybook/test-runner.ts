@@ -1,5 +1,5 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { getStoryContext, waitForPageReady } from '../dist/playwright/hooks';
+import { getStoryContext, waitForPageReady } from '../dist';
 import type { TestRunnerConfig } from '../dist';
 
 const snapshotsDir = process.env.SNAPSHOTS_DIR || '__snapshots__';
