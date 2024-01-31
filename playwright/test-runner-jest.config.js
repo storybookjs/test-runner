@@ -1,4 +1,4 @@
-const { getJestConfig } = require('@storybook/test-runner');
+const { getJestConfig } = require('../dist');
 
 // The default Jest configuration comes from @storybook/test-runner
 const testRunnerConfig = getJestConfig();

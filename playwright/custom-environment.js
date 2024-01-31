@@ -1,4 +1,4 @@
-const { setupPage } = require('../dist/setup-page');
+const { setupPage } = require('../dist');
 
 const PlaywrightEnvironment = require('jest-playwright-preset/lib/PlaywrightEnvironment').default;
 

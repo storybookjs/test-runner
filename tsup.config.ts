@@ -3,19 +3,25 @@ import { defineConfig } from 'tsup';
 export default defineConfig([
   {
     clean: true,
-    entry: [
-      './src/**/*.{js,jsx,ts,tsx}',
-      '!./src/**/*.d.{js,jsx,ts,tsx}',
-      '!./src/**/*test.{js,jsx,ts,tsx}',
-    ],
+    entry: ['./src/index.ts', './src/test-storybook.ts'],
     format: ['cjs', 'esm'],
     splitting: false,
     dts: true,
     minify: false,
     treeshake: false,
-    bundle: false,
-    esbuildOptions(options, context) {
+    bundle: true,
+    platform: 'node',
+    external: ['@storybook/test-runner'],
+    esbuildOptions(options) {
       options.platform = 'node';
     },
+  },
+  {
+    entry: ['./src/setup-page-script.ts'],
+    format: ['esm'],
+    dts: false,
+    bundle: false,
+    treeshake: false,
+    platform: 'browser',
   },
 ]);
