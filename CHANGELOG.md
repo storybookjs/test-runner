@@ -1,3 +1,37 @@
+# v0.17.0 (Mon Mar 11 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.17.0 [#438](https://github.com/storybookjs/test-runner/pull/438) ([@JReinhold](https://github.com/JReinhold) [@shilman](https://github.com/shilman) [@valentinpalkovic](https://github.com/valentinpalkovic) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen))
+- Support Storybook 8 [#429](https://github.com/storybookjs/test-runner/pull/429) ([@yannbf](https://github.com/yannbf))
+- Support unhandled rendering errors [#421](https://github.com/storybookjs/test-runner/pull/421) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Prebundle dependencies [#431](https://github.com/storybookjs/test-runner/pull/431) ([@yannbf](https://github.com/yannbf))
+- Update internal example to Storybook 8 [#430](https://github.com/storybookjs/test-runner/pull/430) ([@yannbf](https://github.com/yannbf))
+- swap storybook/jest to storybook/test [#427](https://github.com/storybookjs/test-runner/pull/427) ([@ndelangen](https://github.com/ndelangen))
+- Add PR template [#428](https://github.com/storybookjs/test-runner/pull/428) ([@yannbf](https://github.com/yannbf))
+- Fix build step [#425](https://github.com/storybookjs/test-runner/pull/425) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Remove --prerelease from sb upgrade CI [#423](https://github.com/storybookjs/test-runner/pull/423) ([@JReinhold](https://github.com/JReinhold))
+- Support stories with meta id for permalinking [#419](https://github.com/storybookjs/test-runner/pull/419) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Docs: Add remark regarding pnp support [#432](https://github.com/storybookjs/test-runner/pull/432) ([@yannbf](https://github.com/yannbf))
+- docs: replace postRender(deprecated) with postVisit [#418](https://github.com/storybookjs/test-runner/pull/418) ([@junkisai](https://github.com/junkisai))
+
+#### Authors: 6
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Junki Saito ([@junkisai](https://github.com/junkisai))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.16.0 (Mon Nov 27 2023)
 
 #### 🚀 Enhancement
