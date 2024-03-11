@@ -3774,6 +3774,7 @@ __metadata:
     "@swc/jest": ^0.2.23
     "@types/jest": ^29.0.0
     "@types/node": ^16.4.1
+    "@types/node-fetch": ^2.6.11
     "@vitejs/plugin-react": ^4.0.3
     auto: ^11.0.1
     babel-jest: ^29.0.0
@@ -4382,6 +4383,16 @@ __metadata:
   version: 5.1.2
   resolution: "@types/minimatch@npm:5.1.2"
   checksum: 0391a282860c7cb6fe262c12b99564732401bdaa5e395bee9ca323c312c1a0f45efbf34dce974682036e857db59a5c9b1da522f3d6055aeead7097264c8705a8
+  languageName: node
+  linkType: hard
+
+"@types/node-fetch@npm:^2.6.11":
+  version: 2.6.11
+  resolution: "@types/node-fetch@npm:2.6.11"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^4.0.0
+  checksum: 180e4d44c432839bdf8a25251ef8c47d51e37355ddd78c64695225de8bc5dc2b50b7bb855956d471c026bb84bd7295688a0960085e7158cbbba803053492568b
   languageName: node
   linkType: hard
 
