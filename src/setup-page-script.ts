@@ -380,6 +380,11 @@ async function __test(storyId: string): Promise<any> {
         reject(new StorybookTestRunnerError(storyId, error.message, logs));
       },
 
+      unhandledErrorsWhilePlaying: ([error]: Error[]) => {
+        cleanup(listeners);
+        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+      },
+
       storyMissing: (id: string) => {
         cleanup(listeners);
         if (id === storyId) {

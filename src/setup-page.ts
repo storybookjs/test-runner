@@ -1,5 +1,6 @@
 import type { Page, BrowserContext } from 'playwright';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
+import { pkgUp } from 'pkg-up';
 import { PrepareContext } from './playwright/hooks';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { readFile } from 'node:fs/promises';
@@ -61,7 +62,13 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
 
   const finalStorybookUrl = referenceURL ?? targetURL ?? '';
-  const scriptLocation = require.resolve(path.join(__dirname, 'setup-page-script.mjs'));
+  const testRunnerPackageLocation = await pkgUp({ cwd: __dirname });
+  if (!testRunnerPackageLocation) throw new Error('Could not find test-runner package location');
+  const scriptLocation = path.join(
+    path.dirname(testRunnerPackageLocation),
+    'dist',
+    'setup-page-script.mjs'
+  );
 
   // read the content of setup-page-script.mjs and replace the placeholders with the actual values
   const content = (await readFile(scriptLocation, 'utf-8'))

@@ -47,6 +47,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
+  - [Yarn PnP (Plug n' Play) support](#yarn-pnp-plug-n-play-support)
   - [React Native support](#react-native-support)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -91,7 +92,8 @@ Use the following table to use the correct version of this package, based on the
 
 | Test runner version | Storybook version |
 | ------------------- | ----------------- |
-| ^0.10.0             | ^7.0.0            |
+| ^0.17.0             | ^8.0.0            |
+| ~0.16.0             | ^7.0.0            |
 | ~0.9.4              | ^6.4.0            |
 
 ## Getting started
@@ -982,6 +984,19 @@ export default config;
 ```
 
 ## Troubleshooting
+
+#### Yarn PnP (Plug n' Play) support
+
+The Storybook test-runner relies on a library called [jest-playwright-preset](https://github.com/playwright-community/jest-playwright), of which does not seem to support PnP. As a result, the test-runner won't work out of the box with PnP, and you might have the following error:
+
+```
+PlaywrightError: jest-playwright-preset: Cannot find playwright package to use chromium
+```
+
+If that is the case, there are two potential solutions:
+
+1. Install `playwright` as a direct dependency. You might need to run `yarn playwright install` after that, so you install Playwright's browser binaries.
+2. Switch your package manager's linker mode to `node-modules`.
 
 #### React Native support
 

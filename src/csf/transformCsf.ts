@@ -165,7 +165,7 @@ export const transformCsf = (
         return makeDescribe(key, tests);
       }
     })
-    .filter(Boolean) as babel.types.Statement[];
+    .filter(Boolean) as t.Statement[];
 
   let result = '';
 
@@ -175,7 +175,7 @@ export const transformCsf = (
       csf.meta?.title as string,
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
-    ) as babel.types.Node;
+    );
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
