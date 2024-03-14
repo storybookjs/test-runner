@@ -3667,7 +3667,7 @@ __metadata:
     lint-staged: ^13.0.3
     node-fetch: ^2
     pkg-up: ^5.0.0
-    playwright: ^1.14.0
+    playwright: ^1.42.1
     prettier: ^2.8.1
     react: ^17.0.1
     react-dom: ^17.0.1
@@ -10626,7 +10626,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.39.0, playwright-core@npm:>=1.2.0":
+"playwright-core@npm:1.42.1":
+  version: 1.42.1
+  resolution: "playwright-core@npm:1.42.1"
+  bin:
+    playwright-core: cli.js
+  checksum: e7081ff0f43b4b9053255109eb1d82164b7c6b55c7d022e25fca935d0f4fc547cb2e02a7b64f0c2a9462729be7bb45edb082f8b038306415944f1061d00d9c90
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:>=1.2.0":
   version: 1.39.0
   resolution: "playwright-core@npm:1.39.0"
   bin:
@@ -10635,18 +10644,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.14.0":
-  version: 1.39.0
-  resolution: "playwright@npm:1.39.0"
+"playwright@npm:^1.42.1":
+  version: 1.42.1
+  resolution: "playwright@npm:1.42.1"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.39.0
+    playwright-core: 1.42.1
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 96d8ca5aa25465c1c5d554d0d6071981d55e22477800ff8f5d47a53ca75193d60ece2df538a01b7165b3277dd5493c67603a5acda713029df7fbd95ce2417bc9
+  checksum: 06c16bcd07d03993126ee6c168bde28c59d3cab7f7d4721eaf57bd5c51e9c929e10a286758de062b5fc02874413ceae2684d14cbb7865c0a51fc8df6d9001ad1
   languageName: node
   linkType: hard
 
