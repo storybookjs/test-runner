@@ -25,7 +25,7 @@ export const testPrefixer: TestPrefixer = (context) => {
           await globalThis.__sbPreVisit(page, context);
         }
 
-        const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
+        const result = await page.addInitScript(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
           id: %%id%%,
         });
   

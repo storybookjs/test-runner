@@ -53,7 +53,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -98,7 +98,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -145,7 +145,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -239,7 +239,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -286,7 +286,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -356,7 +356,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -447,7 +447,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -492,7 +492,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -539,7 +539,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
@@ -618,7 +618,7 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
+                const result = await page.addInitScript(({
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
