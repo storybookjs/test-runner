@@ -1,3 +1,186 @@
+# v0.17.0 (Mon Mar 11 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.17.0 [#438](https://github.com/storybookjs/test-runner/pull/438) ([@JReinhold](https://github.com/JReinhold) [@shilman](https://github.com/shilman) [@valentinpalkovic](https://github.com/valentinpalkovic) [@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen))
+- Support Storybook 8 [#429](https://github.com/storybookjs/test-runner/pull/429) ([@yannbf](https://github.com/yannbf))
+- Support unhandled rendering errors [#421](https://github.com/storybookjs/test-runner/pull/421) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Prebundle dependencies [#431](https://github.com/storybookjs/test-runner/pull/431) ([@yannbf](https://github.com/yannbf))
+- Update internal example to Storybook 8 [#430](https://github.com/storybookjs/test-runner/pull/430) ([@yannbf](https://github.com/yannbf))
+- swap storybook/jest to storybook/test [#427](https://github.com/storybookjs/test-runner/pull/427) ([@ndelangen](https://github.com/ndelangen))
+- Add PR template [#428](https://github.com/storybookjs/test-runner/pull/428) ([@yannbf](https://github.com/yannbf))
+- Fix build step [#425](https://github.com/storybookjs/test-runner/pull/425) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Remove --prerelease from sb upgrade CI [#423](https://github.com/storybookjs/test-runner/pull/423) ([@JReinhold](https://github.com/JReinhold))
+- Support stories with meta id for permalinking [#419](https://github.com/storybookjs/test-runner/pull/419) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Docs: Add remark regarding pnp support [#432](https://github.com/storybookjs/test-runner/pull/432) ([@yannbf](https://github.com/yannbf))
+- docs: replace postRender(deprecated) with postVisit [#418](https://github.com/storybookjs/test-runner/pull/418) ([@junkisai](https://github.com/junkisai))
+
+#### Authors: 6
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Junki Saito ([@junkisai](https://github.com/junkisai))
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.16.0 (Mon Nov 27 2023)
+
+#### 🚀 Enhancement
+
+- Introduce logLevel configuration [#406](https://github.com/storybookjs/test-runner/pull/406) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Filter duplicated error messages in browser logs [#405](https://github.com/storybookjs/test-runner/pull/405) ([@yannbf](https://github.com/yannbf))
+- Fix sync issues between tests [#404](https://github.com/storybookjs/test-runner/pull/404) ([@yannbf](https://github.com/yannbf))
+- Refactor: Extract the setup page scripts into a separate file [#403](https://github.com/storybookjs/test-runner/pull/403) ([@yannbf](https://github.com/yannbf))
+- Docs: Adds feedback form to migration documentation [#402](https://github.com/storybookjs/test-runner/pull/402) ([@jonniebigodes](https://github.com/jonniebigodes))
+- Bump `jest-playwright-preset` from `v3.0.1` to `v4.0.0` [#400](https://github.com/storybookjs/test-runner/pull/400) ([@kemuridama](https://github.com/kemuridama))
+- Improve type safety and code quality [#383](https://github.com/storybookjs/test-runner/pull/383) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+- Refactor: Improve internal code [#378](https://github.com/storybookjs/test-runner/pull/378) ([@bryanjtc](https://github.com/bryanjtc) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- [@jonniebigodes](https://github.com/jonniebigodes)
+- Bryan Thomas ([@bryanjtc](https://github.com/bryanjtc))
+- Ryo Ochiai ([@kemuridama](https://github.com/kemuridama))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.15.2 (Tue Nov 21 2023)
+
+#### 🐛 Bug Fix
+
+- Remove Node 14 from engines field [#353](https://github.com/storybookjs/test-runner/pull/353) ([@legobeat](https://github.com/legobeat) [@yannbf](https://github.com/yannbf))
+- Docs: Add react native remark to troubleshooting section [#398](https://github.com/storybookjs/test-runner/pull/398) ([@yannbf](https://github.com/yannbf))
+- Fix "Browser has been closed" crash on uncaught page errors [#397](https://github.com/storybookjs/test-runner/pull/397) ([@yannbf](https://github.com/yannbf))
+- Clarify difference between skipped and excluded tags [#396](https://github.com/storybookjs/test-runner/pull/396) ([@IanVS](https://github.com/IanVS) [@yannbf](https://github.com/yannbf))
+- Refactor: Rename "render" hooks to "visit" hooks [#394](https://github.com/storybookjs/test-runner/pull/394) ([@yannbf](https://github.com/yannbf))
+- Docs: Update tags documentation [#393](https://github.com/storybookjs/test-runner/pull/393) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- [@legobeat](https://github.com/legobeat)
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.15.1 (Thu Nov 16 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Make tags optional in TestRunnerConfig [#391](https://github.com/storybookjs/test-runner/pull/391) ([@stramel](https://github.com/stramel))
+
+#### Authors: 2
+
+- Michael Stramel ([@stramel](https://github.com/stramel))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.15.0 (Thu Nov 16 2023)
+
+#### 🚀 Enhancement
+
+- Add support for test filtering via tags [#382](https://github.com/storybookjs/test-runner/pull/382) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- fix: switch `checkStorybook` to use `GET` method [#385](https://github.com/storybookjs/test-runner/pull/385) ([@stramel](https://github.com/stramel))
+- Chore: update wait-on and lockfile [#389](https://github.com/storybookjs/test-runner/pull/389) ([@yannbf](https://github.com/yannbf))
+- Add storyshots migration guides [#380](https://github.com/storybookjs/test-runner/pull/380) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman) [@jonniebigodes](https://github.com/jonniebigodes))
+
+#### Authors: 4
+
+- [@jonniebigodes](https://github.com/jonniebigodes)
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Michael Stramel ([@stramel](https://github.com/stramel))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.14.1 (Mon Nov 13 2023)
+
+#### 🐛 Bug Fix
+
+- Fix: Do not set test root outside index json mode [#387](https://github.com/storybookjs/test-runner/pull/387) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.14.0 (Wed Nov 08 2023)
+
+#### 🚀 Enhancement
+
+- Feature: Support .story files [#376](https://github.com/storybookjs/test-runner/pull/376) ([@yannbf](https://github.com/yannbf))
+- BREAKING: Upgrade Jest to v29 [#348](https://github.com/storybookjs/test-runner/pull/348) ([@yannbf](https://github.com/yannbf) [@legobeat](https://github.com/legobeat))
+- BREAKING: Bump minimum Node.js version to ^14.15.0 [#354](https://github.com/storybookjs/test-runner/pull/354) ([@legobeat](https://github.com/legobeat))
+- Add waitForPageReady utility [#361](https://github.com/storybookjs/test-runner/pull/361) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Documentation: restructure docs and include more recipes [#373](https://github.com/storybookjs/test-runner/pull/373) ([@yannbf](https://github.com/yannbf))
+- Run nyc with correct packager manager command [#364](https://github.com/storybookjs/test-runner/pull/364) ([@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph) [@yannbf](https://github.com/yannbf))
+- deps/devDeps: bump semver to latest [CVE-2022-25883] [#349](https://github.com/storybookjs/test-runner/pull/349) ([@legobeat](https://github.com/legobeat))
+- Make userAgent configurable [#342](https://github.com/storybookjs/test-runner/pull/342) ([@jaknas](https://github.com/jaknas))
+- devDeps: Bump auto from v10 to v11 [#346](https://github.com/storybookjs/test-runner/pull/346) ([@legobeat](https://github.com/legobeat))
+- CI: Fix yarn 2 issue [#352](https://github.com/storybookjs/test-runner/pull/352) ([@yannbf](https://github.com/yannbf))
+- chore: set `engines.node` to `>=12.0.0` [#351](https://github.com/storybookjs/test-runner/pull/351) ([@legobeat](https://github.com/legobeat))
+- Maintenance: Update to yarn berry [#344](https://github.com/storybookjs/test-runner/pull/344) ([@yannbf](https://github.com/yannbf))
+- Maintenance: Remove csf upgrade in nightly check [#343](https://github.com/storybookjs/test-runner/pull/343) ([@yannbf](https://github.com/yannbf))
+
+#### 🏠 Internal
+
+- chore: disable yarn telemetry by default [#350](https://github.com/storybookjs/test-runner/pull/350) ([@legobeat](https://github.com/legobeat))
+- chore: dedupe dependency versions in `yarn.lock` [#347](https://github.com/storybookjs/test-runner/pull/347) ([@legobeat](https://github.com/legobeat))
+
+#### 📝 Documentation
+
+- Docs: Expand ejected config docs with an example [#363](https://github.com/storybookjs/test-runner/pull/363) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 4
+
+- [@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph)
+- [@legobeat](https://github.com/legobeat)
+- Jakub Naskręski ([@jaknas](https://github.com/jaknas))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.13.0 (Fri Aug 04 2023)
+
+#### 🚀 Enhancement
+
+- Add ability to fail on console errors [#321](https://github.com/storybookjs/test-runner/pull/321) ([@work933k](https://github.com/work933k) [@yannbf](https://github.com/yannbf))
+- Support importing stories from separate packages [#339](https://github.com/storybookjs/test-runner/pull/339) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Maintenance: Update storybook example to vite and typescript [#340](https://github.com/storybookjs/test-runner/pull/340) ([@yannbf](https://github.com/yannbf))
+- Add coverage directory option [#272](https://github.com/storybookjs/test-runner/pull/272) ([@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- [@ferdinandhummel-gph](https://github.com/ferdinandhummel-gph)
+- [@work933k](https://github.com/work933k)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.12.0 (Thu Jul 27 2023)
 
 #### 🚀 Enhancement
