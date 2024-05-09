@@ -1,0 +1,39 @@
+name: Bug report 🐞
+description: >-
+  Something is broken and you have a reliable reproduction? Let us know here.
+  For questions, please use "Question" below.
+title: '[Bug]: '
+labels:
+  - needs triage
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: To Reproduce
+      description: >-
+        Due to the high volume of reports we receive, we can only prioritize bug reports that include a clear reproduction of the problem. Please use [storybook.new](https://storybook.new) to create one, and consult our [documentation](https://storybook.js.org/docs/react/contribute/how-to-reproduce) for guidance. Thank you for your understanding!
+      placeholder: >-
+        Please provide a link to your reproduction here. If creating a reproduction really isn't feasible, let us know and be sure to include as much detail as you can to help us understand the issue. 
+    validations:
+      required: true
+  - type: textarea
+    id: system
+    attributes:
+      label: System
+      description: Please paste the results of `npx storybook@latest info` here.
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
