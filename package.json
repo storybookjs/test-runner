@@ -1,6 +1,6 @@
 {
   "name": "@storybook/test-runner",
-  "version": "0.12.0",
+  "version": "0.18.0",
   "description": "Test runner for Storybook stories",
   "keywords": [
     "storybook-addons",
@@ -88,6 +88,7 @@
     "@storybook/test": "next",
     "@types/jest": "^29.0.0",
     "@types/node": "^16.4.1",
+    "@types/node-fetch": "^2.6.11",
     "@vitejs/plugin-react": "^4.0.3",
     "auto": "^11.1.6",
     "babel-jest": "^29.0.0",
