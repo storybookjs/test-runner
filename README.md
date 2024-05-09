@@ -156,6 +156,7 @@ Usage: test-storybook [options]
 | `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
 | `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
 | `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
+| `--testTimeout [number]`          | This option sets the default timeouts of test cases <br/>`test-storybook --testTimeout=15_000`                                                                                |
 | `--no-cache`                      | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
 | `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
 | `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
@@ -173,7 +174,7 @@ Usage: test-storybook [options]
 
 ## Ejecting configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
+The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, `--testTimeout`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
 
 > **Note**
 > The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
@@ -350,10 +351,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
@@ -385,10 +386,10 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
@@ -1016,6 +1017,12 @@ In either way, to fix it you should limit the amount of workers that run in para
 {
   "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
 }
+```
+
+Another option is trying to increase the test timeout by passing the [--testTimeout](https://jestjs.io/docs/cli#--testtimeoutnumber) option to your command (adding `--testTimeout=60_000` will increase test timeouts to 1 minute):
+
+```json
+"test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2 --testTimeout=60_000\""
 ```
 
 #### The test runner reports "No tests found" running on a Windows CI
