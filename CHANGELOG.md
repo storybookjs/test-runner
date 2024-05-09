@@ -1,3 +1,21 @@
+# v0.18.0 (Thu May 09 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.18.0 [#458](https://github.com/storybookjs/test-runner/pull/458) ([@skratchdot](https://github.com/skratchdot) [@yannbf](https://github.com/yannbf))
+- Fix coverage reports, add lcov as extra reporter [#456](https://github.com/storybookjs/test-runner/pull/456) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- add `--testTimeout` cli option from jest [#409](https://github.com/storybookjs/test-runner/pull/409) ([@skratchdot](https://github.com/skratchdot) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- ◬ ([@skratchdot](https://github.com/skratchdot))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.17.0 (Mon Mar 11 2024)
 
 #### 🚀 Enhancement
