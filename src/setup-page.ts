@@ -61,6 +61,14 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
 
+  await page.exposeBinding('getFormattedMessage', (_, message: string) => {
+    if (testRunnerConfig.errorMessageFormatter) {
+      return testRunnerConfig.errorMessageFormatter(message);
+    }
+
+    return message;
+  });
+
   const finalStorybookUrl = referenceURL ?? targetURL ?? '';
   const testRunnerPackageLocation = await pkgUp({ cwd: __dirname });
   if (!testRunnerPackageLocation) throw new Error('Could not find test-runner package location');

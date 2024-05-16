@@ -63,6 +63,11 @@ export interface TestRunnerConfig {
    * @default 'info'
    */
   logLevel?: 'info' | 'warn' | 'error' | 'verbose' | 'none';
+
+  /**
+   * Defines a custom function to process the error message. Useful to sanitize error messages or to add additional information.
+   */
+  errorMessageFormatter?: (error: string) => string;
 }
 
 export const setPreVisit = (preVisit: TestHook) => {

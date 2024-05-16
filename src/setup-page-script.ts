@@ -31,6 +31,7 @@ const TEST_RUNNER_DEBUG_PRINT_LIMIT = parseInt('{{debugPrintLimit}}', 10);
 declare global {
   // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
   var logToPage: (message: string) => void;
+  var getFormattedMessage: (message: string) => Promise<string>;
 }
 
 // Type definitions for function parameters and return types
@@ -377,7 +378,9 @@ async function __test(storyId: string): Promise<any> {
 
       playFunctionThrewException: (error: Error) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+        getFormattedMessage(error.message).then((message: string) => {
+          reject(new StorybookTestRunnerError(storyId, message, logs));
+        });
       },
 
       unhandledErrorsWhilePlaying: ([error]: Error[]) => {
