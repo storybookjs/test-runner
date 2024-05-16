@@ -80,7 +80,7 @@ async function reportCoverage() {
   if (process.env.JEST_SHARD !== 'true') {
     const nycBinFullPath = getNycBinPath();
     execSync(
-      `${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
+      `node ${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
       {
         stdio: 'inherit',
         cwd: process.cwd(),
