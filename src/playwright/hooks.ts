@@ -1,5 +1,5 @@
 import type { BrowserContext, Page } from 'playwright';
-import type { StoryContext } from '@storybook/csf';
+import type { StoryContextForEnhancers } from '@storybook/csf';
 
 export type TestContext = {
   id: string;
@@ -73,7 +73,10 @@ export const setPostVisit = (postVisit: TestHook) => {
   globalThis.__sbPostVisit = postVisit;
 };
 
-export const getStoryContext = async (page: Page, context: TestContext): Promise<StoryContext> => {
+export const getStoryContext = async (
+  page: Page,
+  context: TestContext
+): Promise<StoryContextForEnhancers> => {
   return page.evaluate(({ storyId }) => globalThis.__getContext(storyId), {
     storyId: context.id,
   });
