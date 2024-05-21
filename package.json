@@ -28,7 +28,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "node scripts/delete-playwright-cache.js && tsup",
     "build-storybook": "storybook build",
     "build:watch": "concurrently \"tsup --watch\" \"nodemon\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js",

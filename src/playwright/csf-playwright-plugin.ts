@@ -42,7 +42,7 @@ const makeTitleFactory = (filename: string) => {
     return (userTitle: string) =>
       userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;
   } catch (e) {
-    return (title: string) => title || 'atoms-button';
+    return (title: string) => title || '';
   }
 };
 
