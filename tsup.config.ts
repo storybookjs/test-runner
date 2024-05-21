@@ -3,7 +3,13 @@ import { defineConfig } from 'tsup';
 export default defineConfig([
   {
     clean: true,
-    entry: ['./src/index.ts', './src/test-storybook.ts'],
+    entry: [
+      './src/index.ts',
+      './src/test-storybook.ts',
+      './src/config/global.setup.ts',
+      './src/playwright/csf-playwright-plugin.ts',
+      './src/playwright/StoryPage.ts',
+    ],
     format: ['cjs', 'esm'],
     splitting: false,
     dts: true,

@@ -14,11 +14,14 @@ import {
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export const defineConfig = (config: PlaywrightTestConfig) =>
-  playwrightDefineConfig({
-    testDir: process.env.TEST_ROOT || './stories/',
-    testMatch: /Button.stories.(js|jsx|ts|tsx|mjs|mts)$/,
-    globalSetup: path.join(__dirname, 'global.setup.js'),
+export const defineConfig = (config: PlaywrightTestConfig) => {
+  const { STORYBOOK_STORIES_PATTERN } = process.env;
+
+  // @ts-ignore use _contextReuseMode
+  return playwrightDefineConfig({
+    testDir: process.env.TEST_ROOT || process.cwd(),
+    testMatch: STORYBOOK_STORIES_PATTERN?.split(';'),
+    globalSetup: path.join(__dirname, 'config', 'global.setup.js'),
     /* Run tests in files in parallel */
     fullyParallel: true,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -36,7 +39,7 @@ export const defineConfig = (config: PlaywrightTestConfig) =>
 
       /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
       trace: 'on-first-retry',
-      // @ts-expect-error use _contextReuseMode
+      // @ts-ignore use _contextReuseMode
       _contextReuseMode: 'when-possible',
     },
 
@@ -54,8 +57,7 @@ export const defineConfig = (config: PlaywrightTestConfig) =>
     ],
 
     build: {
-      // @ts-ignore
-      babelPlugins: [[path.join(__dirname, '..', 'playwright', 'csf-playwright-plugin.js')]],
+      babelPlugins: [[path.join(__dirname, 'playwright', 'csf-playwright-plugin.js')]],
       // @ts-ignore
       external: [/test-runner\/.*.js$/],
     },
@@ -68,3 +70,4 @@ export const defineConfig = (config: PlaywrightTestConfig) =>
     },
     ...config,
   });
+};

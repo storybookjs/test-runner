@@ -9,4 +9,6 @@ const { defineConfig } = require('./dist');
 /**
  * @type {import('@jest/types').Config.InitialOptions}
  */
-module.exports = defineConfig();
+const config = defineConfig({});
+
+module.exports = config;

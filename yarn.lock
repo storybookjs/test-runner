@@ -2860,14 +2860,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.36.1":
-  version: 1.44.0
-  resolution: "@playwright/test@npm:1.44.0"
+"@playwright/test@npm:1.41.0":
+  version: 1.41.0
+  resolution: "@playwright/test@npm:1.41.0"
   dependencies:
-    playwright: 1.44.0
+    playwright: 1.41.0
   bin:
     playwright: cli.js
-  checksum: 64cb12e26156e0530d16cec629d82c228db7a57fe29096a6961a18fc8b7fc5f35e28f8905af7039fad5d3af0224d38e93dba479760db2ce16a63c5e2fbe2990c
+  checksum: 3a7039f8cd14dd242154255417c100a99c3254a3c1fd26df2a11be24c10b06ef77d2736336d7743dedc5e1a6a52748e58ced730b6048f8bd75d8867ce81661e0
   languageName: node
   linkType: hard
 
@@ -4090,7 +4090,7 @@ __metadata:
     "@babel/template": ^7.22.5
     "@babel/types": ^7.22.5
     "@jest/types": ^29.6.3
-    "@playwright/test": ^1.36.1
+    "@playwright/test": 1.41.0
     "@storybook/addon-coverage": ^1.0.0
     "@storybook/addon-essentials": next
     "@storybook/addon-interactions": next
@@ -11393,7 +11393,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.44.0, playwright-core@npm:>=1.2.0":
+"playwright-core@npm:1.41.0":
+  version: 1.41.0
+  resolution: "playwright-core@npm:1.41.0"
+  bin:
+    playwright-core: cli.js
+  checksum: 14671265916a1fd0c71d94640de19c48bcce3f7dec35530f10e349e97030ea44ffa8ee518cbf811501e3ab2b74874aecf917e46bf40fea0570db1d4bea1fe7ac
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:>=1.2.0":
   version: 1.44.0
   resolution: "playwright-core@npm:1.44.0"
   bin:
@@ -11402,18 +11411,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:1.44.0":
-  version: 1.44.0
-  resolution: "playwright@npm:1.44.0"
+"playwright@npm:1.41.0":
+  version: 1.41.0
+  resolution: "playwright@npm:1.41.0"
   dependencies:
     fsevents: 2.3.2
-    playwright-core: 1.44.0
+    playwright-core: 1.41.0
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 22653ded652f436c1a837842009a175e8acb91ab340bb3deee87dbdb7205b439bd174f5f20591eb67f0171728c9f8f4bdfa3668a517da6bc7b45a4a79eabdbd5
+  checksum: e7c32136911c58e06b964fe7d33f8b3d8f6a067ae5218662a0811dd6c90e007db1774eb7e161f4aa748d760f404f4c066b7b7303c2b617f7448b6ee4b86c9999
   languageName: node
   linkType: hard
 

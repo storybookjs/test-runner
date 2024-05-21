@@ -1,4 +1,4 @@
-import type { Page, BrowserContext } from 'playwright';
+import type { Page, BrowserContext } from '@playwright/test';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
 import { pkgUp } from 'pkg-up';
 import { PrepareContext } from './playwright/hooks';

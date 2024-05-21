@@ -20,3 +20,4 @@ playwright-cache-location.txt
 !/**/.yarn/sdks
 !/**/.yarn/versions
 /**/.pnp.*
+test-results

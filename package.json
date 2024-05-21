@@ -55,7 +55,7 @@
     "@babel/template": "^7.22.5",
     "@babel/types": "^7.22.5",
     "@jest/types": "^29.6.3",
-    "@playwright/test": "^1.36.1",
+    "@playwright/test": "1.41.0",
     "@storybook/core-common": "next",
     "@storybook/csf": "^0.1.2",
     "@storybook/csf-tools": "next",

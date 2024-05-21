@@ -1,4 +1,4 @@
-import type { BrowserContext, Page } from 'playwright';
+import type { BrowserContext, Page } from '@playwright/test';
 import type { StoryContextForEnhancers } from '@storybook/csf';
 
 export type TestContext = {
