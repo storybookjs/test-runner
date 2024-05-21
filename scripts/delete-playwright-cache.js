@@ -6,10 +6,6 @@
  * these changes would not be reflected in the test-runner. This script (hooked to nodemon) makes sure that
  * whenever you change the csf-playwright-plugin.ts file, the cache is cleared and you actually get your changes.
  */
-if (process.platform !== 'darwin') {
-  throw new Error('This script only works on macOS.');
-}
-
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -62,6 +58,10 @@ async function findPlaywrightTransformCacheDir(dirPath) {
 // This is the pattern used by Playwright: /var/folders/{some-hash}/{some-other-hash}/T/playwright-transform-cache-501
 // it will look like this /var/folders/sv/lg8lnv0s4gg6_rt7s6cd52qr0000gn/T/playwright-transform-cache-501
 const main = async () => {
+  if (process.platform !== 'darwin') {
+    throw new Error('This script only works on macOS.');
+  }
+
   let playwrightTransformPath = await getCachedPath();
 
   if (!playwrightTransformPath) {
@@ -81,4 +81,6 @@ const main = async () => {
   }
 };
 
-main();
+if (process.env.CI === undefined) {
+  main();
+}
