@@ -65,6 +65,7 @@ export const defineConfig = (config: PlaywrightTestConfig) => {
     /* Run your local dev server before starting the tests */
     webServer: {
       command: 'yarn storybook',
+      cwd: process.cwd(),
       url: 'http://127.0.0.1:6006',
       reuseExistingServer: true, //!process.env.CI,
     },
