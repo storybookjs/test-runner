@@ -206,21 +206,38 @@ function addToUserAgent(extra: string): void {
 
 // Custom error class
 class StorybookTestRunnerError extends Error {
-  constructor(storyId: string, errorMessage: string, logs: string[] = []) {
+  constructor(
+    storyId: string,
+    errorMessage: string,
+    logs: string[] = [],
+    isMessageFormatted: boolean = false
+  ) {
     super(errorMessage);
     this.name = 'StorybookTestRunnerError';
+    this.message = isMessageFormatted
+      ? errorMessage
+      : StorybookTestRunnerError.buildErrorMessage(storyId, errorMessage, logs);
+  }
+
+  public static buildErrorMessage(
+    storyId: string,
+    errorMessage: string,
+    logs: string[] = []
+  ): string {
     const storyUrl = `${TEST_RUNNER_STORYBOOK_URL}?path=/story/${storyId}`;
     const finalStoryUrl = `${storyUrl}&addonPanel=storybook/interactions/panel`;
     const separator = '\n\n--------------------------------------------------';
     // The original error message will also be collected in the logs, so we filter it to avoid duplication
-    const finalLogs = logs.filter((err) => !err.includes(errorMessage));
+    const finalLogs = logs.filter((err: string) => !err.includes(errorMessage));
     const extraLogs =
       finalLogs.length > 0 ? separator + '\n\nBrowser logs:\n\n' + finalLogs.join('\n\n') : '';
 
-    this.message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
+    const message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
       errorMessage,
       TEST_RUNNER_DEBUG_PRINT_LIMIT
     )}\n${extraLogs}`;
+
+    return message;
   }
 }
 
@@ -378,8 +395,15 @@ async function __test(storyId: string): Promise<any> {
 
       playFunctionThrewException: (error: Error) => {
         cleanup(listeners);
-        getFormattedMessage(error.message).then((message: string) => {
-          reject(new StorybookTestRunnerError(storyId, message, logs));
+
+        const errorMessage = StorybookTestRunnerError.buildErrorMessage(
+          storyId,
+          error.message,
+          logs
+        );
+
+        getFormattedMessage(errorMessage).then((message) => {
+          reject(new StorybookTestRunnerError(storyId, message, logs, true));
         });
       },
 
