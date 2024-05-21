@@ -6,7 +6,6 @@
     "storybook-addons",
     "test",
     "runner",
-    "jest",
     "testing-library",
     "playwright"
   ],
@@ -31,7 +30,7 @@
   "scripts": {
     "build": "tsup",
     "build-storybook": "storybook build",
-    "build:watch": "tsup --watch",
+    "build:watch": "concurrently \"tsup --watch\" \"nodemon\"",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js",
     "prepare": "husky install",
     "release": "yarn build && auto shipit",
@@ -56,6 +55,7 @@
     "@babel/template": "^7.22.5",
     "@babel/types": "^7.22.5",
     "@jest/types": "^29.6.3",
+    "@playwright/test": "^1.36.1",
     "@storybook/core-common": "next",
     "@storybook/csf": "^0.1.2",
     "@storybook/csf-tools": "next",
@@ -71,8 +71,7 @@
     "jest-runner": "^29.6.4",
     "jest-serializer-html": "^7.1.0",
     "jest-watch-typeahead": "^2.0.0",
-    "nyc": "^15.1.0",
-    "playwright": "^1.14.0"
+    "nyc": "^15.1.0"
   },
   "devDependencies": {
     "@auto-it/released": "^11.1.6",
@@ -102,6 +101,7 @@
     "jest-image-snapshot": "^6.2.0",
     "lint-staged": "^13.0.3",
     "node-fetch": "^2",
+    "nodemon": "^3.0.1",
     "pkg-up": "^5.0.0",
     "prettier": "^2.8.1",
     "react": "^17.0.1",
@@ -111,10 +111,18 @@
     "tempy": "^1.0.1",
     "ts-dedent": "^2.0.0",
     "ts-jest": "^29.0.0",
-    "tsup": "^6.5.0",
-    "typescript": "~4.9.4",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.2",
     "vite": "^4.4.5",
     "wait-on": "^7.2.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/playwright/csf-playwright-plugin.ts",
+      "src/util/*.ts"
+    ],
+    "exec": "node scripts/delete-playwright-cache.js",
+    "ext": "ts"
   },
   "engines": {
     "node": "^16.10.0 || ^18.0.0 || >=20.0.0"
