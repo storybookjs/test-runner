@@ -47,6 +47,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
+  - [Yarn PnP (Plug n' Play) support](#yarn-pnp-plug-n-play-support)
   - [React Native support](#react-native-support)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -91,7 +92,8 @@ Use the following table to use the correct version of this package, based on the
 
 | Test runner version | Storybook version |
 | ------------------- | ----------------- |
-| ^0.10.0             | ^7.0.0            |
+| ^0.17.0             | ^8.0.0            |
+| ~0.16.0             | ^7.0.0            |
 | ~0.9.4              | ^6.4.0            |
 
 ## Getting started
@@ -154,6 +156,7 @@ Usage: test-storybook [options]
 | `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
 | `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
 | `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
+| `--testTimeout [number]`          | This option sets the default timeouts of test cases <br/>`test-storybook --testTimeout=15_000`                                                                                |
 | `--no-cache`                      | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
 | `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
 | `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
@@ -171,7 +174,7 @@ Usage: test-storybook [options]
 
 ## Ejecting configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
+The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, `--testTimeout`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
 
 > **Note**
 > The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
@@ -348,10 +351,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
@@ -383,10 +386,10 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
@@ -753,7 +756,7 @@ You can access its context in a test hook like so:
 import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
     const storyContext = await getStoryContext(page, context);
     if (storyContext.parameters.theme === 'dark') {
@@ -777,7 +780,7 @@ The `waitForPageReady` utility is useful when you're executing [image snapshot t
 import { TestRunnerConfig, waitForPageReady } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
-  async postRender(page, context) {
+  async postVisit(page, context) {
     // use the test-runner utility to wait for fonts to load, etc.
     await waitForPageReady(page);
 
@@ -983,6 +986,19 @@ export default config;
 
 ## Troubleshooting
 
+#### Yarn PnP (Plug n' Play) support
+
+The Storybook test-runner relies on a library called [jest-playwright-preset](https://github.com/playwright-community/jest-playwright), of which does not seem to support PnP. As a result, the test-runner won't work out of the box with PnP, and you might have the following error:
+
+```
+PlaywrightError: jest-playwright-preset: Cannot find playwright package to use chromium
+```
+
+If that is the case, there are two potential solutions:
+
+1. Install `playwright` as a direct dependency. You might need to run `yarn playwright install` after that, so you install Playwright's browser binaries.
+2. Switch your package manager's linker mode to `node-modules`.
+
 #### React Native support
 
 The test-runner is web based and therefore won't work with `@storybook/react-native` directly. However, if you use the [React Native Web Storybook Addon](https://storybook.js.org/addons/%2540storybook/addon-react-native-web), you can run the test-runner against the web-based Storybook generated with that addon. In that case, things would work the same way.
@@ -1001,6 +1017,12 @@ In either way, to fix it you should limit the amount of workers that run in para
 {
   "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
 }
+```
+
+Another option is trying to increase the test timeout by passing the [--testTimeout](https://jestjs.io/docs/cli#--testtimeoutnumber) option to your command (adding `--testTimeout=60_000` will increase test timeouts to 1 minute):
+
+```json
+"test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2 --testTimeout=60_000\""
 ```
 
 #### The test runner reports "No tests found" running on a Windows CI

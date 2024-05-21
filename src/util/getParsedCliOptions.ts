@@ -40,6 +40,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       '--maxWorkers <amount>',
       'Specifies the maximum number of workers the worker-pool will spawn for running tests'
     )
+    // .option('--testTimeout <number>', 'This option sets the default timeouts of test cases')
     // .option('--no-cache', 'Disable the cache')
     // .option('--clearCache', 'Deletes the Jest cache directory and then exits without running tests')
     .option('--verbose', 'Display individual test results with the test suite hierarchy')

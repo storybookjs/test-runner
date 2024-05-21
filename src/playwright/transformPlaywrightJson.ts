@@ -94,7 +94,7 @@ function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
           ({
             type: isV3DocsOnly(stories) ? 'docs' : 'story',
             ...story,
-          } satisfies V4Entry)
+          }) satisfies V4Entry
       ),
     ])
   );
@@ -155,7 +155,7 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
               }),
             ]);
           });
-        const program = t.program([makeDescribe(stories[0].title, storyTests)]) as babel.types.Node;
+        const program = t.program([makeDescribe(stories[0].title, storyTests)]);
 
         const { code } = generate(program, {});
 

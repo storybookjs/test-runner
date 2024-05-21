@@ -28,13 +28,23 @@ export interface TransformOptions {
   skipTags?: string[];
 }
 
-export const prefixFunction = (key: string, title: string, testPrefixer: TestPrefixer) => {
+export const prefixFunction = ({
+  key,
+  testPrefixer,
+  title,
+  id,
+}: {
+  key: string;
+  title: string;
+  testPrefixer: TestPrefixer;
+  id?: string;
+}) => {
   const name = storyNameFromExport(key);
   const context: TestContext = {
     storyExport: t.identifier(key),
     name: t.stringLiteral(name), // FIXME .name annotation
     title: t.stringLiteral(title),
-    id: t.stringLiteral(toId(title, name)),
+    id: t.stringLiteral(toId(id ?? title, name)),
   };
 
   const result = makeArray(testPrefixer(context));
@@ -46,11 +56,13 @@ const makePlayTest = ({
   key,
   metaOrStoryPlay,
   title,
+  id,
   testPrefix,
   shouldSkip,
 }: {
   key: string;
   title: string;
+  id?: string;
   metaOrStoryPlay?: boolean;
   testPrefix: TestPrefixer;
   shouldSkip?: boolean;
@@ -59,7 +71,7 @@ const makePlayTest = ({
     t.expressionStatement(
       t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
         t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
-        prefixFunction(key, title, testPrefix),
+        prefixFunction({ key, title, testPrefixer: testPrefix, id }),
       ])
     ),
   ];
@@ -141,6 +153,7 @@ export const transformCsf = (
           ...makePlayTest({
             key,
             title,
+            id: csf.meta.id,
             metaOrStoryPlay: !!storyAnnotations[key]?.play,
             testPrefix: testPrefixer,
             shouldSkip,
@@ -152,7 +165,7 @@ export const transformCsf = (
         return makeDescribe(key, tests);
       }
     })
-    .filter(Boolean) as babel.types.Statement[];
+    .filter(Boolean) as t.Statement[];
 
   let result = '';
 
@@ -162,7 +175,7 @@ export const transformCsf = (
       csf.meta?.title as string,
       allTests,
       beforeEachPrefixer ? makeBeforeEach(beforeEachPrefixer) : undefined
-    ) as babel.types.Node;
+    );
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
