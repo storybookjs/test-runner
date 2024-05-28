@@ -17,8 +17,7 @@ import {
 export const defineConfig = (config: PlaywrightTestConfig) => {
   const { STORYBOOK_STORIES_PATTERN } = process.env;
 
-  // @ts-ignore use _contextReuseMode
-  return playwrightDefineConfig({
+  const original = playwrightDefineConfig({
     testDir: process.env.TEST_ROOT || process.cwd(),
     testMatch: STORYBOOK_STORIES_PATTERN?.split(';'),
     globalSetup: path.join(__dirname, 'config', 'global.setup.js'),
@@ -56,6 +55,7 @@ export const defineConfig = (config: PlaywrightTestConfig) => {
       },
     ],
 
+    // Keep this for older versions of PW if we ever need. It stopped working in 1.42.0
     build: {
       babelPlugins: [[path.join(__dirname, 'playwright', 'csf-playwright-plugin.js')]],
       // @ts-ignore
@@ -71,4 +71,12 @@ export const defineConfig = (config: PlaywrightTestConfig) => {
     },
     ...config,
   });
+
+  return {
+    ...original,
+    '@playwright/test': {
+      ...(original as any)['@playwright/test'],
+      babelPlugins: [[path.join(__dirname, 'playwright', 'csf-playwright-plugin.js')]],
+    },
+  } as PlaywrightTestConfig;
 };
