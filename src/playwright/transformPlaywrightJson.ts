@@ -120,6 +120,7 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
       Object.values((index as V3StoriesIndex).stories)
     );
     titleIdToEntries = v3TitleMapToV4TitleMap(titleIdToStories);
+  // v4 and v5 are pretty much similar, so we process it in the same way
   } else if (index.v === 4 || index.v === 5) {
     // TODO: Once Storybook 8.0 is released, we should only support v4 and higher
     titleIdToEntries = groupByTitleId<V4Entry>(Object.values((index as V4Index).entries));
