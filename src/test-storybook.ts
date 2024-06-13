@@ -243,8 +243,10 @@ function ejectConfiguration() {
     \n`);
   }
 
-  fs.copyFileSync(origin, destination);
-  log('Configuration file successfully copied as test-runner-jest.config.js');
+  // copy contents of origin and replace ../dist with @storybook/test-runner
+  const content = fs.readFileSync(origin, 'utf-8').replace(/..\/dist/g, '@storybook/test-runner');
+  fs.writeFileSync(destination, content);
+  log(`Configuration file successfully generated at ${destination}`);
 }
 
 function warnOnce(message: string) {
