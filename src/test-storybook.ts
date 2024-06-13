@@ -80,7 +80,7 @@ async function reportCoverage() {
   if (process.env.JEST_SHARD !== 'true') {
     const nycBinFullPath = getNycBinPath();
     execSync(
-      `${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
+      `node ${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
       {
         stdio: 'inherit',
         cwd: process.cwd(),
@@ -243,8 +243,10 @@ function ejectConfiguration() {
     \n`);
   }
 
-  fs.copyFileSync(origin, destination);
-  log('Configuration file successfully copied as test-runner-jest.config.js');
+  // copy contents of origin and replace ../dist with @storybook/test-runner
+  const content = fs.readFileSync(origin, 'utf-8').replace(/..\/dist/g, '@storybook/test-runner');
+  fs.writeFileSync(destination, content);
+  log(`Configuration file successfully generated at ${destination}`);
 }
 
 function warnOnce(message: string) {
@@ -362,17 +364,19 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  const { storiesPaths, lazyCompilation } = getStorybookMetadata();
-  process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+  if (!shouldRunIndexJson) {
+    const { storiesPaths, lazyCompilation } = getStorybookMetadata();
+    process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+
+    if (lazyCompilation && isLocalStorybookIp) {
+      log(
+        `You're running Storybook with lazy compilation enabled, and will likely cause issues with the test runner locally. Consider disabling 'lazyCompilation' in ${runnerOptions.configDir}/main.js when running 'test-storybook' locally.`
+      );
+    }
+  }
 
   if (runnerOptions.failOnConsole) {
     process.env.TEST_CHECK_CONSOLE = 'true';
-  }
-
-  if (lazyCompilation && isLocalStorybookIp) {
-    log(
-      `You're running Storybook with lazy compilation enabled, and will likely cause issues with the test runner locally. Consider disabling 'lazyCompilation' in ${runnerOptions.configDir}/main.js when running 'test-storybook' locally.`
-    );
   }
 
   await executeJestPlaywright(jestOptions);
