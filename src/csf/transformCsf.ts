@@ -2,7 +2,7 @@
 import { loadCsf } from '@storybook/csf-tools';
 import * as t from '@babel/types';
 import generate from '@babel/generator';
-import { toId, storyNameFromExport } from '@storybook/csf';
+import { toId, storyNameFromExport, combineTags } from '@storybook/csf';
 import dedent from 'ts-dedent';
 
 import { getTagOptions } from '../util/getTagOptions';
@@ -126,7 +126,13 @@ export const transformCsf = (
         acc[key].play = annotations.play;
       }
 
-      acc[key].tags = csf._stories[key].tags || csf.meta?.tags || [];
+      acc[key].tags = combineTags(
+        'test',
+        'dev',
+        ...(csf.meta?.tags || []),
+        ...(csf._stories[key].tags || [])
+      );
+
       return acc;
     },
     {}
