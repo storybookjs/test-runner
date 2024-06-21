@@ -108,7 +108,8 @@ export const transformCsf = (
     beforeEachPrefixer,
     insertTestIfEmpty,
     makeTitle,
-  }: TransformOptions
+    previewAnnotations = { tags: [] },
+  }: TransformOptions & { previewAnnotations?: Record<string, any> }
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
@@ -130,7 +131,8 @@ export const transformCsf = (
         'test',
         'dev',
         ...(csf.meta?.tags || []),
-        ...(csf._stories[key].tags || [])
+        ...(csf._stories[key].tags || []),
+        ...previewAnnotations.tags
       );
 
       return acc;

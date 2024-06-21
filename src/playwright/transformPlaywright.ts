@@ -75,11 +75,13 @@ const makeTitleFactory = (filename: string) => {
 };
 
 export const transformPlaywright = (src: string, filename: string) => {
+  const tags = process.env.STORYBOOK_PREVIEW_TAGS?.split(',') ?? [];
   const transformOptions = {
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
     makeTitle: makeTitleFactory(filename),
+    previewAnnotations: { tags },
   };
 
   const result = transformCsf(src, transformOptions);
