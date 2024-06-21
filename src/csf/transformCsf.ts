@@ -130,9 +130,9 @@ export const transformCsf = (
       acc[key].tags = combineTags(
         'test',
         'dev',
+        ...previewAnnotations.tags,
         ...(csf.meta?.tags || []),
-        ...(csf._stories[key].tags || []),
-        ...previewAnnotations.tags
+        ...(csf._stories[key].tags || [])
       );
 
       return acc;

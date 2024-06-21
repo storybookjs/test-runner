@@ -536,16 +536,19 @@ describe('Playwright', () => {
       `);
     });
     it('should work with tag negation', () => {
-      process.env.STORYBOOK_INCLUDE_TAGS = 'play';
+      process.env.STORYBOOK_INCLUDE_TAGS = 'play,test';
+      process.env.STORYBOOK_PREVIEW_TAGS = '!test';
       // Should result in:
       // - A being included
-      // - B being excluded
+      // - B being excluded because it has no play nor test tag (removed by negation in preview tags)
+      // - C being included because it has test tag (overwritten via story tags)
       expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button, tags: ['play'] };
         export const A = { };
         export const B = { tags: ['!play']  };
+        export const C = { tags: ['!play', 'test']  };
       `,
           filename
         )
@@ -588,6 +591,51 @@ describe('Playwright', () => {
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
                     console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
+                    await jestPlaywright.resetPage();
+                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                    await testFn();
+                  } else {
+                    throw err;
+                  }
+                }
+              });
+            });
+            describe("C", () => {
+              it("smoke-test", async () => {
+                const testFn = async () => {
+                  const context = {
+                    id: "example-foo-bar--c",
+                    title: "Example/foo/bar",
+                    name: "C"
+                  };
+                  if (globalThis.__sbPreVisit) {
+                    await globalThis.__sbPreVisit(page, context);
+                  }
+                  const result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-foo-bar--c"
+                  });
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, context);
+                  }
+                  if (globalThis.__sbCollectCoverage) {
+                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                    if (!isCoverageSetupCorrectly) {
+                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+          The code in this story is not instrumented, which means the coverage setup is likely not correct.
+          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                    }
+                    await jestPlaywright.saveCoverage(page);
+                  }
+                  return result;
+                };
+                try {
+                  await testFn();
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"C"}". Retrying...\`);
                     await jestPlaywright.resetPage();
                     await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                     await testFn();
