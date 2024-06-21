@@ -1,3 +1,4 @@
+import type { Preview } from '@storybook/react';
 import { isTestRunner } from './is-test-runner';
 
 const withSkippableTests = (StoryFn, { parameters }) => {
@@ -8,4 +9,9 @@ const withSkippableTests = (StoryFn, { parameters }) => {
   return StoryFn();
 };
 
-export const decorators = [withSkippableTests];
+const preview: Preview = {
+  tags: ['global-tag'],
+  decorators: [withSkippableTests],
+};
+
+export default preview;
