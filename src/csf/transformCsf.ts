@@ -2,7 +2,7 @@
 import { loadCsf } from '@storybook/csf-tools';
 import * as t from '@babel/types';
 import generate from '@babel/generator';
-import { toId, storyNameFromExport } from '@storybook/csf';
+import { toId, storyNameFromExport, combineTags } from '@storybook/csf';
 import dedent from 'ts-dedent';
 
 import { getTagOptions } from '../util/getTagOptions';
@@ -108,7 +108,8 @@ export const transformCsf = (
     beforeEachPrefixer,
     insertTestIfEmpty,
     makeTitle,
-  }: TransformOptions
+    previewAnnotations = { tags: [] },
+  }: TransformOptions & { previewAnnotations?: Record<string, any> }
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
@@ -126,7 +127,14 @@ export const transformCsf = (
         acc[key].play = annotations.play;
       }
 
-      acc[key].tags = csf._stories[key].tags || csf.meta?.tags || [];
+      acc[key].tags = combineTags(
+        'test',
+        'dev',
+        ...previewAnnotations.tags,
+        ...(csf.meta?.tags || []),
+        ...(csf._stories[key].tags || [])
+      );
+
       return acc;
     },
     {}
