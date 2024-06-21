@@ -119,9 +119,6 @@
   "engines": {
     "node": "^16.10.0 || ^18.0.0 || >=20.0.0"
   },
-  "resolutions": {
-    "@babel/types": "7.23.6"
-  },
   "publishConfig": {
     "access": "public"
   },
