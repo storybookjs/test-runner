@@ -61,7 +61,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
 
-  await page.exposeBinding('getFormattedMessage', (_, message: string) => {
+  await page.exposeBinding('testRunner_errorMessageFormatter', (_, message: string) => {
     if (testRunnerConfig.errorMessageFormatter) {
       return testRunnerConfig.errorMessageFormatter(message);
     }

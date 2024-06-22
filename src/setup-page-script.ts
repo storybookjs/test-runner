@@ -31,7 +31,7 @@ const TEST_RUNNER_DEBUG_PRINT_LIMIT = parseInt('{{debugPrintLimit}}', 10);
 declare global {
   // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
   var logToPage: (message: string) => void;
-  var getFormattedMessage: (message: string) => Promise<string>;
+  var testRunner_errorMessageFormatter: (message: string) => Promise<string>;
 }
 
 // Type definitions for function parameters and return types
@@ -212,11 +212,12 @@ class StorybookTestRunnerError extends Error {
     logs: string[] = [],
     isMessageFormatted: boolean = false
   ) {
-    super(errorMessage);
-    this.name = 'StorybookTestRunnerError';
-    this.message = isMessageFormatted
+    const message = isMessageFormatted
       ? errorMessage
       : StorybookTestRunnerError.buildErrorMessage(storyId, errorMessage, logs);
+    super(message);
+
+    this.name = 'StorybookTestRunnerError';
   }
 
   public static buildErrorMessage(
@@ -369,13 +370,32 @@ async function __test(storyId: string): Promise<any> {
   };
 
   return new Promise((resolve, reject) => {
+    const rejectWithFormattedError = (storyId: string, message: string) => {
+      const errorMessage = StorybookTestRunnerError.buildErrorMessage(storyId, message, logs);
+
+      testRunner_errorMessageFormatter(errorMessage)
+        .then((formattedMessage) => {
+          reject(new StorybookTestRunnerError(storyId, formattedMessage, logs, true));
+        })
+        .catch((error) => {
+          reject(
+            new StorybookTestRunnerError(
+              storyId,
+              'There was an error when executing the errorMessageFormatter defiend in your Storybook test-runner config file. Please fix it and rerun the tests:\n\n' +
+                error.message
+            )
+          );
+        });
+    };
+
     const listeners = {
       [TEST_RUNNER_RENDERED_EVENT]: () => {
         cleanup(listeners);
         if (hasErrors) {
-          reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
+          rejectWithFormattedError(storyId, 'Browser console errors');
+        } else {
+          resolve(document.getElementById('root'));
         }
-        resolve(document.getElementById('root'));
       },
 
       storyUnchanged: () => {
@@ -385,43 +405,29 @@ async function __test(storyId: string): Promise<any> {
 
       storyErrored: ({ description }: { description: string }) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, description, logs));
+        rejectWithFormattedError(storyId, description);
       },
 
       storyThrewException: (error: Error) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+        rejectWithFormattedError(storyId, error.message);
       },
 
       playFunctionThrewException: (error: Error) => {
         cleanup(listeners);
 
-        const errorMessage = StorybookTestRunnerError.buildErrorMessage(
-          storyId,
-          error.message,
-          logs
-        );
-
-        getFormattedMessage(errorMessage).then((message) => {
-          reject(new StorybookTestRunnerError(storyId, message, logs, true));
-        });
+        rejectWithFormattedError(storyId, error.message);
       },
 
       unhandledErrorsWhilePlaying: ([error]: Error[]) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+        rejectWithFormattedError(storyId, error.message);
       },
 
       storyMissing: (id: string) => {
         cleanup(listeners);
         if (id === storyId) {
-          reject(
-            new StorybookTestRunnerError(
-              storyId,
-              'The story was missing when trying to access it.',
-              logs
-            )
-          );
+          rejectWithFormattedError(storyId, 'The story was missing when trying to access it.');
         }
       },
     };

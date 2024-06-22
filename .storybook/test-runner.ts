@@ -8,9 +8,8 @@ const skipSnapshots = process.env.SKIP_SNAPSHOTS === 'true';
 
 const config: TestRunnerConfig = {
   logLevel: 'verbose',
-  errorMessageFormatter: (error) => {
-    // DO NOT MERGE WITH THIS CHANGE
-    return 'FORMATTED! ' + error.substring(0, 10);
+  errorMessageFormatter: (message) => {
+    return message;
   },
   tags: {
     exclude: ['exclude'],
