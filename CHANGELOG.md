@@ -1,3 +1,18 @@
+# v0.18.1 (Fri May 17 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.18.1 [#466](https://github.com/storybookjs/test-runner/pull/466) ([@yannbf](https://github.com/yannbf))
+- Fix Windows support in coverage generation [#461](https://github.com/storybookjs/test-runner/pull/461) ([@yannbf](https://github.com/yannbf))
+- Fix getStoryContext type [#462](https://github.com/storybookjs/test-runner/pull/462) ([@yannbf](https://github.com/yannbf))
+- Fix: Skip requiring a main.js file in index.json mode [#464](https://github.com/storybookjs/test-runner/pull/464) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.18.0 (Thu May 09 2024)
 
 #### 🚀 Enhancement
