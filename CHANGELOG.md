@@ -1,3 +1,24 @@
+# v0.19.0 (Sat Jun 22 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.19.0 [#486](https://github.com/storybookjs/test-runner/pull/486) ([@yannbf](https://github.com/yannbf) filip.witosz+textace@gmail.com [@ysgk](https://github.com/ysgk))
+- Feat: Add errorMessageFormatter [#468](https://github.com/storybookjs/test-runner/pull/468) ([@yannbf](https://github.com/yannbf) filip.witosz+textace@gmail.com)
+
+#### 🐛 Bug Fix
+
+- Fix: Combine tags correctly when transforming story files [#485](https://github.com/storybookjs/test-runner/pull/485) ([@yannbf](https://github.com/yannbf))
+- Fix contents of eject functionality [#483](https://github.com/storybookjs/test-runner/pull/483) ([@yannbf](https://github.com/yannbf))
+- Unpin @swc/core from 1.5.7 [#481](https://github.com/storybookjs/test-runner/pull/481) ([@ysgk](https://github.com/ysgk))
+
+#### Authors: 3
+
+- [@ysgk](https://github.com/ysgk)
+- Foxhoundn ([@Foxhoundn](https://github.com/Foxhoundn))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.18.2 (Wed May 29 2024)
 
 #### 🐛 Bug Fix
