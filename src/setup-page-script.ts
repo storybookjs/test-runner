@@ -30,7 +30,7 @@ const TEST_RUNNER_DEBUG_PRINT_LIMIT = parseInt('{{debugPrintLimit}}', 10);
 // Type definitions for globals
 declare global {
   // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
-  var logToPage: (message: string) => void;
+  var logToPage: (message: string) => Promise<void>;
   var testRunner_errorMessageFormatter: (message: string) => Promise<string>;
 }
 
