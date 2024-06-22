@@ -1,3 +1,19 @@
+# v0.18.2 (Wed May 29 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.18.2 [#476](https://github.com/storybookjs/test-runner/pull/476) ([@shilman](https://github.com/shilman) [@valentinpalkovic](https://github.com/valentinpalkovic) [@yannbf](https://github.com/yannbf))
+- Fix 8.1.4+ support for v5 index.json [#475](https://github.com/storybookjs/test-runner/pull/475) ([@shilman](https://github.com/shilman) [@yannbf](https://github.com/yannbf))
+- Pin `@swc/core` to 1.5.7 [#474](https://github.com/storybookjs/test-runner/pull/474) ([@shilman](https://github.com/shilman))
+
+#### Authors: 3
+
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.18.1 (Fri May 17 2024)
 
 #### 🐛 Bug Fix
