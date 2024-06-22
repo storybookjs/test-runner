@@ -220,7 +220,7 @@ module.exports = {
 
 ## Filtering tests (experimental)
 
-You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation.
+You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation. By default, the test-runner includes every story with the `"test"` tag. This tag is included by default in Storybook 8 for all stories, unless the user tells otherwise via [tag negation](https://storybook.js.org/docs/writing-stories/tags#removing-tags).
 
 This annotation can be part of a story, therefore only applying to it, or the component meta (the default export), which applies to all stories in the file:
 
@@ -725,6 +725,23 @@ import type { TestRunnerConfig } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
   logLevel: 'verbose',
+};
+export default config;
+```
+
+#### errorMessageFormatter
+
+The `errorMessageFormatter` property defines a function that will pre-format the error messages before they get reported in the CLI:
+
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  errorMessageFormatter: (message) => {
+    // manipulate the error message as you like
+    return message;
+  },
 };
 export default config;
 ```

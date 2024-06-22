@@ -8,6 +8,9 @@ const skipSnapshots = process.env.SKIP_SNAPSHOTS === 'true';
 
 const config: TestRunnerConfig = {
   logLevel: 'verbose',
+  errorMessageFormatter: (message) => {
+    return message;
+  },
   tags: {
     exclude: ['exclude'],
     include: [],

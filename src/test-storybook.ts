@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
-import path from 'path';
+import path, { join, resolve } from 'path';
 import tempy from 'tempy';
 
 import { JestOptions, getCliOptions } from './util/getCliOptions';
@@ -15,6 +15,8 @@ import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
 
 import { glob } from 'glob';
 import { TestRunnerConfig } from './playwright/hooks';
+import { getInterpretedFile } from '@storybook/core-common';
+import { readConfig } from '@storybook/csf-tools';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -243,8 +245,10 @@ function ejectConfiguration() {
     \n`);
   }
 
-  fs.copyFileSync(origin, destination);
-  log('Configuration file successfully copied as test-runner-jest.config.js');
+  // copy contents of origin and replace ../dist with @storybook/test-runner
+  const content = fs.readFileSync(origin, 'utf-8').replace(/..\/dist/g, '@storybook/test-runner');
+  fs.writeFileSync(destination, content);
+  log(`Configuration file successfully generated at ${destination}`);
 }
 
 function warnOnce(message: string) {
@@ -257,6 +261,16 @@ function warnOnce(message: string) {
     }
   };
 }
+
+const extractTagsFromPreview = async (configDir = '.storybook') => {
+  const previewConfigPath = getInterpretedFile(join(resolve(configDir), 'preview'));
+
+  if (!previewConfigPath) return [];
+  const previewConfig = await readConfig(previewConfigPath);
+  const tags = previewConfig.getFieldValue(['tags']) ?? [];
+
+  return tags.join(',');
+};
 
 const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
@@ -365,6 +379,10 @@ const main = async () => {
   if (!shouldRunIndexJson) {
     const { storiesPaths, lazyCompilation } = getStorybookMetadata();
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+
+    // 1 - We extract tags from preview file statically like it's done by the Storybook indexer. We only do this in non-index-json mode because it's not needed in that mode
+    // 2 - We pass it via env variable to avoid having to use async code in the babel plugin
+    process.env.STORYBOOK_PREVIEW_TAGS = await extractTagsFromPreview(runnerOptions.configDir);
 
     if (lazyCompilation && isLocalStorybookIp) {
       log(
