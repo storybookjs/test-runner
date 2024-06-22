@@ -729,6 +729,23 @@ const config: TestRunnerConfig = {
 export default config;
 ```
 
+#### errorMessageFormatter
+
+The `errorMessageFormatter` property defines a function that will pre-format the error messages before they get reported in the CLI:
+
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  errorMessageFormatter: (message) => {
+    // manipulate the error message as you like
+    return message;
+  },
+};
+export default config;
+```
+
 ### Utility functions
 
 For more specific use cases, the test runner provides utility functions that could be useful to you.
