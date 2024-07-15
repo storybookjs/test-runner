@@ -57,7 +57,7 @@
     "@babel/types": "^7.22.5",
     "@jest/types": "^29.6.3",
     "@storybook/core-common": "^8.0.0",
-    "@storybook/csf": "^0.1.2",
+    "@storybook/csf": "^0.1.11",
     "@storybook/csf-tools": "^8.0.0",
     "@storybook/preview-api": "^8.0.0",
     "@swc/core": "^1.5.22",

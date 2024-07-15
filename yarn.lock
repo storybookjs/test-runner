@@ -3727,7 +3727,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/csf@npm:^0.1.2, @storybook/csf@npm:^0.1.7":
+"@storybook/csf@npm:^0.1.11":
+  version: 0.1.11
+  resolution: "@storybook/csf@npm:0.1.11"
+  dependencies:
+    type-fest: ^2.19.0
+  checksum: ba2a265f62ad82a2853b069f77e974efe31bed263a640ca1dd8e6d7e194022018a67ad4a2587ae928f33ae45aaf6ffedd5925ba3fcf3fe5b7996667a918e22eb
+  languageName: node
+  linkType: hard
+
+"@storybook/csf@npm:^0.1.7":
   version: 0.1.7
   resolution: "@storybook/csf@npm:0.1.7"
   dependencies:
@@ -3971,7 +3980,7 @@ __metadata:
     "@storybook/addon-essentials": ^8.0.0
     "@storybook/addon-interactions": ^8.0.0
     "@storybook/core-common": ^8.0.0
-    "@storybook/csf": ^0.1.2
+    "@storybook/csf": ^0.1.11
     "@storybook/csf-tools": ^8.0.0
     "@storybook/preview-api": ^8.0.0
     "@storybook/react": ^8.0.0
