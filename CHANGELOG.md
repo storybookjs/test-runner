@@ -1,3 +1,17 @@
+# v0.19.1 (Mon Jul 15 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.19.1 [#493](https://github.com/storybookjs/test-runner/pull/493) ([@paulgv](https://github.com/paulgv) [@yannbf](https://github.com/yannbf))
+- fix(deps): upgrade `@storybook/csf` to v0.1.11 [#491](https://github.com/storybookjs/test-runner/pull/491) ([@paulgv](https://github.com/paulgv))
+
+#### Authors: 2
+
+- Paul Gascou-Vaillancourt ([@paulgv](https://github.com/paulgv))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.19.0 (Sat Jun 22 2024)
 
 #### 🚀 Enhancement
