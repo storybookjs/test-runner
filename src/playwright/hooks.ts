@@ -5,6 +5,7 @@ export type TestContext = {
   id: string;
   title: string;
   name: string;
+  hasFailure?: boolean;
 };
 
 export type PrepareContext = {
