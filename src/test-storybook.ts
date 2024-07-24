@@ -96,6 +96,7 @@ const onProcessEnd = () => {
   if (process.env.STORYBOOK_COLLECT_COVERAGE === 'true') {
     reportCoverage();
   }
+  process.exit(0);
 };
 
 process.on('SIGINT', onProcessEnd);
