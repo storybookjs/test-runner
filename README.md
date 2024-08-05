@@ -707,7 +707,7 @@ import type { TestRunnerConfig } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
   tags: {
-    include: [], // string array, e.g. ['test']
+    include: [], // string array, e.g. ['test', 'design'] - by default, the value will be ['test']
     exclude: [], // string array, e.g. ['design', 'docs-only']
     skip: [], // string array, e.g. ['design']
   },
