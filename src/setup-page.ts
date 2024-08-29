@@ -5,6 +5,7 @@ import { PrepareContext } from './playwright/hooks';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import dedent from 'ts-dedent';
 
 /**
  * This is a default prepare function which can be overridden by the user.
@@ -20,6 +21,28 @@ const defaultPrepare = async ({ page, browserContext, testRunnerConfig }: Prepar
     const headers = await testRunnerConfig.getHttpHeaders(iframeURL);
     await browserContext.setExtraHTTPHeaders(headers);
   }
+
+  page.on('crash', () => {
+    const crashError = new Error(dedent`
+      The page has crashed when testing your stories. This may indicate that your code is using browser features that are not supported by the current version of Playwright or its underlying Chromium engine. 
+
+      Possible causes include:
+      - Using unsupported or experimental browser APIs.
+      - Heavy resource usage or memory leaks.
+      - Incompatible code or third-party libraries.
+
+      Suggestions:
+      - Rerun the tests with \`PW_DEBUG=1 --maxWorkers=1\` to visualize the browser and debug the issue.
+      - Check the browser console logs and error messages for details.
+      - Try running the test with a different browser or version.
+      - Try updating Playwright.
+      - Review recent changes in your code or dependencies.
+
+      If you believe this is a bug, please file an issue with a detailed description of your test case and any relevant logs or stack traces.
+    `);
+    crashError.name = 'PageCrashError';
+    throw crashError;
+  });
 
   await page.goto(iframeURL, { waitUntil: 'load' }).catch((err) => {
     if (err.message?.includes('ERR_CONNECTION_REFUSED')) {
