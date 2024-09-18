@@ -33,16 +33,18 @@ export const prefixFunction = ({
   testPrefixer,
   title,
   id,
+  name,
 }: {
   key: string;
   title: string;
   testPrefixer: TestPrefixer;
   id?: string;
+  name?: string;
 }) => {
-  const name = storyNameFromExport(key);
+  const storyName = name ?? storyNameFromExport(key);
   const context: TestContext = {
     storyExport: t.identifier(key),
-    name: t.stringLiteral(name), // FIXME .name annotation
+    name: t.stringLiteral(storyName),
     title: t.stringLiteral(title),
     id: t.stringLiteral(toId(id ?? title, name)),
   };
@@ -59,6 +61,7 @@ const makePlayTest = ({
   id,
   testPrefix,
   shouldSkip,
+  name,
 }: {
   key: string;
   title: string;
@@ -66,12 +69,13 @@ const makePlayTest = ({
   metaOrStoryPlay?: boolean;
   testPrefix: TestPrefixer;
   shouldSkip?: boolean;
+  name?: string;
 }): t.ExpressionStatement[] => {
   return [
     t.expressionStatement(
       t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
         t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
-        prefixFunction({ key, title, testPrefixer: testPrefix, id }),
+        prefixFunction({ key, title, testPrefixer: testPrefix, id, name }),
       ])
     ),
   ];
@@ -119,26 +123,29 @@ export const transformCsf = (
   const storyExports = Object.keys(csf._stories);
   const title = csf.meta?.title;
 
-  const storyAnnotations = storyExports.reduce<Record<string, { play?: t.Node; tags?: string[] }>>(
-    (acc, key) => {
-      const annotations = csf._storyAnnotations[key];
-      acc[key] = {};
-      if (annotations?.play) {
-        acc[key].play = annotations.play;
-      }
+  const storyAnnotations = storyExports.reduce<
+    Record<string, { play?: t.Node; tags?: string[]; name?: string }>
+  >((acc, key) => {
+    const annotations = csf._storyAnnotations[key];
+    acc[key] = {};
+    if (annotations?.play) {
+      acc[key].play = annotations.play;
+    }
 
-      acc[key].tags = combineTags(
-        'test',
-        'dev',
-        ...previewAnnotations.tags,
-        ...(csf.meta?.tags || []),
-        ...(csf._stories[key].tags || [])
-      );
+    acc[key].tags = combineTags(
+      'test',
+      'dev',
+      ...previewAnnotations.tags,
+      ...(csf.meta?.tags || []),
+      ...(csf._stories[key].tags || [])
+    );
 
-      return acc;
-    },
-    {}
-  );
+    if (annotations?.name) {
+      acc[key].name = csf._stories[key].name;
+    }
+
+    return acc;
+  }, {});
 
   const allTests = storyExports
     .filter((key) => {
@@ -165,6 +172,7 @@ export const transformCsf = (
             metaOrStoryPlay: !!storyAnnotations[key]?.play,
             testPrefix: testPrefixer,
             shouldSkip,
+            name: storyAnnotations[key].name,
           }),
         ];
       }
