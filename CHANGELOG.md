@@ -1,3 +1,69 @@
+# v0.19.1 (Mon Jul 15 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.19.1 [#493](https://github.com/storybookjs/test-runner/pull/493) ([@paulgv](https://github.com/paulgv) [@yannbf](https://github.com/yannbf))
+- fix(deps): upgrade `@storybook/csf` to v0.1.11 [#491](https://github.com/storybookjs/test-runner/pull/491) ([@paulgv](https://github.com/paulgv))
+
+#### Authors: 2
+
+- Paul Gascou-Vaillancourt ([@paulgv](https://github.com/paulgv))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.19.0 (Sat Jun 22 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.19.0 [#486](https://github.com/storybookjs/test-runner/pull/486) ([@yannbf](https://github.com/yannbf) filip.witosz+textace@gmail.com [@ysgk](https://github.com/ysgk))
+- Feat: Add errorMessageFormatter [#468](https://github.com/storybookjs/test-runner/pull/468) ([@yannbf](https://github.com/yannbf) filip.witosz+textace@gmail.com)
+
+#### 🐛 Bug Fix
+
+- Fix: Combine tags correctly when transforming story files [#485](https://github.com/storybookjs/test-runner/pull/485) ([@yannbf](https://github.com/yannbf))
+- Fix contents of eject functionality [#483](https://github.com/storybookjs/test-runner/pull/483) ([@yannbf](https://github.com/yannbf))
+- Unpin @swc/core from 1.5.7 [#481](https://github.com/storybookjs/test-runner/pull/481) ([@ysgk](https://github.com/ysgk))
+
+#### Authors: 3
+
+- [@ysgk](https://github.com/ysgk)
+- Foxhoundn ([@Foxhoundn](https://github.com/Foxhoundn))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.18.2 (Wed May 29 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.18.2 [#476](https://github.com/storybookjs/test-runner/pull/476) ([@shilman](https://github.com/shilman) [@valentinpalkovic](https://github.com/valentinpalkovic) [@yannbf](https://github.com/yannbf))
+- Fix 8.1.4+ support for v5 index.json [#475](https://github.com/storybookjs/test-runner/pull/475) ([@shilman](https://github.com/shilman) [@yannbf](https://github.com/yannbf))
+- Pin `@swc/core` to 1.5.7 [#474](https://github.com/storybookjs/test-runner/pull/474) ([@shilman](https://github.com/shilman))
+
+#### Authors: 3
+
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.18.1 (Fri May 17 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.18.1 [#466](https://github.com/storybookjs/test-runner/pull/466) ([@yannbf](https://github.com/yannbf))
+- Fix Windows support in coverage generation [#461](https://github.com/storybookjs/test-runner/pull/461) ([@yannbf](https://github.com/yannbf))
+- Fix getStoryContext type [#462](https://github.com/storybookjs/test-runner/pull/462) ([@yannbf](https://github.com/yannbf))
+- Fix: Skip requiring a main.js file in index.json mode [#464](https://github.com/storybookjs/test-runner/pull/464) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.18.0 (Thu May 09 2024)
 
 #### 🚀 Enhancement
