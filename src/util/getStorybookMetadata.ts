@@ -22,7 +22,7 @@ export const getStorybookMetadata = () => {
     .map((dir) => join(workingDir, dir))
     .join(';');
 
-  // @ts-ignore -- this is added in storybook/internal/common@6.5, which we don't depend on
+  // @ts-expect-error -- this is added in storybook/internal/common@6.5, which we don't depend on
   const lazyCompilation = !!main.core?.builder?.options?.lazyCompilation;
 
   return {
