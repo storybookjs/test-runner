@@ -1,11 +1,11 @@
 import { relative } from 'path';
 import template from '@babel/template';
-import { userOrAutoTitle } from '@storybook/preview-api';
+import { userOrAutoTitle } from 'storybook/internal/preview-api';
+import dedent from 'ts-dedent';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
 import type { TestPrefixer } from '../csf/transformCsf';
-import dedent from 'ts-dedent';
 
 const coverageErrorMessage = dedent`
   [Test runner] An error occurred when evaluating code coverage:

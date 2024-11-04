@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import { serverRequire } from '@storybook/core-common';
+import { serverRequire } from 'storybook/internal/common';
 import { TestRunnerConfig } from '../playwright/hooks';
 
 let testRunnerConfig: TestRunnerConfig;
