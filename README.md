@@ -37,6 +37,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [getHttpHeaders](#gethttpheaders)
   - [tags (experimental)](#tags-experimental)
   - [logLevel](#loglevel)
+  - [errorMessageFormatter](#errormessageformatter)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
     - [waitForPageReady](#waitforpageready)
@@ -92,7 +93,8 @@ Use the following table to use the correct version of this package, based on the
 
 | Test runner version | Storybook version |
 | ------------------- | ----------------- |
-| ^0.17.0             | ^8.0.0            |
+| ^0.19.0             | ^8.2.0            |
+| ~0.17.0             | ^8.0.0            |
 | ~0.16.0             | ^7.0.0            |
 | ~0.9.4              | ^6.4.0            |
 
@@ -220,28 +222,35 @@ module.exports = {
 
 ## Filtering tests (experimental)
 
-You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation. By default, the test-runner includes every story with the `"test"` tag. This tag is included by default in Storybook 8 for all stories, unless the user tells otherwise via [tag negation](https://storybook.js.org/docs/writing-stories/tags#removing-tags).
+You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation. By default, the test-runner includes every story with the `'test'` tag. This tag is included by default in Storybook 8 for all stories, unless the user tells otherwise via [tag negation](https://storybook.js.org/docs/writing-stories/tags#removing-tags).
 
-This annotation can be part of a story, therefore only applying to it, or the component meta (the default export), which applies to all stories in the file:
+This annotation can be part of a story, therefore only applying to that story, or the component meta (the default export), which applies to all stories in the file:
 
 ```ts
 const meta = {
   component: Button,
-  tags: ['design', 'test-only'],
+  tags: ['atom'],
 };
 export default meta;
 
-// will inherit tags from meta with value ['design', 'test-only']
+// will inherit tags from project and meta to be ['dev', 'test', 'atom']
 export const Primary = {};
 
 export const Secondary = {
-  // will override tags to be just ['skip']
-  tags: ['skip'],
+  // will combine with project and meta tags to be ['dev', 'test', 'atom', 'design']
+  tags: ['design'],
+};
+
+export const Tertiary = {
+  // will combine with project and meta tags to be ['dev', 'atom']
+  tags: ['!test'],
 };
 ```
 
 > **Note**
-> You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **have to be** defined inline, as an array of strings. This is a limitation due to Storybook's static analysis.
+> You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **must be** defined inline, as an array of strings. This is a restriction due to Storybook's static analysis.
+
+For more information on how tags combine (and can be selectively removed), please see the [official docs](https://storybook.js.org/docs/writing-stories/tags).
 
 Once your stories have your own custom tags, you can filter them via the [tags property](#tags-experimental) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
 
@@ -699,7 +708,7 @@ import type { TestRunnerConfig } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
   tags: {
-    include: [], // string array, e.g. ['test-only']
+    include: [], // string array, e.g. ['test', 'design'] - by default, the value will be ['test']
     exclude: [], // string array, e.g. ['design', 'docs-only']
     skip: [], // string array, e.g. ['design']
   },

@@ -1,7 +1,8 @@
 import { join } from 'path';
-import { normalizeStories, getProjectRoot } from '@storybook/core-common';
+import { normalizeStories, getProjectRoot } from 'storybook/internal/common';
+import { StoriesEntry } from 'storybook/internal/types';
+
 import { getStorybookMain } from './getStorybookMain';
-import { StoriesEntry } from '@storybook/types';
 
 export const getStorybookMetadata = () => {
   const workingDir = getProjectRoot();
@@ -21,7 +22,7 @@ export const getStorybookMetadata = () => {
     .map((dir) => join(workingDir, dir))
     .join(';');
 
-  // @ts-ignore -- this is added in @storybook/core-common@6.5, which we don't depend on
+  // @ts-expect-error -- this is added in storybook/internal/common@6.5, which we don't depend on
   const lazyCompilation = !!main.core?.builder?.options?.lazyCompilation;
 
   return {

@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-import { loadCsf } from '@storybook/csf-tools';
+import { toId, storyNameFromExport, combineTags } from '@storybook/csf';
+import { loadCsf } from 'storybook/internal/csf-tools';
 import * as t from '@babel/types';
 import generate from '@babel/generator';
-import { toId, storyNameFromExport, combineTags } from '@storybook/csf';
 import dedent from 'ts-dedent';
 
 import { getTagOptions } from '../util/getTagOptions';
@@ -124,6 +124,7 @@ export const transformCsf = (
       const annotations = csf._storyAnnotations[key];
       acc[key] = {};
       if (annotations?.play) {
+        // @ts-expect-error type mismatch – check later
         acc[key].play = annotations.play;
       }
 

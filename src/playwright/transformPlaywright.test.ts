@@ -4,8 +4,8 @@ import * as storybookMain from '../util/getStorybookMain';
 
 import { transformPlaywright } from './transformPlaywright';
 
-jest.mock('@storybook/core-common', () => ({
-  ...jest.requireActual('@storybook/core-common'),
+jest.mock('storybook/internal/common', () => ({
+  ...jest.requireActual('storybook/internal/common'),
   getProjectRoot: jest.fn(() => '/foo/bar'),
   normalizeStories: jest.fn(() => [
     {
