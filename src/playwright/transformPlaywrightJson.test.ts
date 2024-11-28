@@ -55,12 +55,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-header--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-header--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -100,12 +113,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-header--logged-out"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-header--logged-out"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -147,12 +173,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-page--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-page--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -241,12 +280,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-b"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-b"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -288,12 +340,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-c"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-c"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -358,12 +423,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-page--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-page--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -449,12 +527,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-header--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-header--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -494,12 +585,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-header--logged-out"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-header--logged-out"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -541,12 +645,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-page--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-page--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -620,12 +737,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-page--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-page--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -690,12 +820,25 @@ describe('Playwright Json', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-page--logged-in"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-page--logged-in"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }

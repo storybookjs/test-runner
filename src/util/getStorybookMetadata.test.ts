@@ -1,10 +1,10 @@
-import { StorybookConfig } from '@storybook/types';
-import * as storybookMain from './getStorybookMain';
+import { StorybookConfig } from 'storybook/internal/types';
 
+import * as storybookMain from './getStorybookMain';
 import { getStorybookMetadata } from './getStorybookMetadata';
 
-jest.mock('@storybook/core-common', () => ({
-  ...jest.requireActual('@storybook/core-common'),
+jest.mock('storybook/internal/common', () => ({
+  ...jest.requireActual('storybook/internal/common'),
   getProjectRoot: jest.fn(() => '/foo/bar'),
   normalizeStories: jest.fn(() => [
     {

@@ -7,16 +7,15 @@ import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
 import path, { join, resolve } from 'path';
 import tempy from 'tempy';
+import { getInterpretedFile } from 'storybook/internal/common';
+import { readConfig } from 'storybook/internal/csf-tools';
+import { glob } from 'glob';
 
 import { JestOptions, getCliOptions } from './util/getCliOptions';
 import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
-
-import { glob } from 'glob';
 import { TestRunnerConfig } from './playwright/hooks';
-import { getInterpretedFile } from '@storybook/core-common';
-import { readConfig } from '@storybook/csf-tools';
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';

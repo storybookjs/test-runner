@@ -29,12 +29,25 @@ if (!require.main) {
           if (globalThis.__sbPreVisit) {
             await globalThis.__sbPreVisit(page, context);
           }
-          const result = await page.evaluate(({
-            id,
-            hasPlayFn
-          }) => __test(id, hasPlayFn), {
-            id: "button--primary"
-          });
+          let result;
+          try {
+            result = await page.evaluate(({
+              id,
+              hasPlayFn
+            }) => __test(id, hasPlayFn), {
+              id: "button--primary"
+            });
+          } catch (err) {
+            if (err.toString().includes('Execution context was destroyed')) {
+              throw err;
+            } else {
+              await globalThis.__sbPostVisit(page, {
+                ...context,
+                hasFailure: true
+              });
+              throw err;
+            }
+          }
           if (globalThis.__sbPostVisit) {
             await globalThis.__sbPostVisit(page, context);
           }
@@ -96,12 +109,25 @@ if (!require.main) {
           if (globalThis.__sbPreVisit) {
             await globalThis.__sbPreVisit(page, context);
           }
-          const result = await page.evaluate(({
-            id,
-            hasPlayFn
-          }) => __test(id, hasPlayFn), {
-            id: "button--primary"
-          });
+          let result;
+          try {
+            result = await page.evaluate(({
+              id,
+              hasPlayFn
+            }) => __test(id, hasPlayFn), {
+              id: "button--primary"
+            });
+          } catch (err) {
+            if (err.toString().includes('Execution context was destroyed')) {
+              throw err;
+            } else {
+              await globalThis.__sbPostVisit(page, {
+                ...context,
+                hasFailure: true
+              });
+              throw err;
+            }
+          }
           if (globalThis.__sbPostVisit) {
             await globalThis.__sbPostVisit(page, context);
           }
@@ -149,12 +175,25 @@ if (!require.main) {
           if (globalThis.__sbPreVisit) {
             await globalThis.__sbPreVisit(page, context);
           }
-          const result = await page.evaluate(({
-            id,
-            hasPlayFn
-          }) => __test(id, hasPlayFn), {
-            id: "button--primary"
-          });
+          let result;
+          try {
+            result = await page.evaluate(({
+              id,
+              hasPlayFn
+            }) => __test(id, hasPlayFn), {
+              id: "button--primary"
+            });
+          } catch (err) {
+            if (err.toString().includes('Execution context was destroyed')) {
+              throw err;
+            } else {
+              await globalThis.__sbPostVisit(page, {
+                ...context,
+                hasFailure: true
+              });
+              throw err;
+            }
+          }
           if (globalThis.__sbPostVisit) {
             await globalThis.__sbPostVisit(page, context);
           }
