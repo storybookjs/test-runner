@@ -70,12 +70,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--a"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--a"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -115,12 +128,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--b"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--b"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -178,12 +204,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--b"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--b"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -241,12 +280,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--a"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--a"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -286,12 +338,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--b"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--b"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -362,12 +427,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--b"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--b"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -407,12 +485,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--c"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--c"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -452,12 +543,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--d"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--d"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -497,12 +601,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--e"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--e"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -566,12 +683,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--a"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--a"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -611,12 +741,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--c"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--c"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -676,12 +819,25 @@ describe('Playwright', () => {
                   if (globalThis.__sbPreVisit) {
                     await globalThis.__sbPreVisit(page, context);
                   }
-                  const result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--a"
-                  });
+                  let result;
+                  try {
+                    result = await page.evaluate(({
+                      id,
+                      hasPlayFn
+                    }) => __test(id, hasPlayFn), {
+                      id: "example-foo-bar--a"
+                    });
+                  } catch (err) {
+                    if (err.toString().includes('Execution context was destroyed')) {
+                      throw err;
+                    } else {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                      throw err;
+                    }
+                  }
                   if (globalThis.__sbPostVisit) {
                     await globalThis.__sbPostVisit(page, context);
                   }
@@ -753,12 +909,25 @@ describe('Playwright', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-foo-bar--a"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-foo-bar--a"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -814,12 +983,25 @@ describe('Playwright', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-foo-bar--a"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-foo-bar--a"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }
@@ -875,12 +1057,25 @@ describe('Playwright', () => {
                 if (globalThis.__sbPreVisit) {
                   await globalThis.__sbPreVisit(page, context);
                 }
-                const result = await page.evaluate(({
-                  id,
-                  hasPlayFn
-                }) => __test(id, hasPlayFn), {
-                  id: "example-header--a"
-                });
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "example-header--a"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                    throw err;
+                  }
+                }
                 if (globalThis.__sbPostVisit) {
                   await globalThis.__sbPostVisit(page, context);
                 }

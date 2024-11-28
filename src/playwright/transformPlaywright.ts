@@ -25,9 +25,20 @@ export const testPrefixer: TestPrefixer = (context) => {
           await globalThis.__sbPreVisit(page, context);
         }
 
-        const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
-          id: %%id%%,
-        });
+        let result;
+        try {
+          result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
+            id: %%id%%,
+          });
+        } catch(err) {
+          if(err.toString().includes('Execution context was destroyed')) {
+            // Retry the test, possible Vite dep optimization flake
+            throw err;
+          } else {
+            await globalThis.__sbPostVisit(page, {...context, hasFailure: true });
+            throw err;
+          }
+        }
   
         if(globalThis.__sbPostVisit) {
           await globalThis.__sbPostVisit(page, context);
