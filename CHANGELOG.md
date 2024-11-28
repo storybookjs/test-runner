@@ -1,3 +1,46 @@
+# v0.20.0 (Thu Nov 28 2024)
+
+### Release Notes
+
+#### Feature: Run postVisit on failures ([#494](https://github.com/storybookjs/test-runner/pull/494))
+
+The test-runner's postVisit hook now runs even if there are failures. This allows you to, for instance, take snapshots on component failures. You can check whether the test has failed via the `hasFailure` property in the context passed to the hook:
+
+```ts
+const config: TestRunnerConfig = {
+  async postVisit(_page, context) {
+    if(context.hasFailure) {
+      console.log('problems!')
+      // do a snapshot, write a log, or anything you like
+    }
+  },
+}
+```
+
+---
+
+#### 🚀 Enhancement
+
+- Release 0.20.0 [#518](https://github.com/storybookjs/test-runner/pull/518) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman))
+- Feature: Run postVisit on failures [#494](https://github.com/storybookjs/test-runner/pull/494) ([@yannbf](https://github.com/yannbf))
+- Release 0.20.0 [#514](https://github.com/storybookjs/test-runner/pull/514) ([@yannbf](https://github.com/yannbf) runner@fv-az773-358.an51pne1gm2ejjnmkprpigk40g.dx.internal.cloudapp.net)
+- Align with Storybook 8.2 core package layout [#512](https://github.com/storybookjs/test-runner/pull/512) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Fix tags docs [#497](https://github.com/storybookjs/test-runner/pull/497) ([@shilman](https://github.com/shilman) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 6
+
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- shilman (runner@fv-az1567-4.ivwpl3vsblrubjity54i0equac.phxx.internal.cloudapp.net)
+- shilman (runner@fv-az2031-358.rag0t2s20xiu3oejmeweyzhkrf.bx.internal.cloudapp.net)
+- shilman (runner@fv-az738-609.ayi0s4js3kfu5apuyubnvt3std.cx.internal.cloudapp.net)
+- shilman (runner@fv-az773-358.an51pne1gm2ejjnmkprpigk40g.dx.internal.cloudapp.net)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.19.1 (Mon Jul 15 2024)
 
 #### 🐛 Bug Fix
