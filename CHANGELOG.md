@@ -1,3 +1,16 @@
+# v0.20.1 (Mon Dec 02 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.20.1 [#520](https://github.com/storybookjs/test-runner/pull/520) ([@yannbf](https://github.com/yannbf))
+- Fix postVisit hook issue [#519](https://github.com/storybookjs/test-runner/pull/519) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.20.0 (Thu Nov 28 2024)
 
 ### Release Notes
