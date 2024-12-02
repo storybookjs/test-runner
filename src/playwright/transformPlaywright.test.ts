@@ -82,10 +82,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -140,10 +142,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -216,10 +220,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -292,10 +298,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -350,10 +358,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -439,10 +449,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -497,10 +509,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -555,10 +569,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -613,10 +629,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -695,10 +713,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -753,10 +773,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -831,10 +853,12 @@ describe('Playwright', () => {
                     if (err.toString().includes('Execution context was destroyed')) {
                       throw err;
                     } else {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
+                      if (globalThis.__sbPostVisit) {
+                        await globalThis.__sbPostVisit(page, {
+                          ...context,
+                          hasFailure: true
+                        });
+                      }
                       throw err;
                     }
                   }
@@ -921,10 +945,12 @@ describe('Playwright', () => {
                   if (err.toString().includes('Execution context was destroyed')) {
                     throw err;
                   } else {
-                    await globalThis.__sbPostVisit(page, {
-                      ...context,
-                      hasFailure: true
-                    });
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
@@ -995,10 +1021,12 @@ describe('Playwright', () => {
                   if (err.toString().includes('Execution context was destroyed')) {
                     throw err;
                   } else {
-                    await globalThis.__sbPostVisit(page, {
-                      ...context,
-                      hasFailure: true
-                    });
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
@@ -1069,10 +1097,12 @@ describe('Playwright', () => {
                   if (err.toString().includes('Execution context was destroyed')) {
                     throw err;
                   } else {
-                    await globalThis.__sbPostVisit(page, {
-                      ...context,
-                      hasFailure: true
-                    });
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }

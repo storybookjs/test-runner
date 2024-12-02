@@ -35,7 +35,9 @@ export const testPrefixer: TestPrefixer = (context) => {
             // Retry the test, possible Vite dep optimization flake
             throw err;
           } else {
-            await globalThis.__sbPostVisit(page, {...context, hasFailure: true });
+            if(globalThis.__sbPostVisit) {
+              await globalThis.__sbPostVisit(page, {...context, hasFailure: true });
+            }
             throw err;
           }
         }
