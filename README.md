@@ -130,7 +130,7 @@ yarn storybook
 yarn test-storybook
 ```
 
-> **Note**
+> [!Note]
 > The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
 >
 > ```jsx
@@ -179,7 +179,7 @@ Usage: test-storybook [options]
 
 The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, `--testTimeout`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
 
-> **Note**
+> [!Note]
 > The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
 
 The configuration file will accept options for two runners:
@@ -248,7 +248,7 @@ export const Tertiary = {
 };
 ```
 
-> **Note**
+> [!Note]
 > You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **must be** defined inline, as an array of strings. This is a restriction due to Storybook's static analysis.
 
 For more information on how tags combine (and can be selectively removed), please see the [official docs](https://storybook.js.org/docs/writing-stories/tags).
@@ -299,7 +299,7 @@ https://your-storybook-url-here.com/index.json
 
 It should be a JSON file and the first key should be `"v": 4` followed by a key called `"entries"` containing a map of story IDs to JSON objects.
 
-In Storybok 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
+In Storybook 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
 
 </details>
 
@@ -339,7 +339,7 @@ If you are running tests against a local Storybook but for some reason want to r
 yarn test-storybook --index-json
 ```
 
-> **Note**
+> [!Note]
 > index.json mode is not compatible with watch mode.
 
 ## Running in CI
@@ -373,7 +373,7 @@ jobs:
           TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
-> **Note**
+> [!Note]
 > If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
 
 ### 2. Running against locally built Storybooks in CI
@@ -406,7 +406,7 @@ jobs:
         run: yarn test-storybook:ci
 ```
 
-> **Note**
+> [!Note]
 > Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
 
 ## Setting up code coverage
@@ -458,7 +458,7 @@ The test runner will report the results in the CLI and generate a `coverage/stor
 
 ![](.github/assets/coverage-result.png)
 
-> **Note**
+> [!Note]
 > If your components are not shown in the report and you're using Vue or Svelte, it's probably because you're missing a .nycrc.json file to specify the file extensions. Use the [recipes](https://github.com/yannbf/storybook-coverage-recipes) for reference on how to set that up.
 
 If you want to generate coverage reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
@@ -500,7 +500,7 @@ Here's an example on how to achieve that:
 }
 ```
 
-> **Note**
+> [!Note]
 > If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issues when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
 
 ### 4 - Run tests with --shard flag
@@ -569,7 +569,7 @@ There are three hooks: `setup`, `preVisit`, and `postVisit`. `setup` executes on
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
 
-> **Note**
+> [!Note]
 > The `preVisit` and `postVisit` functions will be executed for all stories.
 
 #### setup
@@ -590,7 +590,7 @@ export default config;
 
 #### preRender (deprecated)
 
-> **Note**
+> [!Note]
 > This hook is deprecated. It has been renamed to `preVisit`, please use it instead.
 
 #### preVisit
@@ -612,7 +612,7 @@ export default config;
 
 #### postRender (deprecated)
 
-> **Note**
+> [!Note]
 > This hook is deprecated. It has been renamed to `postVisit`, please use it instead.
 
 #### postVisit
@@ -632,7 +632,7 @@ const config: TestRunnerConfig = {
 export default config;
 ```
 
-> **Note**
+> [!Note]
 > Although you have access to Playwright's Page object, in some of these hooks, we encourage you to test as much as possible within the story's play function.
 
 #### Render lifecycle
@@ -677,7 +677,7 @@ The `prepare` function receives an object containing:
 
 For reference, please use the [default `prepare`](https://github.com/storybookjs/test-runner/blob/next/src/setup-page.ts#L12) function as a starting point.
 
-> **Note**
+> [!Note]
 > If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
 
 #### getHttpHeaders
