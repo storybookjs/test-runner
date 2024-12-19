@@ -65,10 +65,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       'coverage/storybook'
     )
     .option('--junit', 'Indicates that test information should be reported in a junit file')
-    .option(
-      '--listTests',
-      'Lists all test files that will be run, and exits'
-    )
+    .option('--listTests', 'Lists all test files that will be run, and exits.')
     .option(
       '--eject',
       'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'
