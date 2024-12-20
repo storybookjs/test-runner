@@ -289,6 +289,13 @@ function isServerComponentError(error: unknown) {
   );
 }
 
+function isReactWarning(error: unknown) {
+  return (
+    typeof error === 'string' &&
+    error.includes('Support for defaultProps will be removed from function components in a future major release')
+  );
+}
+
 // @ts-expect-error Global main test function, used by the test runner
 async function __test(storyId: string): Promise<any> {
   try {
@@ -331,7 +338,7 @@ async function __test(storyId: string): Promise<any> {
     console[method] = function () {
       const isConsoleError = method === 'error';
       // Storybook nextjs/react supress error logs from server components and so should the test-runner
-      if (isConsoleError && isServerComponentError(arguments?.[0])) {
+      if (isConsoleError && (isServerComponentError(arguments?.[0]) || isReactWarning(arguments?.[0]))) {
         return;
       }
 
