@@ -1,3 +1,23 @@
+# v0.21.0 (Fri Dec 20 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.21.0 [#527](https://github.com/storybookjs/test-runner/pull/527) ([@kaelig](https://github.com/kaelig) [@guspan-tanadi](https://github.com/guspan-tanadi) [@yannbf](https://github.com/yannbf))
+- Feature: Add --listTests flag from Jest [#521](https://github.com/storybookjs/test-runner/pull/521) ([@kaelig](https://github.com/kaelig))
+
+#### 🐛 Bug Fix
+
+- style(README): highlight Markdown Note section [#523](https://github.com/storybookjs/test-runner/pull/523) ([@guspan-tanadi](https://github.com/guspan-tanadi))
+- Fix: Handle RSC errors [#526](https://github.com/storybookjs/test-runner/pull/526) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- Guspan Tanadi ([@guspan-tanadi](https://github.com/guspan-tanadi))
+- Kaelig Deloumeau-Prigent ([@kaelig](https://github.com/kaelig))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.20.1 (Mon Dec 02 2024)
 
 #### 🐛 Bug Fix
