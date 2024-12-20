@@ -281,6 +281,14 @@ async function __getContext(storyId: string): Promise<any> {
   return globalThis.__STORYBOOK_PREVIEW__.storyStore.loadStory({ storyId });
 }
 
+function isServerComponentError(error: unknown) {
+  return (
+    typeof error === 'string' &&
+    (error.includes('A component was suspended by an uncached promise.') ||
+      error.includes('async/await is not yet supported in Client Components'))
+  );
+}
+
 // @ts-expect-error Global main test function, used by the test runner
 async function __test(storyId: string): Promise<any> {
   try {
@@ -321,6 +329,12 @@ async function __test(storyId: string): Promise<any> {
   const spyOnConsole = (method: ConsoleMethod, name: string): void => {
     const originalFn = console[method].bind(console);
     console[method] = function () {
+      const isConsoleError = method === 'error';
+      // Storybook nextjs/react supress error logs from server components and so should the test-runner
+      if (isConsoleError && isServerComponentError(arguments?.[0])) {
+        return;
+      }
+
       const shouldCollectError = TEST_RUNNER_FAIL_ON_CONSOLE === 'true' && method === 'error';
       if (shouldCollectError) {
         hasErrors = true;
