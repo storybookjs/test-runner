@@ -450,6 +450,14 @@ async function __test(storyId: string): Promise<any> {
       channel.on(eventName, listener);
     });
 
+    channel.emit('updateGlobals', {
+      globals: {
+        a11y: {
+          manual: true,
+        },
+      },
+    });
+
     channel.emit('setCurrentStory', { storyId, viewMode: TEST_RUNNER_VIEW_MODE });
   });
 }
