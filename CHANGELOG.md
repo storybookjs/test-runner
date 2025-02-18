@@ -1,3 +1,15 @@
+# v0.21.2 (Tue Feb 18 2025)
+
+#### 🐛 Bug Fix
+
+- Revert "Fix a11y compatibility with Storybook 8.5 and above" [#546](https://github.com/storybookjs/test-runner/pull/546) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 1
+
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+---
+
 # v0.21.1 (Mon Feb 17 2025)
 
 #### 🐛 Bug Fix
