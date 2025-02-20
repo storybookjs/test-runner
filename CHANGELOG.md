@@ -1,3 +1,15 @@
+# v0.21.3 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- fix: Use StoryFinished event if available [#548](https://github.com/storybookjs/test-runner/pull/548) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 1
+
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+---
+
 # v0.21.2 (Tue Feb 18 2025)
 
 #### 🐛 Bug Fix
