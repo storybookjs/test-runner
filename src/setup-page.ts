@@ -36,7 +36,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
   const viewMode = process.env.VIEW_MODE ?? 'story';
-  const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
+  const renderedEvent = viewMode === 'docs' ? 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.DOCS_RENDERED' : 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_FINISHED ?? globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_RENDERED';
   const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
 
@@ -82,7 +82,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const content = (await readFile(scriptLocation, 'utf-8'))
     .replaceAll('{{storybookUrl}}', finalStorybookUrl)
     .replaceAll('{{failOnConsole}}', failOnConsole ?? 'false')
-    .replaceAll('{{renderedEvent}}', renderedEvent)
+    .replaceAll('"{{renderedEvent}}"', renderedEvent)
     .replaceAll('{{testRunnerVersion}}', testRunnerVersion)
     .replaceAll('{{logLevel}}', testRunnerConfig.logLevel ?? 'info')
     .replaceAll('{{debugPrintLimit}}', debugPrintLimit.toString());
