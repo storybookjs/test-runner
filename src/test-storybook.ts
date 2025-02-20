@@ -362,7 +362,8 @@ const main = async () => {
   const { hostname } = new URL(targetURL);
 
   const isLocalStorybookIp = await canBindToHost(hostname);
-  const shouldRunIndexJson = runnerOptions.indexJson !== false && !isLocalStorybookIp;
+  const shouldRunIndexJson =
+    runnerOptions.indexJson === true || (runnerOptions.indexJson !== false && !isLocalStorybookIp);
   if (shouldRunIndexJson) {
     log(
       'Detected a remote Storybook URL, running in index json mode. To disable this, run the command again with --no-index-json\n'
