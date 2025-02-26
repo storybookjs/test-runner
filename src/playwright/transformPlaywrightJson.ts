@@ -101,7 +101,7 @@ function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
             type: isV3DocsOnly(stories) ? 'docs' : 'story',
             tags: isV3DocsOnly(stories) ? [] : ['test', 'dev'],
             ...story,
-          } satisfies V4Entry)
+          }) satisfies V4Entry
       ),
     ])
   );
@@ -121,7 +121,7 @@ function v4TitleMapToV5TitleMap(titleIdToStories: Record<string, V4Entry[]>) {
           ({
             ...story,
             tags: story.tags ? ['test', 'dev', ...story.tags] : ['test', 'dev'],
-          } satisfies V4Entry)
+          }) satisfies V4Entry
       ),
     ])
   );
