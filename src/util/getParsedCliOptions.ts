@@ -39,6 +39,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       '--maxWorkers <amount>',
       'Specifies the maximum number of workers the worker-pool will spawn for running tests'
     )
+    .option('--testTimeout <number>', 'This option sets the default timeouts of test cases')
     .option('--no-cache', 'Disable the cache')
     .option('--clearCache', 'Deletes the Jest cache directory and then exits without running tests')
     .option('--verbose', 'Display individual test results with the test suite hierarchy')
@@ -64,6 +65,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       'coverage/storybook'
     )
     .option('--junit', 'Indicates that test information should be reported in a junit file')
+    .option('--listTests', 'Lists all test files that will be run, and exits')
     .option(
       '--eject',
       'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'

@@ -37,6 +37,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [getHttpHeaders](#gethttpheaders)
   - [tags (experimental)](#tags-experimental)
   - [logLevel](#loglevel)
+  - [errorMessageFormatter](#errormessageformatter)
   - [Utility functions](#utility-functions)
     - [getStoryContext](#getstorycontext)
     - [waitForPageReady](#waitforpageready)
@@ -47,6 +48,7 @@ Storybook test runner turns all of your stories into executable tests.
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
+  - [Yarn PnP (Plug n' Play) support](#yarn-pnp-plug-n-play-support)
   - [React Native support](#react-native-support)
   - [The error output in the CLI is too short](#the-error-output-in-the-cli-is-too-short)
   - [The test runner seems flaky and keeps timing out](#the-test-runner-seems-flaky-and-keeps-timing-out)
@@ -91,7 +93,9 @@ Use the following table to use the correct version of this package, based on the
 
 | Test runner version | Storybook version |
 | ------------------- | ----------------- |
-| ^0.10.0             | ^7.0.0            |
+| ^0.19.0             | ^8.2.0            |
+| ~0.17.0             | ^8.0.0            |
+| ~0.16.0             | ^7.0.0            |
 | ~0.9.4              | ^6.4.0            |
 
 ## Getting started
@@ -126,7 +130,7 @@ yarn storybook
 yarn test-storybook
 ```
 
-> **Note**
+> [!Note]
 > The runner assumes that your Storybook is running on port `6006`. If you're running Storybook in another port, either use --url or set the TARGET_URL before running your command like:
 >
 > ```jsx
@@ -154,6 +158,7 @@ Usage: test-storybook [options]
 | `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
 | `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
 | `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
+| `--testTimeout [number]`          | This option sets the default timeouts of test cases <br/>`test-storybook --testTimeout=15_000`                                                                                |
 | `--no-cache`                      | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
 | `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
 | `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
@@ -162,6 +167,7 @@ Usage: test-storybook [options]
 | `--json`                          | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
 | `--outputFile`                    | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
 | `--junit`                         | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
+| `--listTests`                     | Lists all test files that will be run, and exits<br/>`test-storybook --listTests`                                                                                             |
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
@@ -171,9 +177,9 @@ Usage: test-storybook [options]
 
 ## Ejecting configuration
 
-The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
+The test runner is based on [Jest](https://jestjs.io/) and will accept most of the [CLI options](https://jestjs.io/docs/cli) that Jest does, like `--watch`, `--watchAll`, `--maxWorkers`, `--testTimeout`, etc. It works out of the box, but if you want better control over its configuration, you can eject its configuration by running `test-storybook --eject` to create a local `test-runner-jest.config.js` file in the root folder of your project. This file will be used by the test runner.
 
-> **Note**
+> [!Note]
 > The `test-runner-jest.config.js` file can be placed inside of your Storybook config dir as well. If you pass the `--config-dir` option, the test-runner will look for the config file there as well.
 
 The configuration file will accept options for two runners:
@@ -217,28 +223,35 @@ module.exports = {
 
 ## Filtering tests (experimental)
 
-You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation.
+You might want to skip certain stories in the test-runner, run tests only against a subset of stories, or exclude certain stories entirely from your tests. This is possible via the `tags` annotation. By default, the test-runner includes every story with the `'test'` tag. This tag is included by default in Storybook 8 for all stories, unless the user tells otherwise via [tag negation](https://storybook.js.org/docs/writing-stories/tags#removing-tags).
 
-This annotation can be part of a story, therefore only applying to it, or the component meta (the default export), which applies to all stories in the file:
+This annotation can be part of a story, therefore only applying to that story, or the component meta (the default export), which applies to all stories in the file:
 
 ```ts
 const meta = {
   component: Button,
-  tags: ['design', 'test-only'],
+  tags: ['atom'],
 };
 export default meta;
 
-// will inherit tags from meta with value ['design', 'test-only']
+// will inherit tags from project and meta to be ['dev', 'test', 'atom']
 export const Primary = {};
 
 export const Secondary = {
-  // will override tags to be just ['skip']
-  tags: ['skip'],
+  // will combine with project and meta tags to be ['dev', 'test', 'atom', 'design']
+  tags: ['design'],
+};
+
+export const Tertiary = {
+  // will combine with project and meta tags to be ['dev', 'atom']
+  tags: ['!test'],
 };
 ```
 
-> **Note**
-> You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **have to be** defined inline, as an array of strings. This is a limitation due to Storybook's static analysis.
+> [!Note]
+> You can't import constants from another file and use them to define tags in your stories. The tags in your stories or meta **must be** defined inline, as an array of strings. This is a restriction due to Storybook's static analysis.
+
+For more information on how tags combine (and can be selectively removed), please see the [official docs](https://storybook.js.org/docs/writing-stories/tags).
 
 Once your stories have your own custom tags, you can filter them via the [tags property](#tags-experimental) in your test-runner configuration file. You can also use the CLI flags `--includeTags`, `--excludeTags` or `--skipTags` for the same purpose. The CLI flags will take precedence over the tags in the test-runner config, therefore overriding them.
 
@@ -286,7 +299,7 @@ https://your-storybook-url-here.com/index.json
 
 It should be a JSON file and the first key should be `"v": 4` followed by a key called `"entries"` containing a map of story IDs to JSON objects.
 
-In Storybok 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
+In Storybook 7.0, `index.json` is enabled by default, unless you are using the `storiesOf()` syntax, in which case it is not supported.
 
 </details>
 
@@ -326,7 +339,7 @@ If you are running tests against a local Storybook but for some reason want to r
 yarn test-storybook --index-json
 ```
 
-> **Note**
+> [!Note]
 > index.json mode is not compatible with watch mode.
 
 ## Running in CI
@@ -348,10 +361,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment_status.state == 'success'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
@@ -360,7 +373,7 @@ jobs:
           TARGET_URL: '${{ github.event.deployment_status.target_url }}'
 ```
 
-> **Note**
+> [!Note]
 > If you're running the test-runner against a `TARGET_URL` of a remotely deployed Storybook (e.g. Chromatic), make sure that the URL loads a publicly available Storybook. Does it load correctly when opened in incognito mode on your browser? If your deployed Storybook is private and has authentication layers, the test-runner will hit them and thus not be able to access your stories. If that is the case, use the next option instead.
 
 ### 2. Running against locally built Storybooks in CI
@@ -383,17 +396,17 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: yarn
       - name: Run Storybook tests
         run: yarn test-storybook:ci
 ```
 
-> **Note**
+> [!Note]
 > Building Storybook locally makes it simple to test Storybooks that could be available remotely, but are under authentication layers. If you also deploy your Storybooks somewhere (e.g. Chromatic, Vercel, etc.), the Storybook URL can still be useful with the test-runner. You can pass it to the `REFERENCE_URL` environment variable when running the test-storybook command, and if a story fails, the test-runner will provide a helpful message with the link to the story in your published Storybook instead.
 
 ## Setting up code coverage
@@ -445,7 +458,7 @@ The test runner will report the results in the CLI and generate a `coverage/stor
 
 ![](.github/assets/coverage-result.png)
 
-> **Note**
+> [!Note]
 > If your components are not shown in the report and you're using Vue or Svelte, it's probably because you're missing a .nycrc.json file to specify the file extensions. Use the [recipes](https://github.com/yannbf/storybook-coverage-recipes) for reference on how to set that up.
 
 If you want to generate coverage reports with [different reporters](https://istanbul.js.org/docs/advanced/alternative-reporters/), you can use `nyc` and point it to the folder which contains the Storybook coverage file. `nyc` is a dependency of the test runner so you will already have it in your project.
@@ -487,7 +500,7 @@ Here's an example on how to achieve that:
 }
 ```
 
-> **Note**
+> [!Note]
 > If your other tests (e.g. Jest) are using a different coverageProvider than `babel`, you will have issues when merging the coverage files. [More info here](#merging-test-coverage-results-in-wrong-coverage).
 
 ### 4 - Run tests with --shard flag
@@ -556,7 +569,7 @@ There are three hooks: `setup`, `preVisit`, and `postVisit`. `setup` executes on
 
 All three functions can be set up in the configuration file `.storybook/test-runner.js` which can optionally export any of these functions.
 
-> **Note**
+> [!Note]
 > The `preVisit` and `postVisit` functions will be executed for all stories.
 
 #### setup
@@ -577,7 +590,7 @@ export default config;
 
 #### preRender (deprecated)
 
-> **Note**
+> [!Note]
 > This hook is deprecated. It has been renamed to `preVisit`, please use it instead.
 
 #### preVisit
@@ -599,7 +612,7 @@ export default config;
 
 #### postRender (deprecated)
 
-> **Note**
+> [!Note]
 > This hook is deprecated. It has been renamed to `postVisit`, please use it instead.
 
 #### postVisit
@@ -619,7 +632,7 @@ const config: TestRunnerConfig = {
 export default config;
 ```
 
-> **Note**
+> [!Note]
 > Although you have access to Playwright's Page object, in some of these hooks, we encourage you to test as much as possible within the story's play function.
 
 #### Render lifecycle
@@ -664,7 +677,7 @@ The `prepare` function receives an object containing:
 
 For reference, please use the [default `prepare`](https://github.com/storybookjs/test-runner/blob/next/src/setup-page.ts#L12) function as a starting point.
 
-> **Note**
+> [!Note]
 > If you override the default prepare behavior, even though this is powerful, you will be responsible for properly preparing the browser. Future changes to the default prepare function will not get included in your project, so you will have to keep an eye out for changes in upcoming releases.
 
 #### getHttpHeaders
@@ -696,7 +709,7 @@ import type { TestRunnerConfig } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
   tags: {
-    include: [], // string array, e.g. ['test-only']
+    include: [], // string array, e.g. ['test', 'design'] - by default, the value will be ['test']
     exclude: [], // string array, e.g. ['design', 'docs-only']
     skip: [], // string array, e.g. ['design']
   },
@@ -722,6 +735,23 @@ import type { TestRunnerConfig } from '@storybook/test-runner';
 
 const config: TestRunnerConfig = {
   logLevel: 'verbose',
+};
+export default config;
+```
+
+#### errorMessageFormatter
+
+The `errorMessageFormatter` property defines a function that will pre-format the error messages before they get reported in the CLI:
+
+```ts
+// .storybook/test-runner.ts
+import type { TestRunnerConfig } from '@storybook/test-runner';
+
+const config: TestRunnerConfig = {
+  errorMessageFormatter: (message) => {
+    // manipulate the error message as you like
+    return message;
+  },
 };
 export default config;
 ```
@@ -983,6 +1013,19 @@ export default config;
 
 ## Troubleshooting
 
+#### Yarn PnP (Plug n' Play) support
+
+The Storybook test-runner relies on a library called [jest-playwright-preset](https://github.com/playwright-community/jest-playwright), of which does not seem to support PnP. As a result, the test-runner won't work out of the box with PnP, and you might have the following error:
+
+```
+PlaywrightError: jest-playwright-preset: Cannot find playwright package to use chromium
+```
+
+If that is the case, there are two potential solutions:
+
+1. Install `playwright` as a direct dependency. You might need to run `yarn playwright install` after that, so you install Playwright's browser binaries.
+2. Switch your package manager's linker mode to `node-modules`.
+
 #### React Native support
 
 The test-runner is web based and therefore won't work with `@storybook/react-native` directly. However, if you use the [React Native Web Storybook Addon](https://storybook.js.org/addons/%2540storybook/addon-react-native-web), you can run the test-runner against the web-based Storybook generated with that addon. In that case, things would work the same way.
@@ -1001,6 +1044,12 @@ In either way, to fix it you should limit the amount of workers that run in para
 {
   "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2\""
 }
+```
+
+Another option is trying to increase the test timeout by passing the [--testTimeout](https://jestjs.io/docs/cli#--testtimeoutnumber) option to your command (adding `--testTimeout=60_000` will increase test timeouts to 1 minute):
+
+```json
+"test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2 --testTimeout=60_000\""
 ```
 
 #### The test runner reports "No tests found" running on a Windows CI

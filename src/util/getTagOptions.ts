@@ -15,7 +15,7 @@ export function getTagOptions() {
   const config = getTestRunnerConfig();
 
   let tagOptions = {
-    includeTags: config?.tags?.include || [],
+    includeTags: config?.tags?.include || ['test'],
     excludeTags: config?.tags?.exclude || [],
     skipTags: config?.tags?.skip || [],
   } as TagOptions;

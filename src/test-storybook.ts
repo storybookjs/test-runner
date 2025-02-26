@@ -5,17 +5,16 @@ import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
-import path from 'path';
+import path, { join, resolve } from 'path';
 import tempy from 'tempy';
-import semver from 'semver';
-import { detect as detectPackageManager } from 'detect-package-manager';
+import { getInterpretedFile } from 'storybook/internal/common';
+import { readConfig } from 'storybook/internal/csf-tools';
+import { glob } from 'glob';
 
 import { JestOptions, getCliOptions } from './util/getCliOptions';
 import { getStorybookMetadata } from './util/getStorybookMetadata';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
-
-import { glob } from 'glob';
 import { TestRunnerConfig } from './playwright/hooks';
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -48,38 +47,11 @@ const cleanup = () => {
   }
 };
 
-// Inspired by github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L48-106
-async function getExecutorCommand() {
-  const commands = {
-    npm: () => 'npx',
-    pnpm: () => {
-      const pnpmVersion = getPackageManagerVersion('pnpm');
-      const useExec = semver.gte(pnpmVersion, '6.13.0');
-
-      return useExec ? 'pnpm exec' : 'pnpx';
-    },
-    yarn: () => {
-      const yarnVersion = getPackageManagerVersion('yarn');
-      const useBerry = semver.gte(yarnVersion, '2.0.0');
-      return useBerry ? 'yarn exec' : 'yarn';
-    },
-  };
-
-  try {
-    let packageManager = await detectPackageManager();
-    if (packageManager === 'bun') {
-      packageManager = 'npm';
-    }
-
-    return commands[packageManager]();
-  } catch (err) {
-    return commands.npm();
-  }
-}
-
-// Copied from https://github.com/nrwl/nx/blob/1975181c200eb288221c8beb94e268fe9659cc26/packages/nx/src/utils/package-manager.ts#L113-L117
-function getPackageManagerVersion(packageManager: 'npm' | 'pnpm' | 'yarn') {
-  return execSync(`${packageManager} --version`).toString('utf-8').trim();
+function getNycBinPath() {
+  const nycPath = path.join(require.resolve('nyc/package.json'));
+  const nycBin = require(nycPath).bin.nyc;
+  const nycBinFullPath = path.join(path.dirname(nycPath), nycBin);
+  return nycBinFullPath;
 }
 
 async function reportCoverage() {
@@ -107,11 +79,12 @@ async function reportCoverage() {
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
   if (process.env.JEST_SHARD !== 'true') {
-    const executorCommand = await getExecutorCommand();
+    const nycBinFullPath = getNycBinPath();
     execSync(
-      `${executorCommand} nyc report --reporter=text -t ${coverageFolder} --report-dir ${coverageFolder}`,
+      `node ${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
       {
         stdio: 'inherit',
+        cwd: process.cwd(),
       }
     );
   }
@@ -271,8 +244,10 @@ function ejectConfiguration() {
     \n`);
   }
 
-  fs.copyFileSync(origin, destination);
-  log('Configuration file successfully copied as test-runner-jest.config.js');
+  // copy contents of origin and replace ../dist with @storybook/test-runner
+  const content = fs.readFileSync(origin, 'utf-8').replace(/..\/dist/g, '@storybook/test-runner');
+  fs.writeFileSync(destination, content);
+  log(`Configuration file successfully generated at ${destination}`);
 }
 
 function warnOnce(message: string) {
@@ -285,6 +260,16 @@ function warnOnce(message: string) {
     }
   };
 }
+
+const extractTagsFromPreview = async (configDir = '.storybook') => {
+  const previewConfigPath = getInterpretedFile(join(resolve(configDir), 'preview'));
+
+  if (!previewConfigPath) return [];
+  const previewConfig = await readConfig(previewConfigPath);
+  const tags = previewConfig.getFieldValue(['tags']) ?? [];
+
+  return tags.join(',');
+};
 
 const main = async () => {
   const { jestOptions, runnerOptions } = getCliOptions();
@@ -390,17 +375,23 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  const { storiesPaths, lazyCompilation } = getStorybookMetadata();
-  process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+  if (!shouldRunIndexJson) {
+    const { storiesPaths, lazyCompilation } = getStorybookMetadata();
+    process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
+
+    // 1 - We extract tags from preview file statically like it's done by the Storybook indexer. We only do this in non-index-json mode because it's not needed in that mode
+    // 2 - We pass it via env variable to avoid having to use async code in the babel plugin
+    process.env.STORYBOOK_PREVIEW_TAGS = await extractTagsFromPreview(runnerOptions.configDir);
+
+    if (lazyCompilation && isLocalStorybookIp) {
+      log(
+        `You're running Storybook with lazy compilation enabled, and will likely cause issues with the test runner locally. Consider disabling 'lazyCompilation' in ${runnerOptions.configDir}/main.js when running 'test-storybook' locally.`
+      );
+    }
+  }
 
   if (runnerOptions.failOnConsole) {
     process.env.TEST_CHECK_CONSOLE = 'true';
-  }
-
-  if (lazyCompilation && isLocalStorybookIp) {
-    log(
-      `You're running Storybook with lazy compilation enabled, and will likely cause issues with the test runner locally. Consider disabling 'lazyCompilation' in ${runnerOptions.configDir}/main.js when running 'test-storybook' locally.`
-    );
   }
 
   await executeJestPlaywright(jestOptions);

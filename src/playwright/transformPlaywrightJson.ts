@@ -59,6 +59,11 @@ export const makeDescribe = (title: string, stmts: t.Statement[]) => {
   );
 };
 
+type V3Story = Omit<V4Entry, 'type'> & { parameters?: StoryParameters };
+export type V3StoriesIndex = {
+  v: 3;
+  stories: Record<StoryId, V3Story>;
+};
 type V4Entry = {
   type?: 'story' | 'docs';
   id: StoryId;
@@ -71,17 +76,18 @@ export type V4Index = {
   entries: Record<StoryId, V4Entry>;
 };
 
+type V5Entry = V4Entry & { tags: string[] };
+export type V5Index = {
+  v: 5;
+  entries: Record<StoryId, V5Entry>;
+};
+
 type StoryParameters = {
   __id: StoryId;
   docsOnly?: boolean;
   fileName?: string;
 };
 
-type V3Story = Omit<V4Entry, 'type'> & { parameters?: StoryParameters };
-export type V3StoriesIndex = {
-  v: 3;
-  stories: Record<StoryId, V3Story>;
-};
 export type UnsupportedVersion = { v: number };
 const isV3DocsOnly = (stories: V3Story[]) => stories.length === 1 && stories[0].name === 'Page';
 
@@ -93,7 +99,28 @@ function v3TitleMapToV4TitleMap(titleIdToStories: Record<string, V3Story[]>) {
         ({ parameters, ...story }) =>
           ({
             type: isV3DocsOnly(stories) ? 'docs' : 'story',
+            tags: isV3DocsOnly(stories) ? [] : ['test', 'dev'],
             ...story,
+          } satisfies V4Entry)
+      ),
+    ])
+  );
+}
+
+/**
+ * Storybook 8.0 and below did not automatically tag stories with 'dev'.
+ * Therefore Storybook 8.1 and above would not show composed 8.0 stories by default.
+ * This function adds the 'dev' tag to all stories in the index to workaround this issue.
+ */
+function v4TitleMapToV5TitleMap(titleIdToStories: Record<string, V4Entry[]>) {
+  return Object.fromEntries(
+    Object.entries(titleIdToStories).map(([id, stories]) => [
+      id,
+      stories.map(
+        (story) =>
+          ({
+            ...story,
+            tags: story.tags ? ['test', 'dev', ...story.tags] : ['test', 'dev'],
           } satisfies V4Entry)
       ),
     ])
@@ -122,6 +149,9 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
     titleIdToEntries = v3TitleMapToV4TitleMap(titleIdToStories);
   } else if (index.v === 4) {
     // TODO: Once Storybook 8.0 is released, we should only support v4 and higher
+    titleIdToEntries = groupByTitleId<V4Entry>(Object.values((index as V4Index).entries));
+    titleIdToEntries = v4TitleMapToV5TitleMap(titleIdToEntries);
+  } else if (index.v === 5) {
     titleIdToEntries = groupByTitleId<V4Entry>(Object.values((index as V4Index).entries));
   } else {
     throw new Error(`Unsupported version ${index.v}`);

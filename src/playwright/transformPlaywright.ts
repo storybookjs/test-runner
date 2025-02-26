@@ -1,11 +1,11 @@
 import { relative } from 'path';
 import template from '@babel/template';
-import { userOrAutoTitle } from '@storybook/preview-api';
+import { userOrAutoTitle } from 'storybook/internal/preview-api';
+import dedent from 'ts-dedent';
 
 import { getStorybookMetadata } from '../util';
 import { transformCsf } from '../csf/transformCsf';
 import type { TestPrefixer } from '../csf/transformCsf';
-import dedent from 'ts-dedent';
 
 const coverageErrorMessage = dedent`
   [Test runner] An error occurred when evaluating code coverage:
@@ -25,9 +25,22 @@ export const testPrefixer: TestPrefixer = (context) => {
           await globalThis.__sbPreVisit(page, context);
         }
 
-        const result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
-          id: %%id%%,
-        });
+        let result;
+        try {
+          result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
+            id: %%id%%,
+          });
+        } catch(err) {
+          if(err.toString().includes('Execution context was destroyed')) {
+            // Retry the test, possible Vite dep optimization flake
+            throw err;
+          } else {
+            if(globalThis.__sbPostVisit) {
+              await globalThis.__sbPostVisit(page, {...context, hasFailure: true });
+            }
+            throw err;
+          }
+        }
   
         if(globalThis.__sbPostVisit) {
           await globalThis.__sbPostVisit(page, context);
@@ -75,11 +88,13 @@ const makeTitleFactory = (filename: string) => {
 };
 
 export const transformPlaywright = (src: string, filename: string) => {
+  const tags = process.env.STORYBOOK_PREVIEW_TAGS?.split(',') ?? [];
   const transformOptions = {
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
     makeTitle: makeTitleFactory(filename),
+    previewAnnotations: { tags },
   };
 
   const result = transformCsf(src, transformOptions);

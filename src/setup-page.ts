@@ -1,5 +1,6 @@
 import type { Page, BrowserContext } from 'playwright';
 import readPackageUp, { NormalizedReadResult } from 'read-pkg-up';
+import { pkgUp } from 'pkg-up';
 import { PrepareContext } from './playwright/hooks';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { readFile } from 'node:fs/promises';
@@ -35,7 +36,10 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
   const viewMode = process.env.VIEW_MODE ?? 'story';
-  const renderedEvent = viewMode === 'docs' ? 'docsRendered' : 'storyRendered';
+  const renderedEvent =
+    viewMode === 'docs'
+      ? 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.DOCS_RENDERED'
+      : 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_FINISHED ?? globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_RENDERED';
   const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
 
@@ -60,14 +64,28 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   // if we ever want to log something from the browser to node
   await page.exposeBinding('logToPage', (_, message) => console.log(message));
 
+  await page.exposeBinding('testRunner_errorMessageFormatter', (_, message: string) => {
+    if (testRunnerConfig.errorMessageFormatter) {
+      return testRunnerConfig.errorMessageFormatter(message);
+    }
+
+    return message;
+  });
+
   const finalStorybookUrl = referenceURL ?? targetURL ?? '';
-  const scriptLocation = require.resolve(path.join(__dirname, 'setup-page-script.mjs'));
+  const testRunnerPackageLocation = await pkgUp({ cwd: __dirname });
+  if (!testRunnerPackageLocation) throw new Error('Could not find test-runner package location');
+  const scriptLocation = path.join(
+    path.dirname(testRunnerPackageLocation),
+    'dist',
+    'setup-page-script.mjs'
+  );
 
   // read the content of setup-page-script.mjs and replace the placeholders with the actual values
   const content = (await readFile(scriptLocation, 'utf-8'))
     .replaceAll('{{storybookUrl}}', finalStorybookUrl)
     .replaceAll('{{failOnConsole}}', failOnConsole ?? 'false')
-    .replaceAll('{{renderedEvent}}', renderedEvent)
+    .replaceAll('"{{renderedEvent}}"', renderedEvent)
     .replaceAll('{{testRunnerVersion}}', testRunnerVersion)
     .replaceAll('{{logLevel}}', testRunnerConfig.logLevel ?? 'info')
     .replaceAll('{{debugPrintLimit}}', debugPrintLimit.toString());

@@ -1,8 +1,8 @@
 import path from 'path';
-import { getProjectRoot } from '@storybook/core-common';
+import { getProjectRoot } from 'storybook/internal/common';
 import type { Config } from '@jest/types';
 
-const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
+const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
 
 /**
  * IMPORTANT NOTE:
@@ -17,6 +17,7 @@ const TEST_RUNNER_PATH = process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/t
  * necessary moving parts are all required within the correct path.
  * */
 const getJestPlaywrightConfig = (): Config.InitialOptions => {
+  const TEST_RUNNER_PATH = getTestRunnerPath();
   const presetBasePath = path.dirname(
     require.resolve('jest-playwright-preset', {
       paths: [path.join(__dirname, '../node_modules')],
@@ -71,6 +72,7 @@ export const getJestConfig = (): Config.InitialOptions => {
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
   const testMatch = STORYBOOK_STORIES_PATTERN?.split(';') ?? [];
+  const TEST_RUNNER_PATH = getTestRunnerPath();
 
   const config: Config.InitialOptions = {
     rootDir: getProjectRoot(),

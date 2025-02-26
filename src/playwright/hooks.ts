@@ -1,10 +1,11 @@
 import type { BrowserContext, Page } from 'playwright';
-import type { StoryContext } from '@storybook/csf';
+import type { StoryContextForEnhancers } from '@storybook/csf';
 
 export type TestContext = {
   id: string;
   title: string;
   name: string;
+  hasFailure?: boolean;
 };
 
 export type PrepareContext = {
@@ -63,6 +64,11 @@ export interface TestRunnerConfig {
    * @default 'info'
    */
   logLevel?: 'info' | 'warn' | 'error' | 'verbose' | 'none';
+
+  /**
+   * Defines a custom function to process the error message. Useful to sanitize error messages or to add additional information.
+   */
+  errorMessageFormatter?: (error: string) => string;
 }
 
 export const setPreVisit = (preVisit: TestHook) => {
@@ -73,7 +79,10 @@ export const setPostVisit = (postVisit: TestHook) => {
   globalThis.__sbPostVisit = postVisit;
 };
 
-export const getStoryContext = async (page: Page, context: TestContext): Promise<StoryContext> => {
+export const getStoryContext = async (
+  page: Page,
+  context: TestContext
+): Promise<StoryContextForEnhancers> => {
   return page.evaluate(({ storyId }) => globalThis.__getContext(storyId), {
     storyId: context.id,
   });

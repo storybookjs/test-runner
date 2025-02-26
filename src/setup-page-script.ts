@@ -30,7 +30,8 @@ const TEST_RUNNER_DEBUG_PRINT_LIMIT = parseInt('{{debugPrintLimit}}', 10);
 // Type definitions for globals
 declare global {
   // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
-  var logToPage: (message: string) => void;
+  var logToPage: (message: string) => Promise<void>;
+  var testRunner_errorMessageFormatter: (message: string) => Promise<string>;
 }
 
 // Type definitions for function parameters and return types
@@ -205,21 +206,39 @@ function addToUserAgent(extra: string): void {
 
 // Custom error class
 class StorybookTestRunnerError extends Error {
-  constructor(storyId: string, errorMessage: string, logs: string[] = []) {
-    super(errorMessage);
+  constructor(
+    storyId: string,
+    errorMessage: string,
+    logs: string[] = [],
+    isMessageFormatted: boolean = false
+  ) {
+    const message = isMessageFormatted
+      ? errorMessage
+      : StorybookTestRunnerError.buildErrorMessage(storyId, errorMessage, logs);
+    super(message);
+
     this.name = 'StorybookTestRunnerError';
+  }
+
+  public static buildErrorMessage(
+    storyId: string,
+    errorMessage: string,
+    logs: string[] = []
+  ): string {
     const storyUrl = `${TEST_RUNNER_STORYBOOK_URL}?path=/story/${storyId}`;
     const finalStoryUrl = `${storyUrl}&addonPanel=storybook/interactions/panel`;
     const separator = '\n\n--------------------------------------------------';
     // The original error message will also be collected in the logs, so we filter it to avoid duplication
-    const finalLogs = logs.filter((err) => !err.includes(errorMessage));
+    const finalLogs = logs.filter((err: string) => !err.includes(errorMessage));
     const extraLogs =
       finalLogs.length > 0 ? separator + '\n\nBrowser logs:\n\n' + finalLogs.join('\n\n') : '';
 
-    this.message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
+    const message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
       errorMessage,
       TEST_RUNNER_DEBUG_PRINT_LIMIT
     )}\n${extraLogs}`;
+
+    return message;
   }
 }
 
@@ -262,6 +281,14 @@ async function __getContext(storyId: string): Promise<any> {
   return globalThis.__STORYBOOK_PREVIEW__.storyStore.loadStory({ storyId });
 }
 
+function isServerComponentError(error: unknown) {
+  return (
+    typeof error === 'string' &&
+    (error.includes('A component was suspended by an uncached promise.') ||
+      error.includes('async/await is not yet supported in Client Components'))
+  );
+}
+
 // @ts-expect-error Global main test function, used by the test runner
 async function __test(storyId: string): Promise<any> {
   try {
@@ -302,6 +329,12 @@ async function __test(storyId: string): Promise<any> {
   const spyOnConsole = (method: ConsoleMethod, name: string): void => {
     const originalFn = console[method].bind(console);
     console[method] = function () {
+      const isConsoleError = method === 'error';
+      // Storybook nextjs/react supress error logs from server components and so should the test-runner
+      if (isConsoleError && isServerComponentError(arguments?.[0])) {
+        return;
+      }
+
       const shouldCollectError = TEST_RUNNER_FAIL_ON_CONSOLE === 'true' && method === 'error';
       if (shouldCollectError) {
         hasErrors = true;
@@ -351,13 +384,32 @@ async function __test(storyId: string): Promise<any> {
   };
 
   return new Promise((resolve, reject) => {
+    const rejectWithFormattedError = (storyId: string, message: string) => {
+      const errorMessage = StorybookTestRunnerError.buildErrorMessage(storyId, message, logs);
+
+      testRunner_errorMessageFormatter(errorMessage)
+        .then((formattedMessage) => {
+          reject(new StorybookTestRunnerError(storyId, formattedMessage, logs, true));
+        })
+        .catch((error) => {
+          reject(
+            new StorybookTestRunnerError(
+              storyId,
+              'There was an error when executing the errorMessageFormatter defiend in your Storybook test-runner config file. Please fix it and rerun the tests:\n\n' +
+                error.message
+            )
+          );
+        });
+    };
+
     const listeners = {
       [TEST_RUNNER_RENDERED_EVENT]: () => {
         cleanup(listeners);
         if (hasErrors) {
-          reject(new StorybookTestRunnerError(storyId, 'Browser console errors', logs));
+          rejectWithFormattedError(storyId, 'Browser console errors');
+        } else {
+          resolve(document.getElementById('root'));
         }
-        resolve(document.getElementById('root'));
       },
 
       storyUnchanged: () => {
@@ -367,29 +419,29 @@ async function __test(storyId: string): Promise<any> {
 
       storyErrored: ({ description }: { description: string }) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, description, logs));
+        rejectWithFormattedError(storyId, description);
       },
 
       storyThrewException: (error: Error) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+        rejectWithFormattedError(storyId, error.message);
       },
 
       playFunctionThrewException: (error: Error) => {
         cleanup(listeners);
-        reject(new StorybookTestRunnerError(storyId, error.message, logs));
+
+        rejectWithFormattedError(storyId, error.message);
+      },
+
+      unhandledErrorsWhilePlaying: ([error]: Error[]) => {
+        cleanup(listeners);
+        rejectWithFormattedError(storyId, error.message);
       },
 
       storyMissing: (id: string) => {
         cleanup(listeners);
         if (id === storyId) {
-          reject(
-            new StorybookTestRunnerError(
-              storyId,
-              'The story was missing when trying to access it.',
-              logs
-            )
-          );
+          rejectWithFormattedError(storyId, 'The story was missing when trying to access it.');
         }
       },
     };
