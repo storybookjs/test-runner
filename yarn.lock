@@ -3925,7 +3925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/core-common@npm:7.5.3, @storybook/core-common@npm:^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0":
+"@storybook/core-common@npm:7.5.3":
   version: 7.5.3
   resolution: "@storybook/core-common@npm:7.5.3"
   dependencies:
@@ -3953,6 +3953,15 @@ __metadata:
     resolve-from: ^5.0.0
     ts-dedent: ^2.0.0
   checksum: 152816728cb1c3c14038509c9f7da78331bb91fb0ab766fff25651c9c91e246617f78e9bd4ec6adae21bd3c92c2cfdfbaf5162fedf83b2e8725970a5ac3b28d4
+  languageName: node
+  linkType: hard
+
+"@storybook/core-common@npm:^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0 || ^8.0.0-0 || ^8.0.0 || ^9.0.0-0":
+  version: 9.0.0-alpha.0
+  resolution: "@storybook/core-common@npm:9.0.0-alpha.0"
+  peerDependencies:
+    storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+  checksum: 89a8f5e5b3e17f468239276bd0244753cc197a6660eab5d7698750bf21b4ccbf72cc6abade659110a046a1ed6df1f53506ebd9de14fa9e81ef5b414ca1ceea6a
   languageName: node
   linkType: hard
 
@@ -4033,7 +4042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/csf-tools@npm:7.5.3, @storybook/csf-tools@npm:^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0":
+"@storybook/csf-tools@npm:7.5.3":
   version: 7.5.3
   resolution: "@storybook/csf-tools@npm:7.5.3"
   dependencies:
@@ -4050,16 +4059,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/csf@npm:^0.1.0, @storybook/csf@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@storybook/csf@npm:0.1.1"
-  dependencies:
-    type-fest: ^2.19.0
-  checksum: 1fbb827b50f0c15f21026a95d02cc096be4f9f2705ad8fd29f0a99330233606e69f6af7551d844ace2a4b8f08fcc9f81496d4d69160ba8c458698291efb60954
+"@storybook/csf-tools@npm:^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0 || ^8.0.0-0 || ^8.0.0 || ^9.0.0-0":
+  version: 9.0.0-alpha.0
+  resolution: "@storybook/csf-tools@npm:9.0.0-alpha.0"
+  peerDependencies:
+    storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+  checksum: 0225baba7a8a049aed8557ed844552b84634a9a50ddf8c40f47a6e2010d3a314c149cf42e4129de7ed136b078939ea87d1ab1f2e26ec757bd3e5cc7b9e785b4a
   languageName: node
   linkType: hard
 
-"@storybook/csf@npm:^0.1.2":
+"@storybook/csf@npm:^0.1.0, @storybook/csf@npm:^0.1.1, @storybook/csf@npm:^0.1.2":
   version: 0.1.2
   resolution: "@storybook/csf@npm:0.1.2"
   dependencies:
@@ -4178,7 +4187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/preview-api@npm:7.5.3, @storybook/preview-api@npm:^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0":
+"@storybook/preview-api@npm:7.5.3":
   version: 7.5.3
   resolution: "@storybook/preview-api@npm:7.5.3"
   dependencies:
@@ -4219,6 +4228,15 @@ __metadata:
     ts-dedent: ^2.0.0
     util-deprecate: ^1.0.2
   checksum: df37fe2ac0d94ab8c31821a911483aa6ab5e826ca386e92995ab376d065287c282d3585fdcbcc135ced76149f50efcd0cb854427dc3ff76e3589266f97a77713
+  languageName: node
+  linkType: hard
+
+"@storybook/preview-api@npm:^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0 || ^8.0.0-0 || ^8.0.0 || ^9.0.0-0":
+  version: 9.0.0-alpha.0
+  resolution: "@storybook/preview-api@npm:9.0.0-alpha.0"
+  peerDependencies:
+    storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+  checksum: b38a7e6c5fc8af947409ad066348b3bef0ac4a9569043550d852d2539778a768ba1f079c115bd3f763004068e0ab4eec20647c9eaabb983273d91d9d48331903
   languageName: node
   linkType: hard
 
@@ -4341,10 +4359,10 @@ __metadata:
     "@storybook/addon-coverage": ^0.0.9
     "@storybook/addon-essentials": ^7.5.3
     "@storybook/addon-interactions": ^7.5.3
-    "@storybook/core-common": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
+    "@storybook/core-common": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0 || ^8.0.0-0 || ^8.0.0 || ^9.0.0-0
     "@storybook/csf": ^0.1.1
-    "@storybook/csf-tools": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
-    "@storybook/preview-api": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
+    "@storybook/csf-tools": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0 || ^8.0.0-0 || ^8.0.0 || ^9.0.0-0
+    "@storybook/preview-api": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0 || ^8.0.0-0 || ^8.0.0 || ^9.0.0-0
     "@storybook/react": ^7.5.3
     "@storybook/react-vite": ^7.5.3
     "@storybook/test": ^7.5.3
