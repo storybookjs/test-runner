@@ -1,3 +1,23 @@
+# v0.22.0 (Fri Feb 28 2025)
+
+#### 🚀 Enhancement
+
+- Release v0.22.0 [#553](https://github.com/storybookjs/test-runner/pull/553) ([@ronakj](https://github.com/ronakj) [@ndelangen](https://github.com/ndelangen) [@kasperpeulen](https://github.com/kasperpeulen) [@yannbf](https://github.com/yannbf))
+- Dependencies: Add sb9 alpha compatibility [#551](https://github.com/storybookjs/test-runner/pull/551) ([@ndelangen](https://github.com/ndelangen))
+
+#### 🐛 Bug Fix
+
+- Exclude new server component error [#552](https://github.com/storybookjs/test-runner/pull/552) ([@kasperpeulen](https://github.com/kasperpeulen))
+
+#### Authors: 4
+
+- Kasper Peulen ([@kasperpeulen](https://github.com/kasperpeulen))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- Ronak Jain ([@ronakj](https://github.com/ronakj))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.21.3 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
