@@ -284,7 +284,8 @@ async function __getContext(storyId: string): Promise<any> {
 function isServerComponentError(error: unknown) {
   return (
     typeof error === 'string' &&
-    (error.includes('A component was suspended by an uncached promise.') ||
+    (error.includes('Only Server Components can be async at the moment.') ||
+      error.includes('A component was suspended by an uncached promise.') ||
       error.includes('async/await is not yet supported in Client Components'))
   );
 }
