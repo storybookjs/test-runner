@@ -1,3 +1,116 @@
+# v0.21.3 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- fix: Use StoryFinished event if available [#548](https://github.com/storybookjs/test-runner/pull/548) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 1
+
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+---
+
+# v0.21.2 (Tue Feb 18 2025)
+
+#### 🐛 Bug Fix
+
+- Revert "Fix a11y compatibility with Storybook 8.5 and above" [#546](https://github.com/storybookjs/test-runner/pull/546) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 1
+
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+---
+
+# v0.21.1 (Mon Feb 17 2025)
+
+#### 🐛 Bug Fix
+
+- Fix a11y compatibility with Storybook 8.5 and above [#536](https://github.com/storybookjs/test-runner/pull/536) ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+#### Authors: 2
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Valentin Palkovic ([@valentinpalkovic](https://github.com/valentinpalkovic))
+
+---
+
+# v0.21.0 (Fri Dec 20 2024)
+
+#### 🚀 Enhancement
+
+- Release 0.21.0 [#527](https://github.com/storybookjs/test-runner/pull/527) ([@kaelig](https://github.com/kaelig) [@guspan-tanadi](https://github.com/guspan-tanadi) [@yannbf](https://github.com/yannbf))
+- Feature: Add --listTests flag from Jest [#521](https://github.com/storybookjs/test-runner/pull/521) ([@kaelig](https://github.com/kaelig))
+
+#### 🐛 Bug Fix
+
+- style(README): highlight Markdown Note section [#523](https://github.com/storybookjs/test-runner/pull/523) ([@guspan-tanadi](https://github.com/guspan-tanadi))
+- Fix: Handle RSC errors [#526](https://github.com/storybookjs/test-runner/pull/526) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- Guspan Tanadi ([@guspan-tanadi](https://github.com/guspan-tanadi))
+- Kaelig Deloumeau-Prigent ([@kaelig](https://github.com/kaelig))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.20.1 (Mon Dec 02 2024)
+
+#### 🐛 Bug Fix
+
+- Release 0.20.1 [#520](https://github.com/storybookjs/test-runner/pull/520) ([@yannbf](https://github.com/yannbf))
+- Fix postVisit hook issue [#519](https://github.com/storybookjs/test-runner/pull/519) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.20.0 (Thu Nov 28 2024)
+
+### Release Notes
+
+#### Feature: Run postVisit on failures ([#494](https://github.com/storybookjs/test-runner/pull/494))
+
+The test-runner's postVisit hook now runs even if there are failures. This allows you to, for instance, take snapshots on component failures. You can check whether the test has failed via the `hasFailure` property in the context passed to the hook:
+
+```ts
+const config: TestRunnerConfig = {
+  async postVisit(_page, context) {
+    if(context.hasFailure) {
+      console.log('problems!')
+      // do a snapshot, write a log, or anything you like
+    }
+  },
+}
+```
+
+---
+
+#### 🚀 Enhancement
+
+- Release 0.20.0 [#518](https://github.com/storybookjs/test-runner/pull/518) ([@yannbf](https://github.com/yannbf) [@shilman](https://github.com/shilman))
+- Feature: Run postVisit on failures [#494](https://github.com/storybookjs/test-runner/pull/494) ([@yannbf](https://github.com/yannbf))
+- Release 0.20.0 [#514](https://github.com/storybookjs/test-runner/pull/514) ([@yannbf](https://github.com/yannbf) runner@fv-az773-358.an51pne1gm2ejjnmkprpigk40g.dx.internal.cloudapp.net)
+- Align with Storybook 8.2 core package layout [#512](https://github.com/storybookjs/test-runner/pull/512) ([@yannbf](https://github.com/yannbf))
+
+#### 📝 Documentation
+
+- Fix tags docs [#497](https://github.com/storybookjs/test-runner/pull/497) ([@shilman](https://github.com/shilman) [@yannbf](https://github.com/yannbf))
+
+#### Authors: 6
+
+- Michael Shilman ([@shilman](https://github.com/shilman))
+- shilman (runner@fv-az1567-4.ivwpl3vsblrubjity54i0equac.phxx.internal.cloudapp.net)
+- shilman (runner@fv-az2031-358.rag0t2s20xiu3oejmeweyzhkrf.bx.internal.cloudapp.net)
+- shilman (runner@fv-az738-609.ayi0s4js3kfu5apuyubnvt3std.cx.internal.cloudapp.net)
+- shilman (runner@fv-az773-358.an51pne1gm2ejjnmkprpigk40g.dx.internal.cloudapp.net)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.19.1 (Mon Jul 15 2024)
 
 #### 🐛 Bug Fix
