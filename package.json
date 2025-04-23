@@ -38,7 +38,7 @@
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --quiet\"",
     "storybook": "storybook dev -p 6006",
     "test": "jest",
-    "test-storybook": "node dist/test-storybook --maxWorkers=9",
+    "test-storybook": "node dist/test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook\"",
     "test-storybook:ci-coverage": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook --coverage\"",
     "test-storybook:ci-failures": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"TEST_FAILURES=1 yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook:failures\"",
