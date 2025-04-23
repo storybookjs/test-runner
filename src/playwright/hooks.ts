@@ -1,5 +1,5 @@
 import type { BrowserContext, Page } from 'playwright';
-import type { StoryContextForEnhancers } from '@storybook/csf';
+import type { StoryContextForEnhancers } from 'storybook/internal/csf';
 
 export type TestContext = {
   id: string;
