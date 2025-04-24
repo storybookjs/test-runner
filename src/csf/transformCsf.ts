@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { toId, storyNameFromExport, combineTags } from '@storybook/csf';
+import { toId, storyNameFromExport, combineTags } from 'storybook/internal/csf';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import * as t from '@babel/types';
 import generate from '@babel/generator';

@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { fn, expect, within, waitFor, userEvent, waitForElementToBeRemoved } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn, expect, within, waitFor, userEvent, waitForElementToBeRemoved } from 'storybook/test';
 
 import { isTestRunner } from '../../.storybook/is-test-runner';
 
