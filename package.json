@@ -85,7 +85,6 @@
     "@types/node-fetch": "^2.6.11",
     "@vitejs/plugin-react": "^4.0.3",
     "auto": "^11.1.6",
-    "axe-playwright": "^2.1.0",
     "babel-jest": "^29.0.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.1.1",

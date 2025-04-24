@@ -32,6 +32,13 @@ declare global {
   // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
   var logToPage: (message: string) => Promise<void>;
   var testRunner_errorMessageFormatter: (message: string) => Promise<string>;
+  var __STORYBOOK_PREVIEW__: {
+    currentRender: {
+      story: {
+        parameters?: any;
+      };
+    };
+  };
 }
 
 // Type definitions for function parameters and return types
@@ -42,6 +49,7 @@ const magenta: Colorizer = (message: string) => `\u001b[35m${message}\u001b[39m`
 const blue: Colorizer = (message: string) => `\u001b[34m${message}\u001b[39m`;
 const red: Colorizer = (message: string) => `\u001b[31m${message}\u001b[39m`;
 const yellow: Colorizer = (message: string) => `\u001b[33m${message}\u001b[39m`;
+const grey: Colorizer = (message: string) => `\u001b[90m${message}\u001b[39m`;
 
 // Constants
 var LIMIT_REPLACE_NODE = '[...]';
@@ -223,17 +231,22 @@ class StorybookTestRunnerError extends Error {
   public static buildErrorMessage(
     storyId: string,
     errorMessage: string,
-    logs: string[] = []
+    logs: string[] = [],
+    panel?: string
   ): string {
     const storyUrl = `${TEST_RUNNER_STORYBOOK_URL}?path=/story/${storyId}`;
-    const finalStoryUrl = `${storyUrl}&addonPanel=storybook/interactions/panel`;
+    const finalStoryUrl = panel ? `${storyUrl}&addonPanel=${panel}` : storyUrl;
     const separator = '\n\n--------------------------------------------------';
     // The original error message will also be collected in the logs, so we filter it to avoid duplication
     const finalLogs = logs.filter((err: string) => !err.includes(errorMessage));
     const extraLogs =
       finalLogs.length > 0 ? separator + '\n\nBrowser logs:\n\n' + finalLogs.join('\n\n') : '';
 
-    const message = `\nAn error occurred in the following story. Access the link for full output:\n${finalStoryUrl}\n\nMessage:\n ${truncate(
+    const linkPrefix = blue(
+      `\nClick to debug the error directly in Storybook:\n${finalStoryUrl}\n\n`
+    );
+
+    const message = `${linkPrefix}Message:\n ${truncate(
       errorMessage,
       TEST_RUNNER_DEBUG_PRINT_LIMIT
     )}\n${extraLogs}`;
@@ -385,8 +398,13 @@ async function __test(storyId: string): Promise<any> {
   };
 
   return new Promise((resolve, reject) => {
-    const rejectWithFormattedError = (storyId: string, message: string) => {
-      const errorMessage = StorybookTestRunnerError.buildErrorMessage(storyId, message, logs);
+    const rejectWithFormattedError = (storyId: string, message: string, panel?: string) => {
+      const errorMessage = StorybookTestRunnerError.buildErrorMessage(
+        storyId,
+        message,
+        logs,
+        panel
+      );
 
       testRunner_errorMessageFormatter(errorMessage)
         .then((formattedMessage) => {
@@ -403,14 +421,41 @@ async function __test(storyId: string): Promise<any> {
         });
     };
 
+    const INTERACTIONS_PANEL = 'storybook/interactions/panel';
+    const A11Y_PANEL = 'storybook/a11y/panel';
+
     const listeners = {
-      [TEST_RUNNER_RENDERED_EVENT]: () => {
+      [TEST_RUNNER_RENDERED_EVENT]: (data: any) => {
         cleanup(listeners);
+
         if (hasErrors) {
           rejectWithFormattedError(storyId, 'Browser console errors');
-        } else {
-          resolve(document.getElementById('root'));
+          return;
+        } else if (data?.reporters) {
+          const a11yTestParameter =
+            globalThis.__STORYBOOK_PREVIEW__.currentRender?.story?.parameters?.a11y?.test;
+          const a11yReport = data.reporters.find((reporter: any) => reporter.type === 'a11y');
+          if (
+            a11yReport.result?.violations?.length > 0 &&
+            (a11yTestParameter === 'error' || a11yTestParameter === 'todo')
+          ) {
+            const violations = expectToHaveNoViolations(a11yReport.result);
+            if (violations && a11yTestParameter === 'error') {
+              rejectWithFormattedError(storyId, violations.long, A11Y_PANEL);
+              return;
+            } else if (violations && a11yTestParameter === 'todo') {
+              const warningMessage = StorybookTestRunnerError.buildErrorMessage(
+                storyId,
+                yellow(violations.short),
+                [],
+                A11Y_PANEL
+              );
+              logToPage(warningMessage);
+            }
+          }
         }
+
+        resolve(document.getElementById('root'));
       },
 
       storyUnchanged: () => {
@@ -420,23 +465,23 @@ async function __test(storyId: string): Promise<any> {
 
       storyErrored: ({ description }: { description: string }) => {
         cleanup(listeners);
-        rejectWithFormattedError(storyId, description);
+        rejectWithFormattedError(storyId, description, INTERACTIONS_PANEL);
       },
 
       storyThrewException: (error: Error) => {
         cleanup(listeners);
-        rejectWithFormattedError(storyId, error.message);
+        rejectWithFormattedError(storyId, error.message, INTERACTIONS_PANEL);
       },
 
       playFunctionThrewException: (error: Error) => {
         cleanup(listeners);
 
-        rejectWithFormattedError(storyId, error.message);
+        rejectWithFormattedError(storyId, error.message, INTERACTIONS_PANEL);
       },
 
       unhandledErrorsWhilePlaying: ([error]: Error[]) => {
         cleanup(listeners);
-        rejectWithFormattedError(storyId, error.message);
+        rejectWithFormattedError(storyId, error.message, INTERACTIONS_PANEL);
       },
 
       storyMissing: (id: string) => {
@@ -453,6 +498,67 @@ async function __test(storyId: string): Promise<any> {
 
     channel.emit('setCurrentStory', { storyId, viewMode: TEST_RUNNER_VIEW_MODE });
   });
+}
+
+function expectToHaveNoViolations(results: any): { long: string; short: string } | null {
+  let violations = filterViolations(
+    results.violations,
+    // `impactLevels` is not a valid toolOption but one we add to the config
+    // when calling `run`. axe just happens to pass this along. Might be a safer
+    // way to do this since it's not documented API.
+    results.toolOptions?.impactLevels ?? []
+  );
+
+  function reporter(violations: any) {
+    if (violations.length === 0) {
+      return null;
+    }
+
+    let lineBreak = '\n\n';
+    let horizontalLine = '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500';
+
+    return violations
+      .map((violation: any) => {
+        let errorBody = violation.nodes
+          .map((node: any) => {
+            let selector = node.target.join(', ');
+            let expectedText =
+              red(`Expected the HTML found at $('${selector}') to have no violations:`) + lineBreak;
+            return (
+              expectedText +
+              grey(node.html) +
+              lineBreak +
+              red(`Received:`) +
+              lineBreak +
+              red(`"${violation.help} (${violation.id})"`) +
+              lineBreak +
+              yellow(node.failureSummary) +
+              lineBreak +
+              (violation.helpUrl
+                ? red(`You can find more information on this issue here:`) +
+                  `\n${blue(violation.helpUrl)}`
+                : '')
+            );
+          })
+          .join(lineBreak);
+        return errorBody;
+      })
+      .join(lineBreak + horizontalLine + lineBreak);
+  }
+
+  let formatedViolations = reporter(violations);
+
+  return {
+    long: 'expect(received).toHaveNoViolations(expected)' + '\n\n' + `${formatedViolations}`,
+    short: `Found ${violations.length} a11y violations, run the test with 'a11y: { test: 'error' }' parameter to see the full report or debug it directly in Storybook.`,
+  };
+}
+
+function filterViolations(violations: any, impactLevels: Array<any>) {
+  if (impactLevels && impactLevels.length > 0) {
+    return violations.filter((v: any) => impactLevels.includes(v.impact));
+  }
+  return violations;
 }
 
 export {};
