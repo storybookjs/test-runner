@@ -4,6 +4,8 @@
  * This file is a template to the content which is injected to the Playwright page via the ./setup-page.ts file.
  * setup-page.ts will read the contents of this file and replace values that use {{x}} pattern, and they should be put right below:
  */
+import { PreviewWeb } from 'storybook/internal/preview-api';
+import { StoryContext } from 'storybook/internal/csf';
 
 type ConsoleMethod =
   | 'log'
@@ -32,13 +34,7 @@ declare global {
   // this is defined in setup-page.ts and can be used for logging from the browser to node, helpful for debugging
   var logToPage: (message: string) => Promise<void>;
   var testRunner_errorMessageFormatter: (message: string) => Promise<string>;
-  var __STORYBOOK_PREVIEW__: {
-    currentRender: {
-      story: {
-        parameters?: any;
-      };
-    };
-  };
+  var __STORYBOOK_PREVIEW__: PreviewWeb<any>;
 }
 
 // Type definitions for function parameters and return types
@@ -212,28 +208,40 @@ function addToUserAgent(extra: string): void {
   }
 }
 
+function getStory(): StoryContext {
+  const currentRender = globalThis.__STORYBOOK_PREVIEW__.currentRender;
+  if (currentRender && 'story' in currentRender) {
+    return currentRender.story as unknown as StoryContext;
+  }
+
+  return {} as StoryContext;
+}
+
 // Custom error class
 class StorybookTestRunnerError extends Error {
-  constructor(
-    storyId: string,
-    errorMessage: string,
-    logs: string[] = [],
-    isMessageFormatted: boolean = false
-  ) {
+  constructor(params: {
+    storyId: string;
+    errorMessage: string;
+    logs?: string[];
+    isMessageFormatted?: boolean;
+  }) {
+    const { storyId, errorMessage, logs = [], isMessageFormatted = false } = params;
     const message = isMessageFormatted
       ? errorMessage
-      : StorybookTestRunnerError.buildErrorMessage(storyId, errorMessage, logs);
+      : StorybookTestRunnerError.buildErrorMessage({ storyId, errorMessage, logs });
     super(message);
 
     this.name = 'StorybookTestRunnerError';
   }
 
-  public static buildErrorMessage(
-    storyId: string,
-    errorMessage: string,
-    logs: string[] = [],
-    panel?: string
-  ): string {
+  public static buildErrorMessage(params: {
+    storyId: string;
+    errorMessage: string;
+    logs?: string[];
+    panel?: string;
+    errorMessagePrefix?: string;
+  }): string {
+    const { storyId, errorMessage, logs = [], panel, errorMessagePrefix = '' } = params;
     const storyUrl = `${TEST_RUNNER_STORYBOOK_URL}?path=/story/${storyId}`;
     const finalStoryUrl = panel ? `${storyUrl}&addonPanel=${panel}` : storyUrl;
     const separator = '\n\n--------------------------------------------------';
@@ -246,7 +254,7 @@ class StorybookTestRunnerError extends Error {
       `\nClick to debug the error directly in Storybook:\n${finalStoryUrl}\n\n`
     );
 
-    const message = `${linkPrefix}Message:\n ${truncate(
+    const message = `${errorMessagePrefix}${linkPrefix}Message:\n ${truncate(
       errorMessage,
       TEST_RUNNER_DEBUG_PRINT_LIMIT
     )}\n${extraLogs}`;
@@ -257,7 +265,7 @@ class StorybookTestRunnerError extends Error {
 
 // @ts-expect-error Global function to throw custom error, used by the test runner or user
 async function __throwError(storyId: string, errorMessage: string, logs: string[]): Promise<void> {
-  throw new StorybookTestRunnerError(storyId, errorMessage, logs);
+  throw new StorybookTestRunnerError({ storyId, errorMessage, logs });
 }
 
 // Wait for Storybook to load
@@ -290,7 +298,6 @@ async function __waitForStorybook(): Promise<void> {
 // Get context from Storybook
 // @ts-expect-error Global function to get context, used by the test runner or user
 async function __getContext(storyId: string): Promise<any> {
-  // @ts-expect-error globally defined via Storybook
   return globalThis.__STORYBOOK_PREVIEW__.storyStore.loadStory({ storyId });
 }
 
@@ -309,16 +316,17 @@ async function __test(storyId: string): Promise<any> {
     await __waitForStorybook();
   } catch (err) {
     const message = `Timed out waiting for Storybook to load after 10 seconds. Are you sure the Storybook is running correctly in that URL? Is the Storybook private (e.g. under authentication layers)?\n\n\nHTML: ${document.body.innerHTML}`;
-    throw new StorybookTestRunnerError(storyId, message);
+    throw new StorybookTestRunnerError({ storyId, errorMessage: message });
   }
 
   // @ts-expect-error globally defined via Storybook
   const channel = globalThis.__STORYBOOK_ADDONS_CHANNEL__;
   if (!channel) {
-    throw new StorybookTestRunnerError(
+    throw new StorybookTestRunnerError({
       storyId,
-      'The test runner could not access the Storybook channel. Are you sure the Storybook is running correctly in that URL?'
-    );
+      errorMessage:
+        'The test runner could not access the Storybook channel. Are you sure the Storybook is running correctly in that URL?',
+    });
   }
 
   addToUserAgent(`(StorybookTestRunner@${TEST_RUNNER_VERSION})`);
@@ -399,24 +407,32 @@ async function __test(storyId: string): Promise<any> {
 
   return new Promise((resolve, reject) => {
     const rejectWithFormattedError = (storyId: string, message: string, panel?: string) => {
-      const errorMessage = StorybookTestRunnerError.buildErrorMessage(
+      const errorMessage = StorybookTestRunnerError.buildErrorMessage({
         storyId,
-        message,
+        errorMessage: message,
         logs,
-        panel
-      );
+        panel,
+      });
 
       testRunner_errorMessageFormatter(errorMessage)
         .then((formattedMessage) => {
-          reject(new StorybookTestRunnerError(storyId, formattedMessage, logs, true));
+          reject(
+            new StorybookTestRunnerError({
+              storyId,
+              errorMessage: formattedMessage,
+              logs,
+              isMessageFormatted: true,
+            })
+          );
         })
         .catch((error) => {
           reject(
-            new StorybookTestRunnerError(
+            new StorybookTestRunnerError({
               storyId,
-              'There was an error when executing the errorMessageFormatter defiend in your Storybook test-runner config file. Please fix it and rerun the tests:\n\n' +
-                error.message
-            )
+              errorMessage:
+                'There was an error when executing the errorMessageFormatter defiend in your Storybook test-runner config file. Please fix it and rerun the tests:\n\n' +
+                error.message,
+            })
           );
         });
     };
@@ -432,8 +448,8 @@ async function __test(storyId: string): Promise<any> {
           rejectWithFormattedError(storyId, 'Browser console errors');
           return;
         } else if (data?.reporters) {
-          const a11yTestParameter =
-            globalThis.__STORYBOOK_PREVIEW__.currentRender?.story?.parameters?.a11y?.test;
+          const story = getStory();
+          const a11yTestParameter = story?.parameters?.a11y?.test;
           const a11yReport = data.reporters.find((reporter: any) => reporter.type === 'a11y');
           if (
             a11yReport.result?.violations?.length > 0 &&
@@ -444,12 +460,13 @@ async function __test(storyId: string): Promise<any> {
               rejectWithFormattedError(storyId, violations.long, A11Y_PANEL);
               return;
             } else if (violations && a11yTestParameter === 'todo') {
-              const warningMessage = StorybookTestRunnerError.buildErrorMessage(
+              const warningMessage = StorybookTestRunnerError.buildErrorMessage({
                 storyId,
-                yellow(violations.short),
-                [],
-                A11Y_PANEL
-              );
+                errorMessagePrefix: `--------------------------\n${story.title} > ${story.name}`,
+                errorMessage: yellow(violations.short),
+                logs,
+                panel: A11Y_PANEL,
+              });
               logToPage(warningMessage);
             }
           }
@@ -549,7 +566,7 @@ function expectToHaveNoViolations(results: any): { long: string; short: string }
   let formatedViolations = reporter(violations);
 
   return {
-    long: 'expect(received).toHaveNoViolations(expected)' + '\n\n' + `${formatedViolations}`,
+    long: formatedViolations,
     short: `Found ${violations.length} a11y violations, run the test with 'a11y: { test: 'error' }' parameter to see the full report or debug it directly in Storybook.`,
   };
 }

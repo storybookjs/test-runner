@@ -14,7 +14,7 @@ const preview: Preview = {
   decorators: [withSkippableTests],
   parameters: {
     a11y: {
-      test: 'todo',
+      test: 'error',
       config: {
         rules: [
           {
