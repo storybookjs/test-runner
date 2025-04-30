@@ -1,5 +1,4 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { injectAxe, checkA11y, configureAxe } from 'axe-playwright';
 
 import { getStoryContext, waitForPageReady } from '../dist';
 import type { TestRunnerConfig } from '../dist';
@@ -20,9 +19,6 @@ const config: TestRunnerConfig = {
   },
   setup() {
     expect.extend({ toMatchImageSnapshot });
-  },
-  async preVisit(page) {
-    await injectAxe(page);
   },
   async postVisit(page, context) {
     // Get entire context of a story, including parameters, args, argTypes, etc.
@@ -51,18 +47,6 @@ const config: TestRunnerConfig = {
     const innerHTML = await elementHandler?.innerHTML();
     // HTML snapshot tests
     expect(innerHTML).toMatchSnapshot();
-
-    await configureAxe(page, {
-      rules: parameters?.a11y?.config?.rules,
-    });
-
-    const element = parameters?.a11y?.element ?? 'body';
-    await checkA11y(page, element, {
-      detailedReport: true,
-      detailedReportOptions: {
-        html: true,
-      },
-    });
   },
 };
 

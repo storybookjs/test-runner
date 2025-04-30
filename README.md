@@ -45,6 +45,8 @@ Storybook test runner turns all of your stories into executable tests.
 - [Recipes](#recipes)
   - [Preconfiguring viewport size](#preconfiguring-viewport-size)
   - [Accessibility testing](#accessibility-testing)
+    - [With Storybook 9](#with-storybook-9)
+    - [With Storybook 8](#with-storybook-8)
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
@@ -167,7 +169,7 @@ Usage: test-storybook [options]
 | `--json`                          | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
 | `--outputFile`                    | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
 | `--junit`                         | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
-| `--listTests`                     | Lists all test files that will be run, and exits<br/>`test-storybook --listTests`                                                                         |
+| `--listTests`                     | Lists all test files that will be run, and exits<br/>`test-storybook --listTests`                                                                                             |
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
@@ -884,6 +886,32 @@ export default config;
 ```
 
 ### Accessibility testing
+
+#### With Storybook 9
+
+In Storybook 9, the accessibility addon has been enhanced with automated reporting capabilities and the Test-runner has out of the box support for it. If you have `@storybook/addon-a11y` installed, as long as you enable them via parameters, you will get a11y checks for every story:
+
+```ts
+// .storybook/preview.ts
+
+const preview = {
+  parameters: {
+    a11y: {
+      // 'error' will cause a11y violations to fail tests
+      test: 'error', // or 'todo' or 'off'
+    },
+  },
+};
+
+export default preview;
+```
+
+If you had a11y tests set up previously for Storybook 8 (with the recipe below), you can uninstall `axe-playwright` and remove all the code from the test-runner hooks, as they are not necessary anymore.
+
+#### With Storybook 8
+
+> [!TIP]
+> If you upgrade to Storybook 9, there is out of the box support for a11y tests and you don't have to follow a recipe like this.
 
 You can install `axe-playwright` and use it in tandem with the test-runner to test the accessibility of your components.
 If you use [`@storybook/addon-a11y`](https://storybook.js.org/addons/@storybook/addon-a11y), you can reuse its parameters and make sure that the tests match in configuration, both in the accessibility addon panel and the test-runner.
