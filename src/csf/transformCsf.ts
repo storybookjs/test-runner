@@ -70,7 +70,7 @@ const makePlayTest = ({
   return [
     t.expressionStatement(
       t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
-        t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+        t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'render-test'),
         prefixFunction({ key, title, testPrefixer: testPrefix, id }),
       ])
     ),

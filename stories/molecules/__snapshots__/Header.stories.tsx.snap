@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Molecules/Header LoggedIn smoke-test 2`] = `
+exports[`Molecules/Header LoggedIn render-test 2`] = `
 <header>
   <div class="storybook-header">
     <div>
@@ -48,7 +48,7 @@ exports[`Molecules/Header LoggedIn smoke-test 2`] = `
 </header>
 `;
 
-exports[`Molecules/Header LoggedOut smoke-test 2`] = `
+exports[`Molecules/Header LoggedOut render-test 2`] = `
 <header>
   <div class="storybook-header">
     <div>

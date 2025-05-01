@@ -117,7 +117,7 @@ exports[`Pages/page LoggedIn play-test 2`] = `
 </article>
 `;
 
-exports[`Pages/page LoggedOut smoke-test 2`] = `
+exports[`Pages/page LoggedOut render-test 2`] = `
 <article>
   <header>
     <div class="storybook-header">

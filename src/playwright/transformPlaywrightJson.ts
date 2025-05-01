@@ -24,7 +24,7 @@ const makeTest = ({
   const stmt = (result as Array<t.ExpressionStatement>)[1];
   return t.expressionStatement(
     t.callExpression(shouldSkip ? t.identifier('it.skip') : t.identifier('it'), [
-      t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'smoke-test'),
+      t.stringLiteral(metaOrStoryPlay ? 'play-test' : 'render-test'),
       stmt.expression,
     ])
   );

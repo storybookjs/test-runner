@@ -12,7 +12,7 @@ exports[`Atoms/Button FindBy play-test 2`] = `
 </button>
 `;
 
-exports[`Atoms/Button Primary smoke-test 2`] = `
+exports[`Atoms/Button Primary render-test 2`] = `
 <button type="button"
         class="storybook-button storybook-button--medium storybook-button--primary"
 >
