@@ -449,9 +449,11 @@ async function __test(storyId: string): Promise<any> {
           return;
         } else if (data?.reporters) {
           const story = getStory();
-          const a11yTestParameter = story?.parameters?.a11y?.test;
+          const a11yParameter = story?.parameters?.a11y;
+          const a11yTestParameter = a11yParameter?.test;
           const a11yReport = data.reporters.find((reporter: any) => reporter.type === 'a11y');
           if (
+            !a11yParameter?.disable &&
             a11yReport.result?.violations?.length > 0 &&
             (a11yTestParameter === 'error' || a11yTestParameter === 'todo')
           ) {
