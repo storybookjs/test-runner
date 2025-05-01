@@ -449,14 +449,18 @@ async function __test(storyId: string): Promise<any> {
           return;
         } else if (data?.reporters) {
           const story = getStory();
-          const a11yParameter = story?.parameters?.a11y;
+          const a11yGlobals = story.globals?.a11y;
+          const a11yParameter = story.parameters?.a11y;
           const a11yTestParameter = a11yParameter?.test;
           const a11yReport = data.reporters.find((reporter: any) => reporter.type === 'a11y');
-          if (
-            !a11yParameter?.disable &&
-            a11yReport.result?.violations?.length > 0 &&
-            (a11yTestParameter === 'error' || a11yTestParameter === 'todo')
-          ) {
+
+          const shouldRunA11yTest =
+            a11yParameter?.disable !== true &&
+            a11yParameter?.test !== 'off' &&
+            a11yGlobals?.manual !== true &&
+            a11yReport.result?.violations?.length > 0;
+
+          if (shouldRunA11yTest) {
             const violations = expectToHaveNoViolations(a11yReport.result);
             if (violations && a11yTestParameter === 'error') {
               rejectWithFormattedError(storyId, violations.long, A11Y_PANEL);
