@@ -65,7 +65,7 @@ Storybook test runner turns all of your stories into executable tests.
 ## Features
 
 - ⚡️ Zero config setup
-- 💨 Smoke test all stories
+- 💨 Render test all stories
 - ▶️ Test stories with play functions
 - 🏃 Test your stories in parallel in a headless browser
 - 👷 Get feedback from error with a link directly to the story
@@ -82,7 +82,7 @@ The Storybook test runner uses Jest as a runner, and Playwright as a testing fra
 
 The test runner is simple in design – it just visits each story from a running Storybook instance and makes sure the component is not failing:
 
-- For stories without a `play` function, it verifies whether the story rendered without any errors. This is essentially a smoke test.
+- For stories without a `play` function, it verifies whether the story rendered without any errors. This is a render test, otherwise known as smoke test.
 - For those with a `play` function, it also checks for errors in the `play` function and that all assertions passed. This is essentially an [interaction test](https://storybook.js.org/docs/react/writing-tests/interaction-testing#write-an-interaction-test).
 
 If there are any failures, the test runner will provide an output with the error, alongside with a link to the failing story, so you can see the error yourself and debug it directly in the browser:
