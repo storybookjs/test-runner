@@ -399,8 +399,7 @@ const main = async () => {
   await executeJestPlaywright(jestOptions);
 
   if (!disableTelemetry && !runnerOptions.disableTelemetry) {
-    const t = new Date();
-    // @ts-expect-error -- need to update storybookv version
+    // @ts-expect-error -- need to update storybook version
     await telemetry('test-run', {
       runner: 'test-runner',
       watch: jestOptions.includes('--watch'),
