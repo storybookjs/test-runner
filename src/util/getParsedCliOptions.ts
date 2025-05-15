@@ -65,7 +65,10 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
       'coverage/storybook'
     )
     .option('--junit', 'Indicates that test information should be reported in a junit file')
-    .option('--listTests', 'Lists all test files that will be run, and exits')
+    .option(
+      '--listTests',
+      'Lists all test files that will be run, and exits'
+    )
     .option(
       '--eject',
       'Creates a local configuration file to override defaults of the test-runner. Use it only if you want to have better control over the runner configurations'
@@ -81,13 +84,7 @@ export const getParsedCliOptions = (): ParsedCliOptions => {
     .option('--failOnConsole', 'Makes tests fail on browser console errors')
     .option('--includeTags <tags...>', 'Only test stories that match the specified tags')
     .option('--excludeTags <tags...>', 'Do not test stories that match the specified tags')
-    .option('--skipTags <tags...>', 'Skip test stories that match the specified tags')
-    .option(
-      '--disable-telemetry',
-      'Disable sending telemetry data',
-      // default value is false, but if the user sets STORYBOOK_DISABLE_TELEMETRY, it can be true
-      process.env.STORYBOOK_DISABLE_TELEMETRY && process.env.STORYBOOK_DISABLE_TELEMETRY !== 'false'
-    );
+    .option('--skipTags <tags...>', 'Skip test stories that match the specified tags');
 
   program.exitOverride();
 

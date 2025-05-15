@@ -17,7 +17,6 @@ export type CliOptions = {
     includeTags?: string;
     excludeTags?: string;
     skipTags?: string;
-    disableTelemetry?: boolean;
   } & Record<string, string | boolean>;
   jestOptions: JestOptions;
 };
@@ -37,7 +36,6 @@ const STORYBOOK_RUNNER_COMMANDS: StorybookRunnerCommand[] = [
   'includeTags',
   'excludeTags',
   'skipTags',
-  'disableTelemetry',
 ];
 
 function copyOption<ObjType extends object, KeyType extends keyof ObjType>(
