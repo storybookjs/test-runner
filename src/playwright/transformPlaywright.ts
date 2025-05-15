@@ -27,7 +27,7 @@ export const testPrefixer: TestPrefixer = (context) => {
 
         let result;
         try {
-          result = await page.evaluate(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
+          result = await page.addInitScript(({ id, hasPlayFn }) => __test(id, hasPlayFn), {
             id: %%id%%,
           });
         } catch(err) {
@@ -47,7 +47,7 @@ export const testPrefixer: TestPrefixer = (context) => {
         }
 
         if(globalThis.__sbCollectCoverage) {
-        const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+        const isCoverageSetupCorrectly = await page.addInitScript(() => '__coverage__' in window);
           if (!isCoverageSetupCorrectly) {
             throw new Error(\`${coverageErrorMessage}\`);
           }
