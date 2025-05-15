@@ -9,6 +9,7 @@ import path, { join, resolve } from 'path';
 import tempy from 'tempy';
 import { getInterpretedFile } from 'storybook/internal/common';
 import { readConfig } from 'storybook/internal/csf-tools';
+import { telemetry } from 'storybook/internal/telemetry';
 import { glob } from 'glob';
 
 import { JestOptions, getCliOptions } from './util/getCliOptions';
@@ -376,8 +377,8 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
+  const { storiesPaths, lazyCompilation, disableTelemetry } = getStorybookMetadata();
   if (!shouldRunIndexJson) {
-    const { storiesPaths, lazyCompilation } = getStorybookMetadata();
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
     // 1 - We extract tags from preview file statically like it's done by the Storybook indexer. We only do this in non-index-json mode because it's not needed in that mode
@@ -396,6 +397,15 @@ const main = async () => {
   }
 
   await executeJestPlaywright(jestOptions);
+
+  if (!disableTelemetry && !runnerOptions.disableTelemetry) {
+    const t = new Date();
+    // @ts-expect-error -- need to update storybookv version
+    await telemetry('test-run', {
+      runner: 'test-runner',
+      watch: jestOptions.includes('--watch'),
+    });
+  }
 };
 
 main().catch((e) => {
