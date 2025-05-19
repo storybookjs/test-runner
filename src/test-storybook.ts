@@ -396,15 +396,17 @@ const main = async () => {
     process.env.TEST_CHECK_CONSOLE = 'true';
   }
 
-  await executeJestPlaywright(jestOptions);
-
   if (!disableTelemetry && !runnerOptions.disableTelemetry) {
+    // NOTE: we start telemetry immediately but do not wait on it. Typically it should complete
+    // before the tests do. If not we may miss the event, we are OK with that.
     // @ts-expect-error -- need to update storybook version
-    await telemetry('test-run', {
+    telemetry('test-run', {
       runner: 'test-runner',
       watch: jestOptions.includes('--watch'),
     });
   }
+
+  await executeJestPlaywright(jestOptions);
 };
 
 main().catch((e) => {
