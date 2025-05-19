@@ -377,7 +377,8 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  const { storiesPaths, lazyCompilation, disableTelemetry } = getStorybookMetadata();
+  const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
+    getStorybookMetadata();
   if (!shouldRunIndexJson) {
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
@@ -399,11 +400,18 @@ const main = async () => {
   if (!disableTelemetry && !runnerOptions.disableTelemetry) {
     // NOTE: we start telemetry immediately but do not wait on it. Typically it should complete
     // before the tests do. If not we may miss the event, we are OK with that.
-    // @ts-expect-error -- need to update storybook version
-    telemetry('test-run', {
-      runner: 'test-runner',
-      watch: jestOptions.includes('--watch'),
-    });
+    telemetry(
+      // @ts-expect-error -- need to update storybook version
+      'test-run',
+      {
+        runner: 'test-runner',
+        watch: jestOptions.includes('--watch'),
+      },
+      {
+        configDir: runnerOptions.configDir,
+        enableCrashReports,
+      }
+    );
   }
 
   await executeJestPlaywright(jestOptions);
