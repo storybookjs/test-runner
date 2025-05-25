@@ -458,7 +458,7 @@ async function __test(storyId: string): Promise<any> {
             a11yParameter?.disable !== true &&
             a11yParameter?.test !== 'off' &&
             a11yGlobals?.manual !== true &&
-            a11yReport.result?.violations?.length > 0;
+            a11yReport?.result?.violations?.length > 0;
 
           if (shouldRunA11yTest) {
             const violations = expectToHaveNoViolations(a11yReport.result);
