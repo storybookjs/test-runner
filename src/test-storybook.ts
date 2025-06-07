@@ -9,6 +9,7 @@ import path, { join, resolve } from 'path';
 import tempy from 'tempy';
 import { getInterpretedFile } from 'storybook/internal/common';
 import { readConfig } from 'storybook/internal/csf-tools';
+import { telemetry } from 'storybook/internal/telemetry';
 import { glob } from 'glob';
 
 import { JestOptions, getCliOptions } from './util/getCliOptions';
@@ -376,8 +377,9 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
+  const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
+    getStorybookMetadata();
   if (!shouldRunIndexJson) {
-    const { storiesPaths, lazyCompilation } = getStorybookMetadata();
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
     // 1 - We extract tags from preview file statically like it's done by the Storybook indexer. We only do this in non-index-json mode because it's not needed in that mode
@@ -393,6 +395,23 @@ const main = async () => {
 
   if (runnerOptions.failOnConsole) {
     process.env.TEST_CHECK_CONSOLE = 'true';
+  }
+
+  if (!disableTelemetry && !runnerOptions.disableTelemetry) {
+    // NOTE: we start telemetry immediately but do not wait on it. Typically it should complete
+    // before the tests do. If not we may miss the event, we are OK with that.
+    telemetry(
+      // @ts-expect-error -- need to update storybook version
+      'test-run',
+      {
+        runner: 'test-runner',
+        watch: jestOptions.includes('--watch'),
+      },
+      {
+        configDir: runnerOptions.configDir,
+        enableCrashReports,
+      }
+    );
   }
 
   await executeJestPlaywright(jestOptions);
