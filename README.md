@@ -176,6 +176,7 @@ Usage: test-storybook [options]
 | `--includeTags`                   | (experimental) Only test stories that match the specified tags, comma separated<br/>`test-storybook --includeTags="test-only"`                                                |
 | `--excludeTags`                   | (experimental) Do not test stories that match the specified tags, comma separated<br/>`test-storybook --excludeTags="broken-story,todo"`                                      |
 | `--skipTags`                      | (experimental) Do not test stories that match the specified tags and mark them as skipped in the CLI output, comma separated<br/>`test-storybook --skipTags="design"`         |
+| `--disable-telemetry`             | Disable sending telemetry data<br/>`test-storybook --disable-telemetry`                                                                                                       |
 
 ## Ejecting configuration
 
