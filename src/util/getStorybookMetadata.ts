@@ -26,7 +26,7 @@ export const getStorybookMetadata = () => {
   const lazyCompilation = !!main.core?.builder?.options?.lazyCompilation;
 
   // @ts-expect-error -- need to update to latest sb version
-  const { disableTelemetry, enableCrashReports } = !!main.core || {};
+  const { disableTelemetry, enableCrashReports } = main.core || {};
 
   return {
     configDir,
