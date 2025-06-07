@@ -1,3 +1,15 @@
+# v0.22.1 (Sat Jun 07 2025)
+
+#### 🐛 Bug Fix
+
+- Patch: Add telemetry to test run [#565](https://github.com/storybookjs/test-runner/pull/565) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.22.0 (Fri Feb 28 2025)
 
 #### 🚀 Enhancement
