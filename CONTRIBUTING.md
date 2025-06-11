@@ -29,7 +29,7 @@ We welcome contributions to the test runner! This document outlines the process 
 2. All PRs need to have a `patch`, `minor` or `major` tag. Once a tag is added, a canary release will be triggered.
 3. When merged, a new version of this package will be released on the `next` NPM tag.
 4. If the change contains a bugfix that needs to be patched back to the stable version, that has to be done manually.
-5. In order to promote changes from `next` to `main`, create a branch for that particular version e.g. `release/v0.24.0`, merge `main` into that branch, adjust the version ranges in the `package.json` file and then make a new PR that contains a `minor` label (while the test-runner has v0 format)
+5. In order to promote changes from `next` to `main`, create a branch for that particular version e.g. `release/v0.24.0`, merge `main` into that branch, adjust the version ranges in the `package.json` file and then make a new PR against `main` that contains a `minor` label (while the test-runner has v0 format)
 
 ## Documentation
 
