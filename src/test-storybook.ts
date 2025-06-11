@@ -401,7 +401,6 @@ const main = async () => {
     // NOTE: we start telemetry immediately but do not wait on it. Typically it should complete
     // before the tests do. If not we may miss the event, we are OK with that.
     telemetry(
-      // @ts-expect-error -- need to update storybook version
       'test-run',
       {
         runner: 'test-runner',

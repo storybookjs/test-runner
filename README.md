@@ -45,6 +45,8 @@ Storybook test runner turns all of your stories into executable tests.
 - [Recipes](#recipes)
   - [Preconfiguring viewport size](#preconfiguring-viewport-size)
   - [Accessibility testing](#accessibility-testing)
+    - [With Storybook 9](#with-storybook-9)
+    - [With Storybook 8](#with-storybook-8)
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
 - [Troubleshooting](#troubleshooting)
@@ -57,8 +59,6 @@ Storybook test runner turns all of your stories into executable tests.
   - [Merging test coverage results in wrong coverage](#merging-test-coverage-results-in-wrong-coverage)
 - [Future work](#future-work)
 - [Contributing](#contributing)
-  - [Branch structure](#branch-structure)
-  - [Release process](#release-process)
 
 ## Features
 
@@ -67,10 +67,10 @@ Storybook test runner turns all of your stories into executable tests.
 - ▶️ Test stories with play functions
 - 🏃 Test your stories in parallel in a headless browser
 - 👷 Get feedback from error with a link directly to the story
-- 🐛 Debug them visually and interactively in a live browser with [addon-interactions](https://storybook.js.org/docs/react/essentials/interactions)
-- 🎭 Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)
-- 👀 Watch mode, filters, and the conveniences you'd expect
-- 📔 Code coverage reports
+- 🐛 Debug them visually and interactively in a live browser with [addon-interactions](https://storybook.js.org/docs/react/essentials/interactions)
+- 🎭 Powered by [Jest](https://jestjs.io/) and [Playwright](https://playwright.dev/)
+- 👀 Watch mode, filters, and the conveniences you'd expect
+- 📔 Code coverage reports
 
 ## How it works
 
@@ -167,7 +167,7 @@ Usage: test-storybook [options]
 | `--json`                          | Prints the test results in JSON. This mode will send all other test output and user messages to stderr. <br/>`test-storybook --json`                                          |
 | `--outputFile`                    | Write test results to a file when the --json option is also specified. <br/>`test-storybook --json --outputFile results.json`                                                 |
 | `--junit`                         | Indicates that test information should be reported in a junit file. <br/>`test-storybook --**junit**`                                                                         |
-| `--listTests`                     | Lists all test files that will be run, and exits<br/>`test-storybook --listTests`                                                                         |
+| `--listTests`                     | Lists all test files that will be run, and exits<br/>`test-storybook --listTests`                                                                                             |
 | `--ci`                            | Instead of the regular behavior of storing a new snapshot automatically, it will fail the test and require Jest to be run with `--updateSnapshot`. <br/>`test-storybook --ci` |
 | `--shard [shardIndex/shardCount]` | Splits your test suite across different machines to run in CI. <br/>`test-storybook --shard=1/3`                                                                              |
 | `--failOnConsole`                 | Makes tests fail on browser console errors<br/>`test-storybook --failOnConsole`                                                                                               |
@@ -886,6 +886,32 @@ export default config;
 
 ### Accessibility testing
 
+#### With Storybook 9
+
+In Storybook 9, the accessibility addon has been enhanced with automated reporting capabilities and the Test-runner has out of the box support for it. If you have `@storybook/addon-a11y` installed, as long as you enable them via parameters, you will get a11y checks for every story:
+
+```ts
+// .storybook/preview.ts
+
+const preview = {
+  parameters: {
+    a11y: {
+      // 'error' will cause a11y violations to fail tests
+      test: 'error', // or 'todo' or 'off'
+    },
+  },
+};
+
+export default preview;
+```
+
+If you had a11y tests set up previously for Storybook 8 (with the recipe below), you can uninstall `axe-playwright` and remove all the code from the test-runner hooks, as they are not necessary anymore.
+
+#### With Storybook 8
+
+> [!TIP]
+> If you upgrade to Storybook 9, there is out of the box support for a11y tests and you don't have to follow a recipe like this.
+
 You can install `axe-playwright` and use it in tandem with the test-runner to test the accessibility of your components.
 If you use [`@storybook/addon-a11y`](https://storybook.js.org/addons/@storybook/addon-a11y), you can reuse its parameters and make sure that the tests match in configuration, both in the accessibility addon panel and the test-runner.
 
@@ -1090,18 +1116,4 @@ Future plans involve adding support for the following features:
 
 ## Contributing
 
-We welcome contributions to the test runner!
-
-### Branch structure
-
-- **next** - the `next` version on npm, and the development branch where most work occurs
-- **prerelease** - the `prerelease` version on npm, where eventual changes to `main` get tested
-- **main** - the `latest` version on npm and the stable version that most users use
-
-### Release process
-
-1. All PRs should target the `next` branch, which depends on the `next` version of Storybook.
-2. When merged, a new version of this package will be released on the `next` NPM tag.
-3. If the change contains a bugfix that needs to be patched back to the stable version, please note that in PR description.
-4. PRs labeled `pick` will get cherry-picked back to the `prerelease` branch and will generate a release on the `prerelease` npm tag.
-5. Once validated, `prerelease` PRs will get merged back to the `main` branch, which will generate a release on the `latest` npm tag.
+We welcome contributions to the test runner! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started, our development workflow, and release process.

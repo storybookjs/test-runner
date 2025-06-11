@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, userEvent } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { within, userEvent } from 'storybook/test';
 
 import { Page } from './Page';
 

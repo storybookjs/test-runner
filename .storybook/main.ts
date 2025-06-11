@@ -1,4 +1,4 @@
-import { StorybookConfig } from '@storybok/react-vite';
+import { StorybookConfig } from '@storybook/react-vite';
 
 let stories = [
   '../stories/docs/**/*.mdx',
@@ -18,18 +18,10 @@ let stories = [
 if (process.env.TEST_FAILURES) {
   stories = ['../stories/expected-failures/*.stories.@(js|jsx|ts|tsx)'];
 }
-const addons = [
-  process.env.WITHOUT_DOCS
-    ? {
-        name: '@storybook/addon-essentials',
-        options: {
-          docs: false,
-        },
-      }
-    : '@storybook/addon-essentials',
-  '@storybook/addon-interactions',
-  '@storybook/addon-coverage',
-];
+const addons = process.env.WITHOUT_DOCS
+  ? ['@storybook/addon-coverage', '@storybook/addon-a11y']
+  : ['@storybook/addon-coverage', '@storybook/addon-a11y', '@storybook/addon-docs'];
+
 const config: StorybookConfig = {
   stories,
   addons,
@@ -39,9 +31,6 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/react-vite',
     options: {},
-  },
-  docs: {
-    autodocs: true,
   },
 };
 
