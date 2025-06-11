@@ -1,3 +1,24 @@
+# v0.23.0 (Wed Jun 11 2025)
+
+#### 🚀 Enhancement
+
+- Release v0.23.0 [#568](https://github.com/storybookjs/test-runner/pull/568) ([@yannbf](https://github.com/yannbf) [@tmeasday](https://github.com/tmeasday))
+- Add out of the box support for a11y tests [#557](https://github.com/storybookjs/test-runner/pull/557) ([@yannbf](https://github.com/yannbf))
+
+#### 🐛 Bug Fix
+
+- Add telemetry to test run [#566](https://github.com/storybookjs/test-runner/pull/566) ([@yannbf](https://github.com/yannbf))
+- fix a11y report checking bug [#562](https://github.com/storybookjs/test-runner/pull/562) ([@yannbf](https://github.com/yannbf))
+- Fix: Support a11y disable parameter [#558](https://github.com/storybookjs/test-runner/pull/558) ([@yannbf](https://github.com/yannbf))
+- Replace @storybook/csf with storybook's internal csf implementation [#556](https://github.com/storybookjs/test-runner/pull/556) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Tom Coleman ([@tmeasday](https://github.com/tmeasday))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.22.1 (Sat Jun 07 2025)
 
 #### 🐛 Bug Fix
