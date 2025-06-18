@@ -13,7 +13,12 @@ export const getTestRunnerConfig = (
     return testRunnerConfig;
   }
 
-  testRunnerConfig = serverRequire(join(resolve(configDir), 'test-runner'));
-  loaded = true;
-  return testRunnerConfig;
+  try {
+    testRunnerConfig = serverRequire(join(resolve(configDir), 'test-runner'));
+    loaded = true;
+    return testRunnerConfig;
+  } catch (error) {
+    console.error(error);
+    return undefined;
+  }
 };
