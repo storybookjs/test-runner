@@ -2946,7 +2946,7 @@ __metadata:
     "@swc/core": "npm:^1.5.22"
     "@swc/jest": "npm:^0.2.23"
     "@types/jest": "npm:^29.0.0"
-    "@types/node": "npm:^16.4.1"
+    "@types/node": "npm:^20.0.0"
     "@types/node-fetch": "npm:^2.6.11"
     "@vitejs/plugin-react": "npm:^4.0.3"
     auto: "npm:^11.1.6"
@@ -2956,6 +2956,7 @@ __metadata:
     can-bind-to-host: "npm:^1.1.1"
     commander: "npm:^9.0.0"
     concurrently: "npm:^7.0.0"
+    esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0 || ^0.25.0"
     expect-playwright: "npm:^0.8.0"
     glob: "npm:^10.2.2"
     husky: "npm:^8.0.0"
@@ -3341,10 +3342,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.4.1":
-  version: 16.18.61
-  resolution: "@types/node@npm:16.18.61"
-  checksum: 10/ea2fdb3876f77ef8be0bdeee7b0c301a6bf27ab743f55a10486725d8ddd51b84edea7c219e9d09fd24650e8b14c040207a48169bd396915e7a989bac1a7c0bee
+"@types/node@npm:^20.0.0":
+  version: 20.19.1
+  resolution: "@types/node@npm:20.19.1"
+  dependencies:
+    undici-types: "npm:~6.21.0"
+  checksum: 10/2369a96a832a6e8111d2b996c56fb1b78b27fad0879de3e344ae2835697464e001d6fe813a11902348fc7dc63b9510000f3d2cd4bedadf2d3fce7b7bb7903444
   languageName: node
   linkType: hard
 
@@ -9741,6 +9744,13 @@ __metadata:
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
   checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.21.0":
+  version: 6.21.0
+  resolution: "undici-types@npm:6.21.0"
+  checksum: 10/ec8f41aa4359d50f9b59fa61fe3efce3477cc681908c8f84354d8567bb3701fafdddf36ef6bff307024d3feb42c837cf6f670314ba37fc8145e219560e473d14
   languageName: node
   linkType: hard
 

@@ -2,7 +2,6 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig([
   {
-    clean: true,
     entry: ['./src/index.ts', './src/test-storybook.ts'],
     format: ['cjs', 'esm'],
     splitting: false,
