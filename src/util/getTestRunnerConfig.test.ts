@@ -26,7 +26,7 @@ const testRunnerConfig: TestRunnerConfig = {
   },
 };
 
-jest.mock('storybook/internal/common', () => ({
+jest.mock('./serverRequire', () => ({
   serverRequire: jest.fn(),
 }));
 
@@ -37,23 +37,19 @@ describe('getTestRunnerConfig', () => {
 
   it('should load the test runner config', () => {
     const configDir = '.storybook';
-    (require('storybook/internal/common').serverRequire as jest.Mock).mockReturnValueOnce(
-      testRunnerConfig
-    );
+    (require('./serverRequire').serverRequire as jest.Mock).mockReturnValueOnce(testRunnerConfig);
 
     const result = getTestRunnerConfig(configDir);
 
     expect(result).toEqual(testRunnerConfig);
-    expect(require('storybook/internal/common').serverRequire).toHaveBeenCalledWith(
+    expect(require('./serverRequire').serverRequire).toHaveBeenCalledWith(
       join(resolve('.storybook', 'test-runner'))
     );
   });
 
   it('should cache the test runner config', () => {
     const configDir = '.storybook';
-    (require('storybook/internal/common').serverRequire as jest.Mock).mockReturnValueOnce(
-      testRunnerConfig
-    );
+    (require('./serverRequire').serverRequire as jest.Mock).mockReturnValueOnce(testRunnerConfig);
 
     const result1 = getTestRunnerConfig(configDir);
     const result2 = getTestRunnerConfig(configDir);
