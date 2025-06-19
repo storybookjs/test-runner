@@ -18,7 +18,6 @@ export const getTestRunnerConfig = (
     loaded = true;
     return testRunnerConfig;
   } catch (error) {
-    console.error(error);
     return undefined;
   }
 };
