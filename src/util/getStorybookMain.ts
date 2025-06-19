@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
-import { serverRequire } from 'storybook/internal/common';
 import type { StorybookConfig } from 'storybook/internal/types';
 import dedent from 'ts-dedent';
+import { serverRequire } from './serverRequire';
 
 export const storybookMainConfig = new Map<string, StorybookConfig>();
 

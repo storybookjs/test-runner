@@ -1,7 +1,7 @@
 import { getStorybookMain, resetStorybookMainCache, storybookMainConfig } from './getStorybookMain';
-import * as coreCommon from 'storybook/internal/common';
+import * as coreCommon from './serverRequire';
 
-jest.mock('storybook/internal/common');
+jest.mock('./serverRequire');
 
 describe('getStorybookMain', () => {
   beforeEach(() => {
