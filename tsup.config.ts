@@ -11,7 +11,7 @@ export default defineConfig([
     noExternal: ['storybook/internal/common'],
     dts: true,
     minify: false,
-    treeshake: false,
+    treeshake: true,
     bundle: true,
     platform: 'node',
     external: [
