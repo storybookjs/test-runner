@@ -8,7 +8,7 @@ export default defineConfig([
     entry: ['./src/index.ts', './src/test-storybook.ts'],
     format: ['cjs', 'esm'],
     splitting: false,
-    noExternal: ['storybook/internal/common'],
+    noExternal: ['storybook/internal/common', 'storybook/internal/csf-tools'],
     dts: true,
     minify: false,
     treeshake: true,
