@@ -15,7 +15,11 @@
     "url": "https://github.com/storybookjs/test-runner"
   },
   "license": "MIT",
-  "author": "shilman",
+  "author": [
+    "shilman",
+    "ndelangen",
+    "yannbf"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
