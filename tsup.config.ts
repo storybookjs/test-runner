@@ -6,9 +6,18 @@ const corePkgJson = JSON.parse(readFileSync('./node_modules/storybook/package.js
 export default defineConfig([
   {
     entry: ['./src/index.ts', './src/test-storybook.ts'],
-    format: ['cjs', 'esm'],
+    format: ['cjs'],
     splitting: false,
-    noExternal: ['storybook/internal/common', 'storybook/internal/csf-tools'],
+    noExternal: [
+      'storybook',
+      'storybook/internal/common',
+      'storybook/internal/csf-tools',
+      'storybook/internal/csf',
+      'storybook/internal/node-logger',
+      'storybook/internal/preview-api',
+      'storybook/internal/telemetry',
+      'storybook/internal/types',
+    ],
     dts: true,
     minify: false,
     treeshake: true,
@@ -17,7 +26,8 @@ export default defineConfig([
     external: [
       '@storybook/test-runner',
       ...Object.keys(corePkgJson.dependencies),
-      ...Object.keys(corePkgJson.peerDependencies),
+      // explicitly exclude the `storybook` package, we want it bundled in, as it's ESM-only
+      // ...Object.keys(corePkgJson.peerDependencies),
     ],
     esbuildOptions(options) {
       options.platform = 'node';
@@ -28,6 +38,7 @@ export default defineConfig([
     format: ['esm'],
     dts: false,
     bundle: false,
+    minify: false,
     treeshake: false,
     platform: 'browser',
   },

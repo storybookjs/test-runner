@@ -29,7 +29,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "NODE_ENV=production NODE_OPTIONS='--max-old-space-size=8192' tsup",
     "build-storybook": "storybook build",
     "build:watch": "tsup --watch",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js",
@@ -104,7 +104,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "read-pkg-up": "^7.0.1",
-    "storybook": "next",
+    "storybook": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0",
     "tempy": "^1.0.1",
     "ts-dedent": "^2.0.0",
     "ts-jest": "^29.0.0",
