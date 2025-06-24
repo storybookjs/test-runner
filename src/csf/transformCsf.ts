@@ -1,9 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { toId, storyNameFromExport, combineTags } from 'storybook/internal/csf';
-import { loadCsf } from 'storybook/internal/csf-tools';
-import * as t from '@babel/types';
-import generate from '@babel/generator';
-import dedent from 'ts-dedent';
+import { CsfFile, loadCsf } from 'storybook/internal/csf-tools';
+import { generate, types as t } from 'storybook/internal/babel';
+import { dedent } from 'ts-dedent';
 
 import { getTagOptions } from '../util/getTagOptions';
 
@@ -113,7 +112,10 @@ export const transformCsf = (
 ) => {
   const { includeTags, excludeTags, skipTags } = getTagOptions();
 
-  const csf = loadCsf(code, { makeTitle: makeTitle ?? ((userTitle: string) => userTitle) });
+  const csf: CsfFile = loadCsf(code, {
+    fileName: 'test.js',
+    makeTitle: makeTitle ?? ((userTitle: string) => userTitle),
+  });
   csf.parse();
 
   const storyExports = Object.keys(csf._stories);

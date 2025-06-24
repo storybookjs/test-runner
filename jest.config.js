@@ -3,6 +3,7 @@ module.exports = {
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
   },
+  transformIgnorePatterns: ['node_modules/(?!(storybook-src)/)'],
   moduleNameMapper: {
     '@storybook/test-runner/playwright/global-setup': '<rootDir>/playwright/global-setup',
     '@storybook/test-runner/playwright/global-teardown': '<rootDir>/playwright/global-teardown',

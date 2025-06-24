@@ -1,8 +1,9 @@
 import { join } from 'path';
-import { normalizeStories, getProjectRoot } from 'storybook/internal/common';
 import type { StoriesEntry } from 'storybook/internal/types';
 
 import { getStorybookMain } from './getStorybookMain';
+import { getProjectRoot } from './projectRoot';
+import { normalizeStories } from './normalizeStories';
 
 export const getStorybookMetadata = () => {
   const workingDir = getProjectRoot();

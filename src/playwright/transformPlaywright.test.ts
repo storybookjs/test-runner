@@ -4,8 +4,11 @@ import * as storybookMain from '../util/getStorybookMain';
 
 import { transformPlaywright } from './transformPlaywright';
 
-jest.mock('storybook/internal/common', () => ({
+jest.mock('../util/projectRoot', () => ({
   getProjectRoot: jest.fn(() => '/foo/bar'),
+}));
+
+jest.mock('../util/normalizeStories', () => ({
   normalizeStories: jest.fn(() => [
     {
       titlePrefix: 'Example',

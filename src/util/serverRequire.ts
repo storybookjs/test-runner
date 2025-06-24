@@ -14,11 +14,11 @@ export function serverRequire(path: string) {
       // https://github.com/storybookjs/storybook/issues/19049
       keepNames: true,
       tsconfigRaw: `{
-      "compilerOptions": {
-        "strict": false,
-        "skipLibCheck": true,
-      },
-    }`,
+        "compilerOptions": {
+          "strict": false,
+          "skipLibCheck": true,
+        },
+      }`,
     });
   }
 

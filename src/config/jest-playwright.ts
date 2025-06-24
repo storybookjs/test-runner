@@ -1,6 +1,7 @@
-import path from 'path';
-import { getProjectRoot } from 'storybook/internal/common';
+import path from 'node:path';
 import type { Config } from '@jest/types';
+
+import { getProjectRoot } from '../util/projectRoot';
 
 const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
 

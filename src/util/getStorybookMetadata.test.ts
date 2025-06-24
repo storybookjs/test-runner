@@ -3,8 +3,10 @@ import { StorybookConfig } from 'storybook/internal/types';
 import * as storybookMain from './getStorybookMain';
 import { getStorybookMetadata } from './getStorybookMetadata';
 
-jest.mock('storybook/internal/common', () => ({
+jest.mock('./projectRoot', () => ({
   getProjectRoot: jest.fn(() => '/foo/bar'),
+}));
+jest.mock('./normalizeStories', () => ({
   normalizeStories: jest.fn(() => [
     {
       titlePrefix: 'Example',
