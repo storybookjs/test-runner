@@ -37,7 +37,7 @@
     "release": "yarn build && auto shipit",
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --quiet\"",
     "storybook": "storybook dev -p 6006",
-    "test": "jest",
+    "test": "NODE_ENV=production NODE_OPTIONS='--max-old-space-size=8192' jest --maxWorkers=1",
     "test-storybook": "node dist/test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook\"",
     "test-storybook:ci-coverage": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook --coverage\"",

@@ -19,24 +19,20 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Run unit tests
+      - name: Build
         run: |
           yarn build
+
+      - name: Run unit tests
+        run: |
           yarn test --coverage
-        env:
-          NODE_ENV: production
-          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
       - name: Run test runner
         run: |
-          yarn build
           yarn test-storybook:ci-coverage
-        env:
-          NODE_ENV: production
-          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Generate code coverage
         uses: codecov/codecov-action@v3
