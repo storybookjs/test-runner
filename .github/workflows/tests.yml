@@ -23,6 +23,9 @@ jobs:
         run: |
           yarn build
           yarn test --coverage
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
@@ -31,6 +34,9 @@ jobs:
         run: |
           yarn build
           yarn test-storybook:ci-coverage
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Generate code coverage
         uses: codecov/codecov-action@v3
