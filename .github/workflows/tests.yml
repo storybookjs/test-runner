@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [20.16.0]
     steps:
       - uses: actions/checkout@v4
 
@@ -19,9 +19,12 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Run unit tests
+      - name: Build
         run: |
           yarn build
+
+      - name: Run unit tests
+        run: |
           yarn test --coverage
 
       - name: Install Playwright Browsers
@@ -29,7 +32,6 @@ jobs:
 
       - name: Run test runner
         run: |
-          yarn build
           yarn test-storybook:ci-coverage
 
       - name: Generate code coverage
