@@ -1,20 +1,9 @@
 module.exports = {
-  presets: [
-    ['@babel/preset-env', { targets: { node: 'current' } }],
-    '@babel/preset-typescript',
-    '@babel/preset-react',
-  ],
+  presets: [['@babel/preset-env', { targets: { node: 'current' } }], '@babel/preset-typescript'],
   env: {
-    esm: {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            targets: { node: 'current' },
-          },
-        ],
-      ],
+    test: {
+      presets: ['@babel/preset-typescript'],
+      plugins: ['@babel/plugin-transform-modules-commonjs'],
     },
   },
 };
