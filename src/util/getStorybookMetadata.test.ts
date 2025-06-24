@@ -4,7 +4,6 @@ import * as storybookMain from './getStorybookMain';
 import { getStorybookMetadata } from './getStorybookMetadata';
 
 jest.mock('storybook/internal/common', () => ({
-  ...jest.requireActual('storybook/internal/common'),
   getProjectRoot: jest.fn(() => '/foo/bar'),
   normalizeStories: jest.fn(() => [
     {

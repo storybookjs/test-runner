@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { normalizeStories, getProjectRoot } from 'storybook/internal/common';
-import { StoriesEntry } from 'storybook/internal/types';
+import type { StoriesEntry } from 'storybook/internal/types';
 
 import { getStorybookMain } from './getStorybookMain';
 

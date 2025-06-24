@@ -1,5 +1,5 @@
-import { join, resolve } from 'path';
-import { TestRunnerConfig } from '../playwright/hooks';
+import { join, resolve } from 'node:path';
+import type { TestRunnerConfig } from '../playwright/hooks';
 import { serverRequire } from './serverRequire';
 
 let testRunnerConfig: TestRunnerConfig;

@@ -29,7 +29,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "NODE_ENV=production NODE_OPTIONS='--max-old-space-size=8192' tsup",
+    "build": "tsup",
     "build-storybook": "storybook build",
     "build:watch": "tsup --watch",
     "generate-dynamic-stories": "node scripts/generate-dynamic-stories.js",
@@ -37,7 +37,7 @@
     "release": "yarn build && auto shipit",
     "start": "concurrently \"yarn build:watch\" \"yarn storybook -- --quiet\"",
     "storybook": "storybook dev -p 6006",
-    "test": "NODE_ENV=production NODE_OPTIONS='--max-old-space-size=8192' jest --maxWorkers=1",
+    "test": "jest",
     "test-storybook": "node dist/test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook\"",
     "test-storybook:ci-coverage": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx serve storybook-static -l 6006\" \"wait-on tcp:6006 && yarn test-storybook --coverage\"",
