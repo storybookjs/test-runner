@@ -126,7 +126,6 @@ export const transformCsf = (
       const annotations = csf._storyAnnotations[key];
       acc[key] = {};
       if (annotations?.play) {
-        // @ts-expect-error type mismatch – check later
         acc[key].play = annotations.play;
       }
 
