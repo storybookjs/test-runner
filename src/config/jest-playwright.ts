@@ -1,4 +1,5 @@
 import path from 'path';
+// @ts-ignore
 import { getProjectRoot } from 'storybook/internal/common';
 import type { Config } from '@jest/types';
 
@@ -83,8 +84,9 @@ export const getJestConfig = (): Config.InitialOptions => {
       '^.+\\.(story|stories)\\.[jt]sx?$': require.resolve(
         `${TEST_RUNNER_PATH}/playwright/transform`
       ),
-      '^.+\\.[jt]sx?$': swcJestPath,
+      '^.+\\.[jt]sx?$': [swcJestPath, { module: { type: 'commonjs' } }],
     },
+    transformIgnorePatterns: ['node_modules/(?!(storybook|@storybook)/)'],
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {

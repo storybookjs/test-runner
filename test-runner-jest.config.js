@@ -22,6 +22,7 @@ module.exports = {
   globalTeardown: './playwright/global-teardown.js',
   testEnvironment: './playwright/custom-environment.js',
   setupFilesAfterEnv: ['./playwright/jest-setup.js'],
+  // transformIgnorePatterns for the storybook package and make sure swc jest ignores it too
   // use local build when the package is referred
   moduleNameMapper: {
     '@storybook/test-runner': '<rootDir>/dist/index.js',

@@ -1,5 +1,6 @@
 import * as t from '@babel/types';
 import generate from '@babel/generator';
+// @ts-ignore
 import { ComponentTitle, StoryId, StoryName, toId } from 'storybook/internal/csf';
 
 import { testPrefixer } from './transformPlaywright';

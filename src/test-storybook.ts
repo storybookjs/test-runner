@@ -7,8 +7,11 @@ import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
 import path, { join, resolve } from 'path';
 import tempy from 'tempy';
+// @ts-ignore
 import { getInterpretedFile } from 'storybook/internal/common';
+// @ts-ignore
 import { readConfig } from 'storybook/internal/csf-tools';
+// @ts-ignore
 import { telemetry } from 'storybook/internal/telemetry';
 import { glob } from 'glob';
 
@@ -378,7 +381,7 @@ const main = async () => {
   }
 
   const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
-    getStorybookMetadata();
+    await getStorybookMetadata();
   if (!shouldRunIndexJson) {
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 

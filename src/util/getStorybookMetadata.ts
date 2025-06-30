@@ -1,14 +1,16 @@
 import { join } from 'path';
+// @ts-ignore
 import { normalizeStories, getProjectRoot } from 'storybook/internal/common';
+// @ts-ignore
 import { StoriesEntry } from 'storybook/internal/types';
 
 import { getStorybookMain } from './getStorybookMain';
 
-export const getStorybookMetadata = () => {
+export const getStorybookMetadata = async () => {
   const workingDir = getProjectRoot();
   const configDir = process.env.STORYBOOK_CONFIG_DIR ?? '.storybook';
 
-  const main = getStorybookMain(configDir);
+  const main = await getStorybookMain(configDir);
   const normalizedStoriesEntries = normalizeStories(main.stories as StoriesEntry[], {
     configDir,
     workingDir,

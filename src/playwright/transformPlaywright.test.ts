@@ -30,14 +30,16 @@ describe('Playwright', () => {
   beforeEach(() => {
     const relativeSpy = jest.spyOn(path, 'relative');
     relativeSpy.mockReturnValueOnce('stories/basic/Header.stories.js');
-    jest.spyOn(storybookMain, 'getStorybookMain').mockImplementation(() => ({
-      stories: [
-        {
-          directory: '../stories/basic',
-          titlePrefix: 'Example',
-        },
-      ],
-    }));
+    jest.spyOn(storybookMain, 'getStorybookMain').mockImplementation(() =>
+      Promise.resolve({
+        stories: [
+          {
+            directory: '../stories/basic',
+            titlePrefix: 'Example',
+          },
+        ],
+      })
+    );
 
     delete process.env.STORYBOOK_INCLUDE_TAGS;
     delete process.env.STORYBOOK_EXCLUDE_TAGS;
