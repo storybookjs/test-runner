@@ -1,5 +1,6 @@
 import { relative } from 'path';
 import template from '@babel/template';
+// @ts-ignore
 import { userOrAutoTitle } from 'storybook/internal/preview-api';
 import dedent from 'ts-dedent';
 
@@ -79,21 +80,21 @@ export const testPrefixer: TestPrefixer = (context) => {
   )({ ...context });
 };
 
-const makeTitleFactory = (filename: string) => {
-  const { workingDir, normalizedStoriesEntries } = getStorybookMetadata();
+const makeTitleFactory = async (filename: string) => {
+  const { workingDir, normalizedStoriesEntries } = await getStorybookMetadata();
   const filePath = `./${relative(workingDir, filename)}`;
 
   return (userTitle: string) =>
     userOrAutoTitle(filePath, normalizedStoriesEntries, userTitle) as string;
 };
 
-export const transformPlaywright = (src: string, filename: string) => {
+export const transformPlaywright = async (src: string, filename: string) => {
   const tags = process.env.STORYBOOK_PREVIEW_TAGS?.split(',') ?? [];
   const transformOptions = {
     testPrefixer,
     insertTestIfEmpty: true,
     clearBody: true,
-    makeTitle: makeTitleFactory(filename),
+    makeTitle: await makeTitleFactory(filename),
     previewAnnotations: { tags },
   };
 

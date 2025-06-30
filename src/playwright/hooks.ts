@@ -1,4 +1,5 @@
 import type { BrowserContext, Page } from 'playwright';
+// @ts-ignore
 import type { StoryContextForEnhancers } from 'storybook/internal/csf';
 
 export type TestContext = {

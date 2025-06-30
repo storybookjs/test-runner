@@ -1,32 +1,39 @@
 import { getStorybookMain, resetStorybookMainCache, storybookMainConfig } from './getStorybookMain';
-import * as coreCommon from 'storybook/internal/common';
 
-jest.mock('storybook/internal/common');
+jest.mock('storybook/internal/common', () => ({
+  serverRequire: jest.fn(),
+}));
 
 describe('getStorybookMain', () => {
   beforeEach(() => {
     resetStorybookMainCache();
+    jest.clearAllMocks();
   });
 
-  it('should throw an error if no configuration is found', () => {
-    expect(() => getStorybookMain('.storybook')).toThrowErrorMatchingSnapshot();
+  it('should throw an error if no configuration is found', async () => {
+    (require('storybook/internal/common').serverRequire as jest.Mock).mockRejectedValueOnce(
+      new Error('Module not found')
+    );
+    await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
   });
 
   describe('no stories', () => {
-    it('should throw an error if no stories are defined', () => {
-      jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => ({}));
+    it('should throw an error if no stories are defined', async () => {
+      (require('storybook/internal/common').serverRequire as jest.Mock).mockResolvedValueOnce({});
 
-      expect(() => getStorybookMain('.storybook')).toThrowErrorMatchingSnapshot();
+      await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
     });
 
-    it('should throw an error if stories list is empty', () => {
-      jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => ({ stories: [] }));
+    it('should throw an error if stories list is empty', async () => {
+      (require('storybook/internal/common').serverRequire as jest.Mock).mockResolvedValueOnce({
+        stories: [],
+      });
 
-      expect(() => getStorybookMain('.storybook')).toThrowErrorMatchingSnapshot();
+      await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
     });
   });
 
-  it('should return mainjs', () => {
+  it('should return mainjs', async () => {
     const mockedMain = {
       stories: [
         {
@@ -36,13 +43,15 @@ describe('getStorybookMain', () => {
       ],
     };
 
-    jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => mockedMain);
+    (require('storybook/internal/common').serverRequire as jest.Mock).mockResolvedValueOnce(
+      mockedMain
+    );
 
-    const res = getStorybookMain('.storybook');
+    const res = await getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);
   });
 
-  it('should return the configDir value if it exists', () => {
+  it('should return the configDir value if it exists', async () => {
     const mockedMain = {
       stories: [
         {
@@ -53,7 +62,7 @@ describe('getStorybookMain', () => {
     };
     storybookMainConfig.set('configDir', mockedMain);
 
-    const res = getStorybookMain('.storybook');
+    const res = await getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);
   });
 });
