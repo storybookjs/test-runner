@@ -132,7 +132,7 @@ async function executeJestPlaywright(args: JestOptions) {
       paths: [path.join(import.meta.dirname, '../@storybook/test-runner/node_modules')],
     })
   );
-  const jest = require(jestPath);
+  const jest = await import(jestPath);
   const argv = args.slice(2);
 
   // jest configs could either come in the root dir, or inside of the Storybook config dir

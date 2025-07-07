@@ -1,5 +1,8 @@
 import * as t from '@babel/types';
-import generate from '@babel/generator';
+import babelGenerate from '@babel/generator';
+
+// Handle both ESM and CJS patterns
+const generate = (babelGenerate as any).default ?? babelGenerate;
 // @ts-ignore
 import { ComponentTitle, StoryId, StoryName, toId } from 'storybook/internal/csf';
 

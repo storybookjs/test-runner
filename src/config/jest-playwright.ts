@@ -84,9 +84,10 @@ export const getJestConfig = (): Config.InitialOptions => {
       '^.+\\.(story|stories)\\.[jt]sx?$': require.resolve(
         `${TEST_RUNNER_PATH}/playwright/transform.js`
       ),
-      '^.+\\.[jt]sx?$': swcJestPath,
+      '^.+\\.[jt]sx?$': 'babel-jest',
     },
-    // transformIgnorePatterns: ['node_modules/(?!(storybook|@storybook)/)'],
+    extensionsToTreatAsEsm: ['.js', '.jsx', '.ts', '.tsx'],
+    transformIgnorePatterns: ['node_modules/(?!(storybook|@storybook)/)'],
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {

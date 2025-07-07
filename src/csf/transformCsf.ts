@@ -4,10 +4,13 @@ import { toId, storyNameFromExport, combineTags } from 'storybook/internal/csf';
 // @ts-ignore
 import { loadCsf } from 'storybook/internal/csf-tools';
 import * as t from '@babel/types';
-import generate from '@babel/generator';
+import babelGenerate from '@babel/generator';
 import dedent from 'ts-dedent';
 
 import { getTagOptions } from '../util/getTagOptions';
+
+// Handle both ESM and CJS patterns
+const generate = (babelGenerate as any).default ?? babelGenerate;
 
 export interface TestContext {
   storyExport?: t.Identifier;
@@ -189,7 +192,7 @@ export const transformCsf = async (
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
-      if (!require.main) {
+      if (import.meta.url === undefined) {
         ${describeCode}
       }
     `;
