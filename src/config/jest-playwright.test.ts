@@ -12,7 +12,7 @@ describe('getJestConfig', () => {
       transform: {
         '^.+\\.(story|stories)\\.[jt]sx?$': `${path.dirname(
           require.resolve('@storybook/test-runner/playwright/transform')
-        )}/transform.js`,
+        )}/transform.mjs`,
         '^.+\\.[jt]sx?$': path.resolve('../test-runner/node_modules/@swc/jest'),
       },
       snapshotSerializers: [path.resolve('../test-runner/node_modules/jest-serializer-html')],
@@ -30,11 +30,11 @@ describe('getJestConfig', () => {
       watchPathIgnorePatterns: ['coverage', '.nyc_output', '.cache'],
       roots: undefined,
       runner: path.resolve('../test-runner/node_modules/jest-playwright-preset/runner.js'),
-      globalSetup: path.resolve('playwright/global-setup.js'),
-      globalTeardown: path.resolve('playwright/global-teardown.js'),
-      testEnvironment: path.resolve('playwright/custom-environment.js'),
+      globalSetup: path.resolve('playwright/global-setup.mjs'),
+      globalTeardown: path.resolve('playwright/global-teardown.mjs'),
+      testEnvironment: path.resolve('playwright/custom-environment.mjs'),
       setupFilesAfterEnv: [
-        path.resolve('playwright/jest-setup.js'),
+        path.resolve('playwright/jest-setup.mjs'),
         path.resolve('../test-runner/node_modules/expect-playwright/lib'),
         path.resolve('../test-runner/node_modules/jest-playwright-preset/lib/extends.js'),
       ],
@@ -82,7 +82,7 @@ describe('getJestConfig', () => {
       transform: {
         '^.+\\.(story|stories)\\.[jt]sx?$': `${path.dirname(
           require.resolve('@storybook/test-runner/playwright/transform')
-        )}/transform.js`,
+        )}/transform.mjs`,
         '^.+\\.[jt]sx?$': path.dirname(require.resolve('@swc/jest')),
       },
       snapshotSerializers: [path.dirname(require.resolve('jest-serializer-html'))],

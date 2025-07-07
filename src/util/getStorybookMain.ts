@@ -14,7 +14,6 @@ export const getStorybookMain = async (configDir = '.storybook') => {
 
   try {
     const mainConfig = await serverRequire(join(resolve(configDir), 'main'));
-    console.log('getStorybookMain', mainConfig);
 
     if (!mainConfig) {
       throw new Error(

@@ -1,4 +1,4 @@
-const { getTestRunnerConfig, setPreVisit, setPostVisit, setupPage } = require('../dist');
+import { getTestRunnerConfig, setPreVisit, setPostVisit, setupPage } from '../dist/index.js';
 
 const testRunnerConfig = getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
 if (testRunnerConfig) {

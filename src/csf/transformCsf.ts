@@ -102,7 +102,7 @@ const makeBeforeEach = (beforeEachPrefixer: FilePrefixer) => {
 const makeArray = (templateResult: TemplateResult) =>
   Array.isArray(templateResult) ? templateResult : [templateResult];
 
-export const transformCsf = (
+export const transformCsf = async (
   code: string,
   {
     clearBody = false,
@@ -113,7 +113,7 @@ export const transformCsf = (
     previewAnnotations = { tags: [] },
   }: TransformOptions & { previewAnnotations?: Record<string, any> }
 ) => {
-  const { includeTags, excludeTags, skipTags } = getTagOptions();
+  const { includeTags, excludeTags, skipTags } = await getTagOptions();
 
   const csf = loadCsf(code, { makeTitle: makeTitle ?? ((userTitle: string) => userTitle) });
   csf.parse();
@@ -126,7 +126,7 @@ export const transformCsf = (
       const annotations = csf._storyAnnotations[key];
       acc[key] = {};
       if (annotations?.play) {
-        acc[key].play = annotations.play;
+        acc[key].play = annotations.play as t.Node;
       }
 
       acc[key].tags = combineTags(

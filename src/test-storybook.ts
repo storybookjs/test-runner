@@ -3,7 +3,7 @@
 import fs from 'fs';
 import { execSync } from 'child_process';
 import fetch from 'node-fetch';
-import canBindToHost from 'can-bind-to-host';
+import { canBindToHost } from 'can-bind-to-host';
 import dedent from 'ts-dedent';
 import path, { join, resolve } from 'path';
 import tempy from 'tempy';
@@ -129,7 +129,7 @@ async function executeJestPlaywright(args: JestOptions) {
   // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
   const jestPath = path.dirname(
     require.resolve('jest', {
-      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
+      paths: [path.join(import.meta.dirname, '../@storybook/test-runner/node_modules')],
     })
   );
   const jest = require(jestPath);
@@ -146,7 +146,7 @@ async function executeJestPlaywright(args: JestOptions) {
 
   const jestConfigPath =
     userDefinedJestConfig ||
-    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
+    path.resolve(import.meta.dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
   argv.push('--config', jestConfigPath);
 
@@ -215,7 +215,7 @@ async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
-    const titleIdToTest = transformPlaywrightJson(indexJson);
+    const titleIdToTest = await transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
     for (const [titleId, test] of Object.entries(titleIdToTest)) {
@@ -235,7 +235,7 @@ async function getIndexTempDir(url: string) {
 }
 
 function ejectConfiguration() {
-  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
+  const origin = path.resolve(import.meta.dirname, '../playwright/test-runner-jest.config.js');
   const destination = path.resolve('test-runner-jest.config.js');
   const fileAlreadyExists = fs.existsSync(destination);
 
@@ -285,7 +285,8 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) ?? ({} as TestRunnerConfig);
+  const testRunnerConfig =
+    (await getTestRunnerConfig(runnerOptions.configDir)) ?? ({} as TestRunnerConfig);
 
   if (testRunnerConfig.preVisit && testRunnerConfig.preRender) {
     throw new Error(

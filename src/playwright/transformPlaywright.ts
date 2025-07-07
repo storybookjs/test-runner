@@ -98,6 +98,6 @@ export const transformPlaywright = async (src: string, filename: string) => {
     previewAnnotations: { tags },
   };
 
-  const result = transformCsf(src, transformOptions);
+  const result = await transformCsf(src, transformOptions);
   return result;
 };

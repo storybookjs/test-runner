@@ -6,15 +6,15 @@ import { TestRunnerConfig } from '../playwright/hooks';
 let testRunnerConfig: TestRunnerConfig;
 let loaded = false;
 
-export const getTestRunnerConfig = (
+export const getTestRunnerConfig = async (
   configDir = process.env.STORYBOOK_CONFIG_DIR ?? '.storybook'
-): TestRunnerConfig | undefined => {
+): Promise<TestRunnerConfig | undefined> => {
   // testRunnerConfig can be undefined
   if (loaded) {
     return testRunnerConfig;
   }
 
-  testRunnerConfig = serverRequire(join(resolve(configDir), 'test-runner'));
+  testRunnerConfig = await serverRequire(join(resolve(configDir), 'test-runner'));
   loaded = true;
   return testRunnerConfig;
 };

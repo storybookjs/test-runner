@@ -141,7 +141,9 @@ function groupByTitleId<T extends { title: ComponentTitle }>(entries: T[]) {
  * Generate one test file per component so that Jest can
  * run them in parallel.
  */
-export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | UnsupportedVersion) => {
+export const transformPlaywrightJson = async (
+  index: V3StoriesIndex | V4Index | UnsupportedVersion
+) => {
   let titleIdToEntries: Record<string, V4Entry[]>;
   if (index.v === 3) {
     const titleIdToStories = groupByTitleId<V3Story>(
@@ -158,7 +160,7 @@ export const transformPlaywrightJson = (index: V3StoriesIndex | V4Index | Unsupp
     throw new Error(`Unsupported version ${index.v}`);
   }
 
-  const { includeTags, excludeTags, skipTags } = getTagOptions();
+  const { includeTags, excludeTags, skipTags } = await getTagOptions();
 
   const titleIdToTest = Object.entries(titleIdToEntries).reduce<Record<string, string>>(
     (acc, [titleId, entries]) => {
