@@ -192,9 +192,7 @@ export const transformCsf = async (
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
-      if (import.meta.url === undefined) {
-        ${describeCode}
-      }
+      ${describeCode}
     `;
   } else if (insertTestIfEmpty) {
     // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,
