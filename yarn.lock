@@ -2932,7 +2932,7 @@ __metadata:
   peerDependencies:
     storybook: 0.0.0-pr-31819-sha-8b752a73
   bin:
-    test-storybook: ./dist/test-storybook.mjs
+    test-storybook: ./dist/test-storybook.js
   languageName: unknown
   linkType: soft
 
