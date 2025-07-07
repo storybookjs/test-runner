@@ -5,8 +5,11 @@ import { execSync } from 'child_process';
 import fetch from 'node-fetch';
 import { canBindToHost } from 'can-bind-to-host';
 import dedent from 'ts-dedent';
-import path, { join, resolve } from 'path';
+import path from 'path';
+import { join, resolve } from 'path';
 import tempy from 'tempy';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 // @ts-ignore
 import { getInterpretedFile } from 'storybook/internal/common';
 // @ts-ignore
@@ -15,11 +18,16 @@ import { readConfig } from 'storybook/internal/csf-tools';
 import { telemetry } from 'storybook/internal/telemetry';
 import { glob } from 'glob';
 
-import { JestOptions, getCliOptions } from './util/getCliOptions';
-import { getStorybookMetadata } from './util/getStorybookMetadata';
-import { getTestRunnerConfig } from './util/getTestRunnerConfig';
-import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
-import { TestRunnerConfig } from './playwright/hooks';
+import { JestOptions, getCliOptions } from './util/getCliOptions.js';
+import { getStorybookMetadata } from './util/getStorybookMetadata.js';
+import { getTestRunnerConfig } from './util/getTestRunnerConfig.js';
+import { transformPlaywrightJson } from './playwright/transformPlaywrightJson.js';
+import { TestRunnerConfig } from './playwright/hooks.js';
+
+// Get the current file's directory in ESM
+const __filename2 = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename2);
+const require = createRequire(import.meta.url);
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -51,10 +59,11 @@ const cleanup = () => {
   }
 };
 
-function getNycBinPath() {
-  const nycPath = path.join(require.resolve('nyc/package.json'));
-  const nycBin = require(nycPath).bin.nyc;
-  const nycBinFullPath = path.join(path.dirname(nycPath), nycBin);
+async function getNycBinPath() {
+  const nycPkgUrl = new URL('nyc/package.json', import.meta.url);
+  const { bin } = await import(nycPkgUrl.href, { assert: { type: 'json' } });
+  const nycBin = bin.nyc;
+  const nycBinFullPath = path.join(path.dirname(fileURLToPath(nycPkgUrl)), nycBin);
   return nycBinFullPath;
 }
 
@@ -83,7 +92,7 @@ async function reportCoverage() {
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
   if (process.env.JEST_SHARD !== 'true') {
-    const nycBinFullPath = getNycBinPath();
+    const nycBinFullPath = await getNycBinPath();
     execSync(
       `node ${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
       {
@@ -129,10 +138,10 @@ async function executeJestPlaywright(args: JestOptions) {
   // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
   const jestPath = path.dirname(
     require.resolve('jest', {
-      paths: [path.join(import.meta.dirname, '../@storybook/test-runner/node_modules')],
+      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
     })
   );
-  const jest = await import(jestPath);
+  const { default: jest } = await import(path.join(jestPath, 'index.js'));
   const argv = args.slice(2);
 
   // jest configs could either come in the root dir, or inside of the Storybook config dir
@@ -146,7 +155,7 @@ async function executeJestPlaywright(args: JestOptions) {
 
   const jestConfigPath =
     userDefinedJestConfig ||
-    path.resolve(import.meta.dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
+    path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
   argv.push('--config', jestConfigPath);
 
@@ -235,7 +244,7 @@ async function getIndexTempDir(url: string) {
 }
 
 function ejectConfiguration() {
-  const origin = path.resolve(import.meta.dirname, '../playwright/test-runner-jest.config.js');
+  const origin = path.resolve(__dirname, '../playwright/test-runner-jest.config.js');
   const destination = path.resolve('test-runner-jest.config.js');
   const fileAlreadyExists = fs.existsSync(destination);
 

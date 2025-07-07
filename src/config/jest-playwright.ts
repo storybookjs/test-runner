@@ -19,16 +19,8 @@ const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@stor
  * */
 const getJestPlaywrightConfig = (): Config.InitialOptions => {
   const TEST_RUNNER_PATH = getTestRunnerPath();
-  const presetBasePath = path.dirname(
-    require.resolve('jest-playwright-preset', {
-      paths: [path.join(import.meta.dirname, '../node_modules')],
-    })
-  );
-  const expectPlaywrightPath = path.dirname(
-    require.resolve('expect-playwright', {
-      paths: [path.join(import.meta.dirname, '../node_modules')],
-    })
-  );
+  const presetBasePath = path.dirname(require.resolve('jest-playwright-preset'));
+  const expectPlaywrightPath = path.dirname(require.resolve('expect-playwright'));
   return {
     runner: path.join(presetBasePath, 'runner.js'),
     globalSetup: require.resolve(`${TEST_RUNNER_PATH}/playwright/global-setup.js`),
@@ -52,17 +44,9 @@ export const getJestConfig = (): Config.InitialOptions => {
     STORYBOOK_JUNIT,
   } = process.env;
 
-  const jestJunitPath = path.dirname(
-    require.resolve('jest-junit', {
-      paths: [path.join(import.meta.dirname, '../node_modules')],
-    })
-  );
+  const jestJunitPath = path.dirname(require.resolve('jest-junit'));
 
-  const jestSerializerHtmlPath = path.dirname(
-    require.resolve('jest-serializer-html', {
-      paths: [path.join(import.meta.dirname, '../node_modules')],
-    })
-  );
+  const jestSerializerHtmlPath = path.dirname(require.resolve('jest-serializer-html'));
 
   // const swcJestPath = path.dirname(
   //   require.resolve('@swc/jest', {
