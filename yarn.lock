@@ -3056,7 +3056,7 @@ __metadata:
     sirv: "npm:^2.0.4"
     slash: "npm:^3.0.0"
     storybook: "npm:^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0"
-    storybook-src: "git+https://github.com/storybookjs/storybook.git#jeppe/migrate-core-esm-only-4"
+    storybook-src: "git+https://github.com/storybookjs/storybook.git#sb10/esm-only"
     strip-ansi: "npm:^7.1.0"
     strip-json-comments: "npm:^5.0.1"
     telejson: "npm:8.0.0"
@@ -10280,10 +10280,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-src@git+https://github.com/storybookjs/storybook.git#jeppe/migrate-core-esm-only-4":
+"storybook-src@git+https://github.com/storybookjs/storybook.git#sb10/esm-only":
   version: 0.0.0
-  resolution: "storybook-src@https://github.com/storybookjs/storybook.git#commit=3ef90bee1e1261ad3ce24c5f72c831084ccac7af"
-  checksum: 10/22bf2256e283c96d6ee5e635864ab5d409a1a3d8dae70c9cd2636731900aeb7818b79e0c068c63ade8d9f8fd69496d0bee44366924deffdd92a11fbd0361bd22
+  resolution: "storybook-src@https://github.com/storybookjs/storybook.git#commit=08edd3886304c27ca049de5179bdbc527b2c9c1f"
+  checksum: 10/2d6b4c4c18ce3910aab9c992c540eb0dd5a77e86831b78faf3625f6354f72742b18f44dbc9f9c5d02804b2f93f77d858c56a59ccdf94935f9e542834ef5ef4a8
   languageName: node
   linkType: hard
 

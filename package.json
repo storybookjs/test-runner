@@ -161,7 +161,7 @@
     "sirv": "^2.0.4",
     "slash": "^3.0.0",
     "storybook": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0",
-    "storybook-src": "git+https://github.com/storybookjs/storybook.git#jeppe/migrate-core-esm-only-4",
+    "storybook-src": "git+https://github.com/storybookjs/storybook.git#sb10/esm-only",
     "strip-ansi": "^7.1.0",
     "strip-json-comments": "^5.0.1",
     "telejson": "8.0.0",
