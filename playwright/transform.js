@@ -3,10 +3,9 @@ import { transformPlaywright } from '../dist/index.js';
 
 // Only export async version - force Jest to use it
 async function processAsync(src, filename) {
-  console.log('processAsync filename', filename);
   try {
     const csfTest = await transformPlaywright(src, filename);
-    console.log({ csfTest });
+    // This swc transform might not be needed
     const result = await swcTransform(csfTest, {
       filename,
       isModule: true,
@@ -16,9 +15,9 @@ async function processAsync(src, filename) {
       jsc: {
         parser: {
           syntax: 'typescript',
-          tsx: true, // Enable JSX support
+          tsx: true,
         },
-        target: 'es2015', // Set target for compatibility
+        target: 'es2015',
       },
     });
 
@@ -29,11 +28,6 @@ async function processAsync(src, filename) {
   }
 }
 
-// Export only the async version
 export default {
-  process: (src, filename) => {
-    console.log('processSync filename', filename);
-    return { code: src };
-  },
   processAsync,
 };
