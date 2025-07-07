@@ -64,11 +64,11 @@ export const getJestConfig = (): Config.InitialOptions => {
     })
   );
 
-  const swcJestPath = path.dirname(
-    require.resolve('@swc/jest', {
-      paths: [path.join(import.meta.dirname, '../node_modules')],
-    })
-  );
+  // const swcJestPath = path.dirname(
+  //   require.resolve('@swc/jest', {
+  //     paths: [path.join(import.meta.dirname, '../node_modules')],
+  //   })
+  // );
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
