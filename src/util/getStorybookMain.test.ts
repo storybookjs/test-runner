@@ -8,25 +8,25 @@ describe('getStorybookMain', () => {
     resetStorybookMainCache();
   });
 
-  it('should throw an error if no configuration is found', () => {
-    expect(() => getStorybookMain('.storybook')).toThrowErrorMatchingSnapshot();
+  it('should throw an error if no configuration is found', async () => {
+    await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
   });
 
   describe('no stories', () => {
-    it('should throw an error if no stories are defined', () => {
-      jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => ({}));
+    it('should throw an error if no stories are defined', async () => {
+      jest.spyOn(coreCommon, 'serverRequire').mockImplementation(async () => ({}));
 
-      expect(() => getStorybookMain('.storybook')).toThrowErrorMatchingSnapshot();
+      await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
     });
 
-    it('should throw an error if stories list is empty', () => {
-      jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => ({ stories: [] }));
+    it('should throw an error if stories list is empty', async () => {
+      jest.spyOn(coreCommon, 'serverRequire').mockImplementation(async () => ({ stories: [] }));
 
-      expect(() => getStorybookMain('.storybook')).toThrowErrorMatchingSnapshot();
+      await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
     });
   });
 
-  it('should return mainjs', () => {
+  it('should return mainjs', async () => {
     const mockedMain = {
       stories: [
         {
@@ -36,13 +36,13 @@ describe('getStorybookMain', () => {
       ],
     };
 
-    jest.spyOn(coreCommon, 'serverRequire').mockImplementation(() => mockedMain);
+    jest.spyOn(coreCommon, 'serverRequire').mockImplementation(async () => mockedMain);
 
-    const res = getStorybookMain('.storybook');
+    const res = await getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);
   });
 
-  it('should return the configDir value if it exists', () => {
+  it('should return the configDir value if it exists', async () => {
     const mockedMain = {
       stories: [
         {
@@ -51,9 +51,9 @@ describe('getStorybookMain', () => {
         },
       ],
     };
-    storybookMainConfig.set('configDir', mockedMain);
+    storybookMainConfig.set('.storybook', mockedMain);
 
-    const res = getStorybookMain('.storybook');
+    const res = await getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);
   });
 });

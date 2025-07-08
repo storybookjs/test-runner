@@ -30,14 +30,14 @@ describe('Playwright', () => {
   beforeEach(() => {
     const relativeSpy = jest.spyOn(path, 'relative');
     relativeSpy.mockReturnValueOnce('stories/basic/Header.stories.js');
-    jest.spyOn(storybookMain, 'getStorybookMain').mockImplementation(() => ({
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValue({
       stories: [
         {
           directory: '../stories/basic',
           titlePrefix: 'Example',
         },
       ],
-    }));
+    });
 
     delete process.env.STORYBOOK_INCLUDE_TAGS;
     delete process.env.STORYBOOK_EXCLUDE_TAGS;
@@ -46,9 +46,9 @@ describe('Playwright', () => {
   });
 
   describe('tag filtering mechanism', () => {
-    it('should include all stories when there is no tag filtering', () => {
+    it('should include all stories when there is no tag filtering', async () => {
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = { };
@@ -183,10 +183,10 @@ describe('Playwright', () => {
         }
       `);
     });
-    it('should exclude stories when excludeTags matches', () => {
+    it('should exclude stories when excludeTags matches', async () => {
       process.env.STORYBOOK_EXCLUDE_TAGS = 'exclude-test';
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = { tags: ['exclude-test'] };
@@ -261,10 +261,10 @@ describe('Playwright', () => {
         }
       `);
     });
-    it('should skip stories when skipTags matches', () => {
+    it('should skip stories when skipTags matches', async () => {
       process.env.STORYBOOK_SKIP_TAGS = 'skip-test';
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = { tags: ['skip-test'] };
@@ -399,7 +399,7 @@ describe('Playwright', () => {
         }
       `);
     });
-    it('should work in conjunction with includeTags, excludeTags and skipTags', () => {
+    it('should work in conjunction with includeTags, excludeTags and skipTags', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play,design,global-tag';
       process.env.STORYBOOK_SKIP_TAGS = 'skip';
       process.env.STORYBOOK_EXCLUDE_TAGS = 'exclude';
@@ -412,7 +412,7 @@ describe('Playwright', () => {
       // - D being included
       // - E being excluded
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = { tags: ['play', 'exclude'] };
@@ -670,7 +670,7 @@ describe('Playwright', () => {
         }
       `);
     });
-    it('should work with tag negation', () => {
+    it('should work with tag negation', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play,test';
       process.env.STORYBOOK_PREVIEW_TAGS = '!test';
       // Should result in:
@@ -678,7 +678,7 @@ describe('Playwright', () => {
       // - B being excluded because it has no play nor test tag (removed by negation in preview tags)
       // - C being included because it has test tag (overwritten via story tags)
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button, tags: ['play'] };
         export const A = { };
@@ -814,12 +814,12 @@ describe('Playwright', () => {
         }
       `);
     });
-    it('should include "test" tag by default', () => {
+    it('should include "test" tag by default', async () => {
       // Should result in:
       // - A being included
       // - B being excluded
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = { };
@@ -894,10 +894,10 @@ describe('Playwright', () => {
         }
       `);
     });
-    it('should no op when includeTags is passed but not matched', () => {
+    it('should no op when includeTags is passed but not matched', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play';
       expect(
-        transformPlaywright(
+        await transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = () => {};
@@ -909,9 +909,9 @@ describe('Playwright', () => {
     });
   });
 
-  it('should generate a play test when the story has a play function', () => {
+  it('should generate a play test when the story has a play function', async () => {
     expect(
-      transformPlaywright(
+      await transformPlaywright(
         dedent`
         export default { title: 'foo/bar', component: Button };
         export const A = () => {};
@@ -986,9 +986,9 @@ describe('Playwright', () => {
       }
     `);
   });
-  it('should generate a smoke test when story does not have a play function', () => {
+  it('should generate a smoke test when story does not have a play function', async () => {
     expect(
-      transformPlaywright(
+      await transformPlaywright(
         dedent`
         export default { title: 'foo/bar' };
         export const A = () => {};
@@ -1062,9 +1062,9 @@ describe('Playwright', () => {
       }
     `);
   });
-  it('should generate a smoke test with auto title', () => {
+  it('should generate a smoke test with auto title', async () => {
     expect(
-      transformPlaywright(
+      await transformPlaywright(
         dedent`
         export default { component: Button };
         export const A = () => {};

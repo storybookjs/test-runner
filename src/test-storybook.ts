@@ -212,7 +212,7 @@ async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
-    const titleIdToTest = transformPlaywrightJson(indexJson);
+    const titleIdToTest = await transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
     for (const [titleId, test] of Object.entries(titleIdToTest)) {
@@ -282,7 +282,8 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) ?? ({} as TestRunnerConfig);
+  const testRunnerConfig =
+    (await getTestRunnerConfig(runnerOptions.configDir)) ?? ({} as TestRunnerConfig);
 
   if (testRunnerConfig.preVisit && testRunnerConfig.preRender) {
     throw new Error(
@@ -378,7 +379,7 @@ const main = async () => {
   }
 
   const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
-    getStorybookMetadata();
+    await getStorybookMetadata();
   if (!shouldRunIndexJson) {
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 

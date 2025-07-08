@@ -36,7 +36,10 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
   const failOnConsole = process.env.TEST_CHECK_CONSOLE;
 
   const viewMode = process.env.VIEW_MODE ?? 'story';
-  const renderedEvent = viewMode === 'docs' ? 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.DOCS_RENDERED' : 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_FINISHED ?? globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_RENDERED';
+  const renderedEvent =
+    viewMode === 'docs'
+      ? 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.DOCS_RENDERED'
+      : 'globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_FINISHED ?? globalThis.__STORYBOOK_MODULE_CORE_EVENTS__.STORY_RENDERED';
   const { packageJson } = (await readPackageUp()) as NormalizedReadResult;
   const { version: testRunnerVersion } = packageJson;
 
@@ -51,7 +54,7 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
     );
   }
 
-  const testRunnerConfig = getTestRunnerConfig() || {};
+  const testRunnerConfig = (await getTestRunnerConfig()) || {};
   if (testRunnerConfig?.prepare) {
     await testRunnerConfig.prepare({ page, browserContext, testRunnerConfig });
   } else {

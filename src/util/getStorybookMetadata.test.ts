@@ -22,18 +22,18 @@ describe('getStorybookMetadata', () => {
     process.env.STORYBOOK_CONFIG_DIR = undefined;
   });
 
-  it('should return configDir coming from environment variable', () => {
+  it('should return configDir coming from environment variable', async () => {
     const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: [],
     };
 
-    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValueOnce(mockedMain as any);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    const { configDir } = getStorybookMetadata();
+    const { configDir } = await getStorybookMetadata();
     expect(configDir).toEqual(process.env.STORYBOOK_CONFIG_DIR);
   });
 
-  it('should return storiesPath with default glob from CSF3 style config', () => {
+  it('should return storiesPath with default glob from CSF3 style config', async () => {
     const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: [
         {
@@ -43,28 +43,28 @@ describe('getStorybookMetadata', () => {
       ],
     };
 
-    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValueOnce(mockedMain as any);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    const { storiesPaths } = getStorybookMetadata();
+    const { storiesPaths } = await getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
       `"/foo/bar/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
     );
   });
 
-  it('should return storiesPath with glob defined in CSF2 style config', () => {
+  it('should return storiesPath with glob defined in CSF2 style config', async () => {
     const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: ['../**/stories/*.stories.@(js|ts)'],
     };
 
-    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValueOnce(mockedMain as any);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    const { storiesPaths } = getStorybookMetadata();
+    const { storiesPaths } = await getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
       `"/foo/bar/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
     );
   });
 
-  it('should return storiesPath from mixed CSF2 and CSF3 style config', () => {
+  it('should return storiesPath from mixed CSF2 and CSF3 style config', async () => {
     const mockedMain: Pick<StorybookConfig, 'stories'> = {
       stories: [
         {
@@ -75,29 +75,29 @@ describe('getStorybookMetadata', () => {
       ],
     };
 
-    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValueOnce(mockedMain as any);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    const { storiesPaths } = getStorybookMetadata();
+    const { storiesPaths } = await getStorybookMetadata();
     expect(storiesPaths).toMatchInlineSnapshot(
       `"/foo/bar/stories/basic/**/*.stories.@(mdx|tsx|ts|jsx|js)"`
     );
   });
 
-  it('should return lazyCompilation=false when unset', () => {
+  it('should return lazyCompilation=false when unset', async () => {
     const mockedMain: Pick<StorybookConfig, 'stories'> = { stories: [] };
 
-    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValueOnce(mockedMain as any);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    expect(getStorybookMetadata().lazyCompilation).toBe(false);
+    expect((await getStorybookMetadata()).lazyCompilation).toBe(false);
   });
-  it('should return lazyCompilation=true when set', () => {
+  it('should return lazyCompilation=true when set', async () => {
     const mockedMain: Pick<StorybookConfig, 'stories' | 'core'> = {
       stories: [],
       core: { builder: { name: 'webpack5', options: { lazyCompilation: true } } },
     };
 
-    jest.spyOn(storybookMain, 'getStorybookMain').mockReturnValueOnce(mockedMain);
+    jest.spyOn(storybookMain, 'getStorybookMain').mockResolvedValueOnce(mockedMain as any);
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    expect(getStorybookMetadata().lazyCompilation).toBe(true);
+    expect((await getStorybookMetadata()).lazyCompilation).toBe(true);
   });
 });
