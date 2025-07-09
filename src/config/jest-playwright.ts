@@ -71,7 +71,6 @@ export const getJestConfig = (): Config.InitialOptions => {
       '^.+\\.[jt]sx?$': 'babel-jest',
     },
     extensionsToTreatAsEsm: ['.jsx', '.ts', '.tsx'],
-    transformIgnorePatterns: ['node_modules/(?!(storybook|@storybook)/)'],
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {
