@@ -10282,8 +10282,8 @@ __metadata:
 
 "storybook-src@git+https://github.com/storybookjs/storybook.git#norbert/try-fixing-test-runner":
   version: 0.0.0
-  resolution: "storybook-src@https://github.com/storybookjs/storybook.git#commit=8f6a63a9f01a97029ae8ec7b07ace0e2a597e24e"
-  checksum: 10/117bf868712af9d667e655736c7e3d4efb1559d33fa2d945fc6acd0e841e10d1eee9148e37571825c500a43d9a1239055b497e7b707e89d9cab63e50d79a8fd1
+  resolution: "storybook-src@https://github.com/storybookjs/storybook.git#commit=3095ad4932c56bb5c98be9d0e85c52ec1c9c2edc"
+  checksum: 10/35bab1db690d7c7b429f864e21c1974c679a93fabf4edaf63c5dbbfa932ec5a35e10322713948646b4f2f7f5004d2d806a73afa8c5dc28b3e18ff58b1d325c4e
   languageName: node
   linkType: hard
 
