@@ -84,7 +84,7 @@ export const getJestConfig = (): Config.InitialOptions => {
       '^.+\\.(story|stories)\\.[jt]sx?$': require.resolve(
         `${TEST_RUNNER_PATH}/playwright/transform`
       ),
-      '^.+\\.[jt]sx?$': swcJestPath,
+      '^.+\\.[jt]sx?$': [swcJestPath, { jsc: { target: 'es2022' } }],
     },
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
