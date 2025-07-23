@@ -1,7 +1,5 @@
 import { join } from 'path';
-// @ts-ignore
 import { normalizeStories, getProjectRoot } from 'storybook/internal/common';
-// @ts-ignore
 import { StoriesEntry } from 'storybook/internal/types';
 
 import { getStorybookMain } from './getStorybookMain';

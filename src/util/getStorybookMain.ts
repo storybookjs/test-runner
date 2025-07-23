@@ -1,7 +1,5 @@
 import { join, resolve } from 'path';
-// @ts-ignore
 import { serverRequire } from 'storybook/internal/common';
-// @ts-ignore
 import type { StorybookConfig } from 'storybook/internal/types';
 import dedent from 'ts-dedent';
 

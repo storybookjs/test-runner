@@ -4,7 +4,8 @@ import { pkgUp } from 'pkg-up';
 import { PrepareContext } from './playwright/hooks';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import path, { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /**
  * This is a default prepare function which can be overridden by the user.
@@ -72,8 +73,10 @@ export const setupPage = async (page: Page, browserContext: BrowserContext) => {
     return message;
   });
 
+  const cwd = typeof __dirname === 'string' ? __dirname : dirname(fileURLToPath(import.meta.url));
+
   const finalStorybookUrl = referenceURL ?? targetURL ?? '';
-  const testRunnerPackageLocation = await pkgUp({ cwd: import.meta.dirname });
+  const testRunnerPackageLocation = await pkgUp({ cwd });
   if (!testRunnerPackageLocation) throw new Error('Could not find test-runner package location');
   const scriptLocation = path.join(
     path.dirname(testRunnerPackageLocation),

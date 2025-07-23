@@ -3,7 +3,6 @@ import babelTemplate from '@babel/template';
 
 // Handle both ESM and CJS patterns
 const template = (babelTemplate as any).default ?? babelTemplate;
-// @ts-ignore
 import { userOrAutoTitle } from 'storybook/internal/preview-api';
 import dedent from 'ts-dedent';
 

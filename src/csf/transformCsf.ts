@@ -1,7 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-// @ts-ignore
 import { toId, storyNameFromExport, combineTags } from 'storybook/internal/csf';
-// @ts-ignore
 import { loadCsf } from 'storybook/internal/csf-tools';
 import * as t from '@babel/types';
 import babelGenerate from '@babel/generator';

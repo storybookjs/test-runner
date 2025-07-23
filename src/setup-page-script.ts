@@ -4,9 +4,7 @@
  * This file is a template to the content which is injected to the Playwright page via the ./setup-page.ts file.
  * setup-page.ts will read the contents of this file and replace values that use {{x}} pattern, and they should be put right below:
  */
-// @ts-ignore
 import { PreviewWeb } from 'storybook/internal/preview-api';
-// @ts-ignore
 import { StoryContext } from 'storybook/internal/csf';
 
 type ConsoleMethod =

@@ -48,11 +48,11 @@ export const getJestConfig = (): Config.InitialOptions => {
 
   const jestSerializerHtmlPath = path.dirname(require.resolve('jest-serializer-html'));
 
-  // const swcJestPath = path.dirname(
-  //   require.resolve('@swc/jest', {
-  //     paths: [path.join(import.meta.dirname, '../node_modules')],
-  //   })
-  // );
+  const swcJestPath = path.dirname(
+    require.resolve('@swc/jest', {
+      paths: [path.join(import.meta.dirname, '../node_modules')],
+    })
+  );
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
@@ -68,7 +68,7 @@ export const getJestConfig = (): Config.InitialOptions => {
       '^.+\\.(story|stories)\\.[jt]sx?$': require.resolve(
         `${TEST_RUNNER_PATH}/playwright/transform.js`
       ),
-      '^.+\\.[jt]sx?$': 'babel-jest',
+      '^.+\\.[jt]sx?$': '@swc/jest',
     },
     extensionsToTreatAsEsm: ['.jsx', '.ts', '.tsx'],
     snapshotSerializers: [jestSerializerHtmlPath],

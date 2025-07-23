@@ -1,6 +1,6 @@
 import { getTestRunnerConfig, setPreVisit, setPostVisit, setupPage } from '../dist/index.js';
 
-const testRunnerConfig = getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
+const testRunnerConfig = await getTestRunnerConfig(process.env.STORYBOOK_CONFIG_DIR);
 if (testRunnerConfig) {
   // hooks set up
   if (testRunnerConfig.setup) {

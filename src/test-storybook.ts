@@ -10,11 +10,8 @@ import { join, resolve } from 'path';
 import tempy from 'tempy';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
-// @ts-ignore
 import { getInterpretedFile } from 'storybook/internal/common';
-// @ts-ignore
 import { readConfig } from 'storybook/internal/csf-tools';
-// @ts-ignore
 import { telemetry } from 'storybook/internal/telemetry';
 import { glob } from 'glob';
 
@@ -136,12 +133,14 @@ function sanitizeURL(url: string) {
 
 async function executeJestPlaywright(args: JestOptions) {
   // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
-  const jestPath = path.dirname(
-    require.resolve('jest', {
-      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
-    })
+  const jestPath = path.join(
+    path.dirname(
+      require.resolve('jest/package.json', {
+        paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
+      })
+    ),
+    'bin/jest.js'
   );
-  const { default: jest } = await import(path.join(jestPath, 'index.js'));
   const argv = args.slice(2);
 
   // jest configs could either come in the root dir, or inside of the Storybook config dir
@@ -157,16 +156,21 @@ async function executeJestPlaywright(args: JestOptions) {
     userDefinedJestConfig ||
     path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
-  argv.push('--config', jestConfigPath);
+  const command = `node --experimental-vm-modules ${jestPath} ${argv.join(
+    ' '
+  )} --config ${jestConfigPath}`;
 
-  await jest.run(argv);
+  execSync(command, {
+    stdio: 'inherit',
+    cwd: process.cwd(),
+  });
 }
 
 async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'GET', headers });
-    if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
+    if (res.status !== 200) throw new Error(`Unexpected status: ${res.status}`);
   } catch (e) {
     console.error(
       dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?

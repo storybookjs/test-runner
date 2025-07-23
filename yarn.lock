@@ -1948,12 +1948,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/create-cache-key-function@npm:^29.7.0":
-  version: 29.7.0
-  resolution: "@jest/create-cache-key-function@npm:29.7.0"
+"@jest/create-cache-key-function@npm:^30.0.0":
+  version: 30.0.5
+  resolution: "@jest/create-cache-key-function@npm:30.0.5"
   dependencies:
-    "@jest/types": "npm:^29.6.3"
-  checksum: 10/061ef63b13ec8c8e5d08e4456f03b5cf8c7f9c1cab4fed8402e1479153cafce6eea80420e308ef62027abb7e29b825fcfa06551856bd021d98e92e381bf91723
+    "@jest/types": "npm:30.0.5"
+  checksum: 10/ca939b0586792fc6c4dedf3c88a5c41491b49dce6856847da9f8657a5ab9cb5cea2b90d9cf0ba8cc4097746d1138e728812236bb74d3e4108ae4c25304d46bee
   languageName: node
   linkType: hard
 
@@ -2083,12 +2083,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/schemas@npm:^29.6.3":
-  version: 29.6.3
-  resolution: "@jest/schemas@npm:29.6.3"
+"@jest/schemas@npm:30.0.5":
+  version: 30.0.5
+  resolution: "@jest/schemas@npm:30.0.5"
   dependencies:
-    "@sinclair/typebox": "npm:^0.27.8"
-  checksum: 10/910040425f0fc93cd13e68c750b7885590b8839066dfa0cd78e7def07bbb708ad869381f725945d66f2284de5663bbecf63e8fdd856e2ae6e261ba30b1687e93
+    "@sinclair/typebox": "npm:^0.34.0"
+  checksum: 10/40df4db55d4aeed09d1c7e19caf23788309cea34490a1c5d584c913494195e698b9967e996afc27226cac6d76e7512fe73ae6b9584480695c60dd18a5459cdba
   languageName: node
   linkType: hard
 
@@ -2177,17 +2177,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^29.6.3":
-  version: 29.6.3
-  resolution: "@jest/types@npm:29.6.3"
+"@jest/types@npm:30.0.5":
+  version: 30.0.5
+  resolution: "@jest/types@npm:30.0.5"
   dependencies:
-    "@jest/schemas": "npm:^29.6.3"
-    "@types/istanbul-lib-coverage": "npm:^2.0.0"
-    "@types/istanbul-reports": "npm:^3.0.0"
+    "@jest/pattern": "npm:30.0.1"
+    "@jest/schemas": "npm:30.0.5"
+    "@types/istanbul-lib-coverage": "npm:^2.0.6"
+    "@types/istanbul-reports": "npm:^3.0.4"
     "@types/node": "npm:*"
-    "@types/yargs": "npm:^17.0.8"
-    chalk: "npm:^4.0.0"
-  checksum: 10/f74bf512fd09bbe2433a2ad460b04668b7075235eea9a0c77d6a42222c10a79b9747dc2b2a623f140ed40d6865a2ed8f538f3cbb75169120ea863f29a7ed76cd
+    "@types/yargs": "npm:^17.0.33"
+    chalk: "npm:^4.1.2"
+  checksum: 10/6bf18f4e899ff9cf6bd88b1e3348aeb944db4d5ad7e9c683bb0188daeb2d11d10a1463a4dc494e92145eafcbc2656fe31adb6f1fd0bf5928cf73ddc8b2f215bf
   languageName: node
   linkType: hard
 
@@ -2700,13 +2701,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinclair/typebox@npm:^0.27.8":
-  version: 0.27.8
-  resolution: "@sinclair/typebox@npm:0.27.8"
-  checksum: 10/297f95ff77c82c54de8c9907f186076e715ff2621c5222ba50b8d40a170661c0c5242c763cba2a4791f0f91cb1d8ffa53ea1d7294570cf8cd4694c0e383e484d
-  languageName: node
-  linkType: hard
-
 "@sinclair/typebox@npm:^0.34.0":
   version: 0.34.37
   resolution: "@sinclair/typebox@npm:0.34.37"
@@ -2907,7 +2901,6 @@ __metadata:
     "@types/node-fetch": "npm:^2.6.12"
     "@vitejs/plugin-react": "npm:^4.0.3"
     auto: "npm:^11.1.6"
-    babel-jest: "npm:^30.0.4"
     babel-loader: "npm:^8.1.0"
     babel-plugin-istanbul: "npm:^6.1.1"
     can-bind-to-host: "npm:^1.1.1"
@@ -2949,94 +2942,94 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@swc/core-darwin-arm64@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-darwin-arm64@npm:1.8.0"
+"@swc/core-darwin-arm64@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-darwin-arm64@npm:1.13.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-darwin-x64@npm:1.8.0"
+"@swc/core-darwin-x64@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-darwin-x64@npm:1.13.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.8.0"
+"@swc/core-linux-arm-gnueabihf@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.13.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.8.0"
+"@swc/core-linux-arm64-gnu@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.13.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-linux-arm64-musl@npm:1.8.0"
+"@swc/core-linux-arm64-musl@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-linux-arm64-musl@npm:1.13.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-linux-x64-gnu@npm:1.8.0"
+"@swc/core-linux-x64-gnu@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-linux-x64-gnu@npm:1.13.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-linux-x64-musl@npm:1.8.0"
+"@swc/core-linux-x64-musl@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-linux-x64-musl@npm:1.13.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.8.0"
+"@swc/core-win32-arm64-msvc@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.13.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.8.0"
+"@swc/core-win32-ia32-msvc@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.13.2"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.8.0":
-  version: 1.8.0
-  resolution: "@swc/core-win32-x64-msvc@npm:1.8.0"
+"@swc/core-win32-x64-msvc@npm:1.13.2":
+  version: 1.13.2
+  resolution: "@swc/core-win32-x64-msvc@npm:1.13.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
 "@swc/core@npm:^1.5.22":
-  version: 1.8.0
-  resolution: "@swc/core@npm:1.8.0"
+  version: 1.13.2
+  resolution: "@swc/core@npm:1.13.2"
   dependencies:
-    "@swc/core-darwin-arm64": "npm:1.8.0"
-    "@swc/core-darwin-x64": "npm:1.8.0"
-    "@swc/core-linux-arm-gnueabihf": "npm:1.8.0"
-    "@swc/core-linux-arm64-gnu": "npm:1.8.0"
-    "@swc/core-linux-arm64-musl": "npm:1.8.0"
-    "@swc/core-linux-x64-gnu": "npm:1.8.0"
-    "@swc/core-linux-x64-musl": "npm:1.8.0"
-    "@swc/core-win32-arm64-msvc": "npm:1.8.0"
-    "@swc/core-win32-ia32-msvc": "npm:1.8.0"
-    "@swc/core-win32-x64-msvc": "npm:1.8.0"
+    "@swc/core-darwin-arm64": "npm:1.13.2"
+    "@swc/core-darwin-x64": "npm:1.13.2"
+    "@swc/core-linux-arm-gnueabihf": "npm:1.13.2"
+    "@swc/core-linux-arm64-gnu": "npm:1.13.2"
+    "@swc/core-linux-arm64-musl": "npm:1.13.2"
+    "@swc/core-linux-x64-gnu": "npm:1.13.2"
+    "@swc/core-linux-x64-musl": "npm:1.13.2"
+    "@swc/core-win32-arm64-msvc": "npm:1.13.2"
+    "@swc/core-win32-ia32-msvc": "npm:1.13.2"
+    "@swc/core-win32-x64-msvc": "npm:1.13.2"
     "@swc/counter": "npm:^0.1.3"
-    "@swc/types": "npm:^0.1.14"
+    "@swc/types": "npm:^0.1.23"
   peerDependencies:
-    "@swc/helpers": "*"
+    "@swc/helpers": ">=0.5.17"
   dependenciesMeta:
     "@swc/core-darwin-arm64":
       optional: true
@@ -3061,7 +3054,7 @@ __metadata:
   peerDependenciesMeta:
     "@swc/helpers":
       optional: true
-  checksum: 10/2e7fb49286545b2b712b8220dbaf0d342636bd4c31763f760dc9822975d8e538e0080f1eb8ae7e74bf9b2eed8200a9525fd210ead573843dabd6f3e388bfb336
+  checksum: 10/ca4d05c44c3e36f7d3f68dda9b53eb1e7e1c9f07701d526c8484605bf4a744cbcb83e1cadb0b4b57723d98ba799d3a75508b2219751ad5fdb29491ca325c680d
   languageName: node
   linkType: hard
 
@@ -3073,24 +3066,24 @@ __metadata:
   linkType: hard
 
 "@swc/jest@npm:^0.2.38":
-  version: 0.2.38
-  resolution: "@swc/jest@npm:0.2.38"
+  version: 0.2.39
+  resolution: "@swc/jest@npm:0.2.39"
   dependencies:
-    "@jest/create-cache-key-function": "npm:^29.7.0"
+    "@jest/create-cache-key-function": "npm:^30.0.0"
     "@swc/counter": "npm:^0.1.3"
     jsonc-parser: "npm:^3.2.0"
   peerDependencies:
     "@swc/core": "*"
-  checksum: 10/3aaf557425e806890ebefea35334b7795e9f8ddf6f82d634d865ef917333cca4208190af1a9610c134c0e3b7a6a1aea4ec77a659e3ca5965be7aace65ce80c97
+  checksum: 10/a2b7ed6fbb908867e673d1bbff9efde7eee225a57ad75735216ce2005e40c5cfb92285bd807d2058f1c0317e3d48ed71f5577fe85b28bebc80c1bc2c3a03306e
   languageName: node
   linkType: hard
 
-"@swc/types@npm:^0.1.14":
-  version: 0.1.14
-  resolution: "@swc/types@npm:0.1.14"
+"@swc/types@npm:^0.1.23":
+  version: 0.1.23
+  resolution: "@swc/types@npm:0.1.23"
   dependencies:
     "@swc/counter": "npm:^0.1.3"
-  checksum: 10/1ee6cd759f7dd52ea64cbcacc912e2111624a8db0dcfae443604bd9d42b671d9b9570f1eca945dfc21b8850a15d2c0db2aa0e0b85f4bb9782f4acd1eb66dccd1
+  checksum: 10/8d9d73dd1fc9335105105da57595ab913bad6addd4fbcb2eb147300694630232225eb7dc74b733205af33352803e4fcefc18e3a36f8924cf821ef91384767670
   languageName: node
   linkType: hard
 
@@ -3240,7 +3233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1, @types/istanbul-lib-coverage@npm:^2.0.4, @types/istanbul-lib-coverage@npm:^2.0.6":
+"@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.1, @types/istanbul-lib-coverage@npm:^2.0.4, @types/istanbul-lib-coverage@npm:^2.0.6":
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
   checksum: 10/3feac423fd3e5449485afac999dcfcb3d44a37c830af898b689fadc65d26526460bedb889db278e0d4d815a670331796494d073a10ee6e3a6526301fe7415778
@@ -3256,7 +3249,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/istanbul-reports@npm:^3.0.0, @types/istanbul-reports@npm:^3.0.4":
+"@types/istanbul-reports@npm:^3.0.4":
   version: 3.0.4
   resolution: "@types/istanbul-reports@npm:3.0.4"
   dependencies:
@@ -3352,7 +3345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.33, @types/yargs@npm:^17.0.8":
+"@types/yargs@npm:^17.0.33":
   version: 17.0.33
   resolution: "@types/yargs@npm:17.0.33"
   dependencies:
@@ -3919,7 +3912,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-jest@npm:30.0.4, babel-jest@npm:^30.0.4":
+"babel-jest@npm:30.0.4":
   version: 30.0.4
   resolution: "babel-jest@npm:30.0.4"
   dependencies:
@@ -7019,9 +7012,9 @@ __metadata:
   linkType: hard
 
 "jsonc-parser@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "jsonc-parser@npm:3.2.0"
-  checksum: 10/bd68b902e5f9394f01da97921f49c5084b2dc03a0c5b4fdb2a429f8d6f292686c1bf87badaeb0a8148d024192a88f5ad2e57b2918ba43fe25cf15f3371db64d4
+  version: 3.3.1
+  resolution: "jsonc-parser@npm:3.3.1"
+  checksum: 10/9b0dc391f20b47378f843ef1e877e73ec652a5bdc3c5fa1f36af0f119a55091d147a86c1ee86a232296f55c929bba174538c2bf0312610e0817a22de131cc3f4
   languageName: node
   linkType: hard
 

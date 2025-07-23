@@ -1,5 +1,4 @@
 import { join, resolve } from 'path';
-// @ts-ignore
 import { serverRequire } from 'storybook/internal/common';
 import { TestRunnerConfig } from '../playwright/hooks';
 
