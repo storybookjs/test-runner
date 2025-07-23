@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`getStorybookMain no stories should throw an error if no stories are defined 1`] = `
 "Could not find stories in main.js in ".storybook".
@@ -12,4 +12,4 @@ If you are using a mono-repository, please run the test-runner only against your
 You can change the config directory by using --config-dir <path-to-dir>"
 `;
 
-exports[`getStorybookMain should throw an error if no configuration is found 1`] = `"Could not load main.js in .storybook. Is the ".storybook" config directory correct? You can change it by using --config-dir <path-to-dir>"`;
+exports[`getStorybookMain should throw an error if no configuration is found 1`] = `"Module not found"`;

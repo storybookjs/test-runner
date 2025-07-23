@@ -48,12 +48,6 @@ export const getJestConfig = (): Config.InitialOptions => {
 
   const jestSerializerHtmlPath = path.dirname(require.resolve('jest-serializer-html'));
 
-  const swcJestPath = path.dirname(
-    require.resolve('@swc/jest', {
-      paths: [path.join(import.meta.dirname, '../node_modules')],
-    })
-  );
-
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
   const testMatch = STORYBOOK_STORIES_PATTERN?.split(';') ?? [];
