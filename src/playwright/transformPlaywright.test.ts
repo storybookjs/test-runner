@@ -1,13 +1,19 @@
 import dedent from 'ts-dedent';
 import path from 'path';
 import * as storybookMain from '../util/getStorybookMain';
+import { describe, beforeEach, expect, it, vi } from 'vitest';
 
 import { transformPlaywright } from './transformPlaywright';
 
-jest.mock('storybook/internal/common', () => ({
-  ...jest.requireActual('storybook/internal/common'),
-  getProjectRoot: jest.fn(() => '/foo/bar'),
-  normalizeStories: jest.fn(() => [
+vi.mock('storybook/internal/preview-api', async (importOriginal) => ({
+  ...(await importOriginal()),
+  userOrAutoTitle: vi.fn(() => 'foo/bar'),
+}));
+
+vi.mock('storybook/internal/common', async (importOriginal) => ({
+  ...(await importOriginal()),
+  getProjectRoot: vi.fn(() => '/foo/bar'),
+  normalizeStories: vi.fn(() => [
     {
       titlePrefix: 'Example',
       files: '**/*.stories.@(mdx|tsx|ts|jsx|js)',
@@ -18,7 +24,7 @@ jest.mock('storybook/internal/common', () => ({
   ]),
 }));
 
-jest.mock('../util/getTestRunnerConfig');
+vi.mock('../util/getTestRunnerConfig');
 
 expect.addSnapshotSerializer({
   print: (val: unknown) => (typeof val === 'string' ? val.trim() : String(val)),
@@ -28,9 +34,9 @@ expect.addSnapshotSerializer({
 describe('Playwright', () => {
   const filename = './stories/basic/Header.stories.js';
   beforeEach(() => {
-    const relativeSpy = jest.spyOn(path, 'relative');
+    const relativeSpy = vi.spyOn(path, 'relative');
     relativeSpy.mockReturnValueOnce('stories/basic/Header.stories.js');
-    jest.spyOn(storybookMain, 'getStorybookMain').mockImplementation(() =>
+    vi.spyOn(storybookMain, 'getStorybookMain').mockImplementation(() =>
       Promise.resolve({
         stories: [
           {
@@ -58,131 +64,129 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`
-        if (!require.main) {
-          describe("Example/foo/bar", () => {
-            describe("A", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--a",
-                    title: "Example/foo/bar",
-                    name: "A"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--a"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
+      ).resolves.toMatchInlineSnapshot(`
+        describe("foo/bar", () => {
+          describe("A", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--a",
+                  title: "foo/bar",
+                  name: "A"
                 };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
                 try {
-                  await testFn();
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--a"
+                  });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
+                    throw err;
                   } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
-              });
-            });
-            describe("B", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--b",
-                    title: "Example/foo/bar",
-                    name: "B"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--b"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
-                };
-                try {
-                  await testFn();
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"B"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
-                  } else {
-                    throw err;
-                  }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
-              });
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
             });
           });
-        }
+          describe("B", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--b",
+                  title: "foo/bar",
+                  name: "B"
+                };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--b"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
+                    throw err;
+                  }
+                }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+        });
       `);
     });
     it('should exclude stories when excludeTags matches', () => {
@@ -196,71 +200,69 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`
-        if (!require.main) {
-          describe("Example/foo/bar", () => {
-            describe("B", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--b",
-                    title: "Example/foo/bar",
-                    name: "B"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--b"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
+      ).resolves.toMatchInlineSnapshot(`
+        describe("foo/bar", () => {
+          describe("B", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--b",
+                  title: "foo/bar",
+                  name: "B"
                 };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
                 try {
-                  await testFn();
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--b"
+                  });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"B"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
+                    throw err;
                   } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
-              });
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
             });
           });
-        }
+        });
       `);
     });
     it('should skip stories when skipTags matches', () => {
@@ -274,131 +276,129 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`
-        if (!require.main) {
-          describe("Example/foo/bar", () => {
-            describe("A", () => {
-              it.skip("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--a",
-                    title: "Example/foo/bar",
-                    name: "A"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--a"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
+      ).resolves.toMatchInlineSnapshot(`
+        describe("foo/bar", () => {
+          describe("A", () => {
+            it.skip("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--a",
+                  title: "foo/bar",
+                  name: "A"
                 };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
                 try {
-                  await testFn();
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--a"
+                  });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
+                    throw err;
                   } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
-              });
-            });
-            describe("B", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--b",
-                    title: "Example/foo/bar",
-                    name: "B"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--b"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
-                };
-                try {
-                  await testFn();
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"B"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
-                  } else {
-                    throw err;
-                  }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
-              });
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
             });
           });
-        }
+          describe("B", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--b",
+                  title: "foo/bar",
+                  name: "B"
+                };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--b"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
+                    throw err;
+                  }
+                }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+        });
       `);
     });
     it('should work in conjunction with includeTags, excludeTags and skipTags', () => {
@@ -425,251 +425,249 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`
-        if (!require.main) {
-          describe("Example/foo/bar", () => {
-            describe("B", () => {
-              it.skip("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--b",
-                    title: "Example/foo/bar",
-                    name: "B"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--b"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
+      ).resolves.toMatchInlineSnapshot(`
+        describe("foo/bar", () => {
+          describe("B", () => {
+            it.skip("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--b",
+                  title: "foo/bar",
+                  name: "B"
                 };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
                 try {
-                  await testFn();
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--b"
+                  });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"B"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
+                    throw err;
                   } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
-              });
-            });
-            describe("C", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--c",
-                    title: "Example/foo/bar",
-                    name: "C"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--c"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
-                };
-                try {
-                  await testFn();
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"C"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
-                  } else {
-                    throw err;
-                  }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
-              });
-            });
-            describe("D", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--d",
-                    title: "Example/foo/bar",
-                    name: "D"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
                   }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--d"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
-                };
-                try {
-                  await testFn();
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"D"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
-                  } else {
-                    throw err;
-                  }
+                  await jestPlaywright.saveCoverage(page);
                 }
-              });
-            });
-            describe("E", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--e",
-                    title: "Example/foo/bar",
-                    name: "E"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--e"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
-                };
-                try {
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"E"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
-                  } else {
-                    throw err;
-                  }
+                } else {
+                  throw err;
                 }
-              });
+              }
             });
           });
-        }
+          describe("C", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--c",
+                  title: "foo/bar",
+                  name: "C"
+                };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--c"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
+                    throw err;
+                  }
+                }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"C"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+          describe("D", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--d",
+                  title: "foo/bar",
+                  name: "D"
+                };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--d"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
+                    throw err;
+                  }
+                }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"D"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+          describe("E", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--e",
+                  title: "foo/bar",
+                  name: "E"
+                };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--e"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
+                    throw err;
+                  }
+                }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"E"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+        });
       `);
     });
     it('should work with tag negation', () => {
@@ -689,131 +687,129 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`
-        if (!require.main) {
-          describe("Example/foo/bar", () => {
-            describe("A", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--a",
-                    title: "Example/foo/bar",
-                    name: "A"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--a"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
+      ).resolves.toMatchInlineSnapshot(`
+        describe("foo/bar", () => {
+          describe("A", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--a",
+                  title: "foo/bar",
+                  name: "A"
                 };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
                 try {
-                  await testFn();
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--a"
+                  });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
+                    throw err;
                   } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
-              });
-            });
-            describe("C", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--c",
-                    title: "Example/foo/bar",
-                    name: "C"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--c"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
-                };
-                try {
-                  await testFn();
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"C"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
-                  } else {
-                    throw err;
-                  }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
                 }
-              });
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
             });
           });
-        }
+          describe("C", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--c",
+                  title: "foo/bar",
+                  name: "C"
+                };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
+                try {
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--c"
+                  });
+                } catch (err) {
+                  if (err.toString().includes('Execution context was destroyed')) {
+                    throw err;
+                  } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
+                    throw err;
+                  }
+                }
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"C"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
+            });
+          });
+        });
       `);
     });
     it('should include "test" tag by default', () => {
@@ -829,71 +825,69 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`
-        if (!require.main) {
-          describe("Example/foo/bar", () => {
-            describe("A", () => {
-              it("smoke-test", async () => {
-                const testFn = async () => {
-                  const context = {
-                    id: "example-foo-bar--a",
-                    title: "Example/foo/bar",
-                    name: "A"
-                  };
-                  if (globalThis.__sbPreVisit) {
-                    await globalThis.__sbPreVisit(page, context);
-                  }
-                  let result;
-                  try {
-                    result = await page.evaluate(({
-                      id,
-                      hasPlayFn
-                    }) => __test(id, hasPlayFn), {
-                      id: "example-foo-bar--a"
-                    });
-                  } catch (err) {
-                    if (err.toString().includes('Execution context was destroyed')) {
-                      throw err;
-                    } else {
-                      if (globalThis.__sbPostVisit) {
-                        await globalThis.__sbPostVisit(page, {
-                          ...context,
-                          hasFailure: true
-                        });
-                      }
-                      throw err;
-                    }
-                  }
-                  if (globalThis.__sbPostVisit) {
-                    await globalThis.__sbPostVisit(page, context);
-                  }
-                  if (globalThis.__sbCollectCoverage) {
-                    const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                    if (!isCoverageSetupCorrectly) {
-                      throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-          The code in this story is not instrumented, which means the coverage setup is likely not correct.
-          More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                    }
-                    await jestPlaywright.saveCoverage(page);
-                  }
-                  return result;
+      ).resolves.toMatchInlineSnapshot(`
+        describe("foo/bar", () => {
+          describe("A", () => {
+            it("smoke-test", async () => {
+              const testFn = async () => {
+                const context = {
+                  id: "foo-bar--a",
+                  title: "foo/bar",
+                  name: "A"
                 };
+                if (globalThis.__sbPreVisit) {
+                  await globalThis.__sbPreVisit(page, context);
+                }
+                let result;
                 try {
-                  await testFn();
+                  result = await page.evaluate(({
+                    id,
+                    hasPlayFn
+                  }) => __test(id, hasPlayFn), {
+                    id: "foo-bar--a"
+                  });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
-                    console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
-                    await jestPlaywright.resetPage();
-                    await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                    await testFn();
+                    throw err;
                   } else {
+                    if (globalThis.__sbPostVisit) {
+                      await globalThis.__sbPostVisit(page, {
+                        ...context,
+                        hasFailure: true
+                      });
+                    }
                     throw err;
                   }
                 }
-              });
+                if (globalThis.__sbPostVisit) {
+                  await globalThis.__sbPostVisit(page, context);
+                }
+                if (globalThis.__sbCollectCoverage) {
+                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                  if (!isCoverageSetupCorrectly) {
+                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+        The code in this story is not instrumented, which means the coverage setup is likely not correct.
+        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                  }
+                  await jestPlaywright.saveCoverage(page);
+                }
+                return result;
+              };
+              try {
+                await testFn();
+              } catch (err) {
+                if (err.toString().includes('Execution context was destroyed')) {
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  await jestPlaywright.resetPage();
+                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                  await testFn();
+                } else {
+                  throw err;
+                }
+              }
             });
           });
-        }
+        });
       `);
     });
     it('should no op when includeTags is passed but not matched', () => {
@@ -907,12 +901,14 @@ describe('Playwright', () => {
       `,
           filename
         )
-      ).toMatchInlineSnapshot(`describe.skip('Example/foo/bar', () => { it('no-op', () => {}) });`);
+      ).resolves.toMatchInlineSnapshot(
+        `describe.skip('foo/bar', () => { it('no-op', () => {}) });`
+      );
     });
   });
 
-  it('should generate a play test when the story has a play function', () => {
-    expect(
+  it('should generate a play test when the story has a play function', async () => {
+    await expect(
       transformPlaywright(
         dedent`
         export default { title: 'foo/bar', component: Button };
@@ -921,75 +917,73 @@ describe('Playwright', () => {
       `,
         filename
       )
-    ).toMatchInlineSnapshot(`
-      if (!require.main) {
-        describe("Example/foo/bar", () => {
-          describe("A", () => {
-            it("play-test", async () => {
-              const testFn = async () => {
-                const context = {
-                  id: "example-foo-bar--a",
-                  title: "Example/foo/bar",
-                  name: "A"
-                };
-                if (globalThis.__sbPreVisit) {
-                  await globalThis.__sbPreVisit(page, context);
-                }
-                let result;
-                try {
-                  result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--a"
-                  });
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    throw err;
-                  } else {
-                    if (globalThis.__sbPostVisit) {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
-                    }
-                    throw err;
-                  }
-                }
-                if (globalThis.__sbPostVisit) {
-                  await globalThis.__sbPostVisit(page, context);
-                }
-                if (globalThis.__sbCollectCoverage) {
-                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                  if (!isCoverageSetupCorrectly) {
-                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-        The code in this story is not instrumented, which means the coverage setup is likely not correct.
-        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                  }
-                  await jestPlaywright.saveCoverage(page);
-                }
-                return result;
+    ).resolves.toMatchInlineSnapshot(`
+      describe("foo/bar", () => {
+        describe("A", () => {
+          it("play-test", async () => {
+            const testFn = async () => {
+              const context = {
+                id: "foo-bar--a",
+                title: "foo/bar",
+                name: "A"
               };
+              if (globalThis.__sbPreVisit) {
+                await globalThis.__sbPreVisit(page, context);
+              }
+              let result;
               try {
-                await testFn();
+                result = await page.evaluate(({
+                  id,
+                  hasPlayFn
+                }) => __test(id, hasPlayFn), {
+                  id: "foo-bar--a"
+                });
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
-                  await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                  await testFn();
+                  throw err;
                 } else {
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                  }
                   throw err;
                 }
               }
-            });
+              if (globalThis.__sbPostVisit) {
+                await globalThis.__sbPostVisit(page, context);
+              }
+              if (globalThis.__sbCollectCoverage) {
+                const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                if (!isCoverageSetupCorrectly) {
+                  throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+      The code in this story is not instrumented, which means the coverage setup is likely not correct.
+      More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                }
+                await jestPlaywright.saveCoverage(page);
+              }
+              return result;
+            };
+            try {
+              await testFn();
+            } catch (err) {
+              if (err.toString().includes('Execution context was destroyed')) {
+                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                await jestPlaywright.resetPage();
+                await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                await testFn();
+              } else {
+                throw err;
+              }
+            }
           });
         });
-      }
+      });
     `);
   });
-  it('should generate a smoke test when story does not have a play function', () => {
-    expect(
+  it('should generate a smoke test when story does not have a play function', async () => {
+    await expect(
       transformPlaywright(
         dedent`
         export default { title: 'foo/bar' };
@@ -997,75 +991,73 @@ describe('Playwright', () => {
       `,
         filename
       )
-    ).toMatchInlineSnapshot(`
-      if (!require.main) {
-        describe("Example/foo/bar", () => {
-          describe("A", () => {
-            it("smoke-test", async () => {
-              const testFn = async () => {
-                const context = {
-                  id: "example-foo-bar--a",
-                  title: "Example/foo/bar",
-                  name: "A"
-                };
-                if (globalThis.__sbPreVisit) {
-                  await globalThis.__sbPreVisit(page, context);
-                }
-                let result;
-                try {
-                  result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-foo-bar--a"
-                  });
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    throw err;
-                  } else {
-                    if (globalThis.__sbPostVisit) {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
-                    }
-                    throw err;
-                  }
-                }
-                if (globalThis.__sbPostVisit) {
-                  await globalThis.__sbPostVisit(page, context);
-                }
-                if (globalThis.__sbCollectCoverage) {
-                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                  if (!isCoverageSetupCorrectly) {
-                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-        The code in this story is not instrumented, which means the coverage setup is likely not correct.
-        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                  }
-                  await jestPlaywright.saveCoverage(page);
-                }
-                return result;
+    ).resolves.toMatchInlineSnapshot(`
+      describe("foo/bar", () => {
+        describe("A", () => {
+          it("smoke-test", async () => {
+            const testFn = async () => {
+              const context = {
+                id: "foo-bar--a",
+                title: "foo/bar",
+                name: "A"
               };
+              if (globalThis.__sbPreVisit) {
+                await globalThis.__sbPreVisit(page, context);
+              }
+              let result;
               try {
-                await testFn();
+                result = await page.evaluate(({
+                  id,
+                  hasPlayFn
+                }) => __test(id, hasPlayFn), {
+                  id: "foo-bar--a"
+                });
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/foo/bar"}/\${"A"}". Retrying...\`);
-                  await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                  await testFn();
+                  throw err;
                 } else {
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                  }
                   throw err;
                 }
               }
-            });
+              if (globalThis.__sbPostVisit) {
+                await globalThis.__sbPostVisit(page, context);
+              }
+              if (globalThis.__sbCollectCoverage) {
+                const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                if (!isCoverageSetupCorrectly) {
+                  throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+      The code in this story is not instrumented, which means the coverage setup is likely not correct.
+      More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                }
+                await jestPlaywright.saveCoverage(page);
+              }
+              return result;
+            };
+            try {
+              await testFn();
+            } catch (err) {
+              if (err.toString().includes('Execution context was destroyed')) {
+                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                await jestPlaywright.resetPage();
+                await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                await testFn();
+              } else {
+                throw err;
+              }
+            }
           });
         });
-      }
+      });
     `);
   });
-  it('should generate a smoke test with auto title', () => {
-    expect(
+  it('should generate a smoke test with auto title', async () => {
+    await expect(
       transformPlaywright(
         dedent`
         export default { component: Button };
@@ -1073,71 +1065,69 @@ describe('Playwright', () => {
       `,
         filename
       )
-    ).toMatchInlineSnapshot(`
-      if (!require.main) {
-        describe("Example/Header", () => {
-          describe("A", () => {
-            it("smoke-test", async () => {
-              const testFn = async () => {
-                const context = {
-                  id: "example-header--a",
-                  title: "Example/Header",
-                  name: "A"
-                };
-                if (globalThis.__sbPreVisit) {
-                  await globalThis.__sbPreVisit(page, context);
-                }
-                let result;
-                try {
-                  result = await page.evaluate(({
-                    id,
-                    hasPlayFn
-                  }) => __test(id, hasPlayFn), {
-                    id: "example-header--a"
-                  });
-                } catch (err) {
-                  if (err.toString().includes('Execution context was destroyed')) {
-                    throw err;
-                  } else {
-                    if (globalThis.__sbPostVisit) {
-                      await globalThis.__sbPostVisit(page, {
-                        ...context,
-                        hasFailure: true
-                      });
-                    }
-                    throw err;
-                  }
-                }
-                if (globalThis.__sbPostVisit) {
-                  await globalThis.__sbPostVisit(page, context);
-                }
-                if (globalThis.__sbCollectCoverage) {
-                  const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-                  if (!isCoverageSetupCorrectly) {
-                    throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-        The code in this story is not instrumented, which means the coverage setup is likely not correct.
-        More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-                  }
-                  await jestPlaywright.saveCoverage(page);
-                }
-                return result;
+    ).resolves.toMatchInlineSnapshot(`
+      describe("AutoTitle", () => {
+        describe("A", () => {
+          it("smoke-test", async () => {
+            const testFn = async () => {
+              const context = {
+                id: "autotitle--a",
+                title: "AutoTitle",
+                name: "A"
               };
+              if (globalThis.__sbPreVisit) {
+                await globalThis.__sbPreVisit(page, context);
+              }
+              let result;
               try {
-                await testFn();
+                result = await page.evaluate(({
+                  id,
+                  hasPlayFn
+                }) => __test(id, hasPlayFn), {
+                  id: "autotitle--a"
+                });
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
-                  await jestPlaywright.resetPage();
-                  await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-                  await testFn();
+                  throw err;
                 } else {
+                  if (globalThis.__sbPostVisit) {
+                    await globalThis.__sbPostVisit(page, {
+                      ...context,
+                      hasFailure: true
+                    });
+                  }
                   throw err;
                 }
               }
-            });
+              if (globalThis.__sbPostVisit) {
+                await globalThis.__sbPostVisit(page, context);
+              }
+              if (globalThis.__sbCollectCoverage) {
+                const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+                if (!isCoverageSetupCorrectly) {
+                  throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+      The code in this story is not instrumented, which means the coverage setup is likely not correct.
+      More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+                }
+                await jestPlaywright.saveCoverage(page);
+              }
+              return result;
+            };
+            try {
+              await testFn();
+            } catch (err) {
+              if (err.toString().includes('Execution context was destroyed')) {
+                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"AutoTitle"}/\${"A"}". Retrying...\`);
+                await jestPlaywright.resetPage();
+                await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+                await testFn();
+              } else {
+                throw err;
+              }
+            }
           });
         });
-      }
+      });
     `);
   });
 });
