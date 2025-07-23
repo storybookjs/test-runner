@@ -86,6 +86,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
     "@vitejs/plugin-react": "^4.0.3",
+    "@vitest/coverage-v8": "^3.2.4",
     "auto": "^11.1.6",
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.1.1",
