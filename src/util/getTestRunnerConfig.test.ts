@@ -1,6 +1,8 @@
 import { TestRunnerConfig } from '../playwright/hooks';
 import { getTestRunnerConfig } from './getTestRunnerConfig';
 import { join, resolve } from 'path';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { serverRequire } from 'storybook/internal/common';
 
 const testRunnerConfig: TestRunnerConfig = {
   setup: () => {
@@ -26,45 +28,41 @@ const testRunnerConfig: TestRunnerConfig = {
   },
 };
 
-jest.mock('storybook/internal/common', () => ({
-  serverRequire: jest.fn(),
+vi.mock('storybook/internal/common', () => ({
+  serverRequire: vi.fn(),
 }));
 
-describe('getTestRunnerConfig', () => {
+describe.only('getTestRunnerConfig', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  it('should load the test runner config', () => {
+  it('should load the test runner config', async () => {
     const configDir = '.storybook';
-    (require('storybook/internal/common').serverRequire as jest.Mock).mockReturnValueOnce(
-      testRunnerConfig
-    );
+    vi.mocked(serverRequire).mockResolvedValueOnce(testRunnerConfig);
 
-    const result = getTestRunnerConfig(configDir);
+    const result = await getTestRunnerConfig(configDir);
 
     expect(result).toEqual(testRunnerConfig);
-    expect(require('storybook/internal/common').serverRequire).toHaveBeenCalledWith(
+    expect(vi.mocked(serverRequire)).toHaveBeenCalledWith(
       join(resolve('.storybook', 'test-runner'))
     );
   });
 
-  it('should cache the test runner config', () => {
+  it('should cache the test runner config', async () => {
     const configDir = '.storybook';
-    (require('storybook/internal/common').serverRequire as jest.Mock).mockReturnValueOnce(
-      testRunnerConfig
-    );
+    vi.mocked(serverRequire).mockResolvedValueOnce(testRunnerConfig);
 
-    const result1 = getTestRunnerConfig(configDir);
-    const result2 = getTestRunnerConfig(configDir);
+    const result1 = await getTestRunnerConfig(configDir);
+    const result2 = await getTestRunnerConfig(configDir);
 
     expect(result1).toEqual(testRunnerConfig);
     expect(result2).toEqual(testRunnerConfig);
   });
 
-  it('should load the test runner config with default configDir', () => {
+  it('should load the test runner config with default configDir', async () => {
     process.env.STORYBOOK_CONFIG_DIR = '.storybook';
-    const result = getTestRunnerConfig();
+    const result = await getTestRunnerConfig();
     expect(result).toEqual(testRunnerConfig);
   });
 

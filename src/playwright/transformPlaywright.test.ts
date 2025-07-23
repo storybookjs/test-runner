@@ -7,12 +7,12 @@ import { transformPlaywright } from './transformPlaywright';
 
 vi.mock('storybook/internal/preview-api', async (importOriginal) => ({
   ...(await importOriginal()),
-  userOrAutoTitle: vi.fn(() => 'foo/bar'),
+  userOrAutoTitle: vi.fn(() => 'Example/Header'),
 }));
 
 vi.mock('storybook/internal/common', async (importOriginal) => ({
   ...(await importOriginal()),
-  getProjectRoot: vi.fn(() => '/foo/bar'),
+  getProjectRoot: vi.fn(() => '/stories/basic'),
   normalizeStories: vi.fn(() => [
     {
       titlePrefix: 'Example',
@@ -54,8 +54,8 @@ describe('Playwright', () => {
   });
 
   describe('tag filtering mechanism', () => {
-    it('should include all stories when there is no tag filtering', () => {
-      expect(
+    it('should include all stories when there is no tag filtering', async () => {
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
@@ -65,13 +65,13 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(`
-        describe("foo/bar", () => {
+        describe("Example/Header", () => {
           describe("A", () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--a",
-                  title: "foo/bar",
+                  id: "example-header--a",
+                  title: "Example/Header",
                   name: "A"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -83,7 +83,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--a"
+                    id: "example-header--a"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -116,7 +116,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -130,8 +130,8 @@ describe('Playwright', () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--b",
-                  title: "foo/bar",
+                  id: "example-header--b",
+                  title: "Example/Header",
                   name: "B"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -143,7 +143,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--b"
+                    id: "example-header--b"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -176,7 +176,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"B"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -189,9 +189,9 @@ describe('Playwright', () => {
         });
       `);
     });
-    it('should exclude stories when excludeTags matches', () => {
+    it('should exclude stories when excludeTags matches', async () => {
       process.env.STORYBOOK_EXCLUDE_TAGS = 'exclude-test';
-      expect(
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
@@ -201,13 +201,13 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(`
-        describe("foo/bar", () => {
+        describe("Example/Header", () => {
           describe("B", () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--b",
-                  title: "foo/bar",
+                  id: "example-header--b",
+                  title: "Example/Header",
                   name: "B"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -219,7 +219,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--b"
+                    id: "example-header--b"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -252,7 +252,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"B"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -265,9 +265,9 @@ describe('Playwright', () => {
         });
       `);
     });
-    it('should skip stories when skipTags matches', () => {
+    it('should skip stories when skipTags matches', async () => {
       process.env.STORYBOOK_SKIP_TAGS = 'skip-test';
-      expect(
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
@@ -277,13 +277,13 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(`
-        describe("foo/bar", () => {
+        describe("Example/Header", () => {
           describe("A", () => {
             it.skip("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--a",
-                  title: "foo/bar",
+                  id: "example-header--a",
+                  title: "Example/Header",
                   name: "A"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -295,7 +295,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--a"
+                    id: "example-header--a"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -328,7 +328,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -342,8 +342,8 @@ describe('Playwright', () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--b",
-                  title: "foo/bar",
+                  id: "example-header--b",
+                  title: "Example/Header",
                   name: "B"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -355,7 +355,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--b"
+                    id: "example-header--b"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -388,7 +388,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"B"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -401,7 +401,7 @@ describe('Playwright', () => {
         });
       `);
     });
-    it('should work in conjunction with includeTags, excludeTags and skipTags', () => {
+    it('should work in conjunction with includeTags, excludeTags and skipTags', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play,design,global-tag';
       process.env.STORYBOOK_SKIP_TAGS = 'skip';
       process.env.STORYBOOK_EXCLUDE_TAGS = 'exclude';
@@ -413,7 +413,7 @@ describe('Playwright', () => {
       // - C being included
       // - D being included
       // - E being excluded
-      expect(
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
@@ -426,13 +426,13 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(`
-        describe("foo/bar", () => {
+        describe("Example/Header", () => {
           describe("B", () => {
             it.skip("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--b",
-                  title: "foo/bar",
+                  id: "example-header--b",
+                  title: "Example/Header",
                   name: "B"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -444,7 +444,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--b"
+                    id: "example-header--b"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -477,7 +477,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"B"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"B"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -491,8 +491,8 @@ describe('Playwright', () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--c",
-                  title: "foo/bar",
+                  id: "example-header--c",
+                  title: "Example/Header",
                   name: "C"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -504,7 +504,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--c"
+                    id: "example-header--c"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -537,7 +537,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"C"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"C"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -551,8 +551,8 @@ describe('Playwright', () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--d",
-                  title: "foo/bar",
+                  id: "example-header--d",
+                  title: "Example/Header",
                   name: "D"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -564,7 +564,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--d"
+                    id: "example-header--d"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -597,7 +597,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"D"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"D"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -611,8 +611,8 @@ describe('Playwright', () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--e",
-                  title: "foo/bar",
+                  id: "example-header--e",
+                  title: "Example/Header",
                   name: "E"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -624,7 +624,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--e"
+                    id: "example-header--e"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -657,7 +657,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"E"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"E"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -670,14 +670,14 @@ describe('Playwright', () => {
         });
       `);
     });
-    it('should work with tag negation', () => {
+    it('should work with tag negation', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play,test';
       process.env.STORYBOOK_PREVIEW_TAGS = '!test';
       // Should result in:
       // - A being included
       // - B being excluded because it has no play nor test tag (removed by negation in preview tags)
       // - C being included because it has test tag (overwritten via story tags)
-      expect(
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button, tags: ['play'] };
@@ -688,13 +688,13 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(`
-        describe("foo/bar", () => {
+        describe("Example/Header", () => {
           describe("A", () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--a",
-                  title: "foo/bar",
+                  id: "example-header--a",
+                  title: "Example/Header",
                   name: "A"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -706,7 +706,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--a"
+                    id: "example-header--a"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -739,7 +739,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -753,8 +753,8 @@ describe('Playwright', () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--c",
-                  title: "foo/bar",
+                  id: "example-header--c",
+                  title: "Example/Header",
                   name: "C"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -766,7 +766,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--c"
+                    id: "example-header--c"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -799,7 +799,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"C"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"C"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -812,11 +812,11 @@ describe('Playwright', () => {
         });
       `);
     });
-    it('should include "test" tag by default', () => {
+    it('should include "test" tag by default', async () => {
       // Should result in:
       // - A being included
       // - B being excluded
-      expect(
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
@@ -826,13 +826,13 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(`
-        describe("foo/bar", () => {
+        describe("Example/Header", () => {
           describe("A", () => {
             it("smoke-test", async () => {
               const testFn = async () => {
                 const context = {
-                  id: "foo-bar--a",
-                  title: "foo/bar",
+                  id: "example-header--a",
+                  title: "Example/Header",
                   name: "A"
                 };
                 if (globalThis.__sbPreVisit) {
@@ -844,7 +844,7 @@ describe('Playwright', () => {
                     id,
                     hasPlayFn
                   }) => __test(id, hasPlayFn), {
-                    id: "foo-bar--a"
+                    id: "example-header--a"
                   });
                 } catch (err) {
                   if (err.toString().includes('Execution context was destroyed')) {
@@ -877,7 +877,7 @@ describe('Playwright', () => {
                 await testFn();
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
-                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                  console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                   await jestPlaywright.resetPage();
                   await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                   await testFn();
@@ -890,9 +890,9 @@ describe('Playwright', () => {
         });
       `);
     });
-    it('should no op when includeTags is passed but not matched', () => {
+    it('should no op when includeTags is passed but not matched', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play';
-      expect(
+      await expect(
         transformPlaywright(
           dedent`
         export default { title: 'foo/bar', component: Button };
@@ -902,7 +902,7 @@ describe('Playwright', () => {
           filename
         )
       ).resolves.toMatchInlineSnapshot(
-        `describe.skip('foo/bar', () => { it('no-op', () => {}) });`
+        `describe.skip('Example/Header', () => { it('no-op', () => {}) });`
       );
     });
   });
@@ -918,13 +918,13 @@ describe('Playwright', () => {
         filename
       )
     ).resolves.toMatchInlineSnapshot(`
-      describe("foo/bar", () => {
+      describe("Example/Header", () => {
         describe("A", () => {
           it("play-test", async () => {
             const testFn = async () => {
               const context = {
-                id: "foo-bar--a",
-                title: "foo/bar",
+                id: "example-header--a",
+                title: "Example/Header",
                 name: "A"
               };
               if (globalThis.__sbPreVisit) {
@@ -936,7 +936,7 @@ describe('Playwright', () => {
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
-                  id: "foo-bar--a"
+                  id: "example-header--a"
                 });
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
@@ -969,7 +969,7 @@ describe('Playwright', () => {
               await testFn();
             } catch (err) {
               if (err.toString().includes('Execution context was destroyed')) {
-                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                 await jestPlaywright.resetPage();
                 await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                 await testFn();
@@ -992,13 +992,13 @@ describe('Playwright', () => {
         filename
       )
     ).resolves.toMatchInlineSnapshot(`
-      describe("foo/bar", () => {
+      describe("Example/Header", () => {
         describe("A", () => {
           it("smoke-test", async () => {
             const testFn = async () => {
               const context = {
-                id: "foo-bar--a",
-                title: "foo/bar",
+                id: "example-header--a",
+                title: "Example/Header",
                 name: "A"
               };
               if (globalThis.__sbPreVisit) {
@@ -1010,7 +1010,7 @@ describe('Playwright', () => {
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
-                  id: "foo-bar--a"
+                  id: "example-header--a"
                 });
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
@@ -1043,7 +1043,7 @@ describe('Playwright', () => {
               await testFn();
             } catch (err) {
               if (err.toString().includes('Execution context was destroyed')) {
-                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"foo/bar"}/\${"A"}". Retrying...\`);
+                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                 await jestPlaywright.resetPage();
                 await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                 await testFn();
@@ -1066,13 +1066,13 @@ describe('Playwright', () => {
         filename
       )
     ).resolves.toMatchInlineSnapshot(`
-      describe("AutoTitle", () => {
+      describe("Example/Header", () => {
         describe("A", () => {
           it("smoke-test", async () => {
             const testFn = async () => {
               const context = {
-                id: "autotitle--a",
-                title: "AutoTitle",
+                id: "example-header--a",
+                title: "Example/Header",
                 name: "A"
               };
               if (globalThis.__sbPreVisit) {
@@ -1084,7 +1084,7 @@ describe('Playwright', () => {
                   id,
                   hasPlayFn
                 }) => __test(id, hasPlayFn), {
-                  id: "autotitle--a"
+                  id: "example-header--a"
                 });
               } catch (err) {
                 if (err.toString().includes('Execution context was destroyed')) {
@@ -1117,7 +1117,7 @@ describe('Playwright', () => {
               await testFn();
             } catch (err) {
               if (err.toString().includes('Execution context was destroyed')) {
-                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"AutoTitle"}/\${"A"}". Retrying...\`);
+                console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Example/Header"}/\${"A"}". Retrying...\`);
                 await jestPlaywright.resetPage();
                 await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
                 await testFn();

@@ -1,31 +1,31 @@
 import { getStorybookMain, resetStorybookMainCache, storybookMainConfig } from './getStorybookMain';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { serverRequire } from 'storybook/internal/common';
 
-jest.mock('storybook/internal/common', () => ({
-  serverRequire: jest.fn(),
+vi.mock('storybook/internal/common', () => ({
+  serverRequire: vi.fn(),
 }));
 
 describe('getStorybookMain', () => {
   beforeEach(() => {
     resetStorybookMainCache();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should throw an error if no configuration is found', async () => {
-    (require('storybook/internal/common').serverRequire as jest.Mock).mockRejectedValueOnce(
-      new Error('Module not found')
-    );
+    vi.mocked(serverRequire).mockRejectedValueOnce(new Error('Module not found'));
     await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
   });
 
   describe('no stories', () => {
     it('should throw an error if no stories are defined', async () => {
-      (require('storybook/internal/common').serverRequire as jest.Mock).mockResolvedValueOnce({});
+      vi.mocked(serverRequire).mockResolvedValueOnce({});
 
       await expect(getStorybookMain('.storybook')).rejects.toThrowErrorMatchingSnapshot();
     });
 
     it('should throw an error if stories list is empty', async () => {
-      (require('storybook/internal/common').serverRequire as jest.Mock).mockResolvedValueOnce({
+      vi.mocked(serverRequire).mockResolvedValueOnce({
         stories: [],
       });
 
@@ -43,9 +43,7 @@ describe('getStorybookMain', () => {
       ],
     };
 
-    (require('storybook/internal/common').serverRequire as jest.Mock).mockResolvedValueOnce(
-      mockedMain
-    );
+    vi.mocked(serverRequire).mockResolvedValueOnce(mockedMain);
 
     const res = await getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);
@@ -60,7 +58,7 @@ describe('getStorybookMain', () => {
         },
       ],
     };
-    storybookMainConfig.set('configDir', mockedMain);
+    storybookMainConfig.set('.storybook', mockedMain);
 
     const res = await getStorybookMain('.storybook');
     expect(res).toMatchObject(mockedMain);

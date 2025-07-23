@@ -6,7 +6,7 @@ const template = (babelTemplate as any).default ?? babelTemplate;
 import { userOrAutoTitle } from 'storybook/internal/preview-api';
 import dedent from 'ts-dedent';
 
-import { getStorybookMetadata } from '../util';
+import { getStorybookMetadata } from '../util/getStorybookMetadata';
 import { transformCsf } from '../csf/transformCsf';
 import type { TestPrefixer } from '../csf/transformCsf';
 

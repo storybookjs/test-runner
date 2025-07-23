@@ -12,7 +12,6 @@ export const getStorybookMain = async (configDir = '.storybook') => {
 
   try {
     const mainConfig = await serverRequire(join(resolve(configDir), 'main'));
-
     if (!mainConfig) {
       throw new Error(
         `Could not load main.js in ${configDir}. Is the "${configDir}" config directory correct? You can change it by using --config-dir <path-to-dir>`
