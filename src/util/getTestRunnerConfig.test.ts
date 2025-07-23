@@ -32,7 +32,7 @@ vi.mock('storybook/internal/common', () => ({
   serverRequire: vi.fn(),
 }));
 
-describe.only('getTestRunnerConfig', () => {
+describe('getTestRunnerConfig', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
