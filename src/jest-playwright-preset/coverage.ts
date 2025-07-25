@@ -1,8 +1,9 @@
 import * as uuid from 'uuid';
-import path from 'node:path';
-import fs from 'node:fs';
+import path from 'path';
+import fs from 'fs';
 import type { Page } from 'playwright-core';
-import { rimraf } from 'rimraf';
+import { promisify } from 'util';
+import rimraf from 'rimraf';
 const fsAsync = fs.promises;
 
 // @ts-ignore
@@ -13,7 +14,7 @@ const NYC_DIR = '.nyc_output';
 const COV_MERGE_DIR = path.join(NYC_DIR, 'merge');
 
 const cleanMergeFiles = async (): Promise<void> => {
-  await rimraf(COV_MERGE_DIR);
+  await promisify(rimraf)(COV_MERGE_DIR);
 };
 
 export const setupCoverage = async (): Promise<void> => {

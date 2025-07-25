@@ -72,7 +72,7 @@
     "nyc": "^15.1.0",
     "playwright": "^1.14.0",
     "playwright-core": ">=1.2.0",
-    "rimraf": "^6.0.1",
+    "rimraf": "^3.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -87,6 +87,7 @@
     "@storybook/react-vite": "0.0.0-pr-31819-sha-7e336af7",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
+    "@types/rimraf": "^3.0.2",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
