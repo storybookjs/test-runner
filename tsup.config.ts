@@ -5,7 +5,15 @@ import { builtinModules } from 'node:module';
 export default defineConfig([
   {
     clean: true,
-    entry: ['./src/index.ts', './src/test-storybook.ts'],
+    entry: [
+      './src/index.ts',
+      './src/test-storybook.ts',
+      './src/jest-playwright-entries/extends.ts',
+      './src/jest-playwright-entries/setup.ts',
+      './src/jest-playwright-entries/teardown.ts',
+      './src/jest-playwright-entries/test-environment.ts',
+      './src/jest-playwright-entries/runner.ts',
+    ],
     format: ['esm'],
     splitting: false,
     dts: true,

@@ -1,9 +1,13 @@
-import path from 'path';
-// @ts-ignore
+import path from 'pathe';
 import { getProjectRoot } from 'storybook/internal/common';
 import type { Config } from '@jest/types';
 
-const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
+const getTestRunnerPath = () => {
+  return (
+    process.env.STORYBOOK_TEST_RUNNER_PATH ??
+    path.dirname(require.resolve('@storybook/test-runner'))
+  );
+};
 
 /**
  * IMPORTANT NOTE:
@@ -18,18 +22,17 @@ const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@stor
  * necessary moving parts are all required within the correct path.
  * */
 const getJestPlaywrightConfig = (): Config.InitialOptions => {
-  const TEST_RUNNER_PATH = getTestRunnerPath();
-  const presetBasePath = path.dirname(require.resolve('jest-playwright-preset'));
+  const resolvedRunnerPath = getTestRunnerPath();
   const expectPlaywrightPath = path.dirname(require.resolve('expect-playwright'));
   return {
-    runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: require.resolve(`${TEST_RUNNER_PATH}/playwright/global-setup.js`),
-    globalTeardown: require.resolve(`${TEST_RUNNER_PATH}/playwright/global-teardown.js`),
-    testEnvironment: require.resolve(`${TEST_RUNNER_PATH}/playwright/custom-environment.js`),
+    runner: path.join(resolvedRunnerPath, 'dist/jest-playwright-entries/runner.js'),
+    globalSetup: path.join(resolvedRunnerPath, 'playwright/global-setup.js'),
+    globalTeardown: path.join(resolvedRunnerPath, 'playwright/global-teardown.js'),
+    testEnvironment: path.join(resolvedRunnerPath, 'playwright/custom-environment.js'),
     setupFilesAfterEnv: [
-      require.resolve(`${TEST_RUNNER_PATH}/playwright/jest-setup.js`),
+      path.join(resolvedRunnerPath, 'playwright/jest-setup.js'),
       expectPlaywrightPath,
-      path.join(presetBasePath, 'lib', 'extends.js'),
+      path.join(resolvedRunnerPath, 'dist/jest-playwright-entries/extends.js'),
     ],
   };
 };
