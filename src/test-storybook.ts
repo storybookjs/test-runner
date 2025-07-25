@@ -1,25 +1,23 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import { execSync } from 'child_process';
-import fetch from 'node-fetch';
 import { canBindToHost } from 'can-bind-to-host';
-import dedent from 'ts-dedent';
-import path from 'path';
-import { join, resolve } from 'path';
-import tempy from 'tempy';
-import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
+import { glob } from 'glob';
+import { execSync, spawn } from 'node:child_process';
+import fs from 'node:fs';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+import path, { join, resolve } from 'pathe';
 import { getInterpretedFile } from 'storybook/internal/common';
 import { readConfig } from 'storybook/internal/csf-tools';
 import { telemetry } from 'storybook/internal/telemetry';
-import { glob } from 'glob';
+import tempy from 'tempy';
+import dedent from 'ts-dedent';
 
+import { TestRunnerConfig } from './playwright/hooks.js';
+import { transformPlaywrightJson } from './playwright/transformPlaywrightJson.js';
 import { JestOptions, getCliOptions } from './util/getCliOptions.js';
 import { getStorybookMetadata } from './util/getStorybookMetadata.js';
 import { getTestRunnerConfig } from './util/getTestRunnerConfig.js';
-import { transformPlaywrightJson } from './playwright/transformPlaywrightJson.js';
-import { TestRunnerConfig } from './playwright/hooks.js';
 
 // Get the current file's directory in ESM
 const __filename2 = fileURLToPath(import.meta.url);
@@ -156,14 +154,52 @@ async function executeJestPlaywright(args: JestOptions) {
     userDefinedJestConfig ||
     path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
-  const command = `node --experimental-vm-modules ${jestPath} ${argv.join(
+  const command = `node --experimental-vm-modules "${jestPath}" ${argv.join(
     ' '
-  )} --config ${jestConfigPath}`;
+  )} --config "${jestConfigPath}" --color`;
 
-  execSync(command, {
-    stdio: 'inherit',
-    cwd: process.cwd(),
-  });
+  const runThing = async (type: 'previous' | 'current') => {
+    if (type === 'previous') {
+      execSync(command, {
+        stdio: 'inherit',
+        cwd: process.cwd(),
+      });
+    } else {
+      const child = spawn(command, {
+        shell: true,
+        cwd: process.cwd(),
+        stdio: ['inherit', 'pipe'],
+      });
+      const shouldLog = (str: string) => {
+        return (
+          !str.includes('watchman') &&
+          !str.includes('DeprecationWarning') &&
+          !str.includes('ExperimentalWarning')
+        );
+      };
+      const exitCode = await new Promise<number>((resolve) => {
+        // filter out messages like DeprecationWarning and ExperimentalWarning
+        child.stdout?.on('data', (data) => {
+          const str = data.toString();
+          if (shouldLog(str)) {
+            process.stdout.write(data);
+          }
+        });
+        child.stderr?.on('data', (data) => {
+          const str = data.toString();
+          if (shouldLog(str)) {
+            process.stderr.write(data);
+          }
+        });
+
+        child.on('exit', (exitCode) => resolve(exitCode || 0));
+      });
+
+      process.exit(exitCode);
+    }
+  };
+
+  await runThing('previous');
 }
 
 async function checkStorybook(url: string) {

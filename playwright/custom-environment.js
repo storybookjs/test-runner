@@ -1,8 +1,5 @@
 import { setupPage } from '../dist/index.js';
-import _PlaywrightEnvironment from 'jest-playwright-preset/lib/PlaywrightEnvironment.js';
-
-// @ts-expect-error check later
-const PlaywrightEnvironment = _PlaywrightEnvironment.default ?? _PlaywrightEnvironment;
+import PlaywrightEnvironment from '../dist/jest-playwright-entries/test-environment.js';
 
 class CustomEnvironment extends PlaywrightEnvironment {
   async setup() {
