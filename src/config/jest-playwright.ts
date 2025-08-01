@@ -1,6 +1,7 @@
-import path from 'path';
-import { getProjectRoot } from 'storybook/internal/common';
+import path from 'node:path';
 import type { Config } from '@jest/types';
+
+import { getProjectRoot } from '../util/projectRoot';
 
 const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
 
@@ -83,7 +84,7 @@ export const getJestConfig = (): Config.InitialOptions => {
       '^.+\\.(story|stories)\\.[jt]sx?$': require.resolve(
         `${TEST_RUNNER_PATH}/playwright/transform`
       ),
-      '^.+\\.[jt]sx?$': swcJestPath,
+      '^.+\\.[jt]sx?$': [swcJestPath, { jsc: { target: 'es2022' } }],
     },
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {

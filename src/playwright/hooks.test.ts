@@ -37,7 +37,7 @@ describe('test-runner', () => {
 
     it('calls page.evaluate with the correct arguments', async () => {
       const context = { id: 'id', title: 'title', name: 'name' };
-      await getStoryContext(page, context);
+      await getStoryContext(page as any, context);
       expect(page.evaluate).toHaveBeenCalledWith(expect.any(Function), { storyId: context.id });
     });
 
@@ -45,7 +45,7 @@ describe('test-runner', () => {
       const context = { id: 'id', title: 'title', name: 'name' };
       const storyContext = { kind: 'kind', name: 'name' };
       page.evaluate.mockResolvedValueOnce(storyContext);
-      const result = await getStoryContext(page, context);
+      const result = await getStoryContext(page as any, context);
       expect(result).toBe(storyContext);
     });
 
@@ -62,7 +62,7 @@ describe('test-runner', () => {
         return storyContext;
       });
 
-      await getStoryContext(page, context);
+      await getStoryContext(page as any, context);
 
       // Check that globalThis.__getContext was called with the correct storyId
       expect(globalThis.__getContext).toHaveBeenCalledWith(context.id);
@@ -87,7 +87,7 @@ describe('test-runner', () => {
     });
 
     it('waits for the page to be ready', async () => {
-      await waitForPageReady(page);
+      await waitForPageReady(page as any);
       expect(page.waitForLoadState).toHaveBeenCalledWith('domcontentloaded');
       expect(page.waitForLoadState).toHaveBeenCalledWith('load');
       expect(page.waitForLoadState).toHaveBeenCalledWith('networkidle');
@@ -106,7 +106,7 @@ describe('test-runner', () => {
           ready: 'ready',
         },
       } as unknown as Document;
-      await waitForPageReady(page);
+      await waitForPageReady(page as any);
 
       expect(page.evaluate).toHaveBeenCalledWith(expect.any(Function));
       const evaluateFn = page.evaluate.mock.calls[0][0];

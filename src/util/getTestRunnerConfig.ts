@@ -1,6 +1,6 @@
-import { join, resolve } from 'path';
-import { serverRequire } from 'storybook/internal/common';
-import { TestRunnerConfig } from '../playwright/hooks';
+import { join, resolve } from 'node:path';
+import type { TestRunnerConfig } from '../playwright/hooks';
+import { serverRequire } from './serverRequire';
 
 let testRunnerConfig: TestRunnerConfig;
 let loaded = false;
@@ -13,7 +13,11 @@ export const getTestRunnerConfig = (
     return testRunnerConfig;
   }
 
-  testRunnerConfig = serverRequire(join(resolve(configDir), 'test-runner'));
-  loaded = true;
-  return testRunnerConfig;
+  try {
+    testRunnerConfig = serverRequire(join(resolve(configDir), 'test-runner'));
+    loaded = true;
+    return testRunnerConfig;
+  } catch (error) {
+    return undefined;
+  }
 };

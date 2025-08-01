@@ -13,7 +13,9 @@ describe('getJestConfig', () => {
         '^.+\\.(story|stories)\\.[jt]sx?$': `${path.dirname(
           require.resolve('@storybook/test-runner/playwright/transform')
         )}/transform.js`,
-        '^.+\\.[jt]sx?$': path.resolve('../test-runner/node_modules/@swc/jest'),
+        '^.+\\.[jt]sx?$': expect.arrayContaining([
+          path.resolve('../test-runner/node_modules/@swc/jest'),
+        ]),
       },
       snapshotSerializers: [path.resolve('../test-runner/node_modules/jest-serializer-html')],
       testEnvironmentOptions: {
@@ -83,7 +85,7 @@ describe('getJestConfig', () => {
         '^.+\\.(story|stories)\\.[jt]sx?$': `${path.dirname(
           require.resolve('@storybook/test-runner/playwright/transform')
         )}/transform.js`,
-        '^.+\\.[jt]sx?$': path.dirname(require.resolve('@swc/jest')),
+        '^.+\\.[jt]sx?$': expect.arrayContaining([path.dirname(require.resolve('@swc/jest'))]),
       },
       snapshotSerializers: [path.dirname(require.resolve('jest-serializer-html'))],
       testEnvironmentOptions: {

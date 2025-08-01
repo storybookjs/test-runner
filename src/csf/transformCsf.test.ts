@@ -1,6 +1,14 @@
-import { TestPrefixer, TransformOptions, transformCsf } from './transformCsf';
+import { type TestPrefixer, type TransformOptions, transformCsf } from './transformCsf';
 import { testPrefixer } from '../playwright/transformPlaywright';
 import template from '@babel/template';
+
+jest.mock('storybook/internal/common', () => ({}));
+jest.mock('esbuild-register/dist/node', () => ({
+  register: jest.fn(),
+}));
+jest.mock('../util/serverRequire', () => ({
+  serverRequire: jest.fn(),
+}));
 
 describe('transformCsf', () => {
   it('inserts a no-op test if there are no stories', () => {
