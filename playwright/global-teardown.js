@@ -1,7 +1,7 @@
-// global-teardown.js
-const { globalTeardown: playwrightGlobalTeardown } = require('jest-playwright-preset');
+// global-teardown.mjs
+import { globalTeardown as playwrightGlobalTeardown } from 'jest-playwright-preset';
 
-module.exports = async function globalTeardown(globalConfig) {
+export default async function globalTeardown(globalConfig) {
   // Your global teardown
   await playwrightGlobalTeardown(globalConfig);
-};
+}

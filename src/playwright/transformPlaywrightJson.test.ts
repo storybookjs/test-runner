@@ -5,9 +5,10 @@ import {
   makeDescribe,
   transformPlaywrightJson,
 } from './transformPlaywrightJson';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import * as t from '@babel/types';
 
-jest.mock('../util/getTestRunnerConfig');
+vi.mock('../util/getTestRunnerConfig');
 
 describe('Playwright Json', () => {
   describe('v4 indexes', () => {
@@ -17,7 +18,7 @@ describe('Playwright Json', () => {
       delete process.env.STORYBOOK_SKIP_TAGS;
     });
 
-    it('should generate a test for each story', () => {
+    it('should generate a test for each story', async () => {
       const input = {
         v: 4,
         entries: {
@@ -41,7 +42,7 @@ describe('Playwright Json', () => {
           },
         },
       } satisfies V4Index;
-      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+      await expect(transformPlaywrightJson(input)).resolves.toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
           describe("Logged In", () => {
@@ -231,7 +232,7 @@ describe('Playwright Json', () => {
       `);
     });
 
-    it('should respect include, exclude and skip tags', () => {
+    it('should respect include, exclude and skip tags', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'play,design';
       process.env.STORYBOOK_SKIP_TAGS = 'skip';
       process.env.STORYBOOK_EXCLUDE_TAGS = 'exclude';
@@ -272,7 +273,7 @@ describe('Playwright Json', () => {
       // - B being included, but skipped
       // - C being included
       // - D being excluded
-      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+      await expect(transformPlaywrightJson(input)).resolves.toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
           describe("Logged Out", () => {
@@ -402,7 +403,7 @@ describe('Playwright Json', () => {
       `);
     });
 
-    it('should skip docs entries', () => {
+    it('should skip docs entries', async () => {
       const input = {
         v: 4,
         entries: {
@@ -419,7 +420,7 @@ describe('Playwright Json', () => {
           },
         },
       } satisfies V4Index;
-      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+      await expect(transformPlaywrightJson(input)).resolves.toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
@@ -489,7 +490,7 @@ describe('Playwright Json', () => {
   });
 
   describe('v3 indexes', () => {
-    it('should generate a test for each story', () => {
+    it('should generate a test for each story', async () => {
       const input = {
         v: 3,
         stories: {
@@ -525,7 +526,7 @@ describe('Playwright Json', () => {
           },
         },
       } satisfies V3StoriesIndex;
-      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+      await expect(transformPlaywrightJson(input)).resolves.toMatchInlineSnapshot(`
         {
           "example-header": "describe("Example/Header", () => {
           describe("Logged In", () => {
@@ -715,7 +716,7 @@ describe('Playwright Json', () => {
       `);
     });
 
-    it('should skip docs-only stories', () => {
+    it('should skip docs-only stories', async () => {
       const input = {
         v: 3,
         stories: {
@@ -741,7 +742,7 @@ describe('Playwright Json', () => {
           },
         },
       } satisfies V3StoriesIndex;
-      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+      await expect(transformPlaywrightJson(input)).resolves.toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
@@ -809,7 +810,7 @@ describe('Playwright Json', () => {
       `);
     });
 
-    it('should include "test" tag by default', () => {
+    it('should include "test" tag by default', async () => {
       process.env.STORYBOOK_INCLUDE_TAGS = 'test';
       const input = {
         v: 3,
@@ -826,7 +827,7 @@ describe('Playwright Json', () => {
           },
         },
       } satisfies V3StoriesIndex;
-      expect(transformPlaywrightJson(input)).toMatchInlineSnapshot(`
+      await expect(transformPlaywrightJson(input)).resolves.toMatchInlineSnapshot(`
         {
           "example-page": "describe("Example/Page", () => {
           describe("Logged In", () => {
@@ -897,9 +898,9 @@ describe('Playwright Json', () => {
 });
 
 describe('unsupported index', () => {
-  it('throws an error for unsupported versions', () => {
+  it('throws an error for unsupported versions', async () => {
     const unsupportedVersion = { v: 1 } satisfies UnsupportedVersion;
-    expect(() => transformPlaywrightJson(unsupportedVersion)).toThrowError(
+    await expect(transformPlaywrightJson(unsupportedVersion)).rejects.toThrowError(
       `Unsupported version ${unsupportedVersion.v}`
     );
   });

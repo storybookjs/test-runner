@@ -6,13 +6,14 @@ import {
   TestRunnerConfig,
   waitForPageReady,
 } from './hooks';
+import { describe, it, expect, beforeEach, Mock, vi } from 'vitest';
 
-type MockPage = Page & { evaluate: jest.Mock };
+type MockPage = Page & { evaluate: Mock };
 
 describe('test-runner', () => {
   describe('setPreVisit', () => {
     it('sets the preVisit function', () => {
-      const preVisit = jest.fn();
+      const preVisit = vi.fn();
       setPreVisit(preVisit);
       expect(globalThis.__sbPreVisit).toBe(preVisit);
     });
@@ -20,7 +21,7 @@ describe('test-runner', () => {
 
   describe('setPostVisit', () => {
     it('sets the postVisit function', () => {
-      const postVisit = jest.fn();
+      const postVisit = vi.fn();
       setPostVisit(postVisit);
       expect(globalThis.__sbPostVisit).toBe(postVisit);
     });
@@ -28,11 +29,11 @@ describe('test-runner', () => {
 
   describe('getStoryContext', () => {
     const page = {
-      evaluate: jest.fn(),
+      evaluate: vi.fn(),
     } as MockPage;
 
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it('calls page.evaluate with the correct arguments', async () => {
@@ -54,7 +55,7 @@ describe('test-runner', () => {
       const storyContext = { kind: 'kind', name: 'name' };
 
       // Mock globalThis.__getContext
-      globalThis.__getContext = jest.fn();
+      globalThis.__getContext = vi.fn();
 
       page.evaluate.mockImplementation(async (func) => {
         // Call the function passed to page.evaluate
@@ -81,8 +82,8 @@ describe('test-runner', () => {
 
     beforeEach(() => {
       page = {
-        waitForLoadState: jest.fn(),
-        evaluate: jest.fn(),
+        waitForLoadState: vi.fn(),
+        evaluate: vi.fn(),
       } as unknown as Page;
     });
 
@@ -96,8 +97,8 @@ describe('test-runner', () => {
 
     it('calls page.evaluate with () => document.fonts.ready', async () => {
       const page = {
-        waitForLoadState: jest.fn(),
-        evaluate: jest.fn(),
+        waitForLoadState: vi.fn(),
+        evaluate: vi.fn(),
       } as unknown as MockPage;
 
       // Mock document.fonts.ready

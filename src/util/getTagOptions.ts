@@ -11,8 +11,8 @@ type TagOptions = {
  * 1. Test runner config 'tags' object
  * 2. Environment variables (takes precedence)
  */
-export function getTagOptions() {
-  const config = getTestRunnerConfig();
+export async function getTagOptions() {
+  const config = await getTestRunnerConfig();
 
   let tagOptions = {
     includeTags: config?.tags?.include || ['test'],

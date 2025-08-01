@@ -1,7 +1,7 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 
-import { getStoryContext, waitForPageReady } from '../dist';
-import type { TestRunnerConfig } from '../dist';
+import { getStoryContext, waitForPageReady } from '../dist/index.js';
+import type { TestRunnerConfig } from '../dist/index.js';
 
 const snapshotsDir = process.env.SNAPSHOTS_DIR || '__snapshots__';
 const customSnapshotsDir = `${process.cwd()}/${snapshotsDir}`;

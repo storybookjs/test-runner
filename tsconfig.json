@@ -8,18 +8,18 @@
     "incremental": false,
     "isolatedModules": true,
     "jsx": "react",
-    "lib": ["es2017", "dom"],
-    "module": "commonjs",
+    "lib": ["ES2024", "dom"],
+    "module": "esnext",
     "noImplicitAny": true,
     "rootDir": "./src",
     "skipLibCheck": true,
-    "target": "es2020",
+    "target": "esnext",
     "types": ["jest", "node"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "strict": true,
     "noEmit": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": true
   },
   "include": ["src/**/*.ts"]
 }
