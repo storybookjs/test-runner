@@ -21,8 +21,8 @@ export default {
     '^.+\\.(story|stories)\\.[jt]sx?$': './playwright/transform.js',
     '^.+\\.[jt]sx?$': '@swc/jest',
   },
-  globalSetup: './playwright/global-setup.js',
-  globalTeardown: './playwright/global-teardown.js',
+  globalSetup: './dist/jest-playwright-entries/setup.js',
+  globalTeardown: './dist/jest-playwright-entries/teardown.js',
   testEnvironment: './playwright/custom-environment.js',
   setupFilesAfterEnv: ['./playwright/jest-setup.js'],
   // transformIgnorePatterns for the storybook package and make sure swc jest ignores it too
