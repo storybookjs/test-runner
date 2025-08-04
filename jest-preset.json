@@ -1,0 +1,10 @@
+{
+  "globalSetup": "@storybook/test-runner/dist/jest-playwright-entries/setup.js",
+  "globalTeardown": "@storybook/test-runner/dist/jest-playwright-entries/teardown.js",
+  "testEnvironment": "@storybook/test-runner/dist/jest-playwright-entries",
+  "runner": "@storybook/test-runner/dist/jest-playwright-entries/runner.js",
+  "setupFilesAfterEnv": [
+    "expect-playwright",
+    "@storybook/test-runner/dist/jest-playwright-entries/lib/extends.js"
+  ]
+}

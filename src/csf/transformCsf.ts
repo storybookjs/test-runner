@@ -2,10 +2,13 @@
 import { toId, storyNameFromExport, combineTags } from 'storybook/internal/csf';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import * as t from '@babel/types';
-import generate from '@babel/generator';
+import babelGenerate from '@babel/generator';
 import dedent from 'ts-dedent';
 
 import { getTagOptions } from '../util/getTagOptions';
+
+// Handle both ESM and CJS patterns
+const generate = (babelGenerate as any).default ?? babelGenerate;
 
 export interface TestContext {
   storyExport?: t.Identifier;
@@ -100,7 +103,7 @@ const makeBeforeEach = (beforeEachPrefixer: FilePrefixer) => {
 const makeArray = (templateResult: TemplateResult) =>
   Array.isArray(templateResult) ? templateResult : [templateResult];
 
-export const transformCsf = (
+export const transformCsf = async (
   code: string,
   {
     clearBody = false,
@@ -111,7 +114,7 @@ export const transformCsf = (
     previewAnnotations = { tags: [] },
   }: TransformOptions & { previewAnnotations?: Record<string, any> }
 ) => {
-  const { includeTags, excludeTags, skipTags } = getTagOptions();
+  const { includeTags, excludeTags, skipTags } = await getTagOptions();
 
   const csf = loadCsf(code, { makeTitle: makeTitle ?? ((userTitle: string) => userTitle) });
   csf.parse();
@@ -124,8 +127,7 @@ export const transformCsf = (
       const annotations = csf._storyAnnotations[key];
       acc[key] = {};
       if (annotations?.play) {
-        // @ts-expect-error type mismatch – check later
-        acc[key].play = annotations.play;
+        acc[key].play = annotations.play as t.Node;
       }
 
       acc[key].tags = combineTags(
@@ -188,9 +190,7 @@ export const transformCsf = (
     const { code: describeCode } = generate(describe, {});
     result = dedent`
       ${result}
-      if (!require.main) {
-        ${describeCode}
-      }
+      ${describeCode}
     `;
   } else if (insertTestIfEmpty) {
     // When there are no tests at all, we skip. The reason is that the file already went through Jest's transformation,

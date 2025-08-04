@@ -1,5 +1,5 @@
 import { getParsedCliOptions } from './getParsedCliOptions';
-import type { BrowserType } from 'jest-playwright-preset';
+import type { BrowserType } from '../jest-playwright-preset/types';
 
 export type JestOptions = string[];
 
