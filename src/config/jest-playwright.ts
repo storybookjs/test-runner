@@ -1,3 +1,4 @@
+/** @jest-config-loader-options {"transpileOnly": true} */
 import path from 'path';
 import { getProjectRoot } from 'storybook/internal/common';
 import type { Config } from '@jest/types';
@@ -95,6 +96,7 @@ export const getJestConfig = (): Config.InitialOptions => {
         exitOnPageError: false,
       },
     },
+    testSequencer: require.resolve(`./config/jest-sequencer`),
     watchPlugins: [
       require.resolve('jest-watch-typeahead/filename'),
       require.resolve('jest-watch-typeahead/testname'),
