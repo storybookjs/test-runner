@@ -97,7 +97,7 @@ export const getJestConfig = (): Config.InitialOptions => {
         exitOnPageError: false,
       },
     },
-    testSequencer: TEST_INDEX_JSON ? require.resolve(`./config/jest-filename-sequencer`) : undefined,
+    testSequencer: TEST_INDEX_JSON ? require.resolve('./config/jest-filename-sequencer') : undefined,
     watchPlugins: [
       require.resolve('jest-watch-typeahead/filename'),
       require.resolve('jest-watch-typeahead/testname'),
