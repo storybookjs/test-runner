@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig([
   {
     clean: true,
-    entry: ['./src/index.ts', './src/test-storybook.ts', './src/config/jest-sequencer.ts'],
+    entry: ['./src/index.ts', './src/test-storybook.ts', './src/config/jest-filename-sequencer.ts'],
     format: ['cjs', 'esm'],
     splitting: false,
     dts: true,

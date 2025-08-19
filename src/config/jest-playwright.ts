@@ -50,6 +50,7 @@ export const getJestConfig = (): Config.InitialOptions => {
     TEST_BROWSERS,
     STORYBOOK_COLLECT_COVERAGE,
     STORYBOOK_JUNIT,
+    TEST_INDEX_JSON,
   } = process.env;
 
   const jestJunitPath = path.dirname(
@@ -96,7 +97,7 @@ export const getJestConfig = (): Config.InitialOptions => {
         exitOnPageError: false,
       },
     },
-    testSequencer: require.resolve(`./config/jest-sequencer`),
+    testSequencer: TEST_INDEX_JSON ? require.resolve(`./config/jest-filename-sequencer`) : undefined,
     watchPlugins: [
       require.resolve('jest-watch-typeahead/filename'),
       require.resolve('jest-watch-typeahead/testname'),

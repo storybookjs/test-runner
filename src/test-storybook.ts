@@ -214,9 +214,7 @@ async function getIndexTempDir(url: string) {
     const indexJson = await getIndexJson(url);
     const titleIdToTest = transformPlaywrightJson(indexJson);
 
-    tmpDir = tempy.directory({
-      prefix: 'test-storybook-index-json__',
-    });
+    tmpDir = tempy.directory();
     for (const [titleId, test] of Object.entries(titleIdToTest)) {
       const tmpFile = path.join(tmpDir, `${titleId}.test.js`);
       fs.writeFileSync(tmpFile, test);
@@ -377,6 +375,7 @@ const main = async () => {
     indexTmpDir = await getIndexTempDir(targetURL);
     process.env.TEST_ROOT = indexTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
+    process.env.TEST_INDEX_JSON = 'true';
   }
 
   const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
