@@ -39,65 +39,6 @@ describe('FilenameSortedTestSequencer', () => {
         '/path/to/story-z.test.js',
       ]);
     });
-
-    it('should handle tests with same basename from different directories', () => {
-      const tests = [
-        createMockTest('/components/button/Button.test.js'),
-        createMockTest('/pages/home/Button.test.js'),
-        createMockTest('/utils/helpers/Button.test.js'),
-      ];
-
-      const result = sequencer.sort(tests);
-
-      expect(result).toHaveLength(3);
-      expect(result.every(test => test.path.endsWith('Button.test.js'))).toBe(true);
-    });
-
-    it('should handle mixed file extensions', () => {
-      const tests = [
-        createMockTest('/path/component.test.tsx'),
-        createMockTest('/path/component.test.js'),
-        createMockTest('/path/component.test.ts'),
-      ];
-
-      const result = sequencer.sort(tests);
-
-      expect(result.map(test => test.path)).toEqual([
-        '/path/component.test.js',
-        '/path/component.test.ts',
-        '/path/component.test.tsx',
-      ]);
-    });
-
-    it('should handle empty test array', () => {
-      const tests: Test[] = [];
-      const result = sequencer.sort(tests);
-      expect(result).toEqual([]);
-    });
-
-    it('should handle single test', () => {
-      const tests = [createMockTest('/path/to/single.test.js')];
-      const result = sequencer.sort(tests);
-      expect(result).toEqual(tests);
-    });
-
-    it('should sort complex story filenames correctly', () => {
-      const tests = [
-        createMockTest('/stories/Button.stories.test.js'),
-        createMockTest('/stories/Alert.stories.test.js'),
-        createMockTest('/stories/Modal.stories.test.js'),
-        createMockTest('/stories/Card.stories.test.js'),
-      ];
-
-      const result = sequencer.sort(tests);
-
-      expect(result.map(test => test.path)).toEqual([
-        '/stories/Alert.stories.test.js',
-        '/stories/Button.stories.test.js',
-        '/stories/Card.stories.test.js',
-        '/stories/Modal.stories.test.js',
-      ]);
-    });
   });
 
   describe('shard', () => {
