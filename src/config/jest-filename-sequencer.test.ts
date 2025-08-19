@@ -1,7 +1,6 @@
 import FilenameSortedTestSequencer from './jest-filename-sequencer';
 import type { Test } from '@jest/test-result';
 
-// Mock test data factory
 const createMockTest = (path: string): Test => ({
   context: {
     config: {
@@ -52,7 +51,6 @@ describe('FilenameSortedTestSequencer', () => {
         createMockTest('/path/c-test.js'),
       ];
 
-      // Test first shard (1 of 3)
       const shard1 = sequencer.shard(tests, { shardIndex: 1, shardCount: 3 });
       expect(shard1.length).toBe(2);
       expect(shard1.map(test => test.path)).toEqual([
@@ -60,7 +58,6 @@ describe('FilenameSortedTestSequencer', () => {
         '/path/b-test.js',
       ]);
 
-      // Test second shard (2 of 3)
       const shard2 = sequencer.shard(tests, { shardIndex: 2, shardCount: 3 });
       expect(shard2.length).toBe(2);
       expect(shard2.map(test => test.path)).toEqual([
@@ -68,7 +65,6 @@ describe('FilenameSortedTestSequencer', () => {
         '/path/d-test.js',
       ]);
 
-      // Test third shard (3 of 3)
       const shard3 = sequencer.shard(tests, { shardIndex: 3, shardCount: 3 });
       expect(shard3.length).toBe(2);
       expect(shard3.map(test => test.path)).toEqual([
