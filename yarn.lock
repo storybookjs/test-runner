@@ -3142,8 +3142,8 @@ __metadata:
     semver: "npm:^7.6.2"
     sirv: "npm:^2.0.4"
     slash: "npm:^3.0.0"
-    storybook: "npm:^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0"
-    storybook-src: "git+https://github.com/storybookjs/storybook.git#norbert/try-fixing-test-runner"
+    storybook: "npm:^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0"
+    storybook-src: "git+https://github.com/storybookjs/storybook.git#next"
     strip-ansi: "npm:^7.1.0"
     strip-json-comments: "npm:^5.0.1"
     telejson: "npm:8.0.0"
@@ -5633,7 +5633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-register@npm:^3.6.0":
+"esbuild-register@npm:^3.5.0, esbuild-register@npm:^3.6.0":
   version: 3.6.0
   resolution: "esbuild-register@npm:3.6.0"
   dependencies:
@@ -10451,19 +10451,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-src@git+https://github.com/storybookjs/storybook.git#norbert/try-fixing-test-runner":
+"storybook-src@git+https://github.com/storybookjs/storybook.git#next":
   version: 0.0.0
-  resolution: "storybook-src@https://github.com/storybookjs/storybook.git#commit=3095ad4932c56bb5c98be9d0e85c52ec1c9c2edc"
-  checksum: 10/35bab1db690d7c7b429f864e21c1974c679a93fabf4edaf63c5dbbfa932ec5a35e10322713948646b4f2f7f5004d2d806a73afa8c5dc28b3e18ff58b1d325c4e
+  resolution: "storybook-src@https://github.com/storybookjs/storybook.git#commit=4236d09d268c741a47e04886286c2ce68418a250"
+  checksum: 10/432381f2da64764559da84315df77ee2d2d25ac32779dfc9f6ee48525f7b3202ff67c25ee9dcbcfce13a8041419b8dcc0cc1e4abb4044326fbb4a21b692b4bcd
   languageName: node
   linkType: hard
 
-"storybook@npm:^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0":
-  version: 10.0.0-beta.0
-  resolution: "storybook@npm:10.0.0-beta.0"
+"storybook@npm:^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0":
+  version: 9.1.2
+  resolution: "storybook@npm:9.1.2"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
-    "@storybook/icons": "npm:^1.4.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/user-event": "npm:^14.6.1"
     "@vitest/expect": "npm:3.2.4"
@@ -10471,6 +10470,7 @@ __metadata:
     "@vitest/spy": "npm:3.2.4"
     better-opn: "npm:^3.0.2"
     esbuild: "npm:^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0 || ^0.25.0"
+    esbuild-register: "npm:^3.5.0"
     recast: "npm:^0.23.5"
     semver: "npm:^7.6.2"
     ws: "npm:^8.18.0"
@@ -10480,8 +10480,8 @@ __metadata:
     prettier:
       optional: true
   bin:
-    storybook: ./dist/bin/dispatcher.js
-  checksum: 10/192654aab822310596fc773532cfc4e362907cfe4ebf67e8e4967022ab0cdaf673931fa2d6ab8df84d76c045eb63ba439d1948ef23c8d78c0b80e26df434bf4c
+    storybook: ./bin/index.cjs
+  checksum: 10/0d3160b6794addc9a91a7c6581e2d85adf77a7ab09cf7bb039737f62fed9903e542198b86c40c90197e73caee8bd82d364aabd908af4eaa34e4735a554adf06e
   languageName: node
   linkType: hard
 

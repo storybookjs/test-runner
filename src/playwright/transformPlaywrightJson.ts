@@ -18,7 +18,7 @@ const makeTest = ({
     name: t.stringLiteral(entry.name),
     title: t.stringLiteral(entry.title),
     id: t.stringLiteral(entry.id),
-    // FIXME
+    //@ts-expect-error FIXME
     storyExport: t.identifier(entry.id),
   });
   const stmt = (result as Array<t.ExpressionStatement>)[1];
