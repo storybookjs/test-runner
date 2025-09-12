@@ -27,7 +27,7 @@ export interface TransformOptions {
   skipTags?: string[];
 }
 
-export const prefixFunction = ({
+const prefixFunction = ({
   key,
   testPrefixer,
   title,

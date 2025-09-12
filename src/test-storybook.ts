@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import { execSync } from 'child_process';
+import * as fs from 'node:fs';
+import { execSync } from 'node:child_process';
+import path, { join, resolve } from 'node:path';
 import fetch from 'node-fetch';
 import canBindToHost from 'can-bind-to-host';
 import dedent from 'ts-dedent';
-import path, { join, resolve } from 'path';
 import tempy from 'tempy';
 import { readConfig } from 'storybook/internal/csf-tools';
 import { telemetry } from 'storybook/internal/telemetry';

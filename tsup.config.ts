@@ -20,7 +20,7 @@ export default defineConfig([
     entry: ['./src/index.ts', './src/test-storybook.ts'],
     format: ['cjs'],
     splitting: true,
-    dts: false,
+    dts: true,
     minify: false,
     treeshake: true,
     bundle: true,
@@ -48,7 +48,7 @@ export default defineConfig([
   {
     entry: ['./src/setup-page-script.ts'],
     format: ['esm'],
-    dts: false,
+    dts: true,
     bundle: false,
     minify: false,
     treeshake: false,
