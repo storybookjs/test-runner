@@ -158,7 +158,7 @@ Usage: test-storybook [options]
 | `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
 | `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
 | `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
-| `--testTimeout [number]`          | This option sets the default timeouts of test cases <br/>`test-storybook --testTimeout=15_000`                                                                                |
+| `--testTimeout [number]`          | This option sets the default timeouts of test cases <br/>`test-storybook --testTimeout=15000`                                                                                 |
 | `--no-cache`                      | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
 | `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
 | `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
@@ -1073,10 +1073,10 @@ In either way, to fix it you should limit the amount of workers that run in para
 }
 ```
 
-Another option is trying to increase the test timeout by passing the [--testTimeout](https://jestjs.io/docs/cli#--testtimeoutnumber) option to your command (adding `--testTimeout=60_000` will increase test timeouts to 1 minute):
+Another option is trying to increase the test timeout by passing the [--testTimeout](https://jestjs.io/docs/cli#--testtimeoutnumber) option to your command (adding `--testTimeout=60000` will increase test timeouts to 1 minute):
 
 ```json
-"test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2 --testTimeout=60_000\""
+"test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && yarn test-storybook --maxWorkers=2 --testTimeout=60000\""
 ```
 
 #### The test runner reports "No tests found" running on a Windows CI
