@@ -158,7 +158,7 @@ Usage: test-storybook [options]
 | `--url`                           | Define the URL to run tests in. Useful for custom Storybook URLs <br/>`test-storybook --url http://the-storybook-url-here.com`                                                |
 | `--browsers`                      | Define browsers to run tests in. One or multiple of: chromium, firefox, webkit <br/>`test-storybook --browsers firefox chromium`                                              |
 | `--maxWorkers [amount]`           | Specifies the maximum number of workers the worker-pool will spawn for running tests <br/>`test-storybook --maxWorkers=2`                                                     |
-| `--testTimeout [number]`          | This option sets the default timeouts of test cases <br/>`test-storybook --testTimeout=15000`                                                                                 |
+| `--testTimeout [number]`          | This option sets the timeout of each test case <br/>`test-storybook --testTimeout=15000`                                                                                      |
 | `--no-cache`                      | Disable the cache <br/>`test-storybook --no-cache`                                                                                                                            |
 | `--clearCache`                    | Deletes the Jest cache directory and then exits without running tests <br/>`test-storybook --clearCache`                                                                      |
 | `--verbose`                       | Display individual test results with the test suite hierarchy <br/>`test-storybook --verbose`                                                                                 |
