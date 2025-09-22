@@ -850,12 +850,12 @@ Below you will find recipes that use both the hooks and the utility functions to
 
 ### Preconfiguring viewport size
 
-You can use [Playwright's Page viewport utility](https://playwright.dev/docs/api/class-page#page-set-viewport-size) to programatically change the viewport size of your test. If you use [@storybook/addon-viewports](https://storybook.js.org/addons/@storybook/addon-viewport), you can reuse its parameters and make sure that the tests match in configuration.
+You can use [Playwright's Page viewport utility](https://playwright.dev/docs/api/class-page#page-set-viewport-size) to programatically change the viewport size of your test. If you use [storybook/viewports](https://storybook.js.org/addons/@storybook/addon-viewport), you can reuse its parameters and make sure that the tests match in configuration.
 
 ```ts
 // .storybook/test-runner.ts
 import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
-import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 
 const DEFAULT_VIEWPORT_SIZE = { width: 1280, height: 720 };
 
