@@ -81,10 +81,10 @@
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
-    "@storybook/addon-a11y": "0.0.0-pr-31819-sha-7e336af7",
+    "@storybook/addon-a11y": "^10.0.0-beta.10",
     "@storybook/addon-coverage": "^1.0.0",
-    "@storybook/addon-docs": "0.0.0-pr-31819-sha-7e336af7",
-    "@storybook/react-vite": "0.0.0-pr-31819-sha-7e336af7",
+    "@storybook/addon-docs": "^10.0.0-beta.10",
+    "@storybook/react-vite": "^10.0.0-beta.10",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
     "@types/rimraf": "^3.0.2",
@@ -115,7 +115,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "read-pkg-up": "^7.0.1",
-    "storybook": "0.0.0-pr-31819-sha-7e336af7",
+    "storybook": "^10.0.0-beta.10",
     "tempy": "^1.0.1",
     "ts-dedent": "^2.0.0",
     "ts-jest": "^29.4.0",
@@ -126,7 +126,7 @@
     "wait-on": "^7.2.0"
   },
   "peerDependencies": {
-    "storybook": "^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0"
+    "storybook": "^10.0.0 || ^10.0.0-0"
   },
   "packageManager": "yarn@4.5.1",
   "engines": {
