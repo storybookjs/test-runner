@@ -26,8 +26,6 @@ const getJestPlaywrightConfig = (): Config.InitialOptions => {
   const expectPlaywrightPath = path.dirname(require.resolve('expect-playwright'));
   return {
     runner: path.join(resolvedRunnerPath, 'dist/jest-playwright-entries/runner.js'),
-    globalSetup: path.join(resolvedRunnerPath, 'playwright/global-setup.js'),
-    globalTeardown: path.join(resolvedRunnerPath, 'playwright/global-teardown.js'),
     testEnvironment: path.join(resolvedRunnerPath, 'playwright/custom-environment.js'),
     setupFilesAfterEnv: [
       path.join(resolvedRunnerPath, 'playwright/jest-setup.js'),
