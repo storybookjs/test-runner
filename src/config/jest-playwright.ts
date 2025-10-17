@@ -5,7 +5,7 @@ import type { Config } from '@jest/types';
 const getTestRunnerPath = () => {
   return (
     process.env.STORYBOOK_TEST_RUNNER_PATH ??
-    path.dirname(require.resolve('@storybook/test-runner'))
+    path.dirname(require.resolve('@storybook/test-runner/package.json'))
   );
 };
 
