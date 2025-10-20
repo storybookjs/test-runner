@@ -1,9 +1,10 @@
 import { program } from 'commander';
 import { getParsedCliOptions } from './getParsedCliOptions';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 
 describe('getParsedCliOptions', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should return the parsed CLI options', () => {
@@ -41,10 +42,10 @@ describe('getParsedCliOptions', () => {
 
   it('should handle unknown options', () => {
     const originalWarn = console.warn;
-    console.warn = jest.fn();
+    console.warn = vi.fn();
 
     const originalExit = process.exit;
-    process.exit = jest.fn() as unknown as typeof process.exit;
+    process.exit = vi.fn() as unknown as typeof process.exit;
 
     const argv = process.argv.slice();
     process.argv.push('--unknown-option');
@@ -62,7 +63,7 @@ describe('getParsedCliOptions', () => {
   });
 
   it('handles unknown options correctly', () => {
-    jest.spyOn(program, 'parse').mockImplementation(() => {
+    vi.spyOn(program, 'parse').mockImplementation(() => {
       throw new Error('Unknown error');
     });
 

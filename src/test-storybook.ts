@@ -1,22 +1,28 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import { execSync } from 'child_process';
-import fetch from 'node-fetch';
-import canBindToHost from 'can-bind-to-host';
-import dedent from 'ts-dedent';
-import path, { join, resolve } from 'path';
-import tempy from 'tempy';
+import { canBindToHost } from 'can-bind-to-host';
+import { glob } from 'glob';
+import { execSync, spawn } from 'node:child_process';
+import fs from 'node:fs';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
+import path, { join, resolve } from 'pathe';
 import { getInterpretedFile } from 'storybook/internal/common';
 import { readConfig } from 'storybook/internal/csf-tools';
 import { telemetry } from 'storybook/internal/telemetry';
-import { glob } from 'glob';
+import tempy from 'tempy';
+import dedent from 'ts-dedent';
 
-import { JestOptions, getCliOptions } from './util/getCliOptions';
-import { getStorybookMetadata } from './util/getStorybookMetadata';
-import { getTestRunnerConfig } from './util/getTestRunnerConfig';
-import { transformPlaywrightJson } from './playwright/transformPlaywrightJson';
-import { TestRunnerConfig } from './playwright/hooks';
+import { TestRunnerConfig } from './playwright/hooks.js';
+import { transformPlaywrightJson } from './playwright/transformPlaywrightJson.js';
+import { JestOptions, getCliOptions } from './util/getCliOptions.js';
+import { getStorybookMetadata } from './util/getStorybookMetadata.js';
+import { getTestRunnerConfig } from './util/getTestRunnerConfig.js';
+
+// Get the current file's directory in ESM
+const __filename2 = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename2);
+const require = createRequire(import.meta.url);
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'test';
@@ -48,10 +54,11 @@ const cleanup = () => {
   }
 };
 
-function getNycBinPath() {
-  const nycPath = path.join(require.resolve('nyc/package.json'));
-  const nycBin = require(nycPath).bin.nyc;
-  const nycBinFullPath = path.join(path.dirname(nycPath), nycBin);
+async function getNycBinPath() {
+  const nycPkgUrl = new URL('nyc/package.json', import.meta.url);
+  const { bin } = await import(nycPkgUrl.href, { assert: { type: 'json' } });
+  const nycBin = bin.nyc;
+  const nycBinFullPath = path.join(path.dirname(fileURLToPath(nycPkgUrl)), nycBin);
   return nycBinFullPath;
 }
 
@@ -80,11 +87,11 @@ async function reportCoverage() {
   // --check-coverage if we want to break if coverage reaches certain threshold
   // .nycrc will be respected for thresholds etc. https://www.npmjs.com/package/nyc#coverage-thresholds
   if (process.env.JEST_SHARD !== 'true') {
-    const nycBinFullPath = getNycBinPath();
+    const nycBinFullPath = await getNycBinPath();
     execSync(
       `node ${nycBinFullPath} report --reporter=text --reporter=lcov -t ${coverageFolder} --report-dir ${coverageFolder}`,
       {
-        stdio: 'inherit',
+        stdio: 'pipe',
         cwd: process.cwd(),
       }
     );
@@ -124,12 +131,14 @@ function sanitizeURL(url: string) {
 
 async function executeJestPlaywright(args: JestOptions) {
   // Always prefer jest installed via the test runner. If it's hoisted, it will get it from root node_modules
-  const jestPath = path.dirname(
-    require.resolve('jest', {
-      paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
-    })
+  const jestPath = path.join(
+    path.dirname(
+      require.resolve('jest/package.json', {
+        paths: [path.join(__dirname, '../@storybook/test-runner/node_modules')],
+      })
+    ),
+    'bin/jest.js'
   );
-  const jest = require(jestPath);
   const argv = args.slice(2);
 
   // jest configs could either come in the root dir, or inside of the Storybook config dir
@@ -145,16 +154,48 @@ async function executeJestPlaywright(args: JestOptions) {
     userDefinedJestConfig ||
     path.resolve(__dirname, path.join('..', 'playwright', 'test-runner-jest.config.js'));
 
-  argv.push('--config', jestConfigPath);
+  const command = `node --experimental-vm-modules "${jestPath}" ${argv.join(
+    ' '
+  )} --config "${jestConfigPath}" --color`;
 
-  await jest.run(argv);
+  const child = spawn(command, {
+    shell: true,
+    cwd: process.cwd(),
+    stdio: ['inherit', 'pipe'],
+  });
+  const shouldLog = (str: string) => {
+    return (
+      !str.includes('watchman') &&
+      !str.includes('DeprecationWarning') &&
+      !str.includes('ExperimentalWarning')
+    );
+  };
+  const exitCode = await new Promise<number>((resolve) => {
+    // filter out messages like DeprecationWarning and ExperimentalWarning
+    child.stdout?.on('data', (data) => {
+      const str = data.toString();
+      if (shouldLog(str)) {
+        process.stdout.write(data);
+      }
+    });
+    child.stderr?.on('data', (data) => {
+      const str = data.toString();
+      if (shouldLog(str)) {
+        process.stderr.write(data);
+      }
+    });
+
+    child.on('exit', (exitCode) => resolve(exitCode || 0));
+  });
+
+  process.exit(exitCode);
 }
 
 async function checkStorybook(url: string) {
   try {
     const headers = await getHttpHeaders(url);
     const res = await fetch(url, { method: 'GET', headers });
-    if (res.status !== 200) throw new Error(`Unxpected status: ${res.status}`);
+    if (res.status !== 200) throw new Error(`Unexpected status: ${res.status}`);
   } catch (e) {
     console.error(
       dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
@@ -212,7 +253,7 @@ async function getIndexTempDir(url: string) {
   let tmpDir: string;
   try {
     const indexJson = await getIndexJson(url);
-    const titleIdToTest = transformPlaywrightJson(indexJson);
+    const titleIdToTest = await transformPlaywrightJson(indexJson);
 
     tmpDir = tempy.directory();
     for (const [titleId, test] of Object.entries(titleIdToTest)) {
@@ -246,7 +287,9 @@ function ejectConfiguration() {
   }
 
   // copy contents of origin and replace ../dist with @storybook/test-runner
-  const content = fs.readFileSync(origin, 'utf-8').replace(/..\/dist/g, '@storybook/test-runner');
+  const content = fs
+    .readFileSync(origin, 'utf-8')
+    .replace('../dist/index.js', '@storybook/test-runner');
   fs.writeFileSync(destination, content);
   log(`Configuration file successfully generated at ${destination}`);
 }
@@ -282,7 +325,8 @@ const main = async () => {
 
   process.env.STORYBOOK_CONFIG_DIR = runnerOptions.configDir;
 
-  const testRunnerConfig = getTestRunnerConfig(runnerOptions.configDir) ?? ({} as TestRunnerConfig);
+  const testRunnerConfig =
+    (await getTestRunnerConfig(runnerOptions.configDir)) ?? ({} as TestRunnerConfig);
 
   if (testRunnerConfig.preVisit && testRunnerConfig.preRender) {
     throw new Error(
@@ -378,7 +422,7 @@ const main = async () => {
   }
 
   const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
-    getStorybookMetadata();
+    await getStorybookMetadata();
   if (!shouldRunIndexJson) {
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
