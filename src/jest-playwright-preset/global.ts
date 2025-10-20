@@ -1,15 +1,13 @@
 /* eslint-disable no-console */
-import {
-  setup as setupServer,
-  teardown as teardownServer,
-  ERROR_TIMEOUT,
-  ERROR_NO_COMMAND,
-} from 'jest-process-manager';
+import { setup as setupServer, teardown as teardownServer } from 'jest-process-manager';
 import { readConfig } from './utils';
 import type { Config as JestConfig } from '@jest/types';
 import { ServerOptions } from './types';
 
 let didAlreadyRunInWatchMode = false;
+
+const ERROR_TIMEOUT = 'ERROR_TIMEOUT';
+const ERROR_NO_COMMAND = 'ERROR_NO_COMMAND';
 
 const logMessage = ({ message, action }: { message: string; action: string }): void => {
   console.log('');
