@@ -1,43 +1,37 @@
 /** @jest-config-loader-options {"transpileOnly": true} */
-import path from 'path';
+import path from 'pathe';
 import { getProjectRoot } from 'storybook/internal/common';
 import type { Config } from '@jest/types';
 
-const getTestRunnerPath = () => process.env.STORYBOOK_TEST_RUNNER_PATH ?? '@storybook/test-runner';
+const getTestRunnerPath = () => {
+  return (
+    process.env.STORYBOOK_TEST_RUNNER_PATH ??
+    path.dirname(require.resolve('@storybook/test-runner/package.json'))
+  );
+};
 
 /**
  * IMPORTANT NOTE:
  * Depending on the user's project and package manager, it's possible that jest-playwright-preset
  * is going to be located in @storybook/test-runner/node_modules OR in the root node_modules
  *
- * By setting `preset: 'jest-playwright-preset` the change of resolution issues is higher, because
+ * By setting `preset: 'jest-playwright-preset' the change of resolution issues is higher, because
  * the lib might be installed inside of @storybook/test-runner/node_modules but references as if it was
  * in the root node_modules.
  *
- * This function does the same thing as `preset: 'jest-playwright-preset` but makes sure that the
+ * This function does the same thing as `preset: 'jest-playwright-preset' but makes sure that the
  * necessary moving parts are all required within the correct path.
  * */
 const getJestPlaywrightConfig = (): Config.InitialOptions => {
-  const TEST_RUNNER_PATH = getTestRunnerPath();
-  const presetBasePath = path.dirname(
-    require.resolve('jest-playwright-preset', {
-      paths: [path.join(__dirname, '../node_modules')],
-    })
-  );
-  const expectPlaywrightPath = path.dirname(
-    require.resolve('expect-playwright', {
-      paths: [path.join(__dirname, '../node_modules')],
-    })
-  );
+  const resolvedRunnerPath = getTestRunnerPath();
+  const expectPlaywrightPath = path.dirname(require.resolve('expect-playwright'));
   return {
-    runner: path.join(presetBasePath, 'runner.js'),
-    globalSetup: require.resolve(`${TEST_RUNNER_PATH}/playwright/global-setup.js`),
-    globalTeardown: require.resolve(`${TEST_RUNNER_PATH}/playwright/global-teardown.js`),
-    testEnvironment: require.resolve(`${TEST_RUNNER_PATH}/playwright/custom-environment.js`),
+    runner: path.join(resolvedRunnerPath, 'dist/jest-playwright-entries/runner.js'),
+    testEnvironment: path.join(resolvedRunnerPath, 'playwright/custom-environment.js'),
     setupFilesAfterEnv: [
-      require.resolve(`${TEST_RUNNER_PATH}/playwright/jest-setup.js`),
+      path.join(resolvedRunnerPath, 'playwright/jest-setup.js'),
       expectPlaywrightPath,
-      path.join(presetBasePath, 'lib', 'extends.js'),
+      path.join(resolvedRunnerPath, 'dist/jest-playwright-entries/extends.js'),
     ],
   };
 };
@@ -53,23 +47,11 @@ export const getJestConfig = (): Config.InitialOptions => {
     TEST_INDEX_JSON,
   } = process.env;
 
-  const jestJunitPath = path.dirname(
-    require.resolve('jest-junit', {
-      paths: [path.join(__dirname, '../node_modules')],
-    })
-  );
+  const jestJunitPath = path.dirname(require.resolve('jest-junit'));
 
-  const jestSerializerHtmlPath = path.dirname(
-    require.resolve('jest-serializer-html', {
-      paths: [path.join(__dirname, '../node_modules')],
-    })
-  );
+  const jestSerializerHtmlPath = path.dirname(require.resolve('jest-serializer-html'));
 
-  const swcJestPath = path.dirname(
-    require.resolve('@swc/jest', {
-      paths: [path.join(__dirname, '../node_modules')],
-    })
-  );
+  const swcJestPath = path.dirname(require.resolve('@swc/jest'));
 
   const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
 
@@ -83,10 +65,11 @@ export const getJestConfig = (): Config.InitialOptions => {
     testMatch,
     transform: {
       '^.+\\.(story|stories)\\.[jt]sx?$': require.resolve(
-        `${TEST_RUNNER_PATH}/playwright/transform`
+        `${TEST_RUNNER_PATH}/playwright/transform.js`
       ),
       '^.+\\.[jt]sx?$': swcJestPath,
     },
+    extensionsToTreatAsEsm: ['.jsx', '.ts', '.tsx'],
     snapshotSerializers: [jestSerializerHtmlPath],
     testEnvironmentOptions: {
       'jest-playwright': {

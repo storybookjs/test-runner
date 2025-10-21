@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`transformCsf calls the beforeEachPrefixer function once 1`] = `
+exports[`transformCsf > calls the beforeEachPrefixer function once 1`] = `
 "
       export default {
         title: 'Button',
@@ -16,73 +16,71 @@ exports[`transformCsf calls the beforeEachPrefixer function once 1`] = `
       export const Primary = () => '<button>Primary</button>';
     
 
-if (!require.main) {
-  describe("Button", () => {
-    describe("Primary", () => {
-      it("smoke-test", async () => {
-        const testFn = async () => {
-          const context = {
-            id: "button--primary",
-            title: "Button",
-            name: "Primary"
-          };
-          if (globalThis.__sbPreVisit) {
-            await globalThis.__sbPreVisit(page, context);
-          }
-          let result;
-          try {
-            result = await page.evaluate(({
-              id,
-              hasPlayFn
-            }) => __test(id, hasPlayFn), {
-              id: "button--primary"
-            });
-          } catch (err) {
-            if (err.toString().includes('Execution context was destroyed')) {
-              throw err;
-            } else {
-              if (globalThis.__sbPostVisit) {
-                await globalThis.__sbPostVisit(page, {
-                  ...context,
-                  hasFailure: true
-                });
-              }
-              throw err;
-            }
-          }
-          if (globalThis.__sbPostVisit) {
-            await globalThis.__sbPostVisit(page, context);
-          }
-          if (globalThis.__sbCollectCoverage) {
-            const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-            if (!isCoverageSetupCorrectly) {
-              throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-  The code in this story is not instrumented, which means the coverage setup is likely not correct.
-  More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-            }
-            await jestPlaywright.saveCoverage(page);
-          }
-          return result;
+describe("Button", () => {
+  describe("Primary", () => {
+    it("smoke-test", async () => {
+      const testFn = async () => {
+        const context = {
+          id: "button--primary",
+          title: "Button",
+          name: "Primary"
         };
+        if (globalThis.__sbPreVisit) {
+          await globalThis.__sbPreVisit(page, context);
+        }
+        let result;
         try {
-          await testFn();
+          result = await page.evaluate(({
+            id,
+            hasPlayFn
+          }) => __test(id, hasPlayFn), {
+            id: "button--primary"
+          });
         } catch (err) {
           if (err.toString().includes('Execution context was destroyed')) {
-            console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
-            await jestPlaywright.resetPage();
-            await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-            await testFn();
+            throw err;
           } else {
+            if (globalThis.__sbPostVisit) {
+              await globalThis.__sbPostVisit(page, {
+                ...context,
+                hasFailure: true
+              });
+            }
             throw err;
           }
         }
-      });
+        if (globalThis.__sbPostVisit) {
+          await globalThis.__sbPostVisit(page, context);
+        }
+        if (globalThis.__sbCollectCoverage) {
+          const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+          if (!isCoverageSetupCorrectly) {
+            throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+The code in this story is not instrumented, which means the coverage setup is likely not correct.
+More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+          }
+          await jestPlaywright.saveCoverage(page);
+        }
+        return result;
+      };
+      try {
+        await testFn();
+      } catch (err) {
+        if (err.toString().includes('Execution context was destroyed')) {
+          console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
+          await jestPlaywright.resetPage();
+          await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+          await testFn();
+        } else {
+          throw err;
+        }
+      }
     });
   });
-}"
+});"
 `;
 
-exports[`transformCsf calls the testPrefixer function for each test 1`] = `
+exports[`transformCsf > calls the testPrefixer function for each test 1`] = `
 "
       export default {
         title: 'Button',
@@ -98,141 +96,137 @@ exports[`transformCsf calls the testPrefixer function for each test 1`] = `
       export const Primary = () => '<button>Primary</button>';
     
 
-if (!require.main) {
-  describe("Button", () => {
-    describe("Primary", () => {
-      it("smoke-test", async () => {
-        const testFn = async () => {
-          const context = {
-            id: "button--primary",
-            title: "Button",
-            name: "Primary"
-          };
-          if (globalThis.__sbPreVisit) {
-            await globalThis.__sbPreVisit(page, context);
-          }
-          let result;
-          try {
-            result = await page.evaluate(({
-              id,
-              hasPlayFn
-            }) => __test(id, hasPlayFn), {
-              id: "button--primary"
-            });
-          } catch (err) {
-            if (err.toString().includes('Execution context was destroyed')) {
-              throw err;
-            } else {
-              if (globalThis.__sbPostVisit) {
-                await globalThis.__sbPostVisit(page, {
-                  ...context,
-                  hasFailure: true
-                });
-              }
-              throw err;
-            }
-          }
-          if (globalThis.__sbPostVisit) {
-            await globalThis.__sbPostVisit(page, context);
-          }
-          if (globalThis.__sbCollectCoverage) {
-            const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-            if (!isCoverageSetupCorrectly) {
-              throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-  The code in this story is not instrumented, which means the coverage setup is likely not correct.
-  More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-            }
-            await jestPlaywright.saveCoverage(page);
-          }
-          return result;
+describe("Button", () => {
+  describe("Primary", () => {
+    it("smoke-test", async () => {
+      const testFn = async () => {
+        const context = {
+          id: "button--primary",
+          title: "Button",
+          name: "Primary"
         };
+        if (globalThis.__sbPreVisit) {
+          await globalThis.__sbPreVisit(page, context);
+        }
+        let result;
         try {
-          await testFn();
+          result = await page.evaluate(({
+            id,
+            hasPlayFn
+          }) => __test(id, hasPlayFn), {
+            id: "button--primary"
+          });
         } catch (err) {
           if (err.toString().includes('Execution context was destroyed')) {
-            console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
-            await jestPlaywright.resetPage();
-            await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-            await testFn();
+            throw err;
           } else {
+            if (globalThis.__sbPostVisit) {
+              await globalThis.__sbPostVisit(page, {
+                ...context,
+                hasFailure: true
+              });
+            }
             throw err;
           }
         }
-      });
+        if (globalThis.__sbPostVisit) {
+          await globalThis.__sbPostVisit(page, context);
+        }
+        if (globalThis.__sbCollectCoverage) {
+          const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+          if (!isCoverageSetupCorrectly) {
+            throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+The code in this story is not instrumented, which means the coverage setup is likely not correct.
+More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+          }
+          await jestPlaywright.saveCoverage(page);
+        }
+        return result;
+      };
+      try {
+        await testFn();
+      } catch (err) {
+        if (err.toString().includes('Execution context was destroyed')) {
+          console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
+          await jestPlaywright.resetPage();
+          await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+          await testFn();
+        } else {
+          throw err;
+        }
+      }
     });
   });
-}"
+});"
 `;
 
-exports[`transformCsf clears the body if clearBody option is true 1`] = `
+exports[`transformCsf > clears the body if clearBody option is true 1`] = `
 "
-if (!require.main) {
-  describe("Button", () => {
-    describe("Primary", () => {
-      it("smoke-test", async () => {
-        const testFn = async () => {
-          const context = {
-            id: "button--primary",
-            title: "Button",
-            name: "Primary"
-          };
-          if (globalThis.__sbPreVisit) {
-            await globalThis.__sbPreVisit(page, context);
-          }
-          let result;
-          try {
-            result = await page.evaluate(({
-              id,
-              hasPlayFn
-            }) => __test(id, hasPlayFn), {
-              id: "button--primary"
-            });
-          } catch (err) {
-            if (err.toString().includes('Execution context was destroyed')) {
-              throw err;
-            } else {
-              if (globalThis.__sbPostVisit) {
-                await globalThis.__sbPostVisit(page, {
-                  ...context,
-                  hasFailure: true
-                });
-              }
-              throw err;
-            }
-          }
-          if (globalThis.__sbPostVisit) {
-            await globalThis.__sbPostVisit(page, context);
-          }
-          if (globalThis.__sbCollectCoverage) {
-            const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
-            if (!isCoverageSetupCorrectly) {
-              throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
-  The code in this story is not instrumented, which means the coverage setup is likely not correct.
-  More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
-            }
-            await jestPlaywright.saveCoverage(page);
-          }
-          return result;
+describe("Button", () => {
+  describe("Primary", () => {
+    it("smoke-test", async () => {
+      const testFn = async () => {
+        const context = {
+          id: "button--primary",
+          title: "Button",
+          name: "Primary"
         };
+        if (globalThis.__sbPreVisit) {
+          await globalThis.__sbPreVisit(page, context);
+        }
+        let result;
         try {
-          await testFn();
+          result = await page.evaluate(({
+            id,
+            hasPlayFn
+          }) => __test(id, hasPlayFn), {
+            id: "button--primary"
+          });
         } catch (err) {
           if (err.toString().includes('Execution context was destroyed')) {
-            console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
-            await jestPlaywright.resetPage();
-            await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
-            await testFn();
+            throw err;
           } else {
+            if (globalThis.__sbPostVisit) {
+              await globalThis.__sbPostVisit(page, {
+                ...context,
+                hasFailure: true
+              });
+            }
             throw err;
           }
         }
-      });
+        if (globalThis.__sbPostVisit) {
+          await globalThis.__sbPostVisit(page, context);
+        }
+        if (globalThis.__sbCollectCoverage) {
+          const isCoverageSetupCorrectly = await page.evaluate(() => '__coverage__' in window);
+          if (!isCoverageSetupCorrectly) {
+            throw new Error(\`[Test runner] An error occurred when evaluating code coverage:
+The code in this story is not instrumented, which means the coverage setup is likely not correct.
+More info: https://github.com/storybookjs/test-runner#setting-up-code-coverage\`);
+          }
+          await jestPlaywright.saveCoverage(page);
+        }
+        return result;
+      };
+      try {
+        await testFn();
+      } catch (err) {
+        if (err.toString().includes('Execution context was destroyed')) {
+          console.log(\`An error occurred in the following story, most likely because of a navigation: "\${"Button"}/\${"Primary"}". Retrying...\`);
+          await jestPlaywright.resetPage();
+          await globalThis.__sbSetupPage(globalThis.page, globalThis.context);
+          await testFn();
+        } else {
+          throw err;
+        }
+      }
     });
   });
-}"
+});"
 `;
 
-exports[`transformCsf executes beforeEach code before each test 1`] = `
+exports[`transformCsf > executes beforeEach code before each test 1`] = `
 "
     export default {
         title: 'Button',
@@ -248,19 +242,17 @@ exports[`transformCsf executes beforeEach code before each test 1`] = `
       export const Primary = () => '<button>Primary</button>';
     
 
-if (!require.main) {
-  describe("Button", () => {
-    beforeEach(beforeEach(() => {
-      console.log("beforeEach called");
-    }));
-    describe("Primary", () => {
-      it("smoke-test", async () => {});
-    });
+describe("Button", () => {
+  beforeEach(beforeEach(() => {
+    console.log("beforeEach called");
+  }));
+  describe("Primary", () => {
+    it("smoke-test", async () => {});
   });
-}"
+});"
 `;
 
-exports[`transformCsf returns empty result if there are no stories 1`] = `
+exports[`transformCsf > returns empty result if there are no stories 1`] = `
 "
       export default {
         title: 'Button',
