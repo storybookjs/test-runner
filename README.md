@@ -97,9 +97,9 @@ If there are any failures, the test runner will provide an output with the error
 Use the following table to use the correct version of this package, based on the version of Storybook you're using:
 
 | Test runner version | Storybook version |
-| ------------------- | ----------------- | --- | ------ |
+| ------------------- | ----------------- |
 | ^0.24.0             | ^10.0.0           |
-| ^0.19.0             | ^8.2.0            |     | ^9.0.0 |
+| ^0.19.0             | ^8.2.0 or ^9.0.0  |
 | ~0.17.0             | ^8.0.0            |
 | ~0.16.0             | ^7.0.0            |
 | ~0.9.4              | ^6.4.0            |
