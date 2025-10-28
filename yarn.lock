@@ -2975,7 +2975,7 @@ __metadata:
     pkg-up: "npm:^5.0.0"
     playwright: "npm:>=1.56.1"
     playwright-chromium: "npm:>=1.56.1"
-    playwright-core: "npm:>=1.2.0"
+    playwright-core: "npm:>=1.56.1"
     prettier: "npm:^2.8.1"
     react: "npm:^17.0.1"
     react-dom: "npm:^17.0.1"
@@ -8485,21 +8485,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.56.1":
+"playwright-core@npm:1.56.1, playwright-core@npm:>=1.56.1":
   version: 1.56.1
   resolution: "playwright-core@npm:1.56.1"
   bin:
     playwright-core: cli.js
   checksum: 10/df785eb3b3a8392b10dcde5f768e09b7fe459a7b06ed81180da69e048f2154b761f86d79572c2b62037a1f18a44e4ace72f5b6547f4f473b4ab13ab1d94007d2
-  languageName: node
-  linkType: hard
-
-"playwright-core@npm:>=1.2.0":
-  version: 1.54.1
-  resolution: "playwright-core@npm:1.54.1"
-  bin:
-    playwright-core: cli.js
-  checksum: 10/c0acfb7ecb48e9fb6c22f71298b966244bd4f8659093a798cc7f9a509deee22109560e44f2d507124e7718779640e0b4cb05a05c068b034405418d8740ec31ff
   languageName: node
   linkType: hard
 
