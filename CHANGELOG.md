@@ -1,3 +1,26 @@
+# v0.24.0 (Tue Oct 28 2025)
+
+#### 🚀 Enhancement
+
+- Release 0.24.0 [#586](https://github.com/storybookjs/test-runner/pull/586) ([@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen) [@IanVS](https://github.com/IanVS))
+- BREAKING: ESM only, Support for Storybook 10 and Jest 30 [#571](https://github.com/storybookjs/test-runner/pull/571) ([@yannbf](https://github.com/yannbf) [@ndelangen](https://github.com/ndelangen))
+
+#### 🐛 Bug Fix
+
+- Allow canaries in dep range [#585](https://github.com/storybookjs/test-runner/pull/585) ([@yannbf](https://github.com/yannbf))
+- Do not use "_" in `--testTimeout` examples [#579](https://github.com/storybookjs/test-runner/pull/579) ([@IanVS](https://github.com/IanVS))
+- Remove jest-playwright-preset dependency and support Jest 30 [#574](https://github.com/storybookjs/test-runner/pull/574) ([@yannbf](https://github.com/yannbf))
+- Release 0.23.1 [#576](https://github.com/storybookjs/test-runner/pull/576) ([@yannbf](https://github.com/yannbf))
+- Support Storybook 9.2 [#575](https://github.com/storybookjs/test-runner/pull/575) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- Ian VanSchooten ([@IanVS](https://github.com/IanVS))
+- Norbert de Langen ([@ndelangen](https://github.com/ndelangen))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.23.0 (Wed Jun 11 2025)
 
 #### 🚀 Enhancement
