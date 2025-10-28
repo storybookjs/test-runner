@@ -44,8 +44,10 @@ Storybook test runner turns all of your stories into executable tests.
     - [StorybookTestRunner user agent](#storybooktestrunner-user-agent)
 - [Recipes](#recipes)
   - [Preconfiguring viewport size](#preconfiguring-viewport-size)
-  - [Accessibility testing](#accessibility-testing)
+    - [With Storybook 10](#with-storybook-10)
     - [With Storybook 9](#with-storybook-9)
+  - [Accessibility testing](#accessibility-testing)
+    - [With Storybook 9](#with-storybook-9-1)
     - [With Storybook 8](#with-storybook-8)
   - [DOM snapshot (HTML)](#dom-snapshot-html)
   - [Image snapshot](#image-snapshot)
@@ -851,6 +853,39 @@ Below you will find recipes that use both the hooks and the utility functions to
 ### Preconfiguring viewport size
 
 You can use [Playwright's Page viewport utility](https://playwright.dev/docs/api/class-page#page-set-viewport-size) to programatically change the viewport size of your test. If you use [@storybook/addon-viewports](https://storybook.js.org/addons/@storybook/addon-viewport), you can reuse its parameters and make sure that the tests match in configuration.
+
+#### With Storybook 10
+
+```ts
+import { TestRunnerConfig, getStoryContext } from '@storybook/test-runner';
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
+
+const DEFAULT_VIEWPORT_SIZE = { width: 1280, height: 720 };
+
+const config: TestRunnerConfig = {
+  async preVisit(page, story) {
+    const context = await getStoryContext(page, story);
+    const viewportName = context.storyGlobals?.viewport?.value;
+    const viewportParameter = MINIMAL_VIEWPORTS[viewportName];
+
+    if (viewportParameter) {
+      const viewportSize = Object.fromEntries(
+        Object.entries(viewportParameter.styles).map(([screen, size]) => [
+          screen,
+          Number.parseInt(size),
+        ])
+      );
+
+      page.setViewportSize(viewportSize);
+    } else {
+      page.setViewportSize(DEFAULT_VIEWPORT_SIZE);
+    }
+  },
+};
+export default config;
+```
+
+#### With Storybook 9
 
 ```ts
 // .storybook/test-runner.ts
