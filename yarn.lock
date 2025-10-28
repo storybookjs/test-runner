@@ -2992,7 +2992,7 @@ __metadata:
     vitest: "npm:^3.2.4"
     wait-on: "npm:^7.2.0"
   peerDependencies:
-    storybook: ^10.0.0 || ^10.0.0-0
+    storybook: ^0.0.0-0 || ^10.0.0 || ^10.0.0-0
   bin:
     test-storybook: ./dist/test-storybook.js
   languageName: unknown
