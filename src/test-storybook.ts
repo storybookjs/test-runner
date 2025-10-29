@@ -421,8 +421,15 @@ const main = async () => {
     process.env.TEST_MATCH = '**/*.test.js';
   }
 
-  const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports } =
+  const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports, frameworkName } =
     await getStorybookMetadata();
+
+  if (frameworkName.includes('vite')) {
+    warnOnce(
+      'Detected Vite-based Storybook project, you might benefit from migrating to the Vitest addon, a modern, faster and more feature-rich testing solution for Storybook: https://storybook.js.org/docs/writing-tests/integrations/vitest-addon?ref=test-runner-migration'
+    );
+  }
+
   if (!shouldRunIndexJson) {
     process.env.STORYBOOK_STORIES_PATTERN = storiesPaths;
 
