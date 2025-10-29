@@ -2,6 +2,9 @@
 
 Storybook test runner turns all of your stories into executable tests.
 
+> [!WARNING]  
+> If you're using Storybook in a Vite-based project, you might want to use [Storybook's Vitest integration](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon?ref=test-runner-migration) instead. It's faster, provides features out of the box such as a11y and coverage, and integrates well with all Storybook's latest features.
+
 <h2>Table of Contents</h2>
 
 - [Features](#features)
@@ -95,7 +98,8 @@ Use the following table to use the correct version of this package, based on the
 
 | Test runner version | Storybook version |
 | ------------------- | ----------------- |
-| ^0.19.0             | ^8.2.0            |
+| ^0.24.0             | ^10.0.0           |
+| ^0.19.0             | ^8.2.0 or ^9.0.0  |
 | ~0.17.0             | ^8.0.0            |
 | ~0.16.0             | ^7.0.0            |
 | ~0.9.4              | ^6.4.0            |
