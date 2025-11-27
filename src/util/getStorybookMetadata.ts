@@ -24,6 +24,9 @@ export const getStorybookMetadata = async () => {
 
   const lazyCompilation = !!main.core?.builder?.options?.lazyCompilation;
 
+  const frameworkName =
+    main.framework && typeof main.framework === 'string' ? main.framework : main.framework?.name;
+
   const { disableTelemetry, enableCrashReports } = main.core || {};
 
   return {
@@ -34,5 +37,6 @@ export const getStorybookMetadata = async () => {
     lazyCompilation,
     disableTelemetry,
     enableCrashReports,
+    frameworkName,
   };
 };
