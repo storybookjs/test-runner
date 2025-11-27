@@ -1,3 +1,16 @@
+# v0.24.2 (Thu Nov 27 2025)
+
+#### 🐛 Bug Fix
+
+- Release v0.24.2 [#590](https://github.com/storybookjs/test-runner/pull/590) ([@yannbf](https://github.com/yannbf))
+- Add migration guide for the Vitest addon [#589](https://github.com/storybookjs/test-runner/pull/589) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.24.1 (Wed Oct 29 2025)
 
 #### 🐛 Bug Fix
