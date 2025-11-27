@@ -429,7 +429,7 @@ const main = async () => {
 
   if (shouldMigrateToVitest) {
     warnOnce(
-      'Detected Vite-based Storybook project, you might benefit from migrating to the Vitest addon, a modern, faster and more feature-rich testing solution for Storybook:\nhttps://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide?ref=test-runner-migration'
+      'Detected Vite-based Storybook project: You might benefit from migrating to the Vitest addon. A modern, faster, and more feature-rich testing solution for Storybook:\nhttps://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide?ref=test-runner-migration'
     )();
   }
 
