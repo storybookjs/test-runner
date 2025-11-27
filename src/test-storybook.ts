@@ -419,6 +419,7 @@ const main = async () => {
     indexTmpDir = await getIndexTempDir(targetURL);
     process.env.TEST_ROOT = indexTmpDir;
     process.env.TEST_MATCH = '**/*.test.js';
+    process.env.TEST_INDEX_JSON = 'true';
   }
 
   const { storiesPaths, lazyCompilation, disableTelemetry, enableCrashReports, frameworkName } =

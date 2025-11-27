@@ -8,6 +8,7 @@ export default defineConfig([
     entry: [
       './src/index.ts',
       './src/test-storybook.ts',
+      './src/config/jest-filename-sequencer.ts',
       './src/jest-playwright-entries/extends.ts',
       './src/jest-playwright-entries/setup.ts',
       './src/jest-playwright-entries/teardown.ts',
