@@ -51,7 +51,9 @@ export const getJestConfig = (): Config.InitialOptions => {
 
   const swcJestPath = path.dirname(require.resolve('@swc/jest'));
 
-  const reporters = STORYBOOK_JUNIT ? ['default', jestJunitPath] : ['default'];
+  const reporters = STORYBOOK_JUNIT
+    ? ['default', 'github-action', jestJunitPath]
+    : ['default', 'github-action'];
 
   const testMatch = STORYBOOK_STORIES_PATTERN?.split(';') ?? [];
   const TEST_RUNNER_PATH = getTestRunnerPath();
