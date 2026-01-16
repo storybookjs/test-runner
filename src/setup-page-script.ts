@@ -63,6 +63,69 @@ function defaultOptions(): { depthLimit: number; edgesLimit: number } {
   };
 }
 
+const copyOnWriteProxySet = new WeakSet();
+function copyOnWriteProxy<T>(target: T): T {
+  if (!target || typeof target !== "object") {
+    return target;
+  }
+
+  const deletedProperties = new Set();
+  const modifiedProperties = new Set();
+  const modififications = {};
+  const proxy = new Proxy(target, {
+    get(target, prop, receiver) {
+      if (deletedProperties.has(prop)) {
+        return undefined;
+      }
+
+      const source = modifiedProperties.has(prop) ? modififications : target;
+      const value = Reflect.get(source, prop, receiver);
+
+      if (value && typeof value === "object" && !copyOnWriteProxySet.has(value)) {
+        const proxiedValue = copyOnWriteProxy(value);
+        Reflect.set(proxy, prop, proxiedValue, receiver);
+        return proxiedValue;
+      }
+
+      return value;
+    },
+    set(_, prop, value, receiver) {
+      modifiedProperties.add(prop);
+      deletedProperties.delete(prop);
+      return Reflect.set(modififications, prop, value, receiver);
+    },
+    deleteProperty(_, prop) {
+      deletedProperties.add(prop);
+      modifiedProperties.delete(prop);
+      return Reflect.deleteProperty(modififications, prop) || Reflect.has(target, prop);
+    },
+    has(target, prop) {
+      if (deletedProperties.has(prop)) {
+        return false;
+      }
+      return Reflect.has(target, prop) || Reflect.has(modififications, prop);
+    },
+    defineProperty(_, prop, descriptor) {
+      modifiedProperties.add(prop);
+      deletedProperties.delete(prop);
+      return Reflect.defineProperty(target, prop, descriptor);
+    },
+    getOwnPropertyDescriptor(target, prop) {
+      if (deletedProperties.has(prop)) {
+        return undefined;
+      }
+      return Reflect.getOwnPropertyDescriptor(modififications, prop) || Reflect.getOwnPropertyDescriptor(target, prop);
+    },
+    ownKeys(target) {
+      return [...new Set([...Reflect.ownKeys(target), ...Reflect.ownKeys(modififications)]).difference(deletedProperties)];
+    },
+  });
+
+  copyOnWriteProxySet.add(proxy);
+
+  return proxy;
+}
+
 // Stringify function
 function stringify(
   obj: any,
@@ -74,7 +137,7 @@ function stringify(
     options = defaultOptions();
   }
 
-  decirc(obj, '', 0, [], undefined, 0, options);
+  decirc(copyOnWriteProxy(obj), '', 0, [], undefined, 0, options);
   var res: string;
   try {
     if (replacerStack.length === 0) {
