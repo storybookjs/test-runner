@@ -34,6 +34,33 @@ import {
 import { setupCoverage, mergeCoverage } from './coverage';
 import { GenericBrowser } from './types';
 
+const getTestDedupeKey = (test: Test) => {
+  const contextConfig = (test as any).context?.config || {};
+  const testPath = (test as any).path || '';
+  const browserName = contextConfig.browserName || '';
+  const deviceName = contextConfig.deviceName || '';
+  const displayName =
+    typeof contextConfig.displayName === 'string'
+      ? contextConfig.displayName
+      : contextConfig.displayName?.name || '';
+
+  return [testPath, browserName, deviceName, displayName].join('::');
+};
+
+export const dedupeBrowserTests = (tests: Test[]) => {
+  const seen = new Set<string>();
+  const deduped: Test[] = [];
+
+  for (const test of tests) {
+    const key = getTestDedupeKey(test);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(test);
+  }
+
+  return deduped;
+};
+
 const getBrowserTest = ({
   test,
   config,
@@ -166,7 +193,7 @@ class PlaywrightRunner extends JestRunner {
       }
     }
 
-    return pwTests;
+    return dedupeBrowserTests(pwTests);
   }
 
   async runTests(
