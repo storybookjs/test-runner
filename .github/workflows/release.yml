@@ -2,6 +2,12 @@ name: Release
 
 on: [push]
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -13,9 +19,10 @@ jobs:
         run: git fetch --unshallow --tags
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
@@ -23,6 +30,5 @@ jobs:
       - name: Create Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           yarn release
