@@ -1,3 +1,30 @@
+# v0.24.2 (Thu Nov 27 2025)
+
+#### 🐛 Bug Fix
+
+- Release v0.24.2 [#590](https://github.com/storybookjs/test-runner/pull/590) ([@yannbf](https://github.com/yannbf))
+- Add migration guide for the Vitest addon [#589](https://github.com/storybookjs/test-runner/pull/589) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.24.1 (Wed Oct 29 2025)
+
+#### 🐛 Bug Fix
+
+- Add support for Storybook 10.x [#587](https://github.com/storybookjs/test-runner/pull/587) (runner@fv-az1755-373.riqyshtk1a3upkg5zgxrxofome.dx.internal.cloudapp.net [@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- shilman (runner@fv-az1755-373.riqyshtk1a3upkg5zgxrxofome.dx.internal.cloudapp.net)
+- shilman (runner@runnervmwhb2z.uzm4dnevkx0exmdpusqguksr3c.dx.internal.cloudapp.net)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.24.0 (Tue Oct 28 2025)
 
 #### 🚀 Enhancement
