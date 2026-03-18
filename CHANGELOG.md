@@ -1,3 +1,16 @@
+# v0.24.3 (Wed Mar 18 2026)
+
+#### 🐛 Bug Fix
+
+- Release/v0.24.3 [#596](https://github.com/storybookjs/test-runner/pull/596) ([@yannbf](https://github.com/yannbf))
+- Feat: Support Storybook 10.4 alpha [#595](https://github.com/storybookjs/test-runner/pull/595) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.24.2 (Thu Nov 27 2025)
 
 #### 🐛 Bug Fix
