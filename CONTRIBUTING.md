@@ -4,10 +4,10 @@ We welcome contributions to the test runner! This document outlines the process 
 
 ## Development Workflow
 
-1. Run `yarn install` to install dependencies
-2. Run `yarn start` to both build the test-runner and run Storybook
-3. Run `yarn test-storybook` to run the test-runner
-4. Run `yarn test` to run tests
+1. Run `pnpm install` to install dependencies
+2. Run `pnpm start` to both build the test-runner and run Storybook
+3. Run `pnpm test-storybook` to run the test-runner
+4. Run `pnpm test` to run tests
 
 ## Branch Structure
 
@@ -26,10 +26,10 @@ We welcome contributions to the test runner! This document outlines the process 
 ## Release Process
 
 1. All PRs should target the `next` branch, which depends on the `next` version of Storybook.
-2. All PRs need to have a `patch`, `minor` or `major` tag. Once a tag is added, a canary release will be triggered.
-3. When merged, a new version of this package will be released on the `next` NPM tag.
-4. If the change contains a bugfix that needs to be patched back to the stable version, that has to be done manually.
-5. In order to promote changes from `next` to `main`, create a branch for that particular version e.g. `release/v0.24.0`, merge `main` into that branch, adjust the version ranges in the `package.json` file and then make a new PR against `main` that contains a `minor` label (while the test-runner has v0 format)
+2. All user-facing PRs must include a changeset for `@storybook/test-runner` that uses a `patch`, `minor`, or `major` bump.
+3. Every PR and push to `main` publishes a preview build via pkg.pr.new for validation.
+4. When changesets land on `main`, the release workflow either opens a release PR or publishes the package to npm with provenance enabled.
+5. If the change contains a bugfix that needs to be patched back to the stable version, that still has to be handled separately.
 
 ## Documentation
 

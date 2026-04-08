@@ -11,16 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable corepack (for pnpm)
+        run: corepack enable
+
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
+          cache: pnpm
           node-version-file: .nvmrc
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
       - name: Run test runner
         run: |
-          yarn build
-          yarn generate-dynamic-stories
-          STRESS_TEST=true yarn test-storybook:ci
+          pnpm build
+          pnpm generate-dynamic-stories
+          STRESS_TEST=true pnpm test-storybook:ci

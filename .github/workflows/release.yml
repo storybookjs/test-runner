@@ -1,34 +1,51 @@
 name: Release
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CI: true
+  COREPACK_INTEGRITY_KEYS: 0
 
 permissions:
   contents: write
-  issues: write
   pull-requests: write
   id-token: write
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci') && !contains(github.event.head_commit.message, 'skip release')"
+    if: github.repository == 'storybookjs/test-runner'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        id: app-token
+        with:
+          app-id: ${{ vars.STORYBOOK_BOT_APP_ID }}
+          private-key: ${{ secrets.STORYBOOK_BOT_APP_PRIVATE_KEY }}
 
-      - name: Prepare repository
-        run: git fetch --unshallow --tags
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Enable corepack (for pnpm)
+        run: corepack enable
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+          node-version-file: '.nvmrc'
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
-      - name: Create Release
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@e0145edc7d9d8679003495b11f87bd8ef63c0cba # v1.5.3
+        with:
+          publish: pnpm release
+          commitMode: github-api
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          yarn release
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}

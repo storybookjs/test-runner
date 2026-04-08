@@ -202,7 +202,7 @@ async function checkStorybook(url: string) {
       
       If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
       
-      yarn test-storybook --url http://127.0.0.1:9009
+      pnpm test-storybook -- --url http://127.0.0.1:9009
       
       More info at https://github.com/storybookjs/test-runner#getting-started`
     );
