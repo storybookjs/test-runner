@@ -1,4 +1,6 @@
-# v0.24.0 (Tue Oct 28 2025)
+# @storybook/test-runner
+
+## v0.24.0 (Tue Oct 28 2025)
 
 #### 🚀 Enhancement
 
@@ -21,7 +23,7 @@
 
 ---
 
-# v0.23.0 (Wed Jun 11 2025)
+## v0.23.0 (Wed Jun 11 2025)
 
 #### 🚀 Enhancement
 
@@ -42,7 +44,7 @@
 
 ---
 
-# v0.22.1 (Sat Jun 07 2025)
+## v0.22.1 (Sat Jun 07 2025)
 
 #### 🐛 Bug Fix
 
@@ -54,7 +56,7 @@
 
 ---
 
-# v0.22.0 (Fri Feb 28 2025)
+## v0.22.0 (Fri Feb 28 2025)
 
 #### 🚀 Enhancement
 
@@ -74,7 +76,7 @@
 
 ---
 
-# v0.21.3 (Thu Feb 20 2025)
+## v0.21.3 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
 
@@ -86,7 +88,7 @@
 
 ---
 
-# v0.21.2 (Tue Feb 18 2025)
+## v0.21.2 (Tue Feb 18 2025)
 
 #### 🐛 Bug Fix
 
@@ -98,7 +100,7 @@
 
 ---
 
-# v0.21.1 (Mon Feb 17 2025)
+## v0.21.1 (Mon Feb 17 2025)
 
 #### 🐛 Bug Fix
 
@@ -111,7 +113,7 @@
 
 ---
 
-# v0.21.0 (Fri Dec 20 2024)
+## v0.21.0 (Fri Dec 20 2024)
 
 #### 🚀 Enhancement
 
@@ -131,7 +133,7 @@
 
 ---
 
-# v0.20.1 (Mon Dec 02 2024)
+## v0.20.1 (Mon Dec 02 2024)
 
 #### 🐛 Bug Fix
 
@@ -144,7 +146,7 @@
 
 ---
 
-# v0.20.0 (Thu Nov 28 2024)
+## v0.20.0 (Thu Nov 28 2024)
 
 ### Release Notes
 
@@ -187,7 +189,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.19.1 (Mon Jul 15 2024)
+## v0.19.1 (Mon Jul 15 2024)
 
 #### 🐛 Bug Fix
 
@@ -201,7 +203,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.19.0 (Sat Jun 22 2024)
+## v0.19.0 (Sat Jun 22 2024)
 
 #### 🚀 Enhancement
 
@@ -222,7 +224,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.18.2 (Wed May 29 2024)
+## v0.18.2 (Wed May 29 2024)
 
 #### 🐛 Bug Fix
 
@@ -238,7 +240,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.18.1 (Fri May 17 2024)
+## v0.18.1 (Fri May 17 2024)
 
 #### 🐛 Bug Fix
 
@@ -253,7 +255,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.18.0 (Thu May 09 2024)
+## v0.18.0 (Thu May 09 2024)
 
 #### 🚀 Enhancement
 
@@ -271,7 +273,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.17.0 (Mon Mar 11 2024)
+## v0.17.0 (Mon Mar 11 2024)
 
 #### 🚀 Enhancement
 
@@ -305,7 +307,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.16.0 (Mon Nov 27 2023)
+## v0.16.0 (Mon Nov 27 2023)
 
 #### 🚀 Enhancement
 
@@ -330,7 +332,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.15.2 (Tue Nov 21 2023)
+## v0.15.2 (Tue Nov 21 2023)
 
 #### 🐛 Bug Fix
 
@@ -349,7 +351,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.15.1 (Thu Nov 16 2023)
+## v0.15.1 (Thu Nov 16 2023)
 
 #### 🐛 Bug Fix
 
@@ -362,7 +364,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.15.0 (Thu Nov 16 2023)
+## v0.15.0 (Thu Nov 16 2023)
 
 #### 🚀 Enhancement
 
@@ -383,7 +385,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.14.1 (Mon Nov 13 2023)
+## v0.14.1 (Mon Nov 13 2023)
 
 #### 🐛 Bug Fix
 
@@ -395,7 +397,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.14.0 (Wed Nov 08 2023)
+## v0.14.0 (Wed Nov 08 2023)
 
 #### 🚀 Enhancement
 
@@ -434,7 +436,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.13.0 (Fri Aug 04 2023)
+## v0.13.0 (Fri Aug 04 2023)
 
 #### 🚀 Enhancement
 
@@ -454,7 +456,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.12.0 (Thu Jul 27 2023)
+## v0.12.0 (Thu Jul 27 2023)
 
 #### 🚀 Enhancement
 
@@ -476,7 +478,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.11.0 (Tue Jun 20 2023)
+## v0.11.0 (Tue Jun 20 2023)
 
 #### 🚀 Enhancement
 
@@ -503,7 +505,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.10.0 (Mon Apr 03 2023)
+## v0.10.0 (Mon Apr 03 2023)
 
 #### 🚀 Enhancement
 
@@ -546,7 +548,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.9.4 (Wed Feb 01 2023)
+## v0.9.4 (Wed Feb 01 2023)
 
 #### 🐛 Bug Fix
 
@@ -563,7 +565,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.9.3 (Fri Jan 20 2023)
+## v0.9.3 (Fri Jan 20 2023)
 
 #### 🐛 Bug Fix
 
@@ -577,7 +579,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.9.2 (Tue Dec 20 2022)
+## v0.9.2 (Tue Dec 20 2022)
 
 #### 🐛 Bug Fix
 
@@ -589,7 +591,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.9.1 (Mon Nov 21 2022)
+## v0.9.1 (Mon Nov 21 2022)
 
 #### 🐛 Bug Fix
 
@@ -606,7 +608,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.9.0 (Wed Oct 12 2022)
+## v0.9.0 (Wed Oct 12 2022)
 
 #### 🚀 Enhancement
 
@@ -631,7 +633,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.8.0 (Fri Oct 07 2022)
+## v0.8.0 (Fri Oct 07 2022)
 
 #### 🚀 Enhancement
 
@@ -649,7 +651,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.7.2 (Fri Sep 16 2022)
+## v0.7.2 (Fri Sep 16 2022)
 
 #### 🐛 Bug Fix
 
@@ -665,7 +667,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.7.1 (Tue Sep 06 2022)
+## v0.7.1 (Tue Sep 06 2022)
 
 #### 🐛 Bug Fix
 
@@ -684,7 +686,7 @@ const config: TestRunnerConfig = {
 
 ---
 
-# v0.7.0 (Fri Aug 26 2022)
+## v0.7.0 (Fri Aug 26 2022)
 
 ### Release Notes
 
@@ -704,7 +706,7 @@ This release updates the internal version of Jest to version 28. You can now rem
 
 ---
 
-# v0.6.4 (Fri Aug 26 2022)
+## v0.6.4 (Fri Aug 26 2022)
 
 ### Release Notes
 
@@ -733,7 +735,7 @@ With that flag, the test runner will add `jest-junit` to the reporters list and 
 
 ---
 
-# v0.6.3 (Wed Aug 24 2022)
+## v0.6.3 (Wed Aug 24 2022)
 
 ### Release Notes
 
@@ -753,7 +755,7 @@ This release fixes an issue where the coverage check was not working for project
 
 ---
 
-# v0.6.2 (Wed Aug 24 2022)
+## v0.6.2 (Wed Aug 24 2022)
 
 ### Release Notes
 
@@ -773,7 +775,7 @@ The Storybook test runner will now contain Jest as an internal dependency, which
 
 ---
 
-# v0.6.1 (Tue Aug 23 2022)
+## v0.6.1 (Tue Aug 23 2022)
 
 ### Release Notes
 
@@ -795,7 +797,7 @@ In Storybook 7.0, the root selector changed from #root to #storybook-root. Both 
 
 ---
 
-# v0.6.0 (Tue Aug 23 2022)
+## v0.6.0 (Tue Aug 23 2022)
 
 ### Release Notes
 
@@ -851,7 +853,7 @@ You can find more info at https://github.com/storybookjs/test-runner#jest-27-sup
 
 ---
 
-# v0.5.0 (Mon Jul 18 2022)
+## v0.5.0 (Mon Jul 18 2022)
 
 ### Release Notes
 
@@ -873,7 +875,7 @@ This release replaces an internal dependency `is-localhost-ip` with `can-bind-to
 
 ---
 
-# v0.4.0 (Tue Jul 12 2022)
+## v0.4.0 (Tue Jul 12 2022)
 
 #### 🚀 Enhancement
 
@@ -893,7 +895,7 @@ This release replaces an internal dependency `is-localhost-ip` with `can-bind-to
 
 ---
 
-# v0.3.0 (Fri Jun 24 2022)
+## v0.3.0 (Fri Jun 24 2022)
 
 ### Release Notes
 
@@ -917,7 +919,7 @@ This release replaces an internal dependency `is-localhost-ip` with `can-bind-to
 
 ---
 
-# v0.2.0 (Tue Jun 21 2022)
+## v0.2.0 (Tue Jun 21 2022)
 
 ### Release Notes
 
@@ -950,7 +952,7 @@ This release replaces an internal dependency `is-localhost-ip` with `can-bind-to
 
 ---
 
-# v0.1.1 (Wed May 25 2022)
+## v0.1.1 (Wed May 25 2022)
 
 #### 🐛 Bug Fix
 
@@ -967,7 +969,7 @@ This release replaces an internal dependency `is-localhost-ip` with `can-bind-to
 
 ---
 
-# v0.1.0 (Thu May 19 2022)
+## v0.1.0 (Thu May 19 2022)
 
 ### Release Notes
 
@@ -993,7 +995,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.8 (Thu Apr 28 2022)
+## v0.0.8 (Thu Apr 28 2022)
 
 #### 🐛 Bug Fix
 
@@ -1012,7 +1014,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.7 (Fri Apr 22 2022)
+## v0.0.7 (Fri Apr 22 2022)
 
 #### 🐛 Bug Fix
 
@@ -1026,7 +1028,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.6 (Tue Apr 12 2022)
+## v0.0.6 (Tue Apr 12 2022)
 
 #### 🐛 Bug Fix
 
@@ -1039,7 +1041,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.5 (Thu Apr 07 2022)
+## v0.0.5 (Thu Apr 07 2022)
 
 #### 🐛 Bug Fix
 
@@ -1059,7 +1061,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.4 (Wed Feb 23 2022)
+## v0.0.4 (Wed Feb 23 2022)
 
 #### 🐛 Bug Fix
 
@@ -1071,7 +1073,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.3 (Wed Feb 23 2022)
+## v0.0.3 (Wed Feb 23 2022)
 
 #### 🐛 Bug Fix
 
@@ -1094,7 +1096,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.2 (Thu Feb 03 2022)
+## v0.0.2 (Thu Feb 03 2022)
 
 #### 🐛 Bug Fix
 
@@ -1118,7 +1120,7 @@ Changes included from [this pull request](https://github.com/storybookjs/test-ru
 
 ---
 
-# v0.0.1 (Thu Jan 06 2022)
+## v0.0.1 (Thu Jan 06 2022)
 
 #### 🐛 Bug Fix
 
