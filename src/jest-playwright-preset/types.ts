@@ -14,7 +14,29 @@ import {
   devices,
 } from 'playwright-core';
 import { Test } from 'jest-runner';
-import { JestProcessManagerOptions } from 'jest-process-manager';
+import type { SpawnOptions } from 'child_process';
+
+export interface JestProcessManagerOptions {
+  command: string;
+  debug?: boolean;
+  launchTimeout?: number;
+  host?: string;
+  port?: number;
+  protocol?: 'https' | 'http' | 'http-get' | 'https-get' | 'tcp' | 'socket';
+  basePath?: string;
+  usedPortAction?: 'ask' | 'error' | 'ignore' | 'kill';
+  waitOnScheme?: {
+    delay?: number;
+    interval?: number;
+    log?: boolean;
+    reverse?: boolean;
+    timeout?: number;
+    tcpTimeout?: number;
+    verbose?: boolean;
+    window?: number;
+  };
+  options?: SpawnOptions;
+}
 
 // TODO Find out flex ways to reuse constants
 declare const IMPORT_KIND_PLAYWRIGHT = 'playwright';

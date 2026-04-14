@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { setup as setupServer, teardown as teardownServer } from 'jest-process-manager';
+import { setup as setupServer, teardown as teardownServer } from './server-manager';
 import { readConfig } from './utils';
 import type { Config as JestConfig } from '@jest/types';
 import { ServerOptions } from './types';
