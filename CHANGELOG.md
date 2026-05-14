@@ -1,3 +1,15 @@
+# v0.24.4 (Thu May 14 2026)
+
+#### 🐛 Bug Fix
+
+- chore: add storybook prerelease peerDeps [#603](https://github.com/storybookjs/test-runner/pull/603) ([@huang-julien](https://github.com/huang-julien))
+
+#### Authors: 1
+
+- Julien Huang ([@huang-julien](https://github.com/huang-julien))
+
+---
+
 # v0.24.3 (Wed Mar 18 2026)
 
 #### 🐛 Bug Fix
