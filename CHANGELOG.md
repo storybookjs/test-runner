@@ -1,3 +1,15 @@
+# v0.24.5 (Wed Sep 02 2026)
+
+#### 🐛 Bug Fix
+
+- chore: add Storybook 11.0 prerelease peerDeps [#608](https://github.com/storybookjs/test-runner/pull/608) ([@JReinhold](https://github.com/JReinhold))
+
+#### Authors: 1
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+
+---
+
 # v0.24.4 (Thu May 14 2026)
 
 #### 🐛 Bug Fix
