@@ -199,11 +199,11 @@ async function checkStorybook(url: string) {
   } catch (e) {
     console.error(
       dedent`\x1b[31m[test-storybook]\x1b[0m It seems that your Storybook instance is not running at: ${url}. Are you sure it's running?
-      
+
       If you're not running Storybook on the default 6006 port or want to run the tests against any custom URL, you can pass the --url flag like so:
-      
+
       yarn test-storybook --url http://127.0.0.1:9009
-      
+
       More info at https://github.com/storybookjs/test-runner#getting-started`
     );
     process.exit(1);
@@ -279,9 +279,9 @@ function ejectConfiguration() {
 
   if (fileAlreadyExists) {
     throw new Error(dedent`Found existing file at:
-    
+
     ${destination}
-    
+
     Please delete it and rerun this command.
     \n`);
   }
@@ -339,6 +339,10 @@ const main = async () => {
       'You cannot use both postVisit and postRender hooks in your test-runner config file. Please use postVisit instead.'
     );
   }
+
+  warnOnce(
+    'Official support for Test Runner has ended. See migration guide at https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#test-runner-support-ended.'
+  )();
 
   // TODO: remove preRender and postRender hooks likely in 0.20.0
   if (testRunnerConfig.preRender) {
