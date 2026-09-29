@@ -1,3 +1,67 @@
+# v0.24.5 (Wed Sep 02 2026)
+
+#### 🐛 Bug Fix
+
+- chore: add Storybook 11.0 prerelease peerDeps [#608](https://github.com/storybookjs/test-runner/pull/608) ([@JReinhold](https://github.com/JReinhold))
+
+#### Authors: 1
+
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+
+---
+
+# v0.24.4 (Thu May 14 2026)
+
+#### 🐛 Bug Fix
+
+- chore: add storybook prerelease peerDeps [#603](https://github.com/storybookjs/test-runner/pull/603) ([@huang-julien](https://github.com/huang-julien))
+
+#### Authors: 1
+
+- Julien Huang ([@huang-julien](https://github.com/huang-julien))
+
+---
+
+# v0.24.3 (Wed Mar 18 2026)
+
+#### 🐛 Bug Fix
+
+- Release/v0.24.3 [#596](https://github.com/storybookjs/test-runner/pull/596) ([@yannbf](https://github.com/yannbf))
+- Feat: Support Storybook 10.4 alpha [#595](https://github.com/storybookjs/test-runner/pull/595) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.24.2 (Thu Nov 27 2025)
+
+#### 🐛 Bug Fix
+
+- Release v0.24.2 [#590](https://github.com/storybookjs/test-runner/pull/590) ([@yannbf](https://github.com/yannbf))
+- Add migration guide for the Vitest addon [#589](https://github.com/storybookjs/test-runner/pull/589) ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 1
+
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
+# v0.24.1 (Wed Oct 29 2025)
+
+#### 🐛 Bug Fix
+
+- Add support for Storybook 10.x [#587](https://github.com/storybookjs/test-runner/pull/587) (runner@fv-az1755-373.riqyshtk1a3upkg5zgxrxofome.dx.internal.cloudapp.net [@yannbf](https://github.com/yannbf))
+
+#### Authors: 3
+
+- shilman (runner@fv-az1755-373.riqyshtk1a3upkg5zgxrxofome.dx.internal.cloudapp.net)
+- shilman (runner@runnervmwhb2z.uzm4dnevkx0exmdpusqguksr3c.dx.internal.cloudapp.net)
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.24.0 (Tue Oct 28 2025)
 
 #### 🚀 Enhancement
