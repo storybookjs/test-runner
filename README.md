@@ -3,6 +3,8 @@
 Storybook test runner turns all of your stories into executable tests.
 
 > [!WARNING]  
+> Official support for Storybook Test Runner has ended. See [MIGRATION.md](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#test-runner-support-ended) for migration examples.
+>
 > If you're using Storybook in a Vite-based project, you might want to use [Storybook's Vitest integration](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon?ref=test-runner-migration) instead. It's faster, provides features out of the box such as a11y and coverage, and integrates well with all Storybook's latest features. [Read the migration steps here](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/migration-guide).
 
 <h2>Table of Contents</h2>
