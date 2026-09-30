@@ -1,3 +1,28 @@
+# v0.25.0 (Wed Sep 30 2026)
+
+#### 🚀 Enhancement
+
+- Release `v0.25.0` [#611](https://github.com/storybookjs/test-runner/pull/611) ([@Copilot](https://github.com/Copilot) [@huang-julien](https://github.com/huang-julien) [@JReinhold](https://github.com/JReinhold) [@AriPerkkio](https://github.com/AriPerkkio))
+- Remove official support [#610](https://github.com/storybookjs/test-runner/pull/610) ([@AriPerkkio](https://github.com/AriPerkkio))
+
+#### 🐛 Bug Fix
+
+- Add Storybook 11.0 prerelease peer dependency support [#607](https://github.com/storybookjs/test-runner/pull/607) ([@JReinhold](https://github.com/JReinhold))
+- Add Storybook 10.5 and 10.6 prerelease peer dependency support [#602](https://github.com/storybookjs/test-runner/pull/602) ([@Copilot](https://github.com/Copilot))
+
+#### ⚠️ Pushed to `main`
+
+- ci: re-trigger github actions ([@AriPerkkio](https://github.com/AriPerkkio))
+
+#### Authors: 4
+
+- [@Copilot](https://github.com/Copilot)
+- Ari Perkkiö ([@AriPerkkio](https://github.com/AriPerkkio))
+- Jeppe Reinhold ([@JReinhold](https://github.com/JReinhold))
+- Julien Huang ([@huang-julien](https://github.com/huang-julien))
+
+---
+
 # v0.24.5 (Wed Sep 02 2026)
 
 #### 🐛 Bug Fix
