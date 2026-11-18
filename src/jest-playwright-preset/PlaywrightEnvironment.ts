@@ -180,13 +180,13 @@ export const getPlaywrightEnv = (): unknown => {
     }
 
     async _setCollectCoverage(context: BrowserContext) {
-      await context.exposeFunction('reportCodeCoverage', (coverage: unknown) => {
+      await context.exposeFunction('reportCodeCoverage', (coverage: string) => {
         if (coverage) saveCoverageToFile(coverage);
       });
       await context.addInitScript(() =>
         window.addEventListener('beforeunload', () => {
           // @ts-ignore
-          reportCodeCoverage(window.__coverage__);
+          reportCodeCoverage(JSON.stringify(window.__coverage__));
         })
       );
     }

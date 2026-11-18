@@ -25,8 +25,8 @@ export const setupCoverage = async (): Promise<void> => {
   await fsAsync.mkdir(COV_MERGE_DIR);
 };
 
-export const saveCoverageToFile = async (coverage: unknown): Promise<void> => {
-  await fsAsync.writeFile(path.join(COV_MERGE_DIR, `${uuid.v4()}.json`), JSON.stringify(coverage));
+export const saveCoverageToFile = async (coverage: string): Promise<void> => {
+  await fsAsync.writeFile(path.join(COV_MERGE_DIR, `${uuid.v4()}.json`), coverage);
 };
 
 export const saveCoverageOnPage = async (page: Page, collectCoverage = false): Promise<void> => {
@@ -36,7 +36,7 @@ export const saveCoverageOnPage = async (page: Page, collectCoverage = false): P
     );
     return;
   }
-  const coverage = await page.evaluate(`window.__coverage__`);
+  const coverage = await page.evaluate(() => JSON.stringify(window.__coverage__));
   if (coverage) {
     await saveCoverageToFile(coverage);
   }

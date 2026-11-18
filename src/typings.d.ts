@@ -8,4 +8,8 @@ declare global {
   var __getContext: (storyId: string) => StoryContext;
   var __sbSetupPage: typeof setupPage;
   var __sbCollectCoverage: boolean;
+
+  interface Window {
+    __coverage__?: unknown;
+  }
 }
