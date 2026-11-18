@@ -341,7 +341,7 @@ const main = async () => {
   }
 
   warnOnce(
-    'Official support for Test Runner has ended. See migration guide at https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#test-runner-support-ended.'
+    'Official support for Test Runner has ended. See migration guide at https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#test-runner-support-removed.'
   )();
 
   // TODO: remove preRender and postRender hooks likely in 0.20.0
