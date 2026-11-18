@@ -1,3 +1,18 @@
+# v0.26.1 (Wed Nov 18 2026)
+
+#### 🐛 Bug Fix
+
+- Release `v0.25.1` [#613](https://github.com/storybookjs/test-runner/pull/613) ([@claude](https://github.com/claude) [@Sidnioulz](https://github.com/Sidnioulz) [@AriPerkkio](https://github.com/AriPerkkio))
+- Remove Storybook 11 from the supported peer range [#612](https://github.com/storybookjs/test-runner/pull/612) ([@claude](https://github.com/claude) [@Sidnioulz](https://github.com/Sidnioulz) [@AriPerkkio](https://github.com/AriPerkkio))
+
+#### Authors: 3
+
+- Ari Perkkiö ([@AriPerkkio](https://github.com/AriPerkkio))
+- Claude ([@claude](https://github.com/claude))
+- Steve Dodier-Lazaro ([@Sidnioulz](https://github.com/Sidnioulz))
+
+---
+
 # v0.25.0 (Wed Sep 30 2026)
 
 #### 🚀 Enhancement
