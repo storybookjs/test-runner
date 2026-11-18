@@ -10,7 +10,7 @@ jobs:
   trigger:
     if: github.event.label.name == 'linear'
     name: Export to linear
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       # - uses: hmarr/debug-action@v2
       - name: Linear action
